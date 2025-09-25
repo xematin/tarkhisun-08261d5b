@@ -42,8 +42,8 @@ const Contact = () => {
     {
       icon: Phone,
       title: "تماس تلفنی",
-      content: "076-33445566",
-      link: "tel:+987633445566"
+      content: "09177380080",
+      link: "tel:+989177380080"
     },
     {
       icon: Mail,

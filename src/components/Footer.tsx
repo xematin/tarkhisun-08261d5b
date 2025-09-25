@@ -101,9 +101,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-primary-foreground/20 text-center">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-primary-foreground/60 text-sm text-persian">
-              تمامی حقوق برای تیم اکتان‌نت محفوظ است © 1404
-            </p>
+            <p className="text-primary-foreground/60 text-sm text-persian">تمامی حقوق برای تیم ترخیصان محفوظ است © 1404</p>
             
             <div className="flex items-center gap-6 text-sm text-primary-foreground/60">
               <span className="text-persian">طراحی شده با ❤️ برای خدمات بهتر</span>

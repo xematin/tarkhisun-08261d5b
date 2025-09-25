@@ -136,7 +136,12 @@
   }
 
   .btn-ai {
-    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-xl shadow-ai hover:shadow-strong transform hover:scale-105 transition-all duration-300 relative overflow-hidden;
+    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden;
+    box-shadow: 0 0 30px hsl(var(--accent) / 0.3);
+  }
+
+  .btn-ai:hover {
+    box-shadow: 0 20px 40px hsl(var(--primary) / 0.25);
   }
 
   .btn-ai::before {
@@ -146,16 +151,31 @@
 
   /* Card Styles */
   .card-service {
-    @apply bg-card border border-border rounded-2xl p-6 shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-2;
+    @apply bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-2;
+    box-shadow: 0 2px 8px hsl(var(--primary) / 0.08);
+  }
+
+  .card-service:hover {
+    box-shadow: 0 8px 25px hsl(var(--primary) / 0.15);
   }
 
   .card-ai-feature {
-    @apply bg-gradient-to-br from-accent-lighter to-white border-2 border-accent/20 rounded-2xl p-8 shadow-ai hover:shadow-strong transition-all duration-500 transform hover:scale-105;
+    @apply bg-gradient-to-br from-accent-lighter to-white border-2 border-accent/20 rounded-2xl p-8 transition-all duration-500 transform hover:scale-105;
+    box-shadow: 0 0 30px hsl(var(--accent) / 0.3);
+  }
+
+  .card-ai-feature:hover {
+    box-shadow: 0 20px 40px hsl(var(--primary) / 0.25);
   }
 
   /* Exchange Rate Cards */
   .exchange-card {
-    @apply bg-white border border-border rounded-xl p-4 shadow-soft hover:shadow-medium transition-all duration-300;
+    @apply bg-white border border-border rounded-xl p-4 transition-all duration-300;
+    box-shadow: 0 2px 8px hsl(var(--primary) / 0.08);
+  }
+
+  .exchange-card:hover {
+    box-shadow: 0 8px 25px hsl(var(--primary) / 0.15);
   }
 
   /* Hero Section */

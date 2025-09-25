@@ -104,7 +104,7 @@ const Footer = () => {
             <p className="text-primary-foreground/60 text-sm text-persian">تمامی حقوق برای تیم ترخیصان محفوظ است © 1404</p>
             
             <div className="flex items-center gap-6 text-sm text-primary-foreground/60">
-              <span className="text-persian">طراحی شده با ❤️ برای خدمات بهتر</span>
+              <span className="text-persian">طراح سایت و خدمات برنامه‌نویسی © OctanNet</span>
             </div>
           </div>
         </div>

@@ -1,24 +1,21 @@
 import { Bot, Phone, Mail, MapPin } from "lucide-react";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  const quickLinks = [
-    { title: "خدمات ترخیص", href: "#services" },
-    { title: "نرخ ارز", href: "#exchange" },
-    { title: "ترخیصان‌یار", href: "#ai-assistant" },
-    { title: "تماس با ما", href: "#contact" }
-  ];
-
-  const services = [
-    "ترخیص کالا",
-    "مشاوره گمرکی", 
-    "صدور مجوزها",
-    "پیگیری پرونده"
-  ];
-
-  return (
-    <footer className="bg-primary text-primary-foreground">
+  const quickLinks = [{
+    title: "خدمات ترخیص",
+    href: "#services"
+  }, {
+    title: "نرخ ارز",
+    href: "#exchange"
+  }, {
+    title: "ترخیصان‌یار",
+    href: "#ai-assistant"
+  }, {
+    title: "تماس با ما",
+    href: "#contact"
+  }];
+  const services = ["ترخیص کالا", "مشاوره گمرکی", "صدور مجوزها", "پیگیری پرونده"];
+  return <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16" dir="rtl">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -42,16 +39,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-persian">لینک‌های سریع</h3>
             <ul className="space-y-2">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <a 
-                    href={link.href}
-                    className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian"
-                  >
+              {quickLinks.map((link, index) => <li key={index}>
+                  <a href={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
                     {link.title}
                   </a>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -59,11 +51,9 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-persian">خدمات</h3>
             <ul className="space-y-2">
-              {services.map((service, index) => (
-                <li key={index} className="text-primary-foreground/80 text-persian">
+              {services.map((service, index) => <li key={index} className="text-primary-foreground/80 text-persian">
                   {service}
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -72,18 +62,12 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-persian">تماس با ما</h3>
             
             <div className="space-y-3">
-              <a 
-                href="tel:+987633445566"
-                className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors"
-              >
+              <a href="tel:+987633445566" className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors">
                 <Phone className="w-5 h-5" />
-                <span>076-33445566</span>
+                <span>09137380080</span>
               </a>
               
-              <a 
-                href="mailto:info@tarkhisun.ir"
-                className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors"
-              >
+              <a href="mailto:info@tarkhisun.ir" className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors">
                 <Mail className="w-5 h-5" />
                 <span>info@tarkhisun.ir</span>
               </a>
@@ -108,10 +92,7 @@ const Footer = () => {
               اولین هوش مصنوعی گمرکات - کاملاً رایگان
             </p>
             
-            <button 
-              onClick={() => window.open('https://t.me/N8NAutoBotBot', '_blank')}
-              className="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover:bg-accent-light transition-colors text-persian"
-            >
+            <button onClick={() => window.open('https://t.me/N8NAutoBotBot', '_blank')} className="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover:bg-accent-light transition-colors text-persian">
               شروع مشاوره رایگان
             </button>
           </div>
@@ -130,8 +111,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

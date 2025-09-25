@@ -18,13 +18,16 @@ const ExchangeRates = () => {
   const fetchExchangeRates = async () => {
     setLoading(true);
     try {
+      console.log('Fetching exchange rates...');
       const response = await fetch('https://gomrok24.com/customer/settings/get-exchange-rate');
       
       if (!response.ok) {
+        console.error('API response not ok:', response.status);
         throw new Error('Failed to fetch rates');
       }
       
       const data = await response.json();
+      console.log('API Response:', data);
       
       // Transform the API response to our format
       const transformedRates: ExchangeRate[] = [

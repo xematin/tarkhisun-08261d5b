@@ -1,42 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Tarkhisun Design System - Professional Customs & Logistics */
 
 @layer base {
   :root {
+    /* Core Colors - Professional Navy & Emerald Theme */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 225 89% 19%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 225 89% 19%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 225 89% 19%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Navy Blue Primary - Trust & Authority */
+    --primary: 225 89% 19%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 225 89% 35%;
+    --primary-lighter: 225 89% 85%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Emerald Green Accent - Success & Progress */
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 160 84% 55%;
+    --accent-lighter: 160 84% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Neutral Grays */
+    --secondary: 220 13% 96%;
+    --secondary-foreground: 225 89% 19%;
+    
+    --muted: 220 13% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 225 89% 19%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Design System Variables */
+    --radius: 0.75rem;
 
-    --radius: 0.5rem;
+    /* Custom Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(225, 89%, 19%), hsl(225, 89%, 35%));
+    --gradient-accent: linear-gradient(135deg, hsl(160, 84%, 39%), hsl(160, 84%, 55%));
+    --gradient-hero: linear-gradient(135deg, hsl(225, 89%, 19%) 0%, hsl(160, 84%, 39%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(220, 13%, 98%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 2px 8px hsl(225, 89%, 19% / 0.08);
+    --shadow-medium: 0 8px 25px hsl(225, 89%, 19% / 0.15);
+    --shadow-strong: 0 20px 40px hsl(225, 89%, 19% / 0.25);
+    --shadow-ai: 0 0 30px hsl(160, 84%, 39% / 0.3);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -91,6 +116,85 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Persian RTL Support */
+  html[dir="rtl"] {
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+  }
+}
+
+@layer components {
+  /* Professional Button Variants */
+  .btn-hero {
+    @apply bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300;
+  }
+
+  .btn-ai {
+    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-xl shadow-ai hover:shadow-strong transform hover:scale-105 transition-all duration-300 relative overflow-hidden;
+  }
+
+  .btn-ai::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-accent-light to-accent opacity-0 hover:opacity-100 transition-opacity duration-300;
+  }
+
+  /* Card Styles */
+  .card-service {
+    @apply bg-card border border-border rounded-2xl p-6 shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-2;
+  }
+
+  .card-ai-feature {
+    @apply bg-gradient-to-br from-accent-lighter to-white border-2 border-accent/20 rounded-2xl p-8 shadow-ai hover:shadow-strong transition-all duration-500 transform hover:scale-105;
+  }
+
+  /* Exchange Rate Cards */
+  .exchange-card {
+    @apply bg-white border border-border rounded-xl p-4 shadow-soft hover:shadow-medium transition-all duration-300;
+  }
+
+  /* Hero Section */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  /* Animations */
+  .fade-in-up {
+    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
+  }
+
+  .fade-in-up.animate {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Persian Typography */
+  .heading-primary {
+    @apply text-4xl md:text-6xl font-bold text-primary leading-tight;
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  .heading-secondary {
+    @apply text-2xl md:text-4xl font-semibold text-primary;
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  .heading-tertiary {
+    @apply text-xl md:text-2xl font-medium text-primary;
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  .text-persian {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    line-height: 1.8;
   }
 }
 

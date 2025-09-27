@@ -30,32 +30,40 @@ const ExchangeRates = () => {
       console.log('API Response:', data);
       
       // Transform the API response to our format
+      // API returns { lastUpdate, items: [{ currency, price: "285,000 [ 0 ]" }, ...] }
+      const items = Array.isArray((data as any).items) ? (data as any).items : [];
+
+      const parsePrice = (s: string) => {
+        const baseMatch = s.match(/([\d,]+)\s*\[/);
+        const changeMatch = s.match(/\[\s*([+\-]?\d[\d,]*)\s*\]/);
+        const base = baseMatch ? Number(baseMatch[1].replace(/,/g, "")) : 0;
+        const change = changeMatch ? Number(changeMatch[1].replace(/,/g, "")) : 0;
+        return { base, change };
+      };
+
+      const findByKeyword = (keyword: string) =>
+        items.find((it: any) => String(it.currency || "").includes(keyword));
+
+      const pick = (keyword: string) => {
+        const row = findByKeyword(keyword);
+        const { base, change } = row?.price ? parsePrice(String(row.price)) : { base: 0, change: 0 };
+        const sell = base;
+        const buy = Math.max(base - change, 0);
+        return { buy, sell };
+      };
+
+      const usd = pick("دلار آمریکا");
+      const eur = pick("یورو");
+      const gbp = pick("پوند انگلیس");
+
       const transformedRates: ExchangeRate[] = [
-        {
-          currency: "USD",
-          name: "دلار آمریکا",
-          buy: data.usd?.buy || 0,
-          sell: data.usd?.sell || 0,
-          icon: DollarSign
-        },
-        {
-          currency: "EUR", 
-          name: "یورو",
-          buy: data.eur?.buy || 0,
-          sell: data.eur?.sell || 0,
-          icon: Euro
-        },
-        {
-          currency: "GBP",
-          name: "پوند انگلیس", 
-          buy: data.gbp?.buy || 0,
-          sell: data.gbp?.sell || 0,
-          icon: PoundSterling
-        }
+        { currency: "USD", name: "دلار آمریکا", buy: usd.buy, sell: usd.sell, icon: DollarSign },
+        { currency: "EUR", name: "یورو", buy: eur.buy, sell: eur.sell, icon: Euro },
+        { currency: "GBP", name: "پوند انگلیس", buy: gbp.buy, sell: gbp.sell, icon: PoundSterling },
       ];
       
       setRates(transformedRates);
-      setLastUpdate(new Date().toLocaleString('fa-IR'));
+      setLastUpdate((data as any).lastUpdate ? new Date((data as any).lastUpdate).toLocaleString('fa-IR') : new Date().toLocaleString('fa-IR'));
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
       // Fallback dummy data for demo

@@ -5,18 +5,17 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, User, ArrowRight, CheckCircle, AlertTriangle, FileText } from "lucide-react";
-
 const BlogPost = () => {
-  const { slug } = useParams();
-
+  const {
+    slug
+  } = useParams();
   useEffect(() => {
     // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
+
     // SEO Meta Tags
     document.title = "راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس | ترخیصان";
-    
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'راهنمای گام به گام ترخیص کالا از گمرک شهید رجایی بندرعباس، مدارک لازم، مراحل و نکات مهم برای واردکنندگان');
@@ -77,7 +76,6 @@ const BlogPost = () => {
       "articleSection": "مشاوره امور گمرکی",
       "keywords": "ترخیص کالا, گمرک شهید رجایی, بندرعباس, مشاوره امور گمرکی"
     };
-
     let scriptTag = document.querySelector('script[type="application/ld+json"]');
     if (scriptTag) {
       scriptTag.textContent = JSON.stringify(structuredData);
@@ -87,11 +85,8 @@ const BlogPost = () => {
       scriptTag.textContent = JSON.stringify(structuredData);
       document.head.appendChild(scriptTag);
     }
-
   }, []);
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <main>
@@ -173,20 +168,10 @@ const BlogPost = () => {
                       </div>
                       
                       <div className="space-y-3">
-                        {[
-                          "بارنامه (Bill of Lading) اصل",
-                          "فاکتور تجاری (Commercial Invoice)",
-                          "لیست بسته‌بندی (Packing List)",
-                          "گواهینامه مبدأ (Certificate of Origin)",
-                          "مجوزهای لازم (در صورت نیاز)",
-                          "بیمه‌نامه محموله",
-                          "کارت ملی و کد اقتصادی واردکننده"
-                        ].map((doc, index) => (
-                          <div key={index} className="flex items-center gap-3 text-persian">
+                        {["بارنامه (Bill of Lading) اصل", "فاکتور تجاری (Commercial Invoice)", "لیست بسته‌بندی (Packing List)", "گواهینامه مبدأ (Certificate of Origin)", "مجوزهای لازم (در صورت نیاز)", "بیمه‌نامه محموله", "کارت ملی و کد اقتصادی واردکننده"].map((doc, index) => <div key={index} className="flex items-center gap-3 text-persian">
                             <CheckCircle className="w-5 h-5 text-accent flex-shrink-0" />
                             <span>{doc}</span>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                     </CardContent>
                   </Card>
@@ -196,34 +181,27 @@ const BlogPost = () => {
                     <h2 className="heading-tertiary mb-6 text-persian">مراحل ترخیص کالا</h2>
                     
                     <div className="space-y-6">
-                      {[
-                        {
-                          step: "۱",
-                          title: "ثبت اظهارنامه گمرکی",
-                          description: "پس از ورود کالا به بندر، اظهارنامه گمرکی در سامانه جامع گمرکی ثبت می‌شود."
-                        },
-                        {
-                          step: "۲", 
-                          title: "بازرسی و تشخیص ارزش",
-                          description: "کالا توسط کارشناسان گمرک بازرسی و ارزش آن تشخیص داده می‌شود."
-                        },
-                        {
-                          step: "۳",
-                          title: "محاسبه عوارض و مالیات",
-                          description: "حقوق گمرکی، مالیات بر ارزش افزوده و سایر عوارض محاسبه می‌شود."
-                        },
-                        {
-                          step: "۴",
-                          title: "پرداخت عوارض",
-                          description: "پس از تأیید، عوارض محاسبه شده پرداخت و رسید دریافت می‌شود."
-                        },
-                        {
-                          step: "۵",
-                          title: "دریافت مجوز ترخیص",
-                          description: "با تکمیل فرآیند، مجوز ترخیص کالا صادر و تحویل داده می‌شود."
-                        }
-                      ].map((item, index) => (
-                        <div key={index} className="flex gap-4">
+                      {[{
+                      step: "۱",
+                      title: "ثبت اظهارنامه گمرکی",
+                      description: "پس از ورود کالا به بندر، اظهارنامه گمرکی در سامانه جامع گمرکی ثبت می‌شود."
+                    }, {
+                      step: "۲",
+                      title: "بازرسی و تشخیص ارزش",
+                      description: "کالا توسط کارشناسان گمرک بازرسی و ارزش آن تشخیص داده می‌شود."
+                    }, {
+                      step: "۳",
+                      title: "محاسبه عوارض و مالیات",
+                      description: "حقوق گمرکی، مالیات بر ارزش افزوده و سایر عوارض محاسبه می‌شود."
+                    }, {
+                      step: "۴",
+                      title: "پرداخت عوارض",
+                      description: "پس از تأیید، عوارض محاسبه شده پرداخت و رسید دریافت می‌شود."
+                    }, {
+                      step: "۵",
+                      title: "دریافت مجوز ترخیص",
+                      description: "با تکمیل فرآیند، مجوز ترخیص کالا صادر و تحویل داده می‌شود."
+                    }].map((item, index) => <div key={index} className="flex gap-4">
                           <div className="flex-shrink-0 w-10 h-10 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold">
                             {item.step}
                           </div>
@@ -231,8 +209,7 @@ const BlogPost = () => {
                             <h3 className="text-lg font-semibold text-primary mb-2 text-persian">{item.title}</h3>
                             <p className="text-muted-foreground text-persian">{item.description}</p>
                           </div>
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
                   </div>
 
@@ -299,7 +276,7 @@ const BlogPost = () => {
                       <CardContent className="p-6">
                         <h3 className="font-semibold mb-4 text-persian">تماس با ما</h3>
                         <div className="space-y-3 text-sm text-persian">
-                          <p>📞 تلفن: ۰۷۶-۳۳۱۲۳۴۵۶</p>
+                          
                           <p>📱 موبایل: ۰۹۱۲۱۲۳۴۵۶۷</p>
                           <p>📍 آدرس: بندرعباس، گمرک شهید رجایی</p>
                         </div>
@@ -327,8 +304,6 @@ const BlogPost = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default BlogPost;

@@ -26,16 +26,36 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      // Prepare URL parameters
+      const params = new URLSearchParams({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        message: formData.message
+      });
 
-    toast({
-      title: "پیام شما دریافت شد",
-      description: "به زودی با شما تماس خواهیم گرفت",
-    });
+      // Send GET request to webhook
+      const webhookUrl = `http://localhost:5678/webhook/0a5e1b61-647b-476b-aa3d-c058a87b5220?${params.toString()}`;
+      await fetch(webhookUrl, {
+        method: 'GET',
+      });
 
-    setFormData({ name: "", email: "", phone: "", message: "" });
-    setIsSubmitting(false);
+      toast({
+        title: "پیام شما دریافت شد",
+        description: "به زودی با شما تماس خواهیم گرفت",
+      });
+
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      toast({
+        title: "خطا در ارسال",
+        description: "لطفاً دوباره تلاش کنید",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [

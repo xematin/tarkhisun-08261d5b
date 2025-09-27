@@ -5,13 +5,16 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navItems = [{
     title: "خانه",
-    href: "#home"
+    href: "/"
   }, {
     title: "خدمات",
     href: "#services"
   }, {
     title: "نرخ ارز",
     href: "#exchange"
+  }, {
+    title: "بلاگ",
+    href: "/blog"
   }, {
     title: "ترخیصان‌یار",
     href: "#ai-assistant"

@@ -36,9 +36,10 @@ const Contact = () => {
       });
 
       // Send GET request to webhook
-      const webhookUrl = `http://localhost:5678/webhook/0a5e1b61-647b-476b-aa3d-c058a87b5220?${params.toString()}`;
+      const webhookUrl = `http://localhost:5678/webhook-test/0a5e1b61-647b-476b-aa3d-c058a87b5220?${params.toString()}`;
       await fetch(webhookUrl, {
         method: 'GET',
+        mode: 'no-cors'
       });
 
       toast({

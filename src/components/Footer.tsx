@@ -21,7 +21,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="text-2xl font-bold text-persian">ترخیص‌سان</div>
+              <div className="text-2xl font-bold text-persian">ترخیصان</div>
             </div>
             
             <p className="text-primary-foreground/80 leading-relaxed text-persian">

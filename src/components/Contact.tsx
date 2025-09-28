@@ -36,7 +36,7 @@ const Contact = () => {
       });
 
       // Send GET request to webhook
-      const webhookUrl = `http://localhost:5678/webhook/0a5e1b61-647b-476b-aa3d-c058a87b5220?${params.toString()}`;
+      const webhookUrl = `https://n8n.tarkhisun.ir/webhook/0a5e1b61-647b-476b-aa3d-c058a87b5220?${params.toString()}`;
       await fetch(webhookUrl, {
         method: 'GET',
         mode: 'no-cors'

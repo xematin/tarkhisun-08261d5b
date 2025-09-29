@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import HSCodeGuide from "./pages/HSCodeGuide";
+import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/hs-code-guide-harmonized-system" element={<HSCodeGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/currencies" element={<Currencies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

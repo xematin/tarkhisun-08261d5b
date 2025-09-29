@@ -162,13 +162,52 @@ const Currencies = () => {
                 const isPositive = rate.change > 0;
                 const isNegative = rate.change < 0;
                 
+                const getCurrencyInfo = (currency: string) => {
+                  const currencyMap: { [key: string]: { flag: string; symbol: string } } = {
+                    'دلار آمریکا': { flag: '🇺🇸', symbol: '$' },
+                    'یورو': { flag: '🇪🇺', symbol: '€' },
+                    'پوند انگلیس': { flag: '🇬🇧', symbol: '£' },
+                    'درهم امارات': { flag: '🇦🇪', symbol: 'د.إ' },
+                    'ین ژاپن': { flag: '🇯🇵', symbol: '¥' },
+                    'یوان چین': { flag: '🇨🇳', symbol: '¥' },
+                    'روپیه هند': { flag: '🇮🇳', symbol: '₹' },
+                    'لیر ترکیه': { flag: '🇹🇷', symbol: '₺' },
+                    'ریال عربستان': { flag: '🇸🇦', symbol: '﷼' },
+                    'کرون سوئد': { flag: '🇸🇪', symbol: 'kr' },
+                    'فرانک سوئیس': { flag: '🇨🇭', symbol: 'CHF' },
+                    'دلار کانادا': { flag: '🇨🇦', symbol: 'C$' },
+                    'دلار استرالیا': { flag: '🇦🇺', symbol: 'A$' },
+                    'وون کره جنوبی': { flag: '🇰🇷', symbol: '₩' },
+                    'روبل روسیه': { flag: '🇷🇺', symbol: '₽' },
+                    'دینار کویت': { flag: '🇰🇼', symbol: 'د.ك' },
+                    'دینار بحرین': { flag: '🇧🇭', symbol: '.د.ب' },
+                    'ریال قطر': { flag: '🇶🇦', symbol: '﷼' },
+                    'ریال عمان': { flag: '🇴🇲', symbol: '﷼' },
+                  };
+                  return currencyMap[currency] || { flag: '🏳️', symbol: '' };
+                };
+
+                const currencyInfo = getCurrencyInfo(rate.currency);
+
                 return (
                   <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary/20">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-semibold text-primary text-persian flex items-center justify-between">
-                        <span className="truncate">{rate.currency}</span>
-                        {isPositive && <ArrowUpIcon className="w-4 h-4 text-accent" />}
-                        {isNegative && <ArrowDownIcon className="w-4 h-4 text-destructive" />}
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{currencyInfo.flag}</span>
+                          <div className="flex flex-col">
+                            <span className="truncate">{rate.currency}</span>
+                            {currencyInfo.symbol && (
+                              <span className="text-xs text-muted-foreground font-normal">
+                                {currencyInfo.symbol}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          {isPositive && <ArrowUpIcon className="w-4 h-4 text-accent" />}
+                          {isNegative && <ArrowDownIcon className="w-4 h-4 text-destructive" />}
+                        </div>
                       </CardTitle>
                     </CardHeader>
                     <CardContent>

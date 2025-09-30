@@ -59,10 +59,10 @@ const AIAssistant = () => {
             </div>
 
             {/* CTA Button */}
-            <Button size="lg" className="btn-ai text-lg px-8 py-4 text-persian" onClick={handleAIClick}>
-              <MessageCircle className="mr-3 h-6 w-6" />
+            <Button size="lg" className="btn-ai text-sm md:text-lg px-4 md:px-8 py-3 md:py-4 text-persian" onClick={handleAIClick}>
+              <MessageCircle className="mr-2 md:mr-3 h-5 md:h-6 w-5 md:w-6" />
               مشاوره رایگان با ترخیصان‌یار
-              <ArrowLeft className="ml-3 h-5 w-5" />
+              <ArrowLeft className="ml-2 md:ml-3 h-4 md:h-5 w-4 md:w-5" />
             </Button>
 
             <p className="text-sm text-muted-foreground mt-4 text-persian">

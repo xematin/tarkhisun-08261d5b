@@ -11,7 +11,7 @@ const Header = () => {
     href: "#services"
   }, {
     title: "نرخ ارز",
-    href: "#exchange"
+    href: "/currencies"
   }, {
     title: "بلاگ",
     href: "/blog"

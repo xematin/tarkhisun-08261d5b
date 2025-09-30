@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import HSCodeGuide from "./pages/HSCodeGuide";
+import CustomsTariffGuide from "./pages/CustomsTariffGuide";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/customs-tariff-definition-importance" element={<CustomsTariffGuide />} />
           <Route path="/blog/hs-code-guide-harmonized-system" element={<HSCodeGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/currencies" element={<Currencies />} />

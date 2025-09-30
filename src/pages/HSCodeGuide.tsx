@@ -355,7 +355,7 @@ const HSCodeGuide = () => {
                         <p className="text-sm mb-4 text-persian opacity-90">
                           متخصصان ما کد دقیق کالا شما را تعیین می‌کنند
                         </p>
-                        <Button variant="secondary" className="w-full text-persian">
+                        <Button variant="cta" className="w-full text-persian">
                           تعیین کد HS
                         </Button>
                       </CardContent>

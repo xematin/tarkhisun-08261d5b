@@ -393,7 +393,7 @@ const CustomsTariffGuide = () => {
                         <p className="text-sm text-muted-foreground mb-4 text-persian">
                           کارشناسان ما آماده ارائه مشاوره در زمینه تعرفه گمرکی و محاسبه هزینه‌های واردات هستند
                         </p>
-                        <Button className="w-full text-persian">
+                        <Button variant="cta" className="w-full text-persian">
                           دریافت مشاوره رایگان
                         </Button>
                       </CardContent>

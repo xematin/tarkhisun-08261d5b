@@ -253,7 +253,7 @@ const BlogPost = () => {
                         <p className="text-sm mb-4 text-persian opacity-90">
                           تیم متخصص ما آماده ارائه مشاوره امور گمرکی است
                         </p>
-                        <Button variant="secondary" className="w-full text-persian">
+                        <Button variant="cta" className="w-full text-persian">
                           مشاوره رایگان
                         </Button>
                       </CardContent>

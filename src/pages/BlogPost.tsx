@@ -277,7 +277,7 @@ const BlogPost = () => {
                         <h3 className="font-semibold mb-4 text-persian">تماس با ما</h3>
                         <div className="space-y-3 text-sm text-persian">
                           
-                          <p>📱 موبایل: ۰۹۱۲۱۲۳۴۵۶۷</p>
+                          <p>📱 موبایل 09177380080</p>
                           <p>📍 آدرس: بندرعباس، گمرک شهید رجایی</p>
                         </div>
                       </CardContent>

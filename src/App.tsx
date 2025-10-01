@@ -9,6 +9,7 @@ import BlogPost from "./pages/BlogPost";
 import HSCodeGuide from "./pages/HSCodeGuide";
 import CustomsTariffGuide from "./pages/CustomsTariffGuide";
 import ExchangeRateGuide from "./pages/ExchangeRateGuide";
+import NTSWGuide from "./pages/NTSWGuide";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/blog/customs-tariff-definition-importance" element={<CustomsTariffGuide />} />
           <Route path="/blog/hs-code-guide-harmonized-system" element={<HSCodeGuide />} />
           <Route path="/blog/exchange-rate-guide" element={<ExchangeRateGuide />} />
+          <Route path="/blog/ntsw-complete-guide" element={<NTSWGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/currencies" element={<Currencies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

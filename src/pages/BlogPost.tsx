@@ -278,7 +278,7 @@ const BlogPost = () => {
                         <div className="space-y-3 text-sm text-persian">
                           
                           <p>📱 موبایل 09177380080</p>
-                          <p>📍 آدرس: بندرعباس، گمرک شهید رجایی</p>
+                          <p>📍 آدرس : بندرعباس، گمرک شهید رجایی</p>
                         </div>
                       </CardContent>
                     </Card>

@@ -438,7 +438,7 @@ const CustomsTariffGuide = () => {
                         <div className="space-y-3 text-sm text-persian">
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Phone className="w-4 h-4 text-accent" />
-                            <span>09177380080</span>
+                            <span>موبایل : 09177380080</span>
                           </div>
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Mail className="w-4 h-4 text-accent" />

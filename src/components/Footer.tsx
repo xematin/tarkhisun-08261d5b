@@ -62,9 +62,9 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-persian">تماس با ما</h3>
             
             <div className="space-y-3">
-              <a href="tel:+987633445566" className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors">
+              <a href="tel:+989177380080" className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors">
                 <Phone className="w-5 h-5" />
-                <span>09137380080</span>
+                <span>09177380080</span>
               </a>
               
               <a href="mailto:info@tarkhisun.ir" className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors">

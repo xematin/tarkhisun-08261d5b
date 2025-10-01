@@ -5,16 +5,14 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, User, Phone, Mail } from "lucide-react";
-
 const CustomsTariffGuide = () => {
   useEffect(() => {
     // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
+
     // SEO Meta Tags
     document.title = "تعریف و اهمیت تعرفه گمرکی در واردات و صادرات | راهنمای جامع تعرفه کالا";
-    
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی، اهمیت تعرفه در تجارت بین‌المللی');
@@ -59,7 +57,6 @@ const CustomsTariffGuide = () => {
         document.head.appendChild(tag);
       }
     };
-
     setOGTag('og:title', 'تعریف و اهمیت تعرفه گمرکی در واردات و صادرات');
     setOGTag('og:description', 'راهنمای کامل تعرفه گمرکی، انواع تعرفه کالا و نحوه محاسبه حقوق ورودی');
     setOGTag('og:type', 'article');
@@ -93,7 +90,6 @@ const CustomsTariffGuide = () => {
       },
       "keywords": "تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, حقوق ورودی"
     };
-
     let scriptTag = document.querySelector('script[type="application/ld+json"]');
     if (scriptTag) {
       scriptTag.textContent = JSON.stringify(structuredData);
@@ -103,11 +99,8 @@ const CustomsTariffGuide = () => {
       scriptTag.textContent = JSON.stringify(structuredData);
       document.head.appendChild(scriptTag);
     }
-
   }, []);
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <main>
@@ -445,11 +438,11 @@ const CustomsTariffGuide = () => {
                         <div className="space-y-3 text-sm text-persian">
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Phone className="w-4 h-4 text-accent" />
-                            <span>۰۷۶-۳۳۳۳۳۳۳۳</span>
+                            <span>09177380080</span>
                           </div>
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Mail className="w-4 h-4 text-accent" />
-                            <span>info@tarkhisan.ir</span>
+                            <span>ایمیل : info@tarkhisan.ir</span>
                           </div>
                         </div>
                       </CardContent>
@@ -476,8 +469,6 @@ const CustomsTariffGuide = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default CustomsTariffGuide;

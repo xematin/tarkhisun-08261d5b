@@ -381,7 +381,7 @@ const HSCodeGuide = () => {
                       <CardContent className="p-6">
                         <h3 className="font-semibold mb-4 text-persian">تماس با ما</h3>
                         <div className="space-y-3 text-sm text-persian">
-                          <p>📱 موبایل: ۰۹۱۲۱۲۳۴۵۶۷</p>
+                          <p>📱 موبایل: ۰۹۱۷۷۳۸۰۰۸۰</p>
                           <p>📍 آدرس: بندرعباس، گمرک شهید رجایی</p>
                         </div>
                       </CardContent>

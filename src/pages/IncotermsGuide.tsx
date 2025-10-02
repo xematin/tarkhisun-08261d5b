@@ -1,0 +1,462 @@
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Ship, Truck, Package, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+
+const IncotermsGuide = () => {
+  useEffect(() => {
+    // Set RTL direction for Persian content
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', 'fa');
+    
+    // SEO Meta Tags
+    document.title = "اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا | ترخیصان";
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات';
+      document.head.appendChild(meta);
+    }
+
+    // Keywords Meta Tag
+    const keywords = document.querySelector('meta[name="keywords"]');
+    if (keywords) {
+      keywords.setAttribute('content', 'اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'keywords';
+      meta.content = 'اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک';
+      document.head.appendChild(meta);
+    }
+
+    // Canonical URL
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const canonicalUrl = window.location.href;
+    if (canonical) {
+      canonical.setAttribute('href', canonicalUrl);
+    } else {
+      const link = document.createElement('link');
+      link.rel = 'canonical';
+      link.href = canonicalUrl;
+      document.head.appendChild(link);
+    }
+
+    // Open Graph Tags
+    const setOGTag = (property: string, content: string) => {
+      let tag = document.querySelector(`meta[property="${property}"]`);
+      if (tag) {
+        tag.setAttribute('content', content);
+      } else {
+        tag = document.createElement('meta');
+        tag.setAttribute('property', property);
+        tag.setAttribute('content', content);
+        document.head.appendChild(tag);
+      }
+    };
+
+    setOGTag('og:title', 'اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا');
+    setOGTag('og:description', 'راهنمای جامع اینکوترمز - آشنایی با انواع شرایط تحویل بین‌المللی کالا');
+    setOGTag('og:type', 'article');
+    setOGTag('og:locale', 'fa_IR');
+    setOGTag('og:url', canonicalUrl);
+
+    // Structured Data for Article
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا",
+      "description": "راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات",
+      "author": {
+        "@type": "Organization",
+        "name": "ترخیصان"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ترخیصان",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "بندرعباس",
+          "addressRegion": "هرمزگان",
+          "addressCountry": "IR"
+        }
+      },
+      "datePublished": "2025-10-02",
+      "dateModified": "2025-10-02",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": canonicalUrl
+      },
+      "keywords": "اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی"
+    };
+
+    let scriptTag = document.querySelector('script[type="application/ld+json"]');
+    if (scriptTag) {
+      scriptTag.textContent = JSON.stringify(structuredData);
+    } else {
+      scriptTag = document.createElement('script');
+      scriptTag.setAttribute('type', 'application/ld+json');
+      scriptTag.textContent = JSON.stringify(structuredData);
+      document.head.appendChild(scriptTag);
+    }
+
+  }, []);
+
+  const incotermsTypes = [
+    {
+      code: "EXW",
+      name: "Ex Works",
+      nameFa: "از کارخانه",
+      description: "فروشنده کالا را در محل خود (کارخانه، انبار) در اختیار خریدار قرار می‌دهد",
+      responsibility: "حداقل مسئولیت فروشنده",
+      icon: Package
+    },
+    {
+      code: "FOB",
+      name: "Free on Board",
+      nameFa: "بر روی کشتی",
+      description: "فروشنده کالا را روی کشتی در بندر مبدا قرار می‌دهد و هزینه حمل دریایی با خریدار",
+      responsibility: "مسئولیت مشترک",
+      icon: Ship
+    },
+    {
+      code: "CIF",
+      name: "Cost, Insurance and Freight",
+      nameFa: "هزینه، بیمه و حمل",
+      description: "فروشنده هزینه حمل و بیمه تا بندر مقصد را پرداخت می‌کند",
+      responsibility: "مسئولیت فروشنده تا بندر مقصد",
+      icon: Ship
+    },
+    {
+      code: "DAP",
+      name: "Delivered at Place",
+      nameFa: "تحویل در محل",
+      description: "فروشنده کالا را تا محل مورد توافق تحویل می‌دهد (قبل از تخلیه)",
+      responsibility: "مسئولیت بالای فروشنده",
+      icon: Truck
+    },
+    {
+      code: "DDP",
+      name: "Delivered Duty Paid",
+      nameFa: "تحویل با پرداخت حقوق",
+      description: "فروشنده تمام هزینه‌ها شامل حقوق گمرکی را تا محل خریدار پرداخت می‌کند",
+      responsibility: "حداکثر مسئولیت فروشنده",
+      icon: Truck
+    }
+  ];
+
+  const selectionTips = [
+    "نوع کالا و حساسیت آن به شرایط حمل",
+    "تجربه و دانش طرفین در امور بین‌المللی",
+    "هزینه‌های حمل و بیمه کالا",
+    "قوانین و مقررات گمرکی کشور مقصد",
+    "ریسک‌های احتمالی و میزان تحمل ریسک",
+    "امکانات حمل و نقل در بنادر مبدا و مقصد"
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      <main>
+        {/* Hero Section */}
+        <section className="py-20 bg-gradient-to-br from-secondary to-white">
+          <div className="container mx-auto px-4" dir="rtl">
+            <div className="max-w-4xl mx-auto">
+              <Link to="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors text-persian">
+                <ArrowRight className="ml-2 h-4 w-4" />
+                بازگشت به بلاگ
+              </Link>
+              
+              <h1 className="heading-primary mb-6 text-persian">
+                اینکوترمز چیست؟
+                <br />
+                <span className="text-accent">راهنمای شرایط تحویل بین‌المللی کالا</span>
+              </h1>
+              
+              <div className="flex flex-wrap gap-6 text-sm text-muted-foreground mb-8 text-persian">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  <span>راهنمای جامع</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>نویسنده: تیم ترخیصان</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>زمان مطالعه: ۱۴ دقیقه</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Main Content */}
+        <article className="py-16">
+          <div className="container mx-auto px-4" dir="rtl">
+            <div className="max-w-4xl mx-auto">
+              
+              {/* Introduction */}
+              <section className="mb-12">
+                <p className="text-lg leading-relaxed mb-6 text-persian">
+                  <strong>اینکوترمز (Incoterms)</strong> مخفف عبارت International Commercial Terms به معنای "شرایط تجاری بین‌المللی" است که توسط اتاق بازرگانی بین‌المللی (ICC) تدوین شده و مجموعه‌ای از قوانین استاندارد برای تعیین مسئولیت‌ها، هزینه‌ها و ریسک‌های مربوط به حمل و تحویل کالا در تجارت بین‌المللی را مشخص می‌کند.
+                </p>
+                
+                <div className="bg-accent/10 border-r-4 border-accent p-6 rounded-lg mb-6">
+                  <p className="text-persian font-medium">
+                    نکته مهم: اینکوترمز تعیین می‌کند که چه کسی مسئول پرداخت هزینه حمل، بیمه، بارگیری، تخلیه و حقوق گمرکی است و در چه نقطه‌ای مسئولیت و ریسک از فروشنده به خریدار منتقل می‌شود.
+                  </p>
+                </div>
+              </section>
+
+              {/* Why Incoterms Matter */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">
+                  چرا اینکوترمز مهم است؟
+                </h2>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="card-service">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 text-persian">
+                        <CheckCircle2 className="w-6 h-6 text-accent" />
+                        شفافیت مسئولیت‌ها
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-persian">
+                      تعیین دقیق مسئولیت فروشنده و خریدار در هر مرحله از حمل کالا
+                    </CardContent>
+                  </Card>
+
+                  <Card className="card-service">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 text-persian">
+                        <CheckCircle2 className="w-6 h-6 text-accent" />
+                        کاهش اختلافات
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-persian">
+                      پیشگیری از سوءتفاهم و اختلافات قراردادی بین طرفین معامله
+                    </CardContent>
+                  </Card>
+
+                  <Card className="card-service">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 text-persian">
+                        <CheckCircle2 className="w-6 h-6 text-accent" />
+                        مدیریت هزینه‌ها
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-persian">
+                      تعیین دقیق اینکه چه کسی کدام هزینه‌ها را پرداخت می‌کند
+                    </CardContent>
+                  </Card>
+
+                  <Card className="card-service">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 text-persian">
+                        <CheckCircle2 className="w-6 h-6 text-accent" />
+                        استاندارد جهانی
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-persian">
+                      زبان مشترک برای تمام کشورها در تجارت بین‌المللی
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
+
+              {/* Types of Incoterms */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">
+                  مهم‌ترین انواع اینکوترمز
+                </h2>
+                
+                <div className="space-y-6">
+                  {incotermsTypes.map((incoterm) => {
+                    const Icon = incoterm.icon;
+                    return (
+                      <Card key={incoterm.code} className="card-service">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-3 text-persian">
+                            <div className="p-3 bg-accent/10 rounded-lg">
+                              <Icon className="w-6 h-6 text-accent" />
+                            </div>
+                            <div>
+                              <div className="text-2xl font-bold">{incoterm.code}</div>
+                              <div className="text-sm text-muted-foreground font-normal">
+                                {incoterm.name} ({incoterm.nameFa})
+                              </div>
+                            </div>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <p className="text-persian">{incoterm.description}</p>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="px-3 py-1 bg-secondary rounded-full text-persian">
+                              {incoterm.responsibility}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-8 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-6 rounded-lg">
+                  <div className="flex gap-3">
+                    <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold mb-2 text-persian">توجه مهم</h3>
+                      <p className="text-sm text-persian">
+                        اینکوترمز ۲۰۲۰ شامل ۱۱ قانون استاندارد است که در این مقاله به ۵ مورد پرکاربرد آن اشاره شده است. سایر اینکوترمزها شامل FCA, CPT, CIP, FAS, CFR و DAT می‌باشند.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Selection Tips */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">
+                  نکات انتخاب اینکوترمز مناسب
+                </h2>
+                
+                <Card className="card-service">
+                  <CardContent className="pt-6">
+                    <p className="mb-6 text-persian">
+                      انتخاب اینکوترمز مناسب یکی از تصمیمات مهم در قراردادهای تجاری بین‌المللی است. عوامل زیر را در نظر بگیرید:
+                    </p>
+                    
+                    <ul className="space-y-4">
+                      {selectionTips.map((tip, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                          <span className="text-persian">{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </section>
+
+              {/* Practical Example */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">
+                  مثال کاربردی
+                </h2>
+                
+                <Card className="card-service bg-gradient-to-br from-accent/5 to-secondary/30">
+                  <CardContent className="pt-6">
+                    <h3 className="font-semibold mb-4 text-lg text-persian">
+                      سناریو: واردات لوازم الکترونیکی از چین به ایران
+                    </h3>
+                    
+                    <div className="space-y-4 text-persian">
+                      <div className="p-4 bg-white dark:bg-gray-900 rounded-lg">
+                        <strong className="text-accent">اینکوترمز FOB:</strong>
+                        <p className="mt-2">
+                          فروشنده چینی کالا را در بندر شانگهای روی کشتی قرار می‌دهد. خریدار ایرانی مسئول پرداخت هزینه حمل دریایی، بیمه و ترخیص گمرکی در بندر شهید رجایی است.
+                        </p>
+                      </div>
+                      
+                      <div className="p-4 bg-white dark:bg-gray-900 rounded-lg">
+                        <strong className="text-accent">اینکوترمز CIF:</strong>
+                        <p className="mt-2">
+                          فروشنده چینی علاوه بر بارگیری در بندر شانگهای، هزینه حمل دریایی و بیمه کالا تا بندر شهید رجایی را نیز پرداخت می‌کند. خریدار فقط مسئول ترخیص گمرکی و حمل داخلی است.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </section>
+
+              {/* Common Mistakes */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">
+                  اشتباهات رایج در استفاده از اینکوترمز
+                </h2>
+                
+                <div className="space-y-4">
+                  <div className="bg-red-50 dark:bg-red-950/20 border-r-4 border-red-500 p-5 rounded-lg">
+                    <h3 className="font-semibold mb-2 text-persian">❌ عدم درج صریح اینکوترمز در قرارداد</h3>
+                    <p className="text-sm text-persian">
+                      همیشه اینکوترمز انتخابی را به صورت واضح در قرارداد درج کنید (مثلاً: CIF Bandar Abbas Incoterms 2020)
+                    </p>
+                  </div>
+                  
+                  <div className="bg-red-50 dark:bg-red-950/20 border-r-4 border-red-500 p-5 rounded-lg">
+                    <h3 className="font-semibold mb-2 text-persian">❌ عدم مطابقت اینکوترمز با نوع حمل</h3>
+                    <p className="text-sm text-persian">
+                      برخی اینکوترمزها فقط برای حمل دریایی (مثل FOB, CIF) و برخی برای تمام انواع حمل (مثل DAP, DDP) کاربرد دارند
+                    </p>
+                  </div>
+                  
+                  <div className="bg-red-50 dark:bg-red-950/20 border-r-4 border-red-500 p-5 rounded-lg">
+                    <h3 className="font-semibold mb-2 text-persian">❌ عدم آگاهی از مسئولیت‌های بیمه</h3>
+                    <p className="text-sm text-persian">
+                      در برخی اینکوترمزها بیمه اجباری نیست، حتماً این موضوع را بررسی کنید
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              {/* Consultation CTA */}
+              <section className="mb-12">
+                <Card className="card-service bg-gradient-to-br from-accent/10 to-secondary/30 border-accent/20">
+                  <CardContent className="pt-6">
+                    <h3 className="heading-tertiary mb-4 text-center text-persian">
+                      نیاز به مشاوره تخصصی دارید؟
+                    </h3>
+                    <p className="text-center mb-6 text-persian">
+                      تیم متخصص ترخیصان آماده است تا شما را در انتخاب اینکوترمز مناسب و کاهش هزینه‌های واردات یاری کند
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <Link to="/#contact">
+                        <Button size="lg" className="text-persian">
+                          درخواست مشاوره رایگان
+                        </Button>
+                      </Link>
+                      <Link to="/blog">
+                        <Button variant="outline" size="lg" className="text-persian">
+                          مطالعه سایر مقالات
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </section>
+
+              {/* Contact Info */}
+              <section className="border-t pt-8">
+                <div className="bg-secondary/30 rounded-xl p-6">
+                  <h3 className="font-semibold mb-4 text-persian">تماس با ما</h3>
+                  <div className="grid md:grid-cols-2 gap-4 text-sm text-persian">
+                    <div>
+                      <strong>آدرس:</strong>
+                      <p className="text-muted-foreground mt-1">بندرعباس، گمرک شهید رجایی</p>
+                    </div>
+                    <div>
+                      <strong>موبایل:</strong>
+                      <p className="text-muted-foreground mt-1 font-english">۰۹۱۷۷۳۸۰۰۸۰</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </div>
+        </article>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default IncotermsGuide;

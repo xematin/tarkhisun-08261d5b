@@ -13,6 +13,7 @@ import NTSWGuide from "./pages/NTSWGuide";
 import IncotermsGuide from "./pages/IncotermsGuide";
 import BusinessCardGuide from "./pages/BusinessCardGuide";
 import SanaExchangeRateGuide from "./pages/SanaExchangeRateGuide";
+import ImportExportGuide from "./pages/ImportExportGuide";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/blog/incoterms-complete-guide" element={<IncotermsGuide />} />
           <Route path="/blog/business-card-complete-guide" element={<BusinessCardGuide />} />
           <Route path="/blog/sana-nima-exchange-rate-difference" element={<SanaExchangeRateGuide />} />
+          <Route path="/blog/import-export-iran-complete-guide" element={<ImportExportGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/currencies" element={<Currencies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

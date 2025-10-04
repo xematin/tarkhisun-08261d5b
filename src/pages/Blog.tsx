@@ -1,12 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, User, ArrowLeft } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const Blog = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 8;
+
   useEffect(() => {
     // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
@@ -86,6 +97,16 @@ const Blog = () => {
   }, []);
 
   const blogPosts = [
+    {
+      id: 9,
+      title: "راهنمای کامل صادرات و واردات در ایران",
+      excerpt: "آشنایی جامع با فرآیند صادرات و واردات کالا: مراحل، مدارک لازم، قوانین، محدودیت‌ها، مجوزها، تعرفه گمرکی و نکات کلیدی برای موفقیت در تجارت بین‌المللی",
+      date: "۱۴۰۴/۷/۱۵",
+      readTime: "۱۸ دقیقه",
+      author: "تیم ترخیصان",
+      slug: "import-export-iran-complete-guide",
+      category: "تجارت خارجی"
+    },
     {
       id: 8,
       title: "تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل",
@@ -168,6 +189,17 @@ const Blog = () => {
     }
   ];
 
+  // Calculate pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -209,7 +241,7 @@ const Blog = () => {
               </div>
 
               <div className="grid lg:grid-cols-2 gap-8">
-                {blogPosts.map((post) => (
+                {currentPosts.map((post) => (
                   <Card key={post.id} className="card-service group cursor-pointer">
                     <CardHeader>
                       <div className="flex items-center justify-between mb-4">
@@ -255,6 +287,41 @@ const Blog = () => {
                   </Card>
                 ))}
               </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex justify-center" dir="ltr">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                          className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                      
+                      {[...Array(totalPages)].map((_, index) => (
+                        <PaginationItem key={index + 1}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(index + 1)}
+                            isActive={currentPage === index + 1}
+                            className="cursor-pointer"
+                          >
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                          className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
 
               {/* Coming Soon */}
               <div className="mt-16 text-center">

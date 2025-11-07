@@ -16,6 +16,7 @@ import SanaExchangeRateGuide from "./pages/SanaExchangeRateGuide";
 import ImportExportGuide from "./pages/ImportExportGuide";
 import ManifestGuide from "./pages/ManifestGuide";
 import TahLanjiImportGuide from "./pages/TahLanjiImportGuide";
+import ExcavationMachineryGuide from "./pages/ExcavationMachineryGuide";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/blog/import-export-iran-complete-guide" element={<ImportExportGuide />} />
           <Route path="/blog/manifest-customs-complete-guide" element={<ManifestGuide />} />
           <Route path="/blog/tah-lanji-mavani-import-guide" element={<TahLanjiImportGuide />} />
+          <Route path="/blog/excavation-machinery-customs-clearance-guide" element={<ExcavationMachineryGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/currencies" element={<Currencies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

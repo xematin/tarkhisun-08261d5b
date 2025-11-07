@@ -17,6 +17,7 @@ import ImportExportGuide from "./pages/ImportExportGuide";
 import ManifestGuide from "./pages/ManifestGuide";
 import TahLanjiImportGuide from "./pages/TahLanjiImportGuide";
 import ExcavationMachineryGuide from "./pages/ExcavationMachineryGuide";
+import Article1CommissionGuide from "./pages/Article1CommissionGuide";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/blog/manifest-customs-complete-guide" element={<ManifestGuide />} />
           <Route path="/blog/tah-lanji-mavani-import-guide" element={<TahLanjiImportGuide />} />
           <Route path="/blog/excavation-machinery-customs-clearance-guide" element={<ExcavationMachineryGuide />} />
+          <Route path="/blog/article-1-commission-customs-guide" element={<Article1CommissionGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/currencies" element={<Currencies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

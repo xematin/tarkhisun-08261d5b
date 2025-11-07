@@ -37,7 +37,7 @@ const HeroSection = () => {
               <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary text-persian" onClick={() => document.getElementById('ai-assistant')?.scrollIntoView({
               behavior: 'smooth'
             })}>
-                ترخیصان‌یار - مشاور هوشمند
+                ترخیصان‌یار - مشاور هوش‌مصنوعی
               </Button>
             </div>
 

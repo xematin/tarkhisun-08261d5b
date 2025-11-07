@@ -13,9 +13,8 @@ const HeroSection = () => {
       <div className="container relative z-10 mx-auto px-4" dir="rtl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-right">
-            <h1 className="heading-primary text-white mb-6 fade-in-up animate">مشاوره امور گمرکی بندرعباس
-شهید رجایی<br />
-              <span className="text-accent-light">در بندرعباس</span>
+            <h1 className="heading-primary text-white mb-6 fade-in-up animate">مشاوره امور گمرکی بندرعباس<br/>
+              <span className="text-accent-light">شهید رجایی</span>
             </h1>
             
             <p className="text-xl text-white/90 mb-8 leading-relaxed text-persian fade-in-up animate" style={{

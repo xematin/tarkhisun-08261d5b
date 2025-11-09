@@ -19,6 +19,7 @@ import TahLanjiImportGuide from "./pages/TahLanjiImportGuide";
 import ExcavationMachineryGuide from "./pages/ExcavationMachineryGuide";
 import Article1CommissionGuide from "./pages/Article1CommissionGuide";
 import KuwaitAfghanistanTransitGuide from "./pages/KuwaitAfghanistanTransitGuide";
+import IslamQalaGuide from "./pages/IslamQalaGuide";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/blog/excavation-machinery-customs-clearance-guide" element={<ExcavationMachineryGuide />} />
           <Route path="/blog/article-1-commission-customs-guide" element={<Article1CommissionGuide />} />
           <Route path="/blog/kuwait-afghanistan-transit-guide" element={<KuwaitAfghanistanTransitGuide />} />
+          <Route path="/blog/islam-qala-border-crossing-guide" element={<IslamQalaGuide />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/currencies" element={<Currencies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

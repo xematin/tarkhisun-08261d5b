@@ -50,7 +50,7 @@ const HSCodeGuide = () => {
     }
 
     // Structured Data for Article
-    const structuredData = {
+    const articleData = {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها",
@@ -76,6 +76,37 @@ const HSCodeGuide = () => {
       },
       "articleSection": "تعرفه و کدگذاری",
       "keywords": "کد HS, تعرفه هماهنگ, کد کالا, HS Code, Harmonized System"
+    };
+
+    // BreadcrumbList Structured Data
+    const breadcrumbData = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": window.location.origin + "/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "بلاگ",
+          "item": window.location.origin + "/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "کد HS کالا",
+          "item": window.location.href
+        }
+      ]
+    };
+
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@graph": [articleData, breadcrumbData]
     };
 
     let scriptTag = document.querySelector('script[type="application/ld+json"]');

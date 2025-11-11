@@ -63,7 +63,7 @@ const CustomsTariffGuide = () => {
     setOGTag('og:locale', 'fa_IR');
 
     // Structured Data for Article
-    const structuredData = {
+    const articleData = {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "تعریف و اهمیت تعرفه گمرکی در واردات و صادرات",
@@ -90,6 +90,38 @@ const CustomsTariffGuide = () => {
       },
       "keywords": "تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, حقوق ورودی"
     };
+    
+    // BreadcrumbList Structured Data
+    const breadcrumbData = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": window.location.origin + "/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "بلاگ",
+          "item": window.location.origin + "/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "تعریف و اهمیت تعرفه گمرکی",
+          "item": window.location.href
+        }
+      ]
+    };
+
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@graph": [articleData, breadcrumbData]
+    };
+    
     let scriptTag = document.querySelector('script[type="application/ld+json"]');
     if (scriptTag) {
       scriptTag.textContent = JSON.stringify(structuredData);

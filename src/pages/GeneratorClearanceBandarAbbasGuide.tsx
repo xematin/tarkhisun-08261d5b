@@ -64,7 +64,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
     }
 
     // Structured Data for Article
-    const structuredData = {
+    const articleData = {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک ژنراتور",
@@ -90,6 +90,37 @@ const GeneratorClearanceBandarAbbasGuide = () => {
         "@id": canonicalUrl
       },
       "keywords": "ترخیص ژنراتور بندرعباس, واردات ژنراتور, گمرک ژنراتور, حقوق گمرکی ژنراتور"
+    };
+
+    // BreadcrumbList Structured Data
+    const breadcrumbData = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": window.location.origin + "/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "بلاگ",
+          "item": window.location.origin + "/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "ترخیص ژنراتور بندرعباس",
+          "item": canonicalUrl
+        }
+      ]
+    };
+
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@graph": [articleData, breadcrumbData]
     };
 
     let scriptTag = document.querySelector('script[type="application/ld+json"]');

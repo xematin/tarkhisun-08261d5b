@@ -110,6 +110,34 @@ const DubaiToAbbasImportGuide = () => {
             ]
           })}
         </script>
+
+        {/* BreadcrumbList Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "خانه",
+                "item": window.location.origin + "/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "بلاگ",
+                "item": window.location.origin + "/blog"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "واردات کالا از دبی به بندرعباس",
+                "item": window.location.origin + "/blog/dubai-to-abbas-import-guide"
+              }
+            ]
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-background">

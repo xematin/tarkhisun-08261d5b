@@ -60,7 +60,7 @@ const HeroSection = () => {
           }}>
               <div className="text-center">
                 <Shield className="h-8 w-8 text-accent-light mx-auto mb-2" />
-                <div className="text-2xl font-bold text-white">۱۵+</div>
+                <div className="text-2xl font-bold text-white">۲۰+</div>
                 <div className="text-sm text-white/80 text-persian">سال تجربه</div>
               </div>
               <div className="text-center">

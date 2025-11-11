@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Services from "@/components/Services";
@@ -6,6 +7,11 @@ import ExchangeRates from "@/components/ExchangeRates";
 import AIAssistant from "@/components/AIAssistant";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import hero480Webp from "@/assets/hero-port-480.webp";
+import hero768Webp from "@/assets/hero-port-768.webp";
+import hero1024Webp from "@/assets/hero-port-1024.webp";
+import hero1440Webp from "@/assets/hero-port-1440.webp";
+import hero1920Webp from "@/assets/hero-port-1920.webp";
 
 const Index = () => {
   useEffect(() => {
@@ -207,17 +213,30 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <HeroSection />
-        <Services />
-        <ExchangeRates />
-        <AIAssistant />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <Helmet>
+        <link
+          rel="preload"
+          as="image"
+          href={hero1024Webp}
+          imageSrcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`}
+          imageSizes="100vw"
+          type="image/webp"
+        />
+      </Helmet>
+      
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main>
+          <HeroSection />
+          <Services />
+          <ExchangeRates />
+          <AIAssistant />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 

@@ -1,19 +1,41 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield, Clock, Award } from "lucide-react";
-import heroImage from "@/assets/hero-port.webp";
+import hero480Avif from "@/assets/hero-port-480.avif";
+import hero768Avif from "@/assets/hero-port-768.avif";
+import hero1024Avif from "@/assets/hero-port-1024.avif";
+import hero1440Avif from "@/assets/hero-port-1440.avif";
+import hero1920Avif from "@/assets/hero-port-1920.avif";
+import hero480Webp from "@/assets/hero-port-480.webp";
+import hero768Webp from "@/assets/hero-port-768.webp";
+import hero1024Webp from "@/assets/hero-port-1024.webp";
+import hero1440Webp from "@/assets/hero-port-1440.webp";
+import hero1920Webp from "@/assets/hero-port-1920.webp";
 const HeroSection = () => {
   return <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
-          className="w-full h-full object-cover"
-          width="1920"
-          height="1080"
-          fetchPriority="high"
-          loading="eager"
-        />
+        <picture>
+          <source 
+            type="image/avif"
+            srcSet={`${hero480Avif} 480w, ${hero768Avif} 768w, ${hero1024Avif} 1024w, ${hero1440Avif} 1440w, ${hero1920Avif} 1920w`}
+            sizes="100vw"
+          />
+          <source 
+            type="image/webp"
+            srcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`}
+            sizes="100vw"
+          />
+          <img 
+            src={hero1024Webp}
+            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
+            className="w-full h-full object-cover"
+            width="1920"
+            height="1080"
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-accent/60"></div>
       </div>
       

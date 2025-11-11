@@ -14,6 +14,7 @@ const ExchangeRates = () => {
   const [rates, setRates] = useState<ExchangeRate[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<string>("");
+  const [isReady, setIsReady] = useState(false);
 
   const fetchExchangeRates = async () => {
     setLoading(true);
@@ -79,11 +80,34 @@ const ExchangeRates = () => {
   };
 
   useEffect(() => {
+    // Defer initial fetch to avoid blocking critical rendering
+    const scheduleReady = () => {
+      if ('requestIdleCallback' in window) {
+        return (window as any).requestIdleCallback(() => setIsReady(true), { timeout: 2000 });
+      } else {
+        return setTimeout(() => setIsReady(true), 1500);
+      }
+    };
+    
+    const id = scheduleReady();
+    
+    return () => {
+      if (typeof id === 'number') {
+        clearTimeout(id);
+      } else if ('cancelIdleCallback' in window) {
+        (window as any).cancelIdleCallback(id);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+    
     fetchExchangeRates();
     // Auto-refresh every 5 minutes
     const interval = setInterval(fetchExchangeRates, 300000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isReady]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('fa-IR').format(price);

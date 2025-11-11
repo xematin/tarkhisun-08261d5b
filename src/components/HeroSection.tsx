@@ -15,26 +15,9 @@ const HeroSection = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <picture>
-          <source 
-            type="image/avif"
-            srcSet={`${hero480Avif} 480w, ${hero768Avif} 768w, ${hero1024Avif} 1024w, ${hero1440Avif} 1440w, ${hero1920Avif} 1920w`}
-            sizes="100vw"
-          />
-          <source 
-            type="image/webp"
-            srcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`}
-            sizes="100vw"
-          />
-          <img 
-            src={hero1024Webp}
-            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
-            className="w-full h-full object-cover"
-            width="1920"
-            height="1080"
-            fetchPriority="high"
-            loading="eager"
-            decoding="async"
-          />
+          <source type="image/avif" srcSet={`${hero480Avif} 480w, ${hero768Avif} 768w, ${hero1024Avif} 1024w, ${hero1440Avif} 1440w, ${hero1920Avif} 1920w`} sizes="100vw" />
+          <source type="image/webp" srcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`} sizes="100vw" />
+          <img src={hero1024Webp} alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" className="w-full h-full object-cover" width="1920" height="1080" fetchPriority="high" loading="eager" decoding="async" />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-accent/60"></div>
       </div>
@@ -43,7 +26,7 @@ const HeroSection = () => {
       <div className="container relative z-10 mx-auto px-4" dir="rtl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-right">
-            <h1 className="heading-primary text-white mb-6 fade-in-up animate">مشاوره امور گمرکی بندرعباس<br/>
+            <h1 className="heading-primary text-white mb-6 fade-in-up animate">مشاوره امور گمرکی بندرعباس<br />
               <span className="text-accent-light">شهید رجایی</span>
             </h1>
             
@@ -99,7 +82,7 @@ const HeroSection = () => {
         }}>
             <div className="w-96 h-96 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <div className="text-center text-white">
-                <div className="text-6xl font-bold mb-2">۱۵+</div>
+                <div className="text-6xl font-bold mb-2">۲۰+</div>
                 <div className="text-lg text-persian">سال خدمت</div>
                 <div className="text-sm opacity-80 text-persian">در بندرعباس</div>
               </div>

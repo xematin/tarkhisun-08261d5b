@@ -220,7 +220,7 @@ const Index = () => {
           as="image"
           href={hero1024Webp}
           imageSrcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`}
-          imageSizes="100vw"
+          imageSizes="(max-width: 640px) 480px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
           type="image/webp"
         />
       </Helmet>

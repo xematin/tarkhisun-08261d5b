@@ -24,10 +24,7 @@ const Footer = () => {
               <div className="text-2xl font-bold text-persian">ترخیصان</div>
             </div>
             
-            <p className="text-primary-foreground/80 leading-relaxed text-persian">
-              بیش از ۱۵ سال تجربه در ترخیص کالا و مشاوره گمرکی. 
-              ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم.
-            </p>
+            <p className="text-primary-foreground/80 leading-relaxed text-persian">بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی. ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم.</p>
             
             <div className="flex items-center gap-2 text-accent-light">
               <Bot className="w-5 h-5" />

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap&font-display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -28,6 +28,7 @@
     --accent: 160 84% 39%;
     --accent-foreground: 0 0% 100%;
     --accent-light: 160 84% 55%;
+    --accent-dark: 160 84% 25%;
     --accent-lighter: 160 84% 90%;
 
     /* Neutral Grays */

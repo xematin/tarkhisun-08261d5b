@@ -81,7 +81,7 @@ const Services = () => {
                 </ul>
 
                 <div className="mt-6 pt-6 border-t border-border">
-                  <button className="text-accent font-medium text-sm hover:text-accent-light transition-colors text-persian">
+                  <button className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian">
                     اطلاعات بیشتر ←
                   </button>
                 </div>

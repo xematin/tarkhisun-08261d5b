@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield, Clock, Award } from "lucide-react";
-import heroImage from "@/assets/hero-port.jpg";
+import heroImage from "@/assets/hero-port.webp";
 const HeroSection = () => {
   return <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -9,6 +9,9 @@ const HeroSection = () => {
           src={heroImage} 
           alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
           className="w-full h-full object-cover"
+          width="1920"
+          height="1080"
+          fetchPriority="high"
           loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-accent/60"></div>

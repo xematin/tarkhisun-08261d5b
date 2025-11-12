@@ -215,25 +215,25 @@ const Article1CommissionGuide = () => {
                   </p>
                   <div className="grid gap-4">
                     <div className="border-r-4 border-accent pr-4">
-                      <h3 className="font-bold text-lg mb-2">۱. رسیدگی به اختلافات ارزش گمرکی</h3>
+                      <h3 className="text-lg mb-2 text-persian"><strong>۱. رسیدگی به اختلافات ارزش گمرکی</strong></h3>
                       <p className="text-muted-foreground">
                         بررسی دقیق اختلافات بین ارزش اظهاری واردکننده و ارزیابی گمرک
                       </p>
                     </div>
                     <div className="border-r-4 border-accent pr-4">
-                      <h3 className="font-bold text-lg mb-2">۲. بررسی اسناد و مدارک</h3>
+                      <h3 className="text-lg mb-2 text-persian"><strong>۲. بررسی اسناد و مدارک</strong></h3>
                       <p className="text-muted-foreground">
                         تحلیل فاکتورها، قراردادها، کاتالوگ‌ها و سایر مدارک مرتبط با ارزش کالا
                       </p>
                     </div>
                     <div className="border-r-4 border-accent pr-4">
-                      <h3 className="font-bold text-lg mb-2">۳. صدور رأی نهایی</h3>
+                      <h3 className="text-lg mb-2 text-persian"><strong>۳. صدور رأی نهایی</strong></h3>
                       <p className="text-muted-foreground">
                         اتخاذ تصمیم قطعی در مورد ارزش واقعی کالا و حقوق و عوارض گمرکی
                       </p>
                     </div>
                     <div className="border-r-4 border-accent pr-4">
-                      <h3 className="font-bold text-lg mb-2">۴. حمایت از حقوق واردکنندگان</h3>
+                      <h3 className="text-lg mb-2 text-persian"><strong>۴. حمایت از حقوق واردکنندگان</strong></h3>
                       <p className="text-muted-foreground">
                         تضمین رسیدگی عادلانه و شفاف به پرونده‌های اختلافی
                       </p>
@@ -258,7 +258,7 @@ const Article1CommissionGuide = () => {
                           ۱
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg mb-2">ارزیابی گمرک و ابلاغ اختلاف</h3>
+                          <h3 className="text-lg mb-2 text-persian"><strong>ارزیابی گمرک و ابلاغ اختلاف</strong></h3>
                           <p className="text-muted-foreground">
                             گمرک پس از بررسی اظهارنامه، در صورت عدم قبول ارزش اظهاری، ارزش جدیدی را تعیین و به واردکننده ابلاغ می‌کند.
                           </p>
@@ -272,7 +272,7 @@ const Article1CommissionGuide = () => {
                           ۲
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg mb-2">ثبت اعتراض</h3>
+                          <h3 className="text-lg mb-2 text-persian"><strong>ثبت اعتراض</strong></h3>
                           <p className="text-muted-foreground">
                             واردکننده می‌تواند ظرف <strong>10 روز کاری</strong> پس از ابلاغ، نسبت به ارزیابی گمرک اعتراض کند و درخواست رسیدگی در کمیسیون ماده 1 را ارائه دهد.
                           </p>
@@ -286,7 +286,7 @@ const Article1CommissionGuide = () => {
                           ۳
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg mb-2">ارائه مدارک و دلایل</h3>
+                          <h3 className="text-lg mb-2 text-persian"><strong>ارائه مدارک و دلایل</strong></h3>
                           <p className="text-muted-foreground">
                             واردکننده باید مدارک معتبری مانند فاکتور اصلی، قراردادها، کاتالوگ‌ها، گواهی‌های مبدأ و اسناد مشابه را برای اثبات ارزش واقعی کالا ارائه دهد.
                           </p>
@@ -300,7 +300,7 @@ const Article1CommissionGuide = () => {
                           ۴
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg mb-2">تشکیل جلسه کمیسیون</h3>
+                          <h3 className="text-lg mb-2 text-persian"><strong>تشکیل جلسه کمیسیون</strong></h3>
                           <p className="text-muted-foreground">
                             کمیسیون با حضور تمامی اعضا تشکیل می‌شود و پرونده به طور دقیق بررسی می‌شود. واردکننده یا نماینده قانونی وی می‌تواند در جلسه حضور یابد و توضیحات لازم را ارائه دهد.
                           </p>
@@ -314,7 +314,7 @@ const Article1CommissionGuide = () => {
                           ۵
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg mb-2">صدور رأی</h3>
+                          <h3 className="text-lg mb-2 text-persian"><strong>صدور رأی</strong></h3>
                           <p className="text-muted-foreground">
                             کمیسیون پس از بررسی کامل پرونده و مدارک، رأی خود را صادر می‌کند. این رأی می‌تواند به نفع واردکننده (تأیید ارزش اظهاری)، به نفع گمرک (تأیید ارزش ارزیابی شده) یا تعیین ارزش جدیدی بین دو مقدار باشد.
                           </p>
@@ -328,7 +328,7 @@ const Article1CommissionGuide = () => {
                           ۶
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg mb-2">اجرای رأی یا تجدیدنظر</h3>
+                          <h3 className="text-lg mb-2 text-persian"><strong>اجرای رأی یا تجدیدنظر</strong></h3>
                           <p className="text-muted-foreground">
                             رأی کمیسیون ماده 1 لازم‌الاجرا است، اما در صورت عدم رضایت، واردکننده می‌تواند به <strong>شورای عالی گمرکی</strong> یا <strong>دیوان عدالت اداری</strong> مراجعه کند.
                           </p>
@@ -407,9 +407,9 @@ const Article1CommissionGuide = () => {
                 <CardContent className="space-y-4 text-persian">
                   <div className="space-y-4">
                     <div className="bg-amber-50 dark:bg-amber-950/20 border-r-4 border-amber-500 p-4 rounded-lg">
-                      <h3 className="font-bold mb-2 flex items-center gap-2">
+                      <h3 className="mb-2 flex items-center gap-2 text-persian">
                         <AlertTriangle className="w-5 h-5 text-amber-600" />
-                        رعایت مهلت قانونی
+                        <strong>رعایت مهلت قانونی</strong>
                       </h3>
                       <p className="text-sm text-muted-foreground">
                         مهلت اعتراض <strong>10 روز کاری</strong> پس از ابلاغ است و عدم رعایت آن منجر به قطعی شدن ارزیابی گمرک می‌شود.
@@ -417,28 +417,28 @@ const Article1CommissionGuide = () => {
                     </div>
 
                     <div className="bg-blue-50 dark:bg-blue-950/20 border-r-4 border-blue-500 p-4 rounded-lg">
-                      <h3 className="font-bold mb-2">اهمیت مدارک معتبر</h3>
+                      <h3 className="mb-2 text-persian"><strong>اهمیت مدارک معتبر</strong></h3>
                       <p className="text-sm text-muted-foreground">
                         ارائه مدارک اصلی و معتبر نقش تعیین‌کننده‌ای در تصمیم کمیسیون دارد. فاکتورهای دستکاری شده یا مشکوک به سرعت شناسایی می‌شوند.
                       </p>
                     </div>
 
                     <div className="bg-green-50 dark:bg-green-950/20 border-r-4 border-green-500 p-4 rounded-lg">
-                      <h3 className="font-bold mb-2">استفاده از مشاور حقوقی</h3>
+                      <h3 className="mb-2 text-persian"><strong>استفاده از مشاور حقوقی</strong></h3>
                       <p className="text-sm text-muted-foreground">
                         در پرونده‌های پیچیده یا با ارزش بالا، استفاده از مشاور حقوقی یا کارشناس گمرکی توصیه می‌شود.
                       </p>
                     </div>
 
                     <div className="bg-purple-50 dark:bg-purple-950/20 border-r-4 border-purple-500 p-4 rounded-lg">
-                      <h3 className="font-bold mb-2">حضور در جلسه</h3>
+                      <h3 className="mb-2 text-persian"><strong>حضور در جلسه</strong></h3>
                       <p className="text-sm text-muted-foreground">
                         حضور واردکننده یا نماینده قانونی در جلسه کمیسیون برای ارائه توضیحات و پاسخ به سؤالات بسیار مؤثر است.
                       </p>
                     </div>
 
                     <div className="bg-red-50 dark:bg-red-950/20 border-r-4 border-red-500 p-4 rounded-lg">
-                      <h3 className="font-bold mb-2">امکان تجدیدنظر</h3>
+                      <h3 className="mb-2 text-persian"><strong>امکان تجدیدنظر</strong></h3>
                       <p className="text-sm text-muted-foreground">
                         در صورت عدم رضایت از رأی کمیسیون، می‌توانید به شورای عالی گمرکی یا دیوان عدالت اداری مراجعه کنید.
                       </p>

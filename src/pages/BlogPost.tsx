@@ -206,7 +206,7 @@ const BlogPost = () => {
                             {item.step}
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-primary mb-2 text-persian">{item.title}</h3>
+                            <h3 className="text-lg text-primary mb-2 text-persian"><strong>{item.title}</strong></h3>
                             <p className="text-muted-foreground text-persian">{item.description}</p>
                           </div>
                         </div>)}
@@ -247,8 +247,8 @@ const BlogPost = () => {
                     {/* CTA Card */}
                     <Card className="bg-gradient-to-br from-primary to-accent text-white">
                       <CardContent className="p-6 text-center">
-                        <h3 className="text-lg font-bold mb-3 text-persian">
-                          نیاز به مشاوره تخصصی دارید؟
+                        <h3 className="text-lg mb-3 text-persian">
+                          <strong>نیاز به مشاوره تخصصی دارید؟</strong>
                         </h3>
                         <p className="text-sm mb-4 text-persian opacity-90">
                           تیم متخصص ما آماده ارائه مشاوره امور گمرکی است
@@ -262,7 +262,7 @@ const BlogPost = () => {
                     {/* Table of Contents */}
                     <Card className="card-service">
                       <CardContent className="p-6">
-                        <h3 className="font-semibold mb-4 text-persian">فهرست مطالب</h3>
+                        <h3 className="mb-4 text-persian"><strong>فهرست مطالب</strong></h3>
                         <nav className="space-y-2 text-sm text-persian">
                           <a href="#documents" className="block hover:text-primary transition-colors">مدارک مورد نیاز</a>
                           <a href="#process" className="block hover:text-primary transition-colors">مراحل ترخیص</a>
@@ -274,7 +274,7 @@ const BlogPost = () => {
                     {/* Contact Info */}
                     <Card className="card-service">
                       <CardContent className="p-6">
-                        <h3 className="font-semibold mb-4 text-persian">تماس با ما</h3>
+                        <h3 className="mb-4 text-persian"><strong>تماس با ما</strong></h3>
                         <div className="space-y-3 text-sm text-persian">
                           
                           <p>📱 09177380080</p>

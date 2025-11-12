@@ -350,7 +350,7 @@ const BusinessCardGuide = () => {
                 
                 <div className="space-y-4">
                   <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
-                    <h3 className="font-bold text-lg mb-2 text-persian">مرحله ۱: عضویت در اتاق بازرگانی</h3>
+                    <h3 className="text-lg mb-2 text-persian"><strong>مرحله ۱: عضویت در اتاق بازرگانی</strong></h3>
                     <p className="text-body text-persian">
                       ابتدا باید در اتاق بازرگانی محل اقامت یا محل فعالیت خود عضو شوید و حق عضویت را پرداخت کنید.
                     </p>

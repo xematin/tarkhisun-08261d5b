@@ -25,7 +25,7 @@ const HeroSection = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPortIndex((prev) => (prev + 1) % ports.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);

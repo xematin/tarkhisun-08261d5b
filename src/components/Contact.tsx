@@ -197,7 +197,7 @@ const Contact = () => {
                     </div>
                     
                     <div className="flex-1">
-                      <h4 className="font-semibold text-primary mb-2 text-persian">{info.title}</h4>
+                      <h4 className="text-primary mb-2 text-persian"><strong>{info.title}</strong></h4>
                       {info.link ? (
                         <a 
                           href={info.link}
@@ -218,7 +218,7 @@ const Contact = () => {
             {/* Map */}
             <div className="mt-8">
               <div className="bg-white rounded-xl shadow-soft p-6">
-                <h4 className="font-semibold text-primary mb-4 text-persian">موقعیت ما</h4>
+                <h4 className="text-primary mb-4 text-persian"><strong>موقعیت ما</strong></h4>
                 <div className="w-full h-64 bg-muted rounded-lg overflow-hidden">
                   <iframe
                     title="موقعیت دفتر ترخیصان در بندرعباس - نقشه بندر شهید رجایی"

@@ -155,7 +155,7 @@ const ExchangeRates = () => {
                       <IconComponent className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary text-persian">{rate.name}</h3>
+                      <h3 className="text-primary text-persian"><strong>{rate.name}</strong></h3>
                       <span className="text-sm text-muted-foreground">{rate.currency}</span>
                     </div>
                   </div>
@@ -170,12 +170,12 @@ const ExchangeRates = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground text-persian">خرید</span>
-                    <span className="font-semibold text-accent">{formatPrice(rate.buy)} ریال</span>
+                    <span className="text-accent"><strong>{formatPrice(rate.buy)}</strong> ریال</span>
                   </div>
                   
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground text-persian">فروش</span>
-                    <span className="font-semibold text-primary">{formatPrice(rate.sell)} ریال</span>
+                    <span className="text-primary"><strong>{formatPrice(rate.sell)}</strong> ریال</span>
                   </div>
                 </div>
 

@@ -85,17 +85,17 @@ const HeroSection = () => {
           }}>
               <div className="text-center">
                 <Shield className="h-8 w-8 text-accent-light mx-auto mb-2" />
-                <div className="text-2xl font-bold text-white">۲۰+</div>
+                <div className="text-2xl text-white"><strong>۲۰+</strong></div>
                 <div className="text-sm text-white/80 text-persian">سال تجربه</div>
               </div>
               <div className="text-center">
                 <Clock className="h-8 w-8 text-accent-light mx-auto mb-2" />
-                <div className="text-2xl font-bold text-white">۲۴/۷</div>
+                <div className="text-2xl text-white"><strong>۲۴/۷</strong></div>
                 <div className="text-sm text-white/80 text-persian">پشتیبانی</div>
               </div>
               <div className="text-center">
                 <Award className="h-8 w-8 text-accent-light mx-auto mb-2" />
-                <div className="text-2xl font-bold text-white">۱۰۰۰+</div>
+                <div className="text-2xl text-white"><strong>۱۰۰۰+</strong></div>
                 <div className="text-sm text-white/80 text-persian">پرونده موفق</div>
               </div>
             </div>
@@ -107,7 +107,7 @@ const HeroSection = () => {
         }}>
             <div className="w-96 h-96 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <div className="text-center text-white">
-                <div className="text-6xl font-bold mb-2">۲۰+</div>
+                <div className="text-6xl mb-2"><strong>۲۰+</strong></div>
                 <div className="text-lg text-persian">سال خدمت</div>
                 <div className="text-sm opacity-80 text-persian">در بندرعباس</div>
               </div>

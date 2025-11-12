@@ -64,7 +64,7 @@ const Services = () => {
                 </div>
                 
                 <h3 className="heading-tertiary mb-4 group-hover:text-accent transition-colors">
-                  {service.title}
+                  <strong>{service.title}</strong>
                 </h3>
                 
                 <p className="text-muted-foreground mb-6 leading-relaxed text-persian">

@@ -21,7 +21,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="text-2xl font-bold text-persian">ترخیصان</div>
+              <div className="text-2xl text-persian"><strong>ترخیصان</strong></div>
             </div>
             
             <p className="text-primary-foreground/80 leading-relaxed text-persian">بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی. ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم.</p>
@@ -34,7 +34,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-persian">لینک‌های سریع</h3>
+            <h3 className="text-lg text-persian"><strong>لینک‌های سریع</strong></h3>
             <ul className="space-y-2">
               {quickLinks.map((link, index) => <li key={index}>
                   <a href={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
@@ -46,7 +46,7 @@ const Footer = () => {
 
           {/* Services */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-persian">خدمات</h3>
+            <h3 className="text-lg text-persian"><strong>خدمات</strong></h3>
             <ul className="space-y-2">
               {services.map((service, index) => <li key={index} className="text-primary-foreground/80 text-persian">
                   {service}
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-persian">تماس با ما</h3>
+            <h3 className="text-lg text-persian"><strong>تماس با ما</strong></h3>
             
             <div className="space-y-3">
               <a href="tel:+989177380080" className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors">
@@ -82,7 +82,7 @@ const Footer = () => {
           <div className="bg-accent/10 rounded-xl p-6 text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Bot className="w-8 h-8 text-accent-light" />
-              <h4 className="text-xl font-semibold text-accent-light text-persian">ترخیصان‌یار</h4>
+              <h4 className="text-xl text-accent-light text-persian"><strong>ترخیصان‌یار</strong></h4>
             </div>
             
             <p className="text-primary-foreground/90 mb-4 text-persian">

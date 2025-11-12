@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield, Clock, Award } from "lucide-react";
+import { useState, useEffect } from "react";
 import hero480Avif from "@/assets/hero-port-480.avif";
 import hero768Avif from "@/assets/hero-port-768.avif";
 import hero1024Avif from "@/assets/hero-port-1024.avif";
@@ -11,6 +12,24 @@ import hero1024Webp from "@/assets/hero-port-1024.webp";
 import hero1440Webp from "@/assets/hero-port-1440.webp";
 import hero1920Webp from "@/assets/hero-port-1920.webp";
 const HeroSection = () => {
+  const ports = [
+    "بندرعباس شهید رجایی",
+    "بندر امام خمینی",
+    "بندر چابهار",
+    "بندر بوشهر",
+    "بندر انزلی"
+  ];
+
+  const [currentPortIndex, setCurrentPortIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPortIndex((prev) => (prev + 1) % ports.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -26,8 +45,9 @@ const HeroSection = () => {
       <div className="container relative z-10 mx-auto px-4" dir="rtl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-right">
-            <h1 className="heading-primary text-white mb-6 fade-in-up animate">مشاوره امور گمرکی بندرعباس<br />
-              <span className="text-accent-light">شهید رجایی</span>
+            <h1 className="heading-primary text-white mb-6 fade-in-up animate">
+              مشاوره امور گمرکی<br />
+              <span className="text-accent-light transition-all duration-500">{ports[currentPortIndex]}</span>
             </h1>
             
             <p className="text-xl text-white/90 mb-8 leading-relaxed text-persian fade-in-up animate" style={{

@@ -12,24 +12,14 @@ import hero1024Webp from "@/assets/hero-port-1024.webp";
 import hero1440Webp from "@/assets/hero-port-1440.webp";
 import hero1920Webp from "@/assets/hero-port-1920.webp";
 const HeroSection = () => {
-  const ports = [
-    "بندرعباس شهید رجایی",
-    "بندر امام خمینی",
-    "بندر چابهار",
-    "بندر بوشهر",
-    "بندر انزلی"
-  ];
-
+  const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی"];
   const [currentPortIndex, setCurrentPortIndex] = useState(0);
-
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentPortIndex((prev) => (prev + 1) % ports.length);
+      setCurrentPortIndex(prev => (prev + 1) % ports.length);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
-
   return <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -47,10 +37,7 @@ const HeroSection = () => {
           <div className="text-center lg:text-right">
             <h1 className="heading-primary text-white mb-6 fade-in-up animate">
               مشاوره امور گمرکی<br />
-              <span 
-                key={currentPortIndex} 
-                className="text-accent-light inline-block animate-fade-in"
-              >
+              <span key={currentPortIndex} className="text-accent-light inline-block animate-fade-in">
                 {ports[currentPortIndex]}
               </span>
             </h1>
@@ -58,8 +45,7 @@ const HeroSection = () => {
             <p className="text-xl text-white/90 mb-8 leading-relaxed text-persian fade-in-up animate" style={{
             animationDelay: "0.2s"
           }}>
-              با بیش از ۱۵ سال تجربه در ترخیص کالا و مشاوره گمرکی، 
-              ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم
+              با بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی، ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start fade-in-up animate" style={{

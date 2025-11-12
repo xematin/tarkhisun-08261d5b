@@ -75,8 +75,8 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "آدرس",
-      content: "بندرعباس، بندر شهید رجایی، خیابان گمرک",
-      link: "https://maps.google.com/?q=Bandar+Abbas+Shahid+Rajaei+Port"
+      content: "بندرعباس، محله پشت شهر، استان هرمزگان",
+      link: "https://maps.app.goo.gl/dXrrPbYKTXgQnMNT7"
     },
     {
       icon: Clock,
@@ -221,8 +221,8 @@ const Contact = () => {
                 <h4 className="text-primary mb-4 text-persian"><strong>موقعیت ما</strong></h4>
                 <div className="w-full h-64 bg-muted rounded-lg overflow-hidden">
                   <iframe
-                    title="موقعیت دفتر ترخیصان در بندرعباس - نقشه بندر شهید رجایی"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3622.3689613393156!2d56.2833!3d27.1833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ef7215c56c47c4b%3A0x4c85b1e7d6b9c0a0!2sBandar%20Abbas%2C%20Iran!5e0!3m2!1sen!2s!4v1640000000000!5m2!1sen!2s"
+                    title="موقعیت دفتر ترخیصان در بندرعباس - محله پشت شهر"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d905.5892403348289!2d56.26646!3d27.1761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDEwJzM0LjAiTiA1NsKwMTUnNTkuMyJF!5e0!3m2!1sfa!2sir!4v1640000000000!5m2!1sfa!2sir"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}

@@ -303,8 +303,8 @@ const ManifestGuide = () => {
                           <Ship className="w-8 h-8 text-accent" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-xl font-bold mb-2 text-persian">
-                            ۱. مانیفست دریایی (Sea Manifest)
+                          <h3 className="text-xl mb-2 text-persian">
+                            <strong>۱. مانیفست دریایی (Sea Manifest)</strong>
                           </h3>
                           <p className="text-muted-foreground text-persian leading-relaxed">
                             برای محموله‌های حمل‌شده از طریق کشتی استفاده می‌شود. این نوع مانیفست شامل اطلاعات کامل کشتی، کنتینرها و محموله‌های بارگیری‌شده در هر بندر است.

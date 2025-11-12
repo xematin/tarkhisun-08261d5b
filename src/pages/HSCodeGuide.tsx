@@ -227,10 +227,10 @@ const HSCodeGuide = () => {
                         </div>
                         
                         <div className="space-y-4">
-                          <div className="flex items-center gap-3 text-persian">
+                      <div className="flex items-center gap-3 text-persian">
                             <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center text-accent font-bold">12</div>
                             <div>
-                              <div className="font-semibold">فصل (Chapter)</div>
+                              <div><strong>فصل (Chapter)</strong></div>
                               <div className="text-sm text-muted-foreground">دسته کلی کالا</div>
                             </div>
                           </div>

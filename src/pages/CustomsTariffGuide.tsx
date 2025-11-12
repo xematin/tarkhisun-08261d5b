@@ -208,37 +208,37 @@ const CustomsTariffGuide = () => {
                       
                       <Card className="mb-6 border-r-4 border-r-accent">
                         <CardContent className="p-6">
-                          <h3 className="text-xl font-semibold mb-4 text-persian">۱. تعرفه حقوق ورودی (Import Duty)</h3>
-                          <p className="text-muted-foreground text-persian leading-relaxed">
-                            این نوع تعرفه بر کالاهای وارداتی اعمال می‌شود و معمولاً به عنوان درصدی از ارزش گمرکی کالا محاسبه می‌گردد. نرخ این تعرفه بر اساس نوع کالا، کشور مبدأ و توافقات تجاری متفاوت است.
-                          </p>
+                      <h3 className="text-xl mb-4 text-persian"><strong>۱. تعرفه حقوق ورودی (Import Duty)</strong></h3>
+                      <p className="text-muted-foreground text-persian leading-relaxed">
+                        این نوع تعرفه بر کالاهای وارداتی اعمال می‌شود و معمولاً به عنوان درصدی از ارزش گمرکی کالا محاسبه می‌گردد. نرخ این تعرفه بر اساس نوع کالا، کشور مبدأ و توافقات تجاری متفاوت است.
+                      </p>
                         </CardContent>
                       </Card>
 
                       <Card className="mb-6 border-r-4 border-r-accent">
                         <CardContent className="p-6">
-                          <h3 className="text-xl font-semibold mb-4 text-persian">۲. سود بازرگانی</h3>
-                          <p className="text-muted-foreground text-persian leading-relaxed">
-                            سود بازرگانی یک نوع عوارض است که به منظور حمایت از تولیدکنندگان داخلی و جبران اختلاف قیمت کالای داخلی و خارجی اخذ می‌شود. این نرخ معمولاً برای کالاهایی که تولید داخلی دارند بالاتر است.
-                          </p>
+                      <h3 className="text-xl mb-4 text-persian"><strong>۲. سود بازرگانی</strong></h3>
+                      <p className="text-muted-foreground text-persian leading-relaxed">
+                        سود بازرگانی یک نوع عوارض است که به منظور حمایت از تولیدکنندگان داخلی و جبران اختلاف قیمت کالای داخلی و خارجی اخذ می‌شود. این نرخ معمولاً برای کالاهایی که تولید داخلی دارند بالاتر است.
+                      </p>
                         </CardContent>
                       </Card>
 
                       <Card className="mb-6 border-r-4 border-r-accent">
                         <CardContent className="p-6">
-                          <h3 className="text-xl font-semibold mb-4 text-persian">۳. مالیات بر ارزش افزوده (VAT)</h3>
-                          <p className="text-muted-foreground text-persian leading-relaxed">
-                            مالیات بر ارزش افزوده بر روی ارزش کالا به اضافه حقوق ورودی و سایر عوارض محاسبه می‌شود. این مالیات در ایران معمولاً ۹ درصد است و بر تمام کالاهای وارداتی اعمال می‌گردد.
-                          </p>
+                      <h3 className="text-xl mb-4 text-persian"><strong>۳. مالیات بر ارزش افزوده (VAT)</strong></h3>
+                      <p className="text-muted-foreground text-persian leading-relaxed">
+                        مالیات بر ارزش افزوده بر روی ارزش کالا به اضافه حقوق ورودی و سایر عوارض محاسبه می‌شود. این مالیات در ایران معمولاً ۹ درصد است و بر تمام کالاهای وارداتی اعمال می‌گردد.
+                      </p>
                         </CardContent>
                       </Card>
 
                       <Card className="border-r-4 border-r-accent">
                         <CardContent className="p-6">
-                          <h3 className="text-xl font-semibold mb-4 text-persian">۴. عوارض ویژه</h3>
-                          <p className="text-muted-foreground text-persian leading-relaxed">
-                            برخی کالاها مشمول عوارض ویژه‌ای می‌شوند که بر اساس سیاست‌های خاص اقتصادی و حمایتی تعیین می‌گردند. این عوارض ممکن است شامل حقوق پادمپینگ، حقوق تلافی‌جویانه و سایر عوارض باشد.
-                          </p>
+                      <h3 className="text-xl mb-4 text-persian"><strong>۴. عوارض ویژه</strong></h3>
+                      <p className="text-muted-foreground text-persian leading-relaxed">
+                        برخی کالاها مشمول عوارض ویژه‌ای می‌شوند که بر اساس سیاست‌های خاص اقتصادی و حمایتی تعیین می‌گردند. این عوارض ممکن است شامل حقوق پادمپینگ، حقوق تلافی‌جویانه و سایر عوارض باشد.
+                      </p>
                         </CardContent>
                       </Card>
                     </section>

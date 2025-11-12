@@ -171,7 +171,7 @@ const SanaExchangeRateGuide = () => {
                 <CardHeader>
                   <CardTitle className="text-persian flex items-center gap-2">
                     <TrendingUp className="w-6 h-6 text-accent" />
-                    سامانه نیما (NIMA) چیست؟
+                    <strong>سامانه نیما (NIMA) چیست؟</strong>
                   </CardTitle>
                   <CardDescription className="text-persian">
                     سامانه نظارت یکپارچه معاملات ارزی

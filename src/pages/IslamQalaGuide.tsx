@@ -107,9 +107,9 @@ const IslamQalaGuide = () => {
                 {/* Introduction */}
                 <Card className="mb-12 border-r-4 border-r-accent">
                   <CardContent className="p-6">
-                    <h2 className="text-2xl font-bold mb-4 text-persian flex items-center gap-2">
+                    <h2 className="text-2xl mb-4 text-persian flex items-center gap-2">
                       <MapPin className="w-6 h-6 text-accent" />
-                      گذرگاه مرزی اسلام قلعه چیست؟
+                      <strong>گذرگاه مرزی اسلام قلعه چیست؟</strong>
                     </h2>
                     <p className="text-muted-foreground leading-relaxed text-persian">
                       اسلام قلعه یکی از مهم‌ترین و استراتژیک‌ترین گذرگاه‌های مرزی ایران در مرز با افغانستان است که در استان خراسان رضوی واقع شده و نقش حیاتی در تجارت دو کشور ایفا می‌کند. این مرز در مقابل شهر و گذرگاه دوغارون افغانستان قرار دارد و یکی از اصلی‌ترین مسیرهای صادرات کالا به افغانستان و ترانزیت به کشورهای آسیای میانه محسوب می‌شود.

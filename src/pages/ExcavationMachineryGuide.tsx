@@ -212,7 +212,7 @@ const ExcavationMachineryGuide = () => {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-persian">
                         <Wrench className="w-5 h-5 text-accent" />
-                        بیل مکانیکی (Excavator)
+                        <strong>بیل مکانیکی (Excavator)</strong>
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="text-persian">

@@ -78,7 +78,7 @@ const KuwaitAfghanistanTransitGuide = () => {
                 <div className="flex items-start gap-3 mb-4">
                   <MapPin className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
                   <div>
-                    <h2 className="text-2xl font-bold mb-3 text-foreground">مسیرهای اصلی ترانزیت کویت به افغانستان</h2>
+                    <h2 className="text-2xl mb-3 text-foreground"><strong>مسیرهای اصلی ترانزیت کویت به افغانستان</strong></h2>
                     <p className="text-foreground leading-relaxed mb-4">
                       ترانزیت کالا از کویت به افغانستان از طریق چند مسیر اصلی انجام می‌شود که هر کدام ویژگی‌های خاص خود را دارند:
                     </p>

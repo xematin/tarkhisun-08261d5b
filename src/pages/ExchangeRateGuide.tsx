@@ -163,7 +163,7 @@ const ExchangeRateGuide = () => {
 
               {/* Main Content */}
               <section className="mb-12">
-                <h2 className="heading-secondary mb-6 text-persian">نرخ ارز گمرکی چیست؟</h2>
+                <h2 className="heading-secondary mb-6 text-persian"><strong>نرخ ارز گمرکی چیست؟</strong></h2>
                 
                 <p className="text-muted-foreground leading-relaxed text-persian mb-6">
                   <strong>نرخ ارز گمرکی</strong> یا <strong>نرخ مبادله‌ای</strong> نرخ رسمی ارز است که توسط بانک مرکزی جمهوری اسلامی ایران اعلام می‌شود و برای محاسبه <strong>حقوق ورودی</strong>، <strong>عوارض گمرکی</strong> و <strong>سود بازرگانی</strong> کالاهای وارداتی در گمرکات ایران استفاده می‌شود.

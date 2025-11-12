@@ -225,7 +225,7 @@ const IncotermsGuide = () => {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-3 text-persian">
                         <CheckCircle2 className="w-6 h-6 text-accent" />
-                        شفافیت مسئولیت‌ها
+                        <strong>شفافیت مسئولیت‌ها</strong>
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="text-persian">

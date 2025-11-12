@@ -176,7 +176,7 @@ const TahLanjiImportGuide = () => {
                 <div>
                   <h2 className="heading-secondary mb-6 text-persian flex items-center gap-3">
                     <Ship className="w-8 h-8 text-accent" />
-                    واردات ته لنجی (ملوانی) چیست؟
+                    <strong>واردات ته لنجی (ملوانی) چیست؟</strong>
                   </h2>
                   <div className="space-y-4 text-lg leading-relaxed text-persian">
                     <p>

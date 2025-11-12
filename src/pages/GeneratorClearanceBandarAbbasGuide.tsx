@@ -238,7 +238,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
                   <h2 className="heading-secondary text-persian">مدارک لازم برای ترخیص ژنراتور</h2>
                 </div>
                 <div className="space-y-4 text-foreground/90 text-persian">
-                  <h3 className="text-xl font-semibold mb-3 text-persian">۱. مدارک اصلی و اجباری</h3>
+                  <h3 className="text-xl mb-3 text-persian"><strong>۱. مدارک اصلی و اجباری</strong></h3>
                   <ul className="list-disc pr-6 space-y-2">
                     <li>کارت بازرگانی معتبر</li>
                     <li>ثبت سفارش کالا (Order Registration)</li>
@@ -249,7 +249,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
                     <li>کاتالوگ و مشخصات فنی ژنراتور</li>
                   </ul>
 
-                  <h3 className="text-xl font-semibold mb-3 mt-6 text-persian">۲. مدارک تکمیلی</h3>
+                  <h3 className="text-xl mb-3 mt-6 text-persian"><strong>۲. مدارک تکمیلی</strong></h3>
                   <ul className="list-disc pr-6 space-y-2">
                     <li>گواهی استاندارد (برای برخی انواع ضروری است)</li>
                     <li>مجوز سازمان حفاظت محیط زیست (برای ژنراتورهای دیزلی)</li>

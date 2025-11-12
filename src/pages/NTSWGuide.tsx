@@ -158,7 +158,7 @@ const NTSWGuide = () => {
 
               {/* Introduction */}
               <section className="mb-12">
-                <h2 className="heading-secondary mb-6 text-persian">سامانه جامع تجارت چیست؟</h2>
+                <h2 className="heading-secondary mb-6 text-persian"><strong>سامانه جامع تجارت چیست؟</strong></h2>
                 <div className="prose-persian space-y-4">
                   <p className="text-lg leading-relaxed">
                     <strong>سامانه جامع تجارت (National Trade Single Window)</strong> یک پلتفرم الکترونیکی یکپارچه است که توسط وزارت صنعت، معدن و تجارت ایران راه‌اندازی شده و تمامی خدمات تجاری مرتبط با واردات و صادرات را در یک بستر واحد ارائه می‌دهد.

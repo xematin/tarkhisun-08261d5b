@@ -148,11 +148,11 @@ const ImportExportGuide = () => {
                   </CardContent>
                 </Card>
 
-                <h3 className="text-xl font-semibold mb-4 text-persian">انواع صادرات در ایران</h3>
+                <h3 className="text-xl mb-4 text-persian"><strong>انواع صادرات در ایران</strong></h3>
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg text-persian">۱. صادرات قطعی</CardTitle>
+                      <CardTitle className="text-lg text-persian"><strong>۱. صادرات قطعی</strong></CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground text-persian">

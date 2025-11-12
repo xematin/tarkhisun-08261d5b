@@ -199,11 +199,11 @@ const DubaiToAbbasImportGuide = () => {
               </section>
 
               {/* Table of Contents */}
-              <Card className="mb-12 bg-muted/30">
+                  <Card className="mb-12 bg-muted/30">
                 <CardHeader>
                   <CardTitle className="text-persian flex items-center gap-2">
                     <Package className="w-5 h-5 text-accent" />
-                    فهرست مطالب
+                    <strong>فهرست مطالب</strong>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -233,11 +233,11 @@ const DubaiToAbbasImportGuide = () => {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <Card className="border-accent/20">
+                    <Card className="border-accent/20">
                     <CardHeader>
                       <CardTitle className="text-persian text-lg flex items-center gap-2">
                         <CheckCircle className="w-5 h-5 text-accent" />
-                        نزدیکی جغرافیایی
+                        <strong>نزدیکی جغرافیایی</strong>
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="text-persian text-foreground/80">

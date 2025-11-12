@@ -32,14 +32,14 @@ const Index = () => {
       document.head.appendChild(meta);
     }
 
-    // Keywords Meta Tag
+    // Keywords Meta Tag - Including all ports
     const keywords = document.querySelector('meta[name="keywords"]');
     if (keywords) {
-      keywords.setAttribute('content', 'مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی');
+      keywords.setAttribute('content', 'مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی, ترخیص کالا در بنادر ایران');
     } else {
       const meta = document.createElement('meta');
       meta.name = 'keywords';
-      meta.content = 'مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی';
+      meta.content = 'مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی, ترخیص کالا در بنادر ایران';
       document.head.appendChild(meta);
     }
 
@@ -176,10 +176,69 @@ const Index = () => {
       }
     };
 
+    // Service Areas - All Iranian Ports
+    const serviceAreaData = {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "خدمات ترخیص کالا و مشاوره گمرکی",
+      "provider": {
+        "@type": "Organization",
+        "name": "ترخیصان"
+      },
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": "بندرعباس شهید رجایی",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "بندرعباس",
+            "addressRegion": "هرمزگان"
+          }
+        },
+        {
+          "@type": "Place",
+          "name": "بندر امام خمینی",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "بندر امام خمینی",
+            "addressRegion": "خوزستان"
+          }
+        },
+        {
+          "@type": "Place",
+          "name": "بندر چابهار",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "چابهار",
+            "addressRegion": "سیستان و بلوچستان"
+          }
+        },
+        {
+          "@type": "Place",
+          "name": "بندر بوشهر",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "بوشهر",
+            "addressRegion": "بوشهر"
+          }
+        },
+        {
+          "@type": "Place",
+          "name": "بندر انزلی",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "بندر انزلی",
+            "addressRegion": "گیلان"
+          }
+        }
+      ],
+      "description": "ارائه خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران شامل بندرعباس شهید رجایی، بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی"
+    };
+
     // Combine all structured data
     const combinedStructuredData = {
       "@context": "https://schema.org",
-      "@graph": [organizationData, localBusinessData, websiteData]
+      "@graph": [organizationData, localBusinessData, websiteData, serviceAreaData]
     };
 
     let scriptTag = document.querySelector('script[type="application/ld+json"]');
@@ -227,6 +286,25 @@ const Index = () => {
       
       <div className="min-h-screen bg-background">
         <Header />
+        
+        {/* Hidden SEO Content - All Iranian Ports */}
+        <div className="sr-only" aria-hidden="true">
+          <h2>خدمات ترخیص کالا و مشاوره گمرکی در بنادر ایران</h2>
+          <ul>
+            <li>مشاوره امور گمرکی بندرعباس شهید رجایی - ترخیص کالا در بزرگترین بندر ایران</li>
+            <li>ترخیص کالا بندر امام خمینی - خدمات گمرکی در بندر امام خمینی خوزستان</li>
+            <li>مشاوره گمرکی بندر چابهار - ترخیص کالا در بندر چابهار سیستان و بلوچستان</li>
+            <li>ترخیص کالا بندر بوشهر - خدمات گمرکی در بندر بوشهر خلیج فارس</li>
+            <li>مشاوره امور گمرکی بندر انزلی - ترخیص کالا در بندر انزلی دریای خزر</li>
+          </ul>
+          <p>
+            ترخیصان ارائه دهنده خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران.
+            از بندرعباس شهید رجایی گرفته تا بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی،
+            ما با بیش از 15 سال تجربه آماده ارائه خدمات گمرکی، ترخیص سریع کالا، اخذ مجوزها و مشاوره
+            تخصصی در زمینه واردات و صادرات هستیم.
+          </p>
+        </div>
+        
         <main>
           <HeroSection />
           <Services />

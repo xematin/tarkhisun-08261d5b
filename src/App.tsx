@@ -27,6 +27,7 @@ const KuwaitAfghanistanTransitGuide = lazy(() => import("./pages/KuwaitAfghanist
 const IslamQalaGuide = lazy(() => import("./pages/IslamQalaGuide"));
 const GeneratorClearanceBandarAbbasGuide = lazy(() => import("./pages/GeneratorClearanceBandarAbbasGuide"));
 const DubaiToAbbasImportGuide = lazy(() => import("./pages/DubaiToAbbasImportGuide"));
+const WaterTankClearanceGuide = lazy(() => import("./pages/WaterTankClearanceGuide"));
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
             <Route path="/blog/islam-qala-border-crossing-guide" element={<IslamQalaGuide />} />
             <Route path="/blog/generator-clearance-bandar-abbas-guide" element={<GeneratorClearanceBandarAbbasGuide />} />
             <Route path="/blog/dubai-to-abbas-import-guide" element={<DubaiToAbbasImportGuide />} />
+            <Route path="/blog/water-tank-clearance-bandar-abbas-guide" element={<WaterTankClearanceGuide />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/currencies" element={<Currencies />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

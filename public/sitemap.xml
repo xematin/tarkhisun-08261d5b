@@ -19,6 +19,13 @@
 
   <!-- Priority 0.8 -->
   <url>
+    <loc>https://tarkhisun.ir/currencies</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://tarkhisun.ir/blog/water-tank-clearance-bandar-abbas-guide</loc>
     <lastmod>2025-11-12</lastmod>
     <changefreq>monthly</changefreq>
@@ -40,12 +47,6 @@
     <loc>https://tarkhisun.ir/blog/tah-lanji-mavani-import-guide</loc>
     <lastmod>2025-11-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://tarkhisun.ir/currencies</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>

@@ -47,7 +47,12 @@ const HeroSection = () => {
           <div className="text-center lg:text-right">
             <h1 className="heading-primary text-white mb-6 fade-in-up animate">
               مشاوره امور گمرکی<br />
-              <span className="text-accent-light transition-all duration-500">{ports[currentPortIndex]}</span>
+              <span 
+                key={currentPortIndex} 
+                className="text-accent-light inline-block animate-fade-in"
+              >
+                {ports[currentPortIndex]}
+              </span>
             </h1>
             
             <p className="text-xl text-white/90 mb-8 leading-relaxed text-persian fade-in-up animate" style={{

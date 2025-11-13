@@ -76,7 +76,7 @@ const Contact = () => {
       icon: MapPin,
       title: "آدرس",
       content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 317",
-      link: "https://maps.app.goo.gl/dXrrPbYKTXgQnMNT7"
+      link: "https://maps.app.goo.gl/7AUGkicjxCvRpT6r8"
     },
     {
       icon: Clock,

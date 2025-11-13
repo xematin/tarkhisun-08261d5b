@@ -14,4 +14,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://gomrok24.com/sitemap.xml
+Sitemap: https://tarkhisun.ir/sitemap.xml

@@ -75,7 +75,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "آدرس",
-      content: "بندرعباس، محله پشت شهر، استان هرمزگان",
+      content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شماسی، ساختمان ثریا طبقه سوم واحد 317",
       link: "https://maps.app.goo.gl/dXrrPbYKTXgQnMNT7"
     },
     {

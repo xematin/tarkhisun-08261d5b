@@ -87,7 +87,7 @@ const Currencies = () => {
           "@type": "WebPage",
           "name": "نرخ ارز امروز",
           "description": "صفحه نرخ ارز با قیمت‌های لحظه‌ای تمامی ارزهای جهان",
-          "url": "https://gomrok24.ir/currencies",
+          "url": "https://tarkhisun.ir/currencies",
           "mainEntity": {
             "@type": "Table",
             "name": "جدول نرخ ارز",

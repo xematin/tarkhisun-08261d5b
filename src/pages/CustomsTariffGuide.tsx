@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, User, Phone, Mail } from "lucide-react";
@@ -136,18 +138,11 @@ const CustomsTariffGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb category="تعرفه و مالیات" articleTitle="تعریف و اهمیت تعرفه گمرکی در واردات و صادرات" />
+        
         <article className="py-8">
           <div className="container mx-auto px-4" dir="rtl">
             <div className="max-w-7xl mx-auto">
-              
-              {/* Breadcrumb */}
-              <nav className="mb-8 text-sm text-muted-foreground text-persian">
-                <Link to="/" className="hover:text-accent transition-colors">خانه</Link>
-                <span className="mx-2">/</span>
-                <Link to="/blog" className="hover:text-accent transition-colors">بلاگ</Link>
-                <span className="mx-2">/</span>
-                <span>تعریف و اهمیت تعرفه گمرکی</span>
-              </nav>
 
               {/* Article Header */}
               <header className="mb-12 text-center max-w-4xl mx-auto">
@@ -197,7 +192,7 @@ const CustomsTariffGuide = () => {
                           <strong>تعرفه گمرکی</strong> (Customs Tariff) به مجموعه نرخ‌ها و حقوق ورودی یا خروجی گفته می‌شود که دولت‌ها بر کالاهای وارداتی و صادراتی اعمال می‌کنند. این تعرفه‌ها معمولاً به صورت درصدی از ارزش کالا یا به صورت مبلغ ثابت برای هر واحد کالا تعیین می‌شوند.
                         </p>
                         <p>
-                          تعرفه گمرکی یکی از مهم‌ترین ابزارهای سیاست تجاری کشورها است که اهداف مختلفی از جمله حمایت از تولید داخلی، ایجاد درآمد برای دولت، کنترل واردات و تنظیم تراز تجاری را دنبال می‌کند.
+                          تعرفه گمرکی یکی از مهم‌ترین ابزارهای سیاست تجاری کشورها است که اهداف مختلفی از جمله حمایت از تولید داخلی، ایجاد درآمد برای دولت، کنترل واردات و تنظیم تراز تجاری را دنبال می‌کند. برای درک بهتر هزینه‌های <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا</Link>، آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کد HS</Link> و <Link to="/blog/customs-exchange-rate-guide" className="text-accent hover:underline">نرخ ارز گمرکی</Link> ضروری است.
                         </p>
                       </div>
                     </section>
@@ -498,6 +493,9 @@ const CustomsTariffGuide = () => {
             </div>
           </div>
         </article>
+
+        {/* Related Articles */}
+        <RelatedArticles currentPostId={3} />
       </main>
       
       <Footer />

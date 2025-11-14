@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Phone, Mail, MessageCircle } from "lucide-react";
@@ -108,16 +110,7 @@ const ExchangeRateGuide = () => {
       <Header />
       
       <main>
-        {/* Breadcrumb */}
-        <nav className="container mx-auto px-4 py-4" dir="rtl" aria-label="breadcrumb">
-          <ol className="flex items-center gap-2 text-sm text-muted-foreground">
-            <li><Link to="/" className="hover:text-accent transition-colors">خانه</Link></li>
-            <li>/</li>
-            <li><Link to="/blog" className="hover:text-accent transition-colors">بلاگ</Link></li>
-            <li>/</li>
-            <li className="text-foreground">نرخ ارز گمرکی چیست؟</li>
-          </ol>
-        </nav>
+        <ArticleBreadcrumb category="تعرفه و مالیات" articleTitle="نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی" />
 
         {/* Article Header */}
         <header className="py-12 bg-gradient-to-br from-secondary to-white">
@@ -166,11 +159,11 @@ const ExchangeRateGuide = () => {
                 <h2 className="heading-secondary mb-6 text-persian"><strong>نرخ ارز گمرکی چیست؟</strong></h2>
                 
                 <p className="text-muted-foreground leading-relaxed text-persian mb-6">
-                  <strong>نرخ ارز گمرکی</strong> یا <strong>نرخ مبادله‌ای</strong> نرخ رسمی ارز است که توسط بانک مرکزی جمهوری اسلامی ایران اعلام می‌شود و برای محاسبه <strong>حقوق ورودی</strong>، <strong>عوارض گمرکی</strong> و <strong>سود بازرگانی</strong> کالاهای وارداتی در گمرکات ایران استفاده می‌شود.
+                  <strong>نرخ ارز گمرکی</strong> یا <strong>نرخ مبادله‌ای</strong> نرخ رسمی ارز است که توسط بانک مرکزی جمهوری اسلامی ایران اعلام می‌شود و برای محاسبه <strong>حقوق ورودی</strong>، <strong>عوارض گمرکی</strong> و <strong>سود بازرگانی</strong> کالاهای وارداتی در گمرکات ایران استفاده می‌شود. برای درک بهتر محاسبات، آشنایی با <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه گمرکی</Link> و <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کد HS کالا</Link> ضروری است.
                 </p>
 
                 <p className="text-muted-foreground leading-relaxed text-persian mb-6">
-                  این نرخ معمولاً با <strong>نرخ ارز آزاد</strong> (بازار) تفاوت دارد و تمامی واردکنندگان ملزم به استفاده از نرخ مبادله‌ای برای محاسبه حقوق و عوارض گمرکی هستند.
+                  این نرخ معمولاً با <strong>نرخ ارز آزاد</strong> (بازار) تفاوت دارد و تمامی واردکنندگان ملزم به استفاده از نرخ مبادله‌ای برای محاسبه حقوق و عوارض گمرکی هستند. برای انجام فرآیند <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا</Link> نیز این نرخ اهمیت بسزایی دارد.
                 </p>
 
                 <div className="bg-secondary/30 rounded-xl p-6 my-8">
@@ -480,6 +473,9 @@ const ExchangeRateGuide = () => {
             </div>
           </div>
         </section>
+
+        {/* Related Articles */}
+        <RelatedArticles currentPostId={4} />
       </main>
       
       <Footer />

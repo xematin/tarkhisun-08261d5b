@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, FileText, TrendingUp, Shield, AlertCircle, CheckCircle2, Clock, Users, Building2 } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const IslamQalaGuide = () => {
   useEffect(() => {

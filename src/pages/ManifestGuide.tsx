@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, FileText, Ship, Plane, Truck, CheckCircle2, AlertCircle } from "lucide-react";

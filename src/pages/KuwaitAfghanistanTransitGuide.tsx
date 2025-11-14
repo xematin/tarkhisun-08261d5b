@@ -1,9 +1,11 @@
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ArticleBreadcrumb from '@/components/ArticleBreadcrumb';
+import RelatedArticles from '@/components/RelatedArticles';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Ship, FileText, Clock, AlertCircle, CheckCircle, MapPin, DollarSign, Shield } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 const KuwaitAfghanistanTransitGuide = () => {
   const navigate = useNavigate();

@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, Calendar, Clock, User, AlertCircle } from "lucide-react";
@@ -112,6 +114,8 @@ const BusinessCardGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb category="تجارت بین‌الملل" articleTitle="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
+        
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-secondary to-white">
           <div className="container mx-auto px-4" dir="rtl">
@@ -156,10 +160,10 @@ const BusinessCardGuide = () => {
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">کارت بازرگانی چیست؟</h2>
                 <p className="text-body mb-6 text-persian">
-                  <strong>کارت بازرگانی</strong> سندی است که توسط اتاق بازرگانی، صنایع، معادن و کشاورزی ایران صادر می‌شود و به دارنده آن اجازه می‌دهد تا فعالیت‌های تجاری خود را به‌ویژه در حوزه واردات و صادرات انجام دهد. این کارت نشان‌دهنده مجوز قانونی برای انجام معاملات تجاری بین‌المللی است.
+                  <strong>کارت بازرگانی</strong> سندی است که توسط اتاق بازرگانی، صنایع، معادن و کشاورزی ایران صادر می‌شود و به دارنده آن اجازه می‌دهد تا فعالیت‌های تجاری خود را به‌ویژه در حوزه <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات و صادرات</Link> انجام دهد. این کارت نشان‌دهنده مجوز قانونی برای انجام معاملات تجاری بین‌المللی است.
                 </p>
                 <p className="text-body mb-6 text-persian">
-                  داشتن کارت بازرگانی برای تمامی اشخاص حقیقی و حقوقی که قصد ورود به عرصه تجارت خارجی را دارند، الزامی است و بدون آن امکان ثبت سفارش، ترخیص کالا از گمرک و انجام فعالیت‌های صادراتی وجود ندارد.
+                  داشتن کارت بازرگانی برای تمامی اشخاص حقیقی و حقوقی که قصد ورود به عرصه تجارت خارجی را دارند، الزامی است و بدون آن امکان ثبت سفارش، <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا از گمرک</Link> و انجام فعالیت‌های صادراتی وجود ندارد.
                 </p>
               </section>
 
@@ -543,6 +547,9 @@ const BusinessCardGuide = () => {
             </div>
           </div>
         </article>
+
+        {/* Related Articles */}
+        <RelatedArticles currentPostId={7} />
       </main>
       
       <Footer />

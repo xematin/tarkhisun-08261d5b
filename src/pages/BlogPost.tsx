@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, User, ArrowRight, CheckCircle, AlertTriangle, FileText } from "lucide-react";
@@ -90,18 +92,7 @@ const BlogPost = () => {
       <Header />
       
       <main>
-        {/* Breadcrumb */}
-        <section className="py-6 border-b border-border">
-          <div className="container mx-auto px-4" dir="rtl">
-            <nav className="flex items-center gap-2 text-sm text-muted-foreground text-persian">
-              <Link to="/" className="hover:text-primary">خانه</Link>
-              <span>/</span>
-              <Link to="/blog" className="hover:text-primary">بلاگ</Link>
-              <span>/</span>
-              <span className="text-foreground">راهنمای کامل ترخیص کالا</span>
-            </nav>
-          </div>
-        </section>
+        <ArticleBreadcrumb category="راهنمای ترخیص" articleTitle="راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس" />
 
         {/* Article Header */}
         <section className="py-12 bg-gradient-to-br from-secondary to-white">
@@ -154,8 +145,8 @@ const BlogPost = () => {
                   {/* Introduction */}
                   <div className="prose prose-lg max-w-none text-persian">
                     <p className="text-lg leading-relaxed text-muted-foreground">
-                      گمرک شهید رجایی بندرعباس به عنوان بزرگترین بندر تجاری ایران، نقش بسیار مهمی در تجارت خارجی کشور دارد. 
-                      در این راهنمای جامع، تمام مراحل <strong>ترخیص کالا از گمرک شهید رجایی</strong> را به تفصیل بررسی می‌کنیم.
+                      گمرک شهید رجایی بندرعباس به عنوان بزرگترین بندر تجاری ایران، نقش بسیار مهمی در <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">تجارت خارجی</Link> کشور دارد. 
+                      در این راهنمای جامع، تمام مراحل <strong>ترخیص کالا</strong> را به تفصیل بررسی می‌کنیم. برای درک بهتر فرآیند، آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کد HS کالا</Link> و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه گمرکی</Link> ضروری است.
                     </p>
                   </div>
 
@@ -301,6 +292,9 @@ const BlogPost = () => {
             </div>
           </div>
         </section>
+
+        {/* Related Articles */}
+        <RelatedArticles currentPostId={1} />
       </main>
       
       <Footer />

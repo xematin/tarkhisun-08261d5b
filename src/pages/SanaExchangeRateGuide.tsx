@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, DollarSign, TrendingUp, Scale, FileText, CheckCircle2, AlertCircle } from "lucide-react";
@@ -113,6 +115,8 @@ const SanaExchangeRateGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb category="تجارت بین‌الملل" articleTitle="تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل" />
+        
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-secondary to-white">
           <div className="container mx-auto px-4" dir="rtl">
@@ -158,7 +162,7 @@ const SanaExchangeRateGuide = () => {
                 </CardHeader>
                 <CardContent className="text-persian space-y-4">
                   <p className="leading-relaxed">
-                    در سال‌های اخیر، دو سامانه مهم ارزی به نام‌های <strong>ارز نیمایی (NIMA)</strong> و <strong>ارز سنا (SANA)</strong> در ایران راه‌اندازی شده‌اند که نقش بسیار مهمی در تأمین ارز مورد نیاز واردکنندگان و بازگشت ارز صادرکنندگان دارند.
+                    در سال‌های اخیر، دو سامانه مهم ارزی به نام‌های <strong>ارز نیمایی (NIMA)</strong> و <strong>ارز سنا (SANA)</strong> در ایران راه‌اندازی شده‌اند که نقش بسیار مهمی در تأمین ارز مورد نیاز واردکنندگان و بازگشت ارز صادرکنندگان دارند. برای درک بهتر هزینه‌های <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا</Link>، آشنایی با <Link to="/blog/customs-exchange-rate-guide" className="text-accent hover:underline">نرخ ارز گمرکی</Link> نیز مفید است.
                   </p>
                   <p className="leading-relaxed">
                     درک تفاوت این دو سامانه برای فعالان اقتصادی، واردکنندگان و صادرکنندگان ضروری است تا بتوانند بهترین تصمیم را در تأمین ارز مورد نیاز خود بگیرند.
@@ -454,6 +458,9 @@ const SanaExchangeRateGuide = () => {
             </article>
           </div>
         </section>
+
+        {/* Related Articles */}
+        <RelatedArticles currentPostId={8} />
       </main>
       
       <Footer />

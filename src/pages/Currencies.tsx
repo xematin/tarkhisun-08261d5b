@@ -75,10 +75,10 @@ const Currencies = () => {
         <title>نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | گمرک ۲۴</title>
         <meta name="description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان شامل دلار، یورو، پوند، ین و سایر ارزها. بروزرسانی مداوم قیمت‌ها برای محاسبه دقیق هزینه‌های تجاری." />
         <meta name="keywords" content="نرخ ارز، قیمت ارز، دلار، یورو، پوند، نرخ ارز امروز، قیمت ارز لحظه‌ای، محاسبه ارز، گمرک، واردات، صادرات" />
-        <link rel="canonical" href="https://gomrok24.ir/currencies" />
+        <link rel="canonical" href="https://tarkhisun.ir/currencies" />
         <meta property="og:title" content="نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان" />
         <meta property="og:description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان با بروزرسانی مداوم" />
-        <meta property="og:url" content="https://gomrok24.ir/currencies" />
+        <meta property="og:url" content="https://tarkhisun.ir/currencies" />
         <meta property="og:type" content="website" />
         
         <script type="application/ld+json">

@@ -46,11 +46,11 @@ const Index = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', 'https://gomrok24.com/');
+      canonical.setAttribute('href', 'https://tarkhisun.ir/');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = 'https://gomrok24.com/';
+      link.href = 'https://tarkhisun.ir/';
       document.head.appendChild(link);
     }
 
@@ -70,7 +70,7 @@ const Index = () => {
     setOGTag('og:title', 'مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان');
     setOGTag('og:description', 'مشاوره تخصصی امور گمرکی و ترخیص کالا با +15 سال تجربه در بندرعباس');
     setOGTag('og:type', 'website');
-    setOGTag('og:url', 'https://gomrok24.com/');
+    setOGTag('og:url', 'https://tarkhisun.ir/');
     setOGTag('og:locale', 'fa_IR');
     setOGTag('og:site_name', 'ترخیصان');
 
@@ -79,8 +79,8 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
-      "url": "https://gomrok24.com",
-      "logo": "https://gomrok24.com/logo.png",
+      "url": "https://tarkhisun.ir",
+      "logo": "https://tarkhisun.ir/logo.png",
       "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
       "address": {
         "@type": "PostalAddress",
@@ -105,7 +105,7 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
-      "image": "https://gomrok24.com/logo.png",
+      "image": "https://tarkhisun.ir/logo.png",
       "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با بیش از 15 سال تجربه",
       "address": {
         "@type": "PostalAddress",
@@ -121,7 +121,7 @@ const Index = () => {
       "telephone": "+98-76-33333333",
       "priceRange": "$$",
       "openingHours": "Mo-Su 00:00-23:59",
-      "url": "https://gomrok24.com",
+      "url": "https://tarkhisun.ir",
       "areaServed": {
         "@type": "GeoCircle",
         "geoMidpoint": {
@@ -168,10 +168,10 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "ترخیصان",
-      "url": "https://gomrok24.com",
+      "url": "https://tarkhisun.ir",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://gomrok24.com/blog?search={search_term_string}",
+        "target": "https://tarkhisun.ir/blog?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     };

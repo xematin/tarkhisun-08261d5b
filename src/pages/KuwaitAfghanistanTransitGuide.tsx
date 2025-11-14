@@ -44,15 +44,12 @@ const KuwaitAfghanistanTransitGuide = () => {
       <div className="min-h-screen bg-background" dir="rtl">
         <Header />
         
+        <ArticleBreadcrumb 
+          category="حمل و نقل بین‌المللی"
+          articleTitle="ترانزیت از کویت به افغانستان"
+        />
+        
         <main className="container mx-auto px-4 py-8 mt-20">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/blog')}
-            className="mb-6 text-persian"
-          >
-            <ArrowRight className="ml-2 h-4 w-4" />
-            بازگشت به وبلاگ
-          </Button>
 
           <article className="max-w-4xl mx-auto">
             {/* Header */}
@@ -413,6 +410,9 @@ const KuwaitAfghanistanTransitGuide = () => {
                 با رعایت نکات ذکر شده، استفاده از مسیرهای امن، بیمه مناسب و پیگیری مداوم، می‌توان ریسک‌های این مسیر را به حداقل رساند و از مزایای آن بهره‌مند شد. توصیه می‌شود حتماً با کارگزاران و شرکت‌های مجرب مشورت کنید و از خدمات مشاوره‌ای تخصصی استفاده نمایید.
               </p>
             </section>
+
+            {/* Related Articles */}
+            <RelatedArticles currentPostId={12} limit={3} />
 
             {/* CTA */}
             <div className="mt-8 text-center">

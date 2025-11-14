@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle, Globe, FileText, Users, Shield, Clock, BarChart } from "lucide-react";
@@ -113,6 +115,11 @@ const NTSWGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb 
+          category="راهنمای سامانه‌ها"
+          articleTitle="سامانه جامع تجارت ایران (ntsw.ir)"
+        />
+        
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-secondary to-white">
           <div className="container mx-auto px-4" dir="rtl">
@@ -161,10 +168,10 @@ const NTSWGuide = () => {
                 <h2 className="heading-secondary mb-6 text-persian"><strong>سامانه جامع تجارت چیست؟</strong></h2>
                 <div className="prose-persian space-y-4">
                   <p className="text-lg leading-relaxed">
-                    <strong>سامانه جامع تجارت (National Trade Single Window)</strong> یک پلتفرم الکترونیکی یکپارچه است که توسط وزارت صنعت، معدن و تجارت ایران راه‌اندازی شده و تمامی خدمات تجاری مرتبط با واردات و صادرات را در یک بستر واحد ارائه می‌دهد.
+                    <strong>سامانه جامع تجارت (National Trade Single Window)</strong> یک پلتفرم الکترونیکی یکپارچه است که توسط وزارت صنعت، معدن و تجارت ایران راه‌اندازی شده و تمامی خدمات تجاری مرتبط با <Link to="/blog/import-export-complete-guide" className="text-accent hover:underline">واردات و صادرات</Link> را در یک بستر واحد ارائه می‌دهد.
                   </p>
                   <p className="text-lg leading-relaxed">
-                    این سامانه با هدف تسهیل فرآیندهای تجاری، کاهش زمان و هزینه‌های مبادلات بین‌المللی و ایجاد شفافیت در معاملات طراحی شده است. NTSW به عنوان دروازه الکترونیکی تجارت خارجی ایران، ارتباط مستقیم بین بازرگانان و دستگاه‌های مختلف دولتی از جمله گمرک، بانک مرکزی، وزارتخانه‌ها و سازمان‌های نظارتی را فراهم می‌کند.
+                    این سامانه با هدف تسهیل فرآیندهای تجاری، کاهش زمان و هزینه‌های مبادلات بین‌المللی و ایجاد شفافیت در معاملات طراحی شده است. NTSW به عنوان دروازه الکترونیکی <Link to="/blog/import-export-complete-guide" className="text-accent hover:underline">تجارت خارجی</Link> ایران، ارتباط مستقیم بین بازرگانان و دستگاه‌های مختلف دولتی از جمله گمرک، بانک مرکزی، وزارتخانه‌ها و سازمان‌های نظارتی را فراهم می‌کند.
                   </p>
                 </div>
               </section>
@@ -471,6 +478,9 @@ const NTSWGuide = () => {
                   </CardContent>
                 </Card>
               </section>
+
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={14} limit={3} />
 
               {/* Back to Blog */}
               <div className="text-center pt-8 border-t">

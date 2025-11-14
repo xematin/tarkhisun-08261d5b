@@ -112,6 +112,11 @@ const Article1CommissionGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb 
+          category="راهنمای گمرکی"
+          articleTitle="کمیسیون ماده 1 گمرک چیست؟"
+        />
+        
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-secondary to-white">
           <div className="container mx-auto px-4" dir="rtl">
@@ -517,6 +522,9 @@ const Article1CommissionGuide = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={10} limit={3} />
 
               {/* Conclusion and CTA */}
               <Card className="card-service">

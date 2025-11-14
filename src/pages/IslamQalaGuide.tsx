@@ -68,6 +68,11 @@ const IslamQalaGuide = () => {
         <Header />
         
         <main>
+          <ArticleBreadcrumb 
+            category="گذرگاه‌های مرزی"
+            articleTitle="اسلام قلعه - راهنمای کامل گذرگاه مرزی ایران و افغانستان"
+          />
+          
           {/* Hero Section */}
           <section className="py-20 bg-gradient-to-br from-secondary to-white">
             <div className="container mx-auto px-4" dir="rtl">
@@ -670,6 +675,9 @@ const IslamQalaGuide = () => {
                 </Card>
 
               </article>
+
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={13} limit={3} />
 
               {/* Back to Blog */}
               <div className="max-w-4xl mx-auto mt-12">

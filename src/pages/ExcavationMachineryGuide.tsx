@@ -171,6 +171,11 @@ const ExcavationMachineryGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb 
+          category="راهنمای ترخیص کالا"
+          articleTitle="ترخیص ماشین آلات حفاری از گمرک"
+        />
+        
         {/* Hero Section */}
         <section className="py-16 bg-gradient-to-br from-secondary to-white">
           <div className="container mx-auto px-4" dir="rtl">
@@ -648,6 +653,9 @@ const ExcavationMachineryGuide = () => {
                   </CardContent>
                 </Card>
               </section>
+
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={9} limit={3} />
 
               {/* CTA Section */}
               <section className="text-center">

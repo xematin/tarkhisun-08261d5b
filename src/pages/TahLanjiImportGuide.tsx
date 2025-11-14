@@ -116,15 +116,16 @@ const TahLanjiImportGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb 
+          category="راهنمای واردات"
+          articleTitle="واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌ها"
+        />
+        
         <article>
           {/* Hero Section */}
           <section className="py-20 bg-gradient-to-br from-secondary to-white">
             <div className="container mx-auto px-4" dir="rtl">
               <div className="max-w-4xl mx-auto">
-                <Link to="/blog" className="inline-flex items-center gap-2 text-accent hover:text-accent/80 transition-colors mb-8 text-persian">
-                  <ArrowRight className="w-4 h-4" />
-                  بازگشت به بلاگ
-                </Link>
                 
                 <h1 className="heading-primary mb-6 text-persian">
                   واردات ته لنجی یا ملوانی چیست؟
@@ -503,6 +504,9 @@ const TahLanjiImportGuide = () => {
                     </Card>
                   </div>
                 </div>
+
+                {/* Related Articles */}
+                <RelatedArticles currentPostId={11} limit={3} />
 
                 {/* Call to Action */}
                 <Card className="bg-gradient-to-br from-accent/10 to-secondary border-accent">

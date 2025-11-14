@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Ship, Truck, Package, FileText, CheckCircle2, AlertCircle } from "lucide-react";
@@ -165,14 +167,15 @@ const IncotermsGuide = () => {
       <Header />
       
       <main>
+        <ArticleBreadcrumb 
+          category="تجارت بین‌المللی"
+          articleTitle="اینکوترمز چیست؟ راهنمای شرایط تحویل بین‌المللی کالا"
+        />
+        
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-secondary to-white">
           <div className="container mx-auto px-4" dir="rtl">
             <div className="max-w-4xl mx-auto">
-              <Link to="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors text-persian">
-                <ArrowRight className="ml-2 h-4 w-4" />
-                بازگشت به بلاگ
-              </Link>
               
               <h1 className="heading-primary mb-6 text-persian">
                 اینکوترمز چیست؟
@@ -431,6 +434,9 @@ const IncotermsGuide = () => {
                   </CardContent>
                 </Card>
               </section>
+
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={17} limit={3} />
 
               {/* Contact Info */}
               <section className="border-t pt-8">

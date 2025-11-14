@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, User, ArrowRight, CheckCircle, AlertTriangle, Search, Globe, Calculator } from "lucide-react";
@@ -125,19 +127,12 @@ const HSCodeGuide = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
+      <ArticleBreadcrumb 
+        category="تعرفه و مالیات"
+        articleTitle="کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها"
+      />
+
       <main>
-        {/* Breadcrumb */}
-        <section className="py-6 border-b border-border">
-          <div className="container mx-auto px-4" dir="rtl">
-            <nav className="flex items-center gap-2 text-sm text-muted-foreground text-persian">
-              <Link to="/" className="hover:text-primary">خانه</Link>
-              <span>/</span>
-              <Link to="/blog" className="hover:text-primary">بلاگ</Link>
-              <span>/</span>
-              <span className="text-foreground">کد HS کالا چیست؟</span>
-            </nav>
-          </div>
-        </section>
 
         {/* Article Header */}
         <section className="py-12 bg-gradient-to-br from-secondary to-white">
@@ -190,8 +185,16 @@ const HSCodeGuide = () => {
                   {/* Introduction */}
                   <div className="prose prose-lg max-w-none text-persian">
                     <p className="text-lg leading-relaxed text-muted-foreground">
-                      <strong>کد HS</strong> یا <strong>Harmonized System</strong> یکی از مهم‌ترین ابزارهای طبقه‌بندی کالاها در تجارت بین‌المللی محسوب می‌شود. 
-                      این سیستم استاندارد جهانی، توسط سازمان جهانی گمرک توسعه یافته و در بیش از ۲۰۰ کشور جهان مورد استفاده قرار می‌گیرد.
+                      <strong>کد HS</strong> یا <strong>Harmonized System</strong> یکی از مهم‌ترین ابزارهای طبقه‌بندی کالاها در{" "}
+                      <Link to="/blog/import-export-guide-iran" className="text-primary hover:underline">
+                        تجارت بین‌المللی
+                      </Link>{" "}
+                      محسوب می‌شود. این سیستم استاندارد جهانی، توسط سازمان جهانی گمرک توسعه یافته و در بیش از ۲۰۰ کشور جهان مورد استفاده قرار می‌گیرد.
+                      برای{" "}
+                      <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-primary hover:underline">
+                        ترخیص کالا
+                      </Link>{" "}
+                      از گمرک، تعیین کد HS صحیح ضروری است.
                     </p>
                   </div>
 
@@ -206,10 +209,23 @@ const HSCodeGuide = () => {
                       <div className="space-y-4 text-persian">
                         <p>
                           <strong>کد HS</strong> (Harmonized Commodity Description and Coding System) یک سیستم استاندارد بین‌المللی برای طبقه‌بندی کالاهای تجاری است. 
-                          این کد ۶ رقمی، کالاها را بر اساس ماهیت، منشأ و کاربرد آنها دسته‌بندی می‌کند.
+                          این کد ۶ رقمی، کالاها را بر اساس ماهیت، منشأ و کاربرد آنها دسته‌بندی می‌کند و تأثیر مستقیمی بر{" "}
+                          <Link to="/blog/customs-tariff-guide" className="text-primary hover:underline">
+                            تعرفه گمرکی
+                          </Link>{" "}
+                          و{" "}
+                          <Link to="/blog/customs-exchange-rate-guide" className="text-primary hover:underline">
+                            محاسبه حقوق گمرکی
+                          </Link>{" "}
+                          دارد.
                         </p>
                         <p>
                           هر کشور می‌تواند این کد ۶ رقمی را با افزودن ارقام اضافی (معمولاً ۸ یا ۱۰ رقم) برای طبقه‌بندی دقیق‌تر گسترش دهد.
+                          در ایران، کدهای HS از طریق{" "}
+                          <Link to="/blog/ntsw-complete-guide" className="text-primary hover:underline">
+                            سامانه جامع تجارت
+                          </Link>{" "}
+                          قابل جستجو هستند.
                         </p>
                       </div>
                     </CardContent>
@@ -436,6 +452,8 @@ const HSCodeGuide = () => {
             </div>
           </div>
         </section>
+
+        <RelatedArticles currentPostId={2} />
       </main>
       
       <Footer />

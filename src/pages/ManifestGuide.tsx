@@ -645,46 +645,8 @@ const ManifestGuide = () => {
         </section>
 
         {/* Related Articles */}
-        <section className="py-16 bg-secondary/20">
-          <div className="container mx-auto px-4" dir="rtl">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="heading-secondary mb-8 text-center text-persian">
-                مقالات مرتبط
-              </h2>
-              
-              <div className="grid md:grid-cols-3 gap-6">
-                {[
-                  {
-                    title: "راهنمای کامل صادرات و واردات در ایران",
-                    slug: "import-export-iran-complete-guide"
-                  },
-                  {
-                    title: "کد HS کالا چیست؟",
-                    slug: "hs-code-guide-harmonized-system"
-                  },
-                  {
-                    title: "اینکوترمز چیست؟",
-                    slug: "incoterms-complete-guide"
-                  }
-                ].map((article, index) => (
-                  <Link key={index} to={`/blog/${article.slug}`}>
-                    <Card className="card-service h-full group cursor-pointer">
-                      <CardContent className="pt-6">
-                        <h3 className="font-bold mb-2 text-persian group-hover:text-accent transition-colors">
-                          {article.title}
-                        </h3>
-                        <span className="text-accent text-sm flex items-center gap-2">
-                          مطالعه مقاله
-                          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                        </span>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        <RelatedArticles currentPostId={5} limit={3} />
+        
       </main>
       
       <Footer />

@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, TrendingUp, Scale, Globe, ShieldCheck, Package } from "lucide-react";
@@ -102,6 +104,11 @@ const ImportExportGuide = () => {
       <Header />
       
       <main dir="rtl">
+        <ArticleBreadcrumb 
+          category="تجارت بین‌المللی"
+          articleTitle="راهنمای کامل صادرات و واردات در ایران"
+        />
+        
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-primary/5 to-accent/5">
           <div className="container mx-auto px-4">
@@ -459,62 +466,7 @@ const ImportExportGuide = () => {
               </section>
 
               {/* Related Articles */}
-              <section>
-                <h2 className="heading-secondary mb-6 text-persian">مقالات مرتبط</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Link to="/blog/business-card-complete-guide">
-                    <Card className="card-service group cursor-pointer h-full">
-                      <CardHeader>
-                        <CardTitle className="text-lg group-hover:text-accent transition-colors text-persian">
-                          کارت بازرگانی چیست؟
-                        </CardTitle>
-                        <CardDescription className="text-persian">
-                          راهنمای کامل دریافت و شرایط صدور کارت بازرگانی
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-
-                  <Link to="/blog/incoterms-complete-guide">
-                    <Card className="card-service group cursor-pointer h-full">
-                      <CardHeader>
-                        <CardTitle className="text-lg group-hover:text-accent transition-colors text-persian">
-                          اینکوترمز چیست؟
-                        </CardTitle>
-                        <CardDescription className="text-persian">
-                          راهنمای شرایط تحویل بین‌المللی کالا
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-
-                  <Link to="/blog/customs-tariff-definition-importance">
-                    <Card className="card-service group cursor-pointer h-full">
-                      <CardHeader>
-                        <CardTitle className="text-lg group-hover:text-accent transition-colors text-persian">
-                          تعرفه گمرکی
-                        </CardTitle>
-                        <CardDescription className="text-persian">
-                          اهمیت تعرفه گمرکی در واردات و صادرات
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-
-                  <Link to="/blog/ntsw-complete-guide">
-                    <Card className="card-service group cursor-pointer h-full">
-                      <CardHeader>
-                        <CardTitle className="text-lg group-hover:text-accent transition-colors text-persian">
-                          سامانه جامع تجارت
-                        </CardTitle>
-                        <CardDescription className="text-persian">
-                          راهنمای کامل ثبت‌نام و استفاده از NTSW
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-                </div>
-              </section>
+              <RelatedArticles currentPostId={18} limit={4} />
 
             </div>
           </div>

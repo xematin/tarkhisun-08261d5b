@@ -616,6 +616,9 @@ const WaterTankClearanceGuide = () => {
                   </p>
                 </section>
 
+                {/* Related Articles */}
+                <RelatedArticles currentPostId={16} limit={3} />
+
                 {/* CTA */}
                 <Card className="bg-gradient-to-br from-accent/10 to-secondary/30 border-accent/30">
                   <CardContent className="p-8 text-center">

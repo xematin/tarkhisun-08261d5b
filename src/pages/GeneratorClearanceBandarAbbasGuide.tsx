@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
+import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, CheckCircle2, AlertCircle, Calculator, FileCheck } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const GeneratorClearanceBandarAbbasGuide = () => {
   useEffect(() => {
@@ -138,17 +140,14 @@ const GeneratorClearanceBandarAbbasGuide = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
+      <ArticleBreadcrumb 
+        category="راهنمای ترخیص کالا"
+        articleTitle="ترخیص ژنراتور از بندرعباس"
+      />
+      
       <article className="py-20">
         <div className="container mx-auto px-4" dir="rtl">
           <div className="max-w-4xl mx-auto">
-            {/* Breadcrumb */}
-            <nav className="mb-8 text-sm text-muted-foreground text-persian">
-              <Link to="/" className="hover:text-accent transition-colors">خانه</Link>
-              <span className="mx-2">/</span>
-              <Link to="/blog" className="hover:text-accent transition-colors">بلاگ</Link>
-              <span className="mx-2">/</span>
-              <span className="text-foreground">ترخیص ژنراتور بندرعباس</span>
-            </nav>
 
             {/* Article Header */}
             <header className="mb-12">
@@ -452,6 +451,9 @@ const GeneratorClearanceBandarAbbasGuide = () => {
                   </Button>
                 </Link>
               </div>
+
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={19} limit={3} />
 
               {/* Back to Blog */}
               <div className="mt-8 text-center">

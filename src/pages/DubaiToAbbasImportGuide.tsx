@@ -965,6 +965,9 @@ const DubaiToAbbasImportGuide = () => {
                 </div>
               </section>
 
+              {/* Related Articles */}
+              <RelatedArticles currentPostId={15} limit={3} />
+
               {/* CTA Section */}
               <Card className="bg-gradient-to-br from-accent/10 via-accent/5 to-transparent border-accent/30">
                 <CardContent className="p-8 text-center">

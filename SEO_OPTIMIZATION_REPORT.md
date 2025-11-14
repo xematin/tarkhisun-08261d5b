@@ -50,9 +50,9 @@
 ### مرحله 1: ثبت در Google Search Console
 ```
 1. به https://search.google.com/search-console بروید
-2. Property جدید اضافه کنید (gomrok24.com)
+2. Property جدید اضافه کنید (tarkhisun.ir)
 3. مالکیت را تایید کنید (از طریق meta tag یا DNS)
-4. Sitemap را ثبت کنید: https://gomrok24.com/sitemap.xml
+4. Sitemap را ثبت کنید: https://tarkhisun.ir/sitemap.xml
 5. URL Inspection Tool را برای بررسی indexing استفاده کنید
 ```
 

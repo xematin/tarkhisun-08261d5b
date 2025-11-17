@@ -20,62 +20,70 @@ import hero1920Webp from "@/assets/hero-port-1920.webp";
 const Index = () => {
   useEffect(() => {
     // Set RTL direction for Persian content
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', 'fa');
-    
+    document.documentElement.setAttribute("dir", "rtl");
+    document.documentElement.setAttribute("lang", "fa");
+
     // SEO Meta Tags
     document.title = "مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان - ترخیص کالا";
-    
+
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080');
+      metaDescription.setAttribute(
+        "content",
+        "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080",
+      );
     } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080';
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content =
+        "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080";
       document.head.appendChild(meta);
     }
-    
+
     // Publisher Meta Tag
     const publisher = document.querySelector('meta[name="publisher"]');
     if (publisher) {
-      publisher.setAttribute('content', 'ترخیصان - مشاوره گمرکی بندرعباس');
+      publisher.setAttribute("content", "ترخیصان - مشاوره گمرکی بندرعباس");
     } else {
-      const meta = document.createElement('meta');
-      meta.name = 'publisher';
-      meta.content = 'ترخیصان - مشاوره گمرکی بندرعباس';
+      const meta = document.createElement("meta");
+      meta.name = "publisher";
+      meta.content = "ترخیصان - مشاوره گمرکی بندرعباس";
       document.head.appendChild(meta);
     }
-    
+
     const author = document.querySelector('meta[name="author"]');
     if (author) {
-      author.setAttribute('content', 'Tarkhisun');
+      author.setAttribute("content", "Tarkhisun");
     } else {
-      const meta = document.createElement('meta');
-      meta.name = 'author';
-      meta.content = 'Tarkhisun';
+      const meta = document.createElement("meta");
+      meta.name = "author";
+      meta.content = "Tarkhisun";
       document.head.appendChild(meta);
     }
 
     // Keywords Meta Tag - Including all ports
     const keywords = document.querySelector('meta[name="keywords"]');
     if (keywords) {
-      keywords.setAttribute('content', 'مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی, ترخیص کالا در بنادر ایران');
+      keywords.setAttribute(
+        "content",
+        "مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی, ترخیص کالا در بنادر ایران",
+      );
     } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی, ترخیص کالا در بنادر ایران';
+      const meta = document.createElement("meta");
+      meta.name = "keywords";
+      meta.content =
+        "مشاوره امور گمرکی بندرعباس, ترخیص کالا بندرعباس, گمرک شهید رجایی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, ترخیصان, واردات بندرعباس, صادرات بندرعباس, ترخیص سریع کالا, مشاور گمرکی, خدمات گمرکی, ترخیص کالا در بنادر ایران";
       document.head.appendChild(meta);
     }
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/');
+      canonical.setAttribute("href", "https://tarkhisun.ir/");
     } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/';
+      const link = document.createElement("link");
+      link.rel = "canonical";
+      link.href = "https://tarkhisun.ir/";
       document.head.appendChild(link);
     }
 
@@ -83,214 +91,216 @@ const Index = () => {
     const setOGTag = (property: string, content: string) => {
       let tag = document.querySelector(`meta[property="${property}"]`);
       if (tag) {
-        tag.setAttribute('content', content);
+        tag.setAttribute("content", content);
       } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
+        tag = document.createElement("meta");
+        tag.setAttribute("property", property);
+        tag.setAttribute("content", content);
         document.head.appendChild(tag);
       }
     };
 
-    setOGTag('og:title', 'ترخیصان | مشاوره گمرکی و ترخیص کالا در بندرعباس');
-    setOGTag('og:description', 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080');
-    setOGTag('og:type', 'website');
-    setOGTag('og:url', 'https://tarkhisun.ir/');
-    setOGTag('og:image', 'https://tarkhisun.ir/og-image.jpg');
-    setOGTag('og:image:width', '1200');
-    setOGTag('og:image:height', '630');
-    setOGTag('og:image:alt', 'ترخیصان - مشاوره گمرکی بندرعباس');
-    setOGTag('og:locale', 'fa_IR');
-    setOGTag('og:site_name', 'ترخیصان');
+    setOGTag("og:title", "ترخیصان | مشاوره گمرکی و ترخیص کالا در بندرعباس");
+    setOGTag(
+      "og:description",
+      "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور کمیسیون ماده یک، مشاوره. تماس: 09177380080",
+    );
+    setOGTag("og:type", "website");
+    setOGTag("og:url", "https://tarkhisun.ir/");
+    setOGTag("og:image", "https://tarkhisun.ir/og-image.jpg");
+    setOGTag("og:image:width", "1200");
+    setOGTag("og:image:height", "630");
+    setOGTag("og:image:alt", "ترخیصان - مشاور امور گمرکی بندرعباس");
+    setOGTag("og:locale", "fa_IR");
+    setOGTag("og:site_name", "ترخیصان");
 
     // Structured Data - Organization
     const organizationData = {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
-      "url": "https://tarkhisun.ir",
-      "logo": "https://tarkhisun.ir/logo.png",
-      "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
-      "address": {
+      name: "ترخیصان - مشاوره امور گمرکی بندرعباس",
+      url: "https://tarkhisun.ir",
+      logo: "https://tarkhisun.ir/logo.png",
+      description: "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
+      address: {
         "@type": "PostalAddress",
-        "addressLocality": "بندرعباس",
-        "addressRegion": "هرمزگان",
-        "addressCountry": "IR"
+        addressLocality: "بندرعباس",
+        addressRegion: "هرمزگان",
+        addressCountry: "IR",
       },
-      "contactPoint": {
+      contactPoint: {
         "@type": "ContactPoint",
-        "telephone": "+98-76-33333333",
-        "contactType": "customer service",
-        "areaServed": "IR",
-        "availableLanguage": ["fa", "en"]
+        telephone: "+98-76-33333333",
+        contactType: "customer service",
+        areaServed: "IR",
+        availableLanguage: ["fa", "en"],
       },
-      "sameAs": [
-        "https://t.me/N8NAutoBotBot"
-      ]
+      sameAs: ["https://t.me/N8NAutoBotBot"],
     };
 
     // Structured Data - LocalBusiness
     const localBusinessData = {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
-      "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
-      "image": "https://tarkhisun.ir/logo.png",
-      "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با بیش از 15 سال تجربه",
-      "address": {
+      name: "ترخیصان - مشاوره امور گمرکی بندرعباس",
+      image: "https://tarkhisun.ir/logo.png",
+      description: "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با بیش از 20 سال تجربه",
+      address: {
         "@type": "PostalAddress",
-        "addressLocality": "بندرعباس",
-        "addressRegion": "هرمزگان",
-        "addressCountry": "IR"
+        addressLocality: "بندرعباس",
+        addressRegion: "هرمزگان",
+        addressCountry: "IR",
       },
-      "geo": {
+      geo: {
         "@type": "GeoCoordinates",
-        "latitude": 27.1832,
-        "longitude": 56.2666
+        latitude: 27.1832,
+        longitude: 56.2666,
       },
-      "telephone": "+98-76-33333333",
-      "priceRange": "$$",
-      "openingHours": "Mo-Su 00:00-23:59",
-      "url": "https://tarkhisun.ir",
-      "areaServed": {
+      telephone: "+98-917-738-0080",
+      priceRange: "$$",
+      openingHours: "Mo-Su 00:00-23:59",
+      url: "https://tarkhisun.ir",
+      areaServed: {
         "@type": "GeoCircle",
-        "geoMidpoint": {
+        geoMidpoint: {
           "@type": "GeoCoordinates",
-          "latitude": 27.1832,
-          "longitude": 56.2666
+          latitude: 27.1832,
+          longitude: 56.2666,
         },
-        "geoRadius": "500000"
+        geoRadius: "500000",
       },
-      "hasOfferCatalog": {
+      hasOfferCatalog: {
         "@type": "OfferCatalog",
-        "name": "خدمات گمرکی",
-        "itemListElement": [
+        name: "خدمات گمرکی",
+        itemListElement: [
           {
             "@type": "Offer",
-            "itemOffered": {
+            itemOffered: {
               "@type": "Service",
-              "name": "ترخیص کالا",
-              "description": "ترخیص سریع و مطمئن انواع کالاهای وارداتی و صادراتی"
-            }
+              name: "ترخیص کالا",
+              description: "ترخیص سریع و مطمئن انواع کالاهای وارداتی و صادراتی",
+            },
           },
           {
             "@type": "Offer",
-            "itemOffered": {
+            itemOffered: {
               "@type": "Service",
-              "name": "مشاوره گمرکی",
-              "description": "مشاوره تخصصی در زمینه امور گمرکی و قوانین تجارت"
-            }
+              name: "مشاوره گمرکی",
+              description: "مشاوره تخصصی در زمینه امور گمرکی و قوانین تجارت",
+            },
           },
           {
             "@type": "Offer",
-            "itemOffered": {
+            itemOffered: {
               "@type": "Service",
-              "name": "صدور مجوزها",
-              "description": "اخذ انواع مجوزهای واردات و صادرات"
-            }
-          }
-        ]
-      }
+              name: "صدور مجوزها",
+              description: "اخذ انواع مجوزهای واردات و صادرات",
+            },
+          },
+        ],
+      },
     };
 
     // WebSite structured data
     const websiteData = {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "ترخیصان",
-      "url": "https://tarkhisun.ir",
-      "potentialAction": {
+      name: "ترخیصان",
+      url: "https://tarkhisun.ir",
+      potentialAction: {
         "@type": "SearchAction",
-        "target": "https://tarkhisun.ir/blog?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+        target: "https://tarkhisun.ir/blog?search={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
     };
 
     // Service Areas - All Iranian Ports
     const serviceAreaData = {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "خدمات ترخیص کالا و مشاوره گمرکی",
-      "provider": {
+      name: "خدمات ترخیص کالا و مشاوره گمرکی",
+      provider: {
         "@type": "Organization",
-        "name": "ترخیصان"
+        name: "ترخیصان",
       },
-      "areaServed": [
+      areaServed: [
         {
           "@type": "Place",
-          "name": "بندرعباس شهید رجایی",
-          "address": {
+          name: "بندرعباس شهید رجایی",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "بندرعباس",
-            "addressRegion": "هرمزگان"
-          }
+            addressLocality: "بندرعباس",
+            addressRegion: "هرمزگان",
+          },
         },
         {
           "@type": "Place",
-          "name": "بندر امام خمینی",
-          "address": {
+          name: "بندر امام خمینی",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "بندر امام خمینی",
-            "addressRegion": "خوزستان"
-          }
+            addressLocality: "بندر امام خمینی",
+            addressRegion: "خوزستان",
+          },
         },
         {
           "@type": "Place",
-          "name": "بندر چابهار",
-          "address": {
+          name: "بندر چابهار",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "چابهار",
-            "addressRegion": "سیستان و بلوچستان"
-          }
+            addressLocality: "چابهار",
+            addressRegion: "سیستان و بلوچستان",
+          },
         },
         {
           "@type": "Place",
-          "name": "بندر بوشهر",
-          "address": {
+          name: "بندر بوشهر",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "بوشهر",
-            "addressRegion": "بوشهر"
-          }
+            addressLocality: "بوشهر",
+            addressRegion: "بوشهر",
+          },
         },
         {
           "@type": "Place",
-          "name": "بندر انزلی",
-          "address": {
+          name: "بندر انزلی",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "بندر انزلی",
-            "addressRegion": "گیلان"
-          }
-        }
+            addressLocality: "بندر انزلی",
+            addressRegion: "گیلان",
+          },
+        },
       ],
-      "description": "ارائه خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران شامل بندرعباس شهید رجایی، بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی"
+      description:
+        "ارائه خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران شامل بندرعباس شهید رجایی، بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی",
     };
 
     // Combine all structured data
     const combinedStructuredData = {
       "@context": "https://schema.org",
-      "@graph": [organizationData, localBusinessData, websiteData, serviceAreaData]
+      "@graph": [organizationData, localBusinessData, websiteData, serviceAreaData],
     };
 
     let scriptTag = document.querySelector('script[type="application/ld+json"]');
     if (scriptTag) {
       scriptTag.textContent = JSON.stringify(combinedStructuredData);
     } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
+      scriptTag = document.createElement("script");
+      scriptTag.setAttribute("type", "application/ld+json");
       scriptTag.textContent = JSON.stringify(combinedStructuredData);
       document.head.appendChild(scriptTag);
     }
-    
+
     // Add animation class after mount
-    const elements = document.querySelectorAll('.fade-in-up');
+    const elements = document.querySelectorAll(".fade-in-up");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
+            entry.target.classList.add("animate");
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     elements.forEach((el) => observer.observe(el));
@@ -312,10 +322,10 @@ const Index = () => {
           type="image/webp"
         />
       </Helmet>
-      
+
       <div className="min-h-screen bg-background">
         <Header />
-        
+
         {/* Hidden SEO Content - All Iranian Ports */}
         <div className="sr-only" aria-hidden="true">
           <h2>خدمات ترخیص کالا و مشاوره گمرکی در بنادر ایران</h2>
@@ -327,13 +337,12 @@ const Index = () => {
             <li>مشاوره امور گمرکی بندر انزلی - ترخیص کالا در بندر انزلی دریای خزر</li>
           </ul>
           <p>
-            ترخیصان ارائه دهنده خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران.
-            از بندرعباس شهید رجایی گرفته تا بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی،
-            ما با بیش از 15 سال تجربه آماده ارائه خدمات گمرکی، ترخیص سریع کالا، اخذ مجوزها و مشاوره
-            تخصصی در زمینه واردات و صادرات هستیم.
+            ترخیصان ارائه دهنده خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران. از بندرعباس شهید
+            رجایی گرفته تا بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی، ما با بیش از 15 سال تجربه آماده ارائه
+            خدمات گمرکی، ترخیص سریع کالا، اخذ مجوزها و مشاوره تخصصی در زمینه واردات و صادرات هستیم.
           </p>
         </div>
-        
+
         <main>
           <HeroSection />
           <Services />

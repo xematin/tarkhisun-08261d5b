@@ -30,7 +30,7 @@ const AIAssistant = () => {
         <div className="max-w-4xl mx-auto">
           <div className="card-ai-feature text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
               <Sparkles className="w-4 h-4" />
               <span className="text-persian">اولین در ایران</span>
             </div>
@@ -62,7 +62,7 @@ const AIAssistant = () => {
             </div>
 
             {/* CTA Button */}
-            <Button size="lg" className="btn-ai text-sm md:text-lg px-4 md:px-8 py-3 md:py-4 text-persian" onClick={handleAIClick}>
+            <Button size="lg" className="btn-ai text-white text-sm md:text-lg px-4 md:px-8 py-3 md:py-4 text-persian" onClick={handleAIClick}>
               <MessageCircle className="mr-2 md:mr-3 h-5 md:h-6 w-5 md:w-6" />
               مشاوره رایگان با ترخیصان‌یار
               <ArrowLeft className="ml-2 md:ml-3 h-4 md:h-5 w-4 md:w-5" />

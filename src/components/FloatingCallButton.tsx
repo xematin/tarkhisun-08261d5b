@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 const FloatingCallButton = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasExpanded, setHasExpanded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,18 +21,16 @@ const FloatingCallButton = () => {
   }, []);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || hasExpanded) return;
 
-    // Expand every 7 seconds for 3 seconds, then collapse
-    const expandInterval = setInterval(() => {
+    // Expand once after 2 seconds, then stay expanded
+    const expandTimeout = setTimeout(() => {
       setIsExpanded(true);
-      setTimeout(() => {
-        setIsExpanded(false);
-      }, 3000); // Stay expanded for 3 seconds
-    }, 7000); // Repeat every 7 seconds
+      setHasExpanded(true);
+    }, 2000);
 
-    return () => clearInterval(expandInterval);
-  }, [isVisible]);
+    return () => clearTimeout(expandTimeout);
+  }, [isVisible, hasExpanded]);
 
   return (
     <a
@@ -44,7 +43,7 @@ const FloatingCallButton = () => {
       aria-label="تماس با ما"
       style={{ writingMode: isExpanded ? 'horizontal-tb' : 'horizontal-tb' }}
     >
-      <Phone className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 -ml-1" />
+      <Phone className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 -ml-3" />
       <span 
         className={`whitespace-nowrap text-sm md:text-base font-medium overflow-hidden transition-all duration-500 ${
           isExpanded ? 'max-w-[150px] opacity-100' : 'max-w-0 opacity-0'

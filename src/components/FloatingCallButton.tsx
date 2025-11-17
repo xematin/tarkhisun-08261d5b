@@ -39,14 +39,12 @@ const FloatingCallButton = () => {
   }, [isVisible]);
 
   const base =
-    "fixed left-0 top-1/2 -translate-y-1/2 z-50 md:hidden bg-accent text-accent-foreground rounded-r-full shadow-lg hover:bg-accent/90 flex items-center";
+    "fixed left-0 top-1/2 -translate-y-1/2 z-50 md:hidden bg-accent text-accent-foreground rounded-r-full shadow-lg hover:bg-accent/90 transition-all duration-500 ease-in-out flex items-center";
 
-  const visibility = isVisible 
-    ? "opacity-100 transition-opacity duration-300" 
-    : "opacity-0 pointer-events-none transition-opacity duration-300";
+  const visibility = isVisible ? "opacity-100" : "opacity-0 pointer-events-none";
 
-  const expandedClasses = "h-12 max-w-[200px] pl-3 pr-4 gap-2 justify-start transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]";
-  const collapsedClasses = "h-12 w-12 max-w-[48px] px-0 gap-0 justify-center translate-x-[2px] transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]";
+  const expandedClasses = "h-12 max-w-[200px] pl-3 pr-4 gap-2 justify-start";
+  const collapsedClasses = "h-12 w-12 max-w-[48px] px-0 gap-0 justify-center translate-x-[2px]";
 
   return (
     <a
@@ -56,7 +54,7 @@ const FloatingCallButton = () => {
     >
       <Phone className="w-5 h-5 flex-shrink-0" />
       <span
-        className={`whitespace-nowrap text-sm font-medium overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+        className={`whitespace-nowrap text-sm font-medium overflow-hidden transition-all duration-500 ${
           isExpanded ? "max-w-[150px] opacity-100" : "max-w-0 opacity-0"
         }`}
       >

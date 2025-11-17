@@ -36,7 +36,7 @@ const FloatingCallButton = () => {
   return (
     <a
       href="tel:+989177380080"
-      className={`fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-accent text-accent-foreground rounded-l-full shadow-lg hover:bg-accent/90 transition-all duration-500 flex items-center gap-2 ${
+      className={`fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-accent text-accent-foreground rounded-r-full shadow-lg hover:bg-accent/90 transition-all duration-500 flex items-center gap-2 ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       } ${
         isExpanded ? 'pr-4 pl-5 py-3' : 'pr-0 pl-4 py-3'

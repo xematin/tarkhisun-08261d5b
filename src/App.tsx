@@ -30,6 +30,7 @@ const DubaiToAbbasImportGuide = lazy(() => import("./pages/DubaiToAbbasImportGui
 const WaterTankClearanceGuide = lazy(() => import("./pages/WaterTankClearanceGuide"));
 const CarPartsImportGuide = lazy(() => import("./pages/CarPartsImportGuide"));
 const BandarAbbasComprehensiveGuide = lazy(() => import("./pages/BandarAbbasComprehensiveGuide"));
+const HomeAppliancesClearanceGuide = lazy(() => import("./pages/HomeAppliancesClearanceGuide"));
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/blog/water-tank-clearance-bandar-abbas-guide" element={<WaterTankClearanceGuide />} />
             <Route path="/blog/car-parts-import-customs-clearance-guide" element={<CarPartsImportGuide />} />
             <Route path="/blog/zero-to-hundred-bandar-abbas-customs-clearance" element={<BandarAbbasComprehensiveGuide />} />
+            <Route path="/blog/home-appliances-clearance-bandar-abbas-guide" element={<HomeAppliancesClearanceGuide />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/currencies" element={<Currencies />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

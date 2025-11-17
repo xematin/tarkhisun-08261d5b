@@ -42,7 +42,7 @@ const FloatingCallButton = () => {
   return (
     <a
       href="tel:+989177380080"
-      className={`fixed top-1/2 -translate-y-1/2 z-50 bg-accent text-accent-foreground rounded-r-full shadow-lg hover:bg-accent/90 transition-all duration-500 flex items-center gap-3 md:hidden ${
+      className={`fixed top-1/2 -translate-y-1/2 z-50 bg-accent text-accent-foreground rounded-r-full shadow-lg hover:bg-accent/90 transition-all duration-500 flex items-center gap-4 md:hidden ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       } ${
         isExpanded ? 'pr-4 pl-4 py-3 left-0' : 'pr-0 pl-4 py-3 -left-1'
@@ -50,9 +50,9 @@ const FloatingCallButton = () => {
       aria-label="تماس با ما"
       style={{ writingMode: isExpanded ? 'horizontal-tb' : 'horizontal-tb' }}
     >
-      <Phone className="w-5 h-5 flex-shrink-0 -ml-5" />
+      <Phone className="w-5 h-5 flex-shrink-0 -ml-6" />
       <span 
-        className={`pl-2 whitespace-nowrap text-sm font-medium overflow-hidden transition-all duration-500 ${
+        className={`pl-1 whitespace-nowrap text-sm font-medium overflow-hidden transition-all duration-500 ${
           isExpanded ? 'max-w-[150px] opacity-100' : 'max-w-0 opacity-0'
         }`}
       >

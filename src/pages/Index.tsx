@@ -1,16 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Services from "@/components/Services";
 import WhyUs from "@/components/WhyUs";
-import ExchangeRates from "@/components/ExchangeRates";
 import AIAssistant from "@/components/AIAssistant";
-import FAQ from "@/components/FAQ";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
 import RelatedArticles from "@/components/RelatedArticles";
 import FloatingCallButton from "@/components/FloatingCallButton";
+
+// Lazy load below-the-fold components for better performance
+const ExchangeRates = lazy(() => import("@/components/ExchangeRates"));
+const FAQ = lazy(() => import("@/components/FAQ"));
+const Contact = lazy(() => import("@/components/Contact"));
+const Footer = lazy(() => import("@/components/Footer"));
 import hero480Webp from "@/assets/hero-port-480.webp";
 import hero768Webp from "@/assets/hero-port-768.webp";
 import hero1024Webp from "@/assets/hero-port-1024.webp";
@@ -347,13 +349,21 @@ const Index = () => {
           <HeroSection />
           <Services />
           <WhyUs />
-          <ExchangeRates />
+          <Suspense fallback={<div className="min-h-[200px]" />}>
+            <ExchangeRates />
+          </Suspense>
           <AIAssistant />
-          <FAQ />
+          <Suspense fallback={<div className="min-h-[400px]" />}>
+            <FAQ />
+          </Suspense>
           <RelatedArticles currentPostId={1} limit={3} />
-          <Contact />
+          <Suspense fallback={<div className="min-h-[400px]" />}>
+            <Contact />
+          </Suspense>
         </main>
-        <Footer />
+        <Suspense fallback={<div className="min-h-[200px]" />}>
+          <Footer />
+        </Suspense>
         <FloatingCallButton />
       </div>
     </>

@@ -1,4 +1,5 @@
 import { Truck, FileCheck, Users, Search, Shield, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Services = () => {
   const services = [
@@ -6,37 +7,43 @@ const Services = () => {
       icon: Truck,
       title: "ترخیص کالا",
       description: "ترخیص سریع و مطمئن انواع کالاهای وارداتی و صادراتی در تمام بنادر کشور",
-      features: ["ترخیص در کمترین زمان", "مشاوره تخصصی", "پیگیری ۲۴ ساعته"]
+      features: ["ترخیص در کمترین زمان", "مشاوره تخصصی", "پیگیری ۲۴ ساعته"],
+      link: "/blog/complete-guide-customs-clearance-shahid-rajaei"
     },
     {
       icon: FileCheck,
       title: "صدور مجوزها",
       description: "اخذ انواع مجوزهای واردات، صادرات و مجوزهای تخصصی از سازمان‌های مختلف",
-      features: ["مجوز استاندارد", "مجوز بهداشت", "مجوزهای ویژه"]
+      features: ["مجوز استاندارد", "مجوز بهداشت", "مجوزهای ویژه"],
+      link: "/blog/ntsw-complete-guide"
     },
     {
       icon: Users,
       title: "مشاوره گمرکی",
       description: "مشاوره تخصصی در زمینه امور گمرکی، تعرفه و قوانین تجارت بین‌الملل",
-      features: ["مشاوره حقوقی", "بررسی تعرفه", "راهنمایی قوانین"]
+      features: ["مشاوره حقوقی", "بررسی تعرفه", "راهنمایی قوانین"],
+      link: "/blog/customs-tariff-guide"
     },
     {
       icon: Search,
       title: "پیگیری پرونده",
       description: "پیگیری مستمر وضعیت پرونده‌های ترخیص و ارائه گزارش‌های لحظه‌ای",
-      features: ["پیگیری آنلاین", "گزارش مرحله‌ای", "اطلاع‌رسانی SMS"]
+      features: ["پیگیری آنلاین", "گزارش مرحله‌ای", "اطلاع‌رسانی SMS"],
+      link: "/blog/manifest-guide"
     },
     {
       icon: Shield,
       title: "خدمات بیمه",
       description: "بیمه کالا و مشاوره انواع پوشش‌های بیمه‌ای برای محموله‌های تجاری",
-      features: ["بیمه حمل", "بیمه کالا", "مشاوره پوشش"]
+      features: ["بیمه حمل", "بیمه کالا", "مشاوره پوشش"],
+      link: "/blog/incoterms-guide"
     },
     {
       icon: Clock,
       title: "خدمات ۲۴ ساعته",
       description: "پشتیبانی و مشاوره در تمام ساعات شبانه‌روز برای پاسخ‌گویی فوری",
-      features: ["پشتیبانی شبانه‌روزی", "پاسخ‌گویی فوری", "مشاوره تلفنی"]
+      features: ["پشتیبانی شبانه‌روزی", "پاسخ‌گویی فوری", "مشاوره تلفنی"],
+      link: "/blog/import-export-guide"
     }
   ];
 
@@ -80,9 +87,12 @@ const Services = () => {
                 </ul>
 
                 <div className="mt-6 pt-6 border-t border-border">
-                  <button className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian">
+                  <Link 
+                    to={service.link} 
+                    className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian inline-flex items-center gap-2"
+                  >
                     اطلاعات بیشتر ←
-                  </button>
+                  </Link>
                 </div>
               </div>
             );

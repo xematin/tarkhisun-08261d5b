@@ -1,4 +1,5 @@
 import { Award, Users, Clock, Shield, TrendingUp, HeadphonesIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const WhyUs = () => {
   const reasons = [
@@ -77,21 +78,41 @@ const WhyUs = () => {
             با اعتماد به ما، کسب‌وکار خود را با اطمینان خاطر به سراسر جهان گسترش دهید. 
             تیم ترخیصان در کنار شماست تا هر چالش گمرکی را به فرصتی برای رشد تبدیل کند.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-white/90">
+          
+          <div className="flex flex-wrap justify-center gap-6 text-white/90 mb-6">
             <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              <span className="text-persian">ضمانت قانونی</span>
+              <div className="w-2 h-2 bg-accent-light rounded-full"></div>
+              <span className="text-persian">سرعت بالا در ترخیص</span>
             </div>
-            <div className="hidden sm:block w-1 h-1 bg-white/50 rounded-full"></div>
             <div className="flex items-center gap-2">
-              <Award className="w-5 h-5" />
-              <span className="text-persian">20+ سال تجربه</span>
+              <div className="w-2 h-2 bg-accent-light rounded-full"></div>
+              <span className="text-persian">قیمت‌های رقابتی</span>
             </div>
-            <div className="hidden sm:block w-1 h-1 bg-white/50 rounded-full"></div>
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              <span className="text-persian">هزاران مشتری راضی</span>
+              <div className="w-2 h-2 bg-accent-light rounded-full"></div>
+              <span className="text-persian">مشاوره رایگان</span>
             </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link 
+              to="/blog/complete-guide-customs-clearance-shahid-rajaei" 
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white text-persian border border-white/20"
+            >
+              راهنمای ترخیص کالا
+            </Link>
+            <Link 
+              to="/blog/hs-code-guide" 
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white text-persian border border-white/20"
+            >
+              آشنایی با کد HS
+            </Link>
+            <a 
+              href="#contact" 
+              className="px-6 py-2 bg-accent-light hover:bg-accent rounded-lg transition-colors text-white text-persian font-semibold"
+            >
+              دریافت مشاوره رایگان
+            </a>
           </div>
         </div>
       </div>

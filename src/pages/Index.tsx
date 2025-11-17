@@ -9,6 +9,7 @@ import AIAssistant from "@/components/AIAssistant";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import RelatedArticles from "@/components/RelatedArticles";
 import hero480Webp from "@/assets/hero-port-480.webp";
 import hero768Webp from "@/assets/hero-port-768.webp";
 import hero1024Webp from "@/assets/hero-port-1024.webp";
@@ -338,6 +339,7 @@ const Index = () => {
           <WhyUs />
           <ExchangeRates />
           <AIAssistant />
+          <RelatedArticles currentPostId={1} limit={4} />
           <FAQ />
           <Contact />
         </main>

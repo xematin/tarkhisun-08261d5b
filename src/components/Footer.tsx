@@ -1,20 +1,35 @@
 import { Bot, Phone, Mail, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const quickLinks = [{
     title: "خدمات ترخیص",
-    href: "#services"
+    href: "#services",
+    isAnchor: true
   }, {
     title: "نرخ ارز",
-    href: "#exchange"
+    href: "#exchange",
+    isAnchor: true
   }, {
     title: "ترخیصان‌یار",
-    href: "#ai-assistant"
+    href: "#ai-assistant",
+    isAnchor: true
+  }, {
+    title: "بلاگ",
+    href: "/blog",
+    isAnchor: false
   }, {
     title: "تماس با ما",
-    href: "#contact"
+    href: "#contact",
+    isAnchor: true
   }];
-  const services = ["ترخیص کالا", "مشاوره گمرکی", "صدور مجوزها", "پیگیری پرونده"];
+  
+  const popularArticles = [
+    { title: "راهنمای ترخیص کالا", slug: "/blog/complete-guide-customs-clearance-shahid-rajaei" },
+    { title: "کد HS چیست؟", slug: "/blog/hs-code-guide" },
+    { title: "تعرفه گمرکی", slug: "/blog/customs-tariff-guide" },
+    { title: "سامانه جامع تجارت", slug: "/blog/ntsw-complete-guide" }
+  ];
   return <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16" dir="rtl">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -36,21 +51,33 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg text-persian"><strong>لینک‌های سریع</strong></h3>
             <ul className="space-y-2">
-              {quickLinks.map((link, index) => <li key={index}>
-                  <a href={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
-                    {link.title}
-                  </a>
-                </li>)}
+              {quickLinks.map((link, index) => (
+                <li key={index}>
+                  {link.isAnchor ? (
+                    <a href={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
+                      {link.title}
+                    </a>
+                  ) : (
+                    <Link to={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
+                      {link.title}
+                    </Link>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Popular Articles */}
           <div className="space-y-4">
-            <h3 className="text-lg text-persian"><strong>خدمات</strong></h3>
+            <h3 className="text-lg text-persian"><strong>مقالات پربازدید</strong></h3>
             <ul className="space-y-2">
-              {services.map((service, index) => <li key={index} className="text-primary-foreground/80 text-persian">
-                  {service}
-                </li>)}
+              {popularArticles.map((article, index) => (
+                <li key={index}>
+                  <Link to={article.slug} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
+                    {article.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

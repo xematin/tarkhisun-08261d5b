@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Preload Critical Hero Image -->
+    <link rel="preload" as="image" href="/src/assets/hero-port-1024.avif" type="image/avif" fetchpriority="high">
+    
     <!-- Preload Critical Local Fonts -->
     <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
@@ -54,19 +57,19 @@
   <meta name="twitter:title" content="ترخیصان | مشاوره گمرکی و ترخیص کالا در بندرعباس">
   <meta property="og:description" content="مشاوره تخصصی امور گمرکی بندرعباس با هوش مصنوعی ترخیصان‌یار - اولین هوش مصنوعی گمرکات. ترخیص سریع کالا بندرعباس شهید رجایی با 20 سال تجربه! تماس : 09177380080">
   <meta name="twitter:description" content="مشاوره تخصصی امور گمرکی بندرعباس با هوش مصنوعی ترخیصان‌یار - اولین هوش مصنوعی گمرکات. ترخیص سریع کالا بندرعباس شهید رجایی با 20 سال تجربه! تماس : 09177380080">
-  
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-7RBYRKE10P');
-  </script>
 </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Google Analytics - Loaded at end for better performance -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-7RBYRKE10P');
+    </script>
   </body>
 </html>

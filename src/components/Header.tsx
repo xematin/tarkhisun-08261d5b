@@ -28,7 +28,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-4 space-x-reverse">
             <div className="flex flex-col">
-              <h1 className="text-xl text-primary text-persian"><strong>ترخیصان</strong></h1>
+              <div className="text-xl text-primary text-persian font-bold">ترخیصان</div>
               <span className="text-xs text-muted-foreground">TARKHISUN</span>
             </div>
           </div>

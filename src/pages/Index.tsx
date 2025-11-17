@@ -88,10 +88,14 @@ const Index = () => {
       }
     };
 
-    setOGTag('og:title', 'مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان');
-    setOGTag('og:description', 'مشاوره تخصصی امور گمرکی و ترخیص کالا با +15 سال تجربه در بندرعباس');
+    setOGTag('og:title', 'ترخیصان | مشاوره گمرکی و ترخیص کالا در بندرعباس');
+    setOGTag('og:description', 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080');
     setOGTag('og:type', 'website');
     setOGTag('og:url', 'https://tarkhisun.ir/');
+    setOGTag('og:image', 'https://tarkhisun.ir/og-image.jpg');
+    setOGTag('og:image:width', '1200');
+    setOGTag('og:image:height', '630');
+    setOGTag('og:image:alt', 'ترخیصان - مشاوره گمرکی بندرعباس');
     setOGTag('og:locale', 'fa_IR');
     setOGTag('og:site_name', 'ترخیصان');
 

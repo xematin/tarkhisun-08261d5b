@@ -75,9 +75,7 @@ const AIAssistant = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
           {features.map((feature, index) => {
           const IconComponent = feature.icon;
-          return <div key={index} className="card-service text-center" style={{
-            animationDelay: `${index * 0.1}s`
-          }}>
+          return <div key={index} className="card-service text-center">
                 <div className="w-16 h-16 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <IconComponent className="w-8 h-8 text-accent" />
                 </div>

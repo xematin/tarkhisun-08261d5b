@@ -66,9 +66,7 @@ const HeroSection = () => {
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-3 gap-6 mt-12 fade-in-up animate" style={{
-            animationDelay: "0.6s"
-          }}>
+            <div className="grid grid-cols-3 gap-6 mt-12 fade-in-up animate [animation-delay:0.6s]">
               <div className="text-center">
                 <Shield className="h-8 w-8 text-accent-light mx-auto mb-2" />
                 <div className="text-2xl text-white"><strong>۲۰+</strong></div>

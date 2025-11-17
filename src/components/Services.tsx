@@ -57,7 +57,6 @@ const Services = () => {
               <div 
                 key={index} 
                 className="card-service group hover:scale-105"
-                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg transition-all duration-300">
                   <IconComponent className="w-8 h-8 text-white" />

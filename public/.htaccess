@@ -1,0 +1,215 @@
+# ==============================================
+# Tarkhisun.ir - Optimized .htaccess Configuration
+# Performance + Security + SEO Optimization
+# ==============================================
+
+# --- Force HTTPS Redirect ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- Force redirect WWW to non-WWW ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^www\.tarkhisun\.ir$ [NC]
+  RewriteRule ^(.*)$ https://tarkhisun.ir/$1 [L,R=301]
+</IfModule>
+
+# --- Remove Trailing Slashes ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} (.+)/$
+  RewriteRule ^ %1 [R=301,L]
+</IfModule>
+
+# ==============================================
+# COMPRESSION - Gzip & Brotli
+# ==============================================
+
+# --- Brotli Compression (Better than Gzip) ---
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/x-javascript application/json
+  AddOutputFilterByType BROTLI_COMPRESS application/xml application/rss+xml
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
+
+# --- Gzip Compression (Fallback) ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+  AddOutputFilterByType DEFLATE application/xml application/rss+xml application/atom+xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/ttf font/otf font/woff font/woff2
+</IfModule>
+
+# ==============================================
+# BROWSER CACHING - Performance Boost
+# ==============================================
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # HTML - No Cache (for updates)
+  ExpiresByType text/html "access plus 0 seconds"
+  
+  # CSS & JavaScript - 1 year (immutable files with hash)
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
+  
+  # Images - 1 week
+  ExpiresByType image/jpeg "access plus 1 week"
+  ExpiresByType image/jpg "access plus 1 week"
+  ExpiresByType image/png "access plus 1 week"
+  ExpiresByType image/webp "access plus 1 week"
+  ExpiresByType image/avif "access plus 1 week"
+  ExpiresByType image/svg+xml "access plus 1 week"
+  ExpiresByType image/x-icon "access plus 1 year"
+  
+  # Fonts - 1 year (immutable)
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  
+  # Manifest & Service Worker - 1 week
+  ExpiresByType application/manifest+json "access plus 1 week"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>
+
+# --- Cache-Control Headers ---
+<IfModule mod_headers.c>
+  # HTML - No Cache
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+  </FilesMatch>
+
+  # CSS & JavaScript - 1 year immutable
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Images - 1 week
+  <FilesMatch "\.(jpg|jpeg|png|gif|webp|avif|svg|ico)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+
+  # Fonts - 1 year immutable
+  <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ==============================================
+# SECURITY HEADERS
+# ==============================================
+
+<IfModule mod_headers.c>
+  # X-Frame-Options - Prevent Clickjacking
+  Header always set X-Frame-Options "SAMEORIGIN"
+  
+  # X-Content-Type-Options - Prevent MIME Sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # X-XSS-Protection - XSS Attack Protection
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # Referrer-Policy - Control Referrer Information
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Permissions-Policy - Control Browser Features
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  
+  # Content-Security-Policy - XSS & Injection Protection
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com;"
+  
+  # Strict-Transport-Security - Force HTTPS (HSTS)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# ==============================================
+# SINGLE PAGE APPLICATION (SPA) ROUTING
+# ==============================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Skip if file or directory exists
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Handle service worker
+  RewriteRule ^sw\.js$ - [L]
+  
+  # Route all other requests to index.html
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ==============================================
+# FILE ACCESS SECURITY
+# ==============================================
+
+# Prevent access to .htaccess
+<Files .htaccess>
+  Order allow,deny
+  Deny from all
+</Files>
+
+# Prevent access to hidden files (except well-known)
+<FilesMatch "^\.(?!well-known)">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# ==============================================
+# MIME TYPES - Ensure Correct File Types
+# ==============================================
+
+<IfModule mod_mime.c>
+  # JavaScript
+  AddType application/javascript js mjs
+  AddType application/json json
+  
+  # Images
+  AddType image/webp webp
+  AddType image/avif avif
+  AddType image/svg+xml svg svgz
+  
+  # Fonts
+  AddType font/woff woff
+  AddType font/woff2 woff2
+  AddType font/ttf ttf
+  AddType font/otf otf
+  
+  # Manifest
+  AddType application/manifest+json webmanifest
+</IfModule>
+
+# ==============================================
+# PERFORMANCE OPTIMIZATIONS
+# ==============================================
+
+# ETags - Enable Entity Tags for Better Caching
+FileETag MTime Size
+
+# Enable Keep-Alive for Better Performance
+<IfModule mod_headers.c>
+  Header set Connection keep-alive
+</IfModule>
+
+# Disable Server Signature (Security)
+ServerSignature Off
+
+# ==============================================
+# END OF CONFIGURATION
+# ==============================================

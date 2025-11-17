@@ -3,6 +3,9 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 
+// Register Service Worker for PWA
+import './registerSW';
+
 // Phase 1 SEO: HTTPS and WWW redirects
 if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
   // Redirect HTTP to HTTPS

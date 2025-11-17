@@ -339,8 +339,8 @@ const Index = () => {
           <WhyUs />
           <ExchangeRates />
           <AIAssistant />
-          <RelatedArticles currentPostId={1} limit={4} />
           <FAQ />
+          <RelatedArticles currentPostId={1} limit={4} />
           <Contact />
         </main>
         <Footer />

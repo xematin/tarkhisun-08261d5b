@@ -24,7 +24,7 @@ const AIAssistant = () => {
   const handleAIClick = () => {
     window.open('https://t.me/N8NAutoBotBot', '_blank');
   };
-  return <section id="ai-assistant" className="py-20 bg-gradient-to-br from-accent-lighter via-white to-primary-lighter">
+  return <section id="ai-assistant" className="contain-layout gpu-accelerated py-20 bg-gradient-to-br from-accent-lighter via-white to-primary-lighter">
       <div className="container mx-auto px-4" dir="rtl">
         {/* Main AI Card */}
         <div className="max-w-4xl mx-auto">

@@ -143,25 +143,78 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    cssCodeSplit: true,
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'router-vendor': ['react-router-dom'],
-          'ui-vendor': ['@radix-ui/react-slot', 'class-variance-authority', 'clsx', 'tailwind-merge'],
-          'radix-vendor': [
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-tabs',
-          ],
+        manualChunks: (id) => {
+          // React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-vendor';
+          }
+          if (id.includes('node_modules/react-router-dom')) {
+            return 'router-vendor';
+          }
+          
+          // Radix UI - split into smaller chunks
+          if (id.includes('@radix-ui/react-accordion') || 
+              id.includes('@radix-ui/react-collapsible')) {
+            return 'radix-accordion';
+          }
+          if (id.includes('@radix-ui/react-dialog') || 
+              id.includes('@radix-ui/react-alert-dialog')) {
+            return 'radix-dialog';
+          }
+          if (id.includes('@radix-ui')) {
+            return 'radix-other';
+          }
+          
+          // Utilities
+          if (id.includes('clsx') || 
+              id.includes('class-variance-authority') || 
+              id.includes('tailwind-merge')) {
+            return 'ui-utils';
+          }
+          
+          // Icons
+          if (id.includes('lucide-react')) {
+            return 'icons';
+          }
+          
+          // Forms
+          if (id.includes('react-hook-form') || 
+              id.includes('@hookform/resolvers') || 
+              id.includes('zod')) {
+            return 'forms';
+          }
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.woff2')) {
             return 'assets/fonts/[name]-[hash][extname]';
           }
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'assets/css/[name]-[hash][extname]';
+          }
           return 'assets/[name]-[hash][extname]';
         },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+      },
+    },
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 2,
+      },
+      mangle: {
+        safari10: true,
+      },
+      format: {
+        comments: false,
       },
     },
   },

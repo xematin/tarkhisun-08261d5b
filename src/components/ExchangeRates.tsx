@@ -114,7 +114,7 @@ const ExchangeRates = () => {
   };
 
   return (
-    <section id="exchange" className="py-20 bg-gradient-to-br from-secondary to-white">
+    <section id="exchange" className="contain-layout gpu-accelerated py-20 bg-gradient-to-br from-secondary to-white">
       <div className="container mx-auto px-4" dir="rtl">
         <div className="text-center mb-12">
           <h2 className="heading-secondary mb-4">نرخ ارز لحظه‌ای</h2>

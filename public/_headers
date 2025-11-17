@@ -1,0 +1,25 @@
+# Cache برای فایل‌های JavaScript و CSS با hash در نام
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache برای تصاویر
+/assets/*.webp
+  Cache-Control: public, max-age=604800
+
+/assets/*.avif
+  Cache-Control: public, max-age=604800
+
+/assets/*.jpg
+/assets/*.png
+  Cache-Control: public, max-age=604800
+
+# Cache برای فونت‌ها
+/assets/fonts/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML بدون cache (برای آپدیت‌های سریع)
+/*
+  Cache-Control: public, max-age=0, must-revalidate

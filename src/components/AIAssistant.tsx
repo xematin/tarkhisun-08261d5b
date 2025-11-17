@@ -99,12 +99,18 @@ const AIAssistant = () => {
         <div className="mt-16 max-w-4xl mx-auto">
           <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
             <CollapsibleTrigger className="w-full group">
-              <div className="card-service hover:shadow-lg transition-shadow cursor-pointer">
+              <div className={`card-service cursor-pointer transition-all duration-300 ${
+                isOpen 
+                  ? 'shadow-lg border-2 border-accent/30 bg-accent/5' 
+                  : 'hover:shadow-md hover:border-accent/20'
+              }`}>
                 <div className="flex items-center justify-between gap-4">
-                  <h3 className="heading-tertiary text-center flex-1">
+                  <h3 className="heading-tertiary text-center flex-1 group-hover:text-accent transition-colors duration-300">
                     ترخیصان‌یار چیست و چگونه کار می‌کند؟
                   </h3>
-                  <ChevronDown className={`w-6 h-6 text-accent transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-6 h-6 text-accent transition-transform duration-500 ease-in-out ${
+                    isOpen ? 'rotate-180' : ''
+                  }`} />
                 </div>
                 <p className="text-sm text-muted-foreground mt-3 text-persian">
                   برای مشاهده توضیحات کامل کلیک کنید
@@ -112,7 +118,7 @@ const AIAssistant = () => {
               </div>
             </CollapsibleTrigger>
             
-            <CollapsibleContent className="mt-6">
+            <CollapsibleContent className="mt-6 overflow-hidden transition-all duration-500 ease-in-out data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
               <div className="prose prose-lg mx-auto text-right" dir="rtl">
                 <div className="space-y-6 text-muted-foreground leading-relaxed">
                   <p className="text-persian text-lg">

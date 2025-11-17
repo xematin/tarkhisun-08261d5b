@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 const FloatingCallButton = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,15 +19,39 @@ const FloatingCallButton = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isVisible) return;
+
+    // Expand every 7 seconds for 3 seconds, then collapse
+    const expandInterval = setInterval(() => {
+      setIsExpanded(true);
+      setTimeout(() => {
+        setIsExpanded(false);
+      }, 3000); // Stay expanded for 3 seconds
+    }, 7000); // Repeat every 7 seconds
+
+    return () => clearInterval(expandInterval);
+  }, [isVisible]);
+
   return (
     <a
       href="tel:+989177380080"
-      className={`fixed left-4 bottom-4 md:left-6 md:bottom-6 z-50 w-12 h-12 md:w-14 md:h-14 bg-accent text-accent-foreground rounded-full flex items-center justify-center shadow-lg hover:bg-accent/90 transition-all duration-300 animate-pulse ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+      className={`fixed left-0 top-1/2 -translate-y-1/2 z-50 bg-accent text-accent-foreground rounded-l-full shadow-lg hover:bg-accent/90 transition-all duration-500 flex items-center gap-2 ${
+        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      } ${
+        isExpanded ? 'pr-4 pl-5 py-3' : 'pr-0 pl-4 py-3'
       }`}
       aria-label="تماس با ما"
+      style={{ writingMode: isExpanded ? 'horizontal-tb' : 'horizontal-tb' }}
     >
-      <Phone className="w-5 h-5 md:w-6 md:h-6" />
+      <Phone className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" />
+      <span 
+        className={`whitespace-nowrap text-sm md:text-base font-medium overflow-hidden transition-all duration-500 ${
+          isExpanded ? 'max-w-[150px] opacity-100' : 'max-w-0 opacity-0'
+        }`}
+      >
+        تماس بگیرید
+      </span>
     </a>
   );
 };

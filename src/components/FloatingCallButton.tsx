@@ -41,7 +41,7 @@ const FloatingCallButton = () => {
       className={`fixed top-1/2 -translate-y-1/2 z-50 bg-accent text-accent-foreground rounded-r-full shadow-lg hover:bg-accent/90 transition-all duration-500 flex items-center gap-2 md:hidden ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       } ${
-        isExpanded ? 'pr-4 pl-4 py-3 left-0' : 'pr-0 pl-2 py-3 left-0'
+        isExpanded ? 'pr-4 pl-4 py-3 left-0' : 'pr-0 pl-4 py-3 left-0'
       }`}
       aria-label="تماس با ما"
       style={{ writingMode: isExpanded ? 'horizontal-tb' : 'horizontal-tb' }}

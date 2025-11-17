@@ -4,7 +4,7 @@
   <!-- Priority 1.0 -->
   <url>
     <loc>https://tarkhisun.ir/</loc>
-    <lastmod>2025-11-12</lastmod>
+    <lastmod>2025-11-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -12,7 +12,7 @@
   <!-- Priority 0.9 -->
   <url>
     <loc>https://tarkhisun.ir/blog</loc>
-    <lastmod>2025-11-11</lastmod>
+    <lastmod>2025-11-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -20,9 +20,17 @@
   <!-- Priority 0.8 -->
   <url>
     <loc>https://tarkhisun.ir/currencies</loc>
-    <lastmod>2025-11-11</lastmod>
+    <lastmod>2025-11-17</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <!-- Priority 0.6 - PWA Install Page -->
+  <url>
+    <loc>https://tarkhisun.ir/install</loc>
+    <lastmod>2025-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <url>
@@ -38,7 +46,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tarkhisun.ir/blog/customs-tariff-definition-importance</loc>
+    <loc>https://tarkhisun.ir/blog/customs-tariff-guide</loc>
     <lastmod>2025-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -128,8 +136,32 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tarkhisun.ir/blog/exchange-rate-guide</loc>
+    <loc>https://tarkhisun.ir/blog/customs-exchange-rate-guide</loc>
     <lastmod>2025-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tarkhisun.ir/blog/hs-code-guide</loc>
+    <lastmod>2025-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance</loc>
+    <lastmod>2025-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide</loc>
+    <lastmod>2025-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tarkhisun.ir/blog/mobile-phone-customs-clearance-registry-guide</loc>
+    <lastmod>2025-11-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

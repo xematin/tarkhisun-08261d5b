@@ -4,7 +4,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useState } from "react";
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  
   const features = [{
     icon: MessageCircle,
     title: "پاسخ به سوالات گمرکی",
@@ -99,18 +98,12 @@ const AIAssistant = () => {
         <div className="mt-16 max-w-4xl mx-auto">
           <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
             <CollapsibleTrigger className="w-full group">
-              <div className={`card-service cursor-pointer transition-all duration-300 ${
-                isOpen 
-                  ? 'shadow-lg border-2 border-accent/30 bg-accent/5' 
-                  : 'hover:shadow-md hover:border-accent/20'
-              }`}>
+              <div className={`card-service cursor-pointer transition-all duration-300 ${isOpen ? 'shadow-lg border-2 border-accent/30 bg-accent/5' : 'hover:shadow-md hover:border-accent/20'}`}>
                 <div className="flex items-center justify-between gap-4">
                   <h3 className="heading-tertiary text-center flex-1 group-hover:text-accent transition-colors duration-300">
                     ترخیصان‌یار چیست و چگونه کار می‌کند؟
                   </h3>
-                  <ChevronDown className={`w-6 h-6 text-accent transition-transform duration-500 ease-in-out ${
-                    isOpen ? 'rotate-180' : ''
-                  }`} />
+                  <ChevronDown className={`w-6 h-6 text-accent transition-transform duration-500 ease-in-out ${isOpen ? 'rotate-180' : ''}`} />
                 </div>
                 <p className="text-sm text-muted-foreground mt-3 text-persian">
                   برای مشاهده توضیحات کامل کلیک کنید
@@ -156,7 +149,7 @@ const AIAssistant = () => {
                   </p>
 
                   <p className="text-persian text-lg">
-                    ترخیصان‌یار همچنین اطلاعات جامعی درباره <strong className="text-primary">گمرکات مختلف ایران</strong> 
+                    ترخیصان‌یار همچنین اطلاعات جامعی درباره <strong className="text-primary">گمرکات مختلف ایران </strong> 
                     از جمله <strong className="text-primary">بندر شهید رجایی</strong>، <strong className="text-primary">بندرعباس</strong>، 
                     <strong className="text-primary">بندر امام خمینی</strong>، <strong className="text-primary">فرودگاه امام خمینی</strong>، 
                     <strong className="text-primary">بندر چابهار</strong> و <strong className="text-primary">مرزهای زمینی</strong> مانند 

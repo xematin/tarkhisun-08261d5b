@@ -50,7 +50,7 @@ const FloatingCallButton = () => {
       aria-label="تماس با ما"
       style={{ writingMode: isExpanded ? 'horizontal-tb' : 'horizontal-tb' }}
     >
-      <Phone className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" />
+      <Phone className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 -ml-2" />
       <span 
         className={`pl-2 whitespace-nowrap text-sm md:text-base font-medium overflow-hidden transition-all duration-500 ${
           isExpanded ? 'max-w-[150px] opacity-100' : 'max-w-0 opacity-0'

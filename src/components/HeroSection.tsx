@@ -32,7 +32,7 @@ const HeroSection = () => {
       </div>
       
       {/* Content */}
-      <div className="w-full max-w-7xl relative z-10 mx-auto px-4 md:px-8 lg:px-12" dir="rtl">
+      <div className="container relative z-10 mx-auto px-4" dir="rtl">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-right">
             <h1 className="heading-primary text-white mb-6 fade-in-up animate">

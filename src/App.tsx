@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
+import Install from "./pages/Install";
 
 // Lazy load blog pages for better performance
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -68,6 +69,7 @@ const App = () => (
             <Route path="/blog/mobile-phone-customs-clearance-registry-guide" element={<MobileRegistryGuide />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/currencies" element={<Currencies />} />
+            <Route path="/install" element={<Install />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

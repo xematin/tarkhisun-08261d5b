@@ -1,4 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap&font-display=swap');
+/* Noto Sans Arabic - Local Fonts */
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-300.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-800.woff2') format('woff2');
+}
 
 @tailwind base;
 @tailwind components;

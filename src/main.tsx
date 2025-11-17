@@ -3,6 +3,19 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 
+// Phase 1 SEO: HTTPS and WWW redirects
+if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+  // Redirect HTTP to HTTPS
+  if (window.location.protocol === 'http:') {
+    window.location.href = window.location.href.replace('http:', 'https:');
+  }
+  
+  // Redirect www to non-www
+  if (window.location.hostname === 'www.tarkhisun.ir') {
+    window.location.href = window.location.href.replace('www.tarkhisun.ir', 'tarkhisun.ir');
+  }
+}
+
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
     <App />

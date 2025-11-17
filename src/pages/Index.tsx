@@ -24,11 +24,32 @@ const Index = () => {
     
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با +15 سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته');
+      metaDescription.setAttribute('content', 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080');
     } else {
       const meta = document.createElement('meta');
       meta.name = 'description';
-      meta.content = 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با +15 سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته';
+      meta.content = 'مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس بندر شهید رجایی با 20+ سال تجربه. خدمات ترخیص سریع، صدور مجوزها، مشاوره گمرکی و پیگیری 24 ساعته. تماس رایگان: 09177380080';
+      document.head.appendChild(meta);
+    }
+    
+    // Publisher Meta Tag
+    const publisher = document.querySelector('meta[name="publisher"]');
+    if (publisher) {
+      publisher.setAttribute('content', 'ترخیصان - مشاوره گمرکی بندرعباس');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'publisher';
+      meta.content = 'ترخیصان - مشاوره گمرکی بندرعباس';
+      document.head.appendChild(meta);
+    }
+    
+    const author = document.querySelector('meta[name="author"]');
+    if (author) {
+      author.setAttribute('content', 'Tarkhisun');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'author';
+      meta.content = 'Tarkhisun';
       document.head.appendChild(meta);
     }
 

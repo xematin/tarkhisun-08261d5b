@@ -3,8 +3,10 @@ import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Services from "@/components/Services";
+import WhyUs from "@/components/WhyUs";
 import ExchangeRates from "@/components/ExchangeRates";
 import AIAssistant from "@/components/AIAssistant";
+import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import hero480Webp from "@/assets/hero-port-480.webp";
@@ -333,8 +335,10 @@ const Index = () => {
         <main>
           <HeroSection />
           <Services />
+          <WhyUs />
           <ExchangeRates />
           <AIAssistant />
+          <FAQ />
           <Contact />
         </main>
         <Footer />

@@ -170,7 +170,7 @@ const ExchangeRates = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground text-persian">خرید</span>
-                    <span className="text-accent"><strong>{formatPrice(rate.buy)}</strong> ریال</span>
+                    <span className="text-accent-text"><strong>{formatPrice(rate.buy)}</strong> ریال</span>
                   </div>
                   
                   <div className="flex justify-between items-center">

@@ -72,10 +72,11 @@
     --primary-lighter: 225 89% 85%;
 
     /* Emerald Green Accent - Success & Progress */
-    --accent: 160 84% 39%;
+    --accent: 160 84% 32%;
     --accent-foreground: 0 0% 100%;
+    --accent-text: 160 84% 28%;
     --accent-light: 160 84% 55%;
-    --accent-dark: 160 84% 25%;
+    --accent-dark: 160 84% 22%;
     --accent-lighter: 160 84% 90%;
 
     /* Neutral Grays */

@@ -128,6 +128,23 @@
     direction: rtl;
     text-align: right;
   }
+
+  /* Force scrollbar to the right side in RTL */
+  html[dir="rtl"] ::-webkit-scrollbar {
+    position: absolute;
+    left: auto;
+    right: 0;
+  }
+  
+  html[dir="rtl"] * {
+    scrollbar-gutter: stable;
+  }
+  
+  /* Ensure body scrollbar is on the right */
+  body {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+  }
 }
 
 @layer components {

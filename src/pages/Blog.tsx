@@ -4,7 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, User, ArrowLeft } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Clock, User, ArrowLeft, Filter } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -17,10 +18,25 @@ import { blogPosts as importedBlogPosts } from "@/data/blogPosts";
 
 const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>("همه");
   const postsPerPage = 8;
   
   // Reverse the posts to show newest first
-  const blogPosts = [...importedBlogPosts].reverse();
+  const allBlogPosts = [...importedBlogPosts].reverse();
+  
+  // Get unique categories
+  const categories = ["همه", ...Array.from(new Set(allBlogPosts.map(post => post.category)))];
+  
+  // Filter posts by selected category
+  const blogPosts = selectedCategory === "همه" 
+    ? allBlogPosts 
+    : allBlogPosts.filter(post => post.category === selectedCategory);
+  
+  // Handle category change
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1); // Reset to first page when category changes
+  };
 
   useEffect(() => {
     // Set RTL direction for Persian content
@@ -189,6 +205,45 @@ const Blog = () => {
                 <p className="text-lg text-muted-foreground text-persian">
                   با مطالعه مقالات ما از آخرین رویه‌ها و قوانین گمرکی مطلع شوید
                 </p>
+              </div>
+              
+              {/* Category Filter */}
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Filter className="w-5 h-5 text-accent" />
+                  <h3 className="text-lg font-semibold text-foreground text-persian">فیلتر بر اساس دسته‌بندی</h3>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {categories.map((category) => (
+                    <Badge
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      className={`cursor-pointer text-sm px-4 py-2 transition-all hover:scale-105 text-persian ${
+                        selectedCategory === category 
+                          ? 'bg-accent text-white hover:bg-accent/90' 
+                          : 'hover:bg-accent/10 hover:text-accent hover:border-accent'
+                      }`}
+                      onClick={() => handleCategoryChange(category)}
+                    >
+                      {category}
+                      {category !== "همه" && (
+                        <span className="mr-2 text-xs opacity-70">
+                          ({allBlogPosts.filter(post => post.category === category).length})
+                        </span>
+                      )}
+                      {category === "همه" && (
+                        <span className="mr-2 text-xs opacity-70">
+                          ({allBlogPosts.length})
+                        </span>
+                      )}
+                    </Badge>
+                  ))}
+                </div>
+                {selectedCategory !== "همه" && (
+                  <p className="text-sm text-muted-foreground mt-4 text-persian">
+                    نمایش <strong>{blogPosts.length}</strong> مقاله در دسته‌بندی <strong className="text-accent">{selectedCategory}</strong>
+                  </p>
+                )}
               </div>
 
               <div className="grid lg:grid-cols-2 gap-8">

@@ -23,13 +23,19 @@ const Footer = () => {
     href: "#contact",
     isAnchor: true
   }];
-  
-  const popularArticles = [
-    { title: "راهنمای ترخیص کالا", slug: "/blog/complete-guide-customs-clearance-shahid-rajaei" },
-    { title: "کد HS چیست؟", slug: "/blog/hs-code-guide" },
-    { title: "تعرفه گمرکی", slug: "/blog/customs-tariff-guide" },
-    { title: "سامانه جامع تجارت", slug: "/blog/ntsw-complete-guide" }
-  ];
+  const popularArticles = [{
+    title: "راهنمای ترخیص کالا",
+    slug: "/blog/complete-guide-customs-clearance-shahid-rajaei"
+  }, {
+    title: "کد HS چیست؟",
+    slug: "/blog/hs-code-guide"
+  }, {
+    title: "تعرفه گمرکی",
+    slug: "/blog/customs-tariff-guide"
+  }, {
+    title: "سامانه جامع تجارت",
+    slug: "/blog/ntsw-complete-guide"
+  }];
   return <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-16" dir="rtl">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -51,19 +57,13 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg text-persian"><strong>لینک‌های سریع</strong></h3>
             <ul className="space-y-2">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  {link.isAnchor ? (
-                    <a href={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
+              {quickLinks.map((link, index) => <li key={index}>
+                  {link.isAnchor ? <a href={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
                       {link.title}
-                    </a>
-                  ) : (
-                    <Link to={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
+                    </a> : <Link to={link.href} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
                       {link.title}
-                    </Link>
-                  )}
-                </li>
-              ))}
+                    </Link>}
+                </li>)}
             </ul>
           </div>
 
@@ -71,13 +71,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg text-persian"><strong>مقالات پربازدید</strong></h3>
             <ul className="space-y-2">
-              {popularArticles.map((article, index) => (
-                <li key={index}>
+              {popularArticles.map((article, index) => <li key={index}>
                   <Link to={article.slug} className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian">
                     {article.title}
                   </Link>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -128,7 +126,7 @@ const Footer = () => {
             <p className="text-primary-foreground/60 text-sm text-persian">تمامی حقوق برای تیم ترخیصان محفوظ است © 1404</p>
             
             <div className="flex items-center gap-6 text-sm text-primary-foreground/60">
-              <span className="text-persian">طراحی سایت و خدمات برنامه‌نویسی © OctanNet</span>
+              <span className="text-persian">طراحی سایت و خدمات برنامه‌نویسی © OctanDev</span>
             </div>
           </div>
         </div>

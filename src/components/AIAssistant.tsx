@@ -114,8 +114,7 @@ const AIAssistant = () => {
             <CollapsibleContent className="mt-6 overflow-hidden transition-all duration-500 ease-in-out data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
               <div className="prose prose-lg mx-auto text-right" dir="rtl">
                 <div className="space-y-6 text-muted-foreground leading-relaxed">
-                  <p className="text-persian text-lg">
-                    <strong className="text-primary">ترخیصان‌یار</strong> اولین 
+                  <p className="text-persian text-lg">ترخیصان‌یار اولین و پیشرفته‌ترین سیستم هوش مصنوعی تخصصی گمرکی در ایران است که با بهره‌گیری از جدیدترین تکنولوژی‌های یادگیری ماشین و پردازش زبان طبیعی، تمامی فرآیندهای مرتبط با ترخیص کالا و امور گمرکی را ساده‌تر و سریع‌تر می‌کند. این سیستم هوشمند با تحلیل هزاران پرونده ترخیصی و قوانین گمرکی ایران، قادر به ارائه مشاوره تخصصی فوری و راهنمایی گام‌به‌گام در تمام مراحل واردات و صادرات است.<strong className="text-primary">ترخیصان‌یار</strong> اولین 
                     و پیشرفته‌ترین سیستم <strong className="text-primary">هوش مصنوعی تخصصی گمرکی</strong> در ایران است 
                     که با بهره‌گیری از جدیدترین تکنولوژی‌های یادگیری ماشین و پردازش زبان طبیعی، 
                     تمامی فرآیندهای مرتبط با <strong className="text-primary">ترخیص کالا</strong> و <strong className="text-primary">امور گمرکی</strong> را 
@@ -163,9 +162,8 @@ const AIAssistant = () => {
                   </h4>
 
                   <p className="text-persian text-lg">
-                    برخلاف مشاوره‌های سنتی که نیاز به تماس تلفنی، نوبت‌گیری و هزینه‌های 
-                    بالا دارند، ترخیصان‌یار به صورت <strong className="text-primary">کاملاً رایگان</strong> و 
-                    <strong className="text-primary">24 ساعته</strong> در دسترس است. کاربران می‌توانند در هر ساعت 
+                    برخلاف مشاوره‌های سنتی که نیاز به تماس تلفنی، نوبت‌گیری و هزینه‌های بالا دارند، ترخیصان‌یار به صورت کاملاً رایگان و 24 ساعته در دسترس است. کاربران می‌توانند در هر ساعت از شبانه‌روز، بدون محدودیت تعداد سوال، از این سیستم هوشمند استفاده کنند. علاوه بر این، پاسخ‌های ارائه شده توسط ترخیصان‌یار بر اساس آخرین قوانین و مقررات گمرکی ایران به‌روزرسانی می‌شوند و دقت بالایی دارند. <strong className="text-primary">کاملاً رایگان</strong> و 
+                    <strong className="text-primary"> 24 ساعته</strong> در دسترس است. کاربران می‌توانند در هر ساعت 
                     از شبانه‌روز، بدون محدودیت تعداد سوال، از این سیستم هوشمند استفاده کنند. 
                     علاوه بر این، پاسخ‌های ارائه شده توسط ترخیصان‌یار بر اساس 
                     <strong className="text-primary">آخرین قوانین و مقررات گمرکی ایران</strong> به‌روزرسانی می‌شوند 
@@ -173,7 +171,7 @@ const AIAssistant = () => {
                   </p>
 
                   <p className="text-persian text-lg">
-                    این ابزار هوشمند ویژه <strong className="text-primary">واردکنندگان</strong>، <strong className="text-primary">صادرکنندگان</strong>، 
+                    این ابزار هوشمند ویژه واردکنندگان، صادرکنندگان،بازرگانان، ترخیصکاران گمرکی و شرکت‌های حمل و نقل بین‌المللی طراحی شده است. استفاده از ترخیصان‌یار نه تنها صرفه‌جویی قابل توجه در زمان و هزینهایجاد می‌کند، بلکه با کاهش خطاهای انسانی، از جریمه‌های گمرکیو توقف کالا نیز جلوگیری می‌کند. <strong className="text-primary">واردکنندگان</strong>، <strong className="text-primary">صادرکنندگان</strong>، 
                     <strong className="text-primary">بازرگانان</strong>، <strong className="text-primary">ترخیصکاران گمرکی</strong> و 
                     <strong className="text-primary">شرکت‌های حمل و نقل بین‌المللی</strong> طراحی شده است. 
                     استفاده از ترخیصان‌یار نه تنها <strong className="text-primary">صرفه‌جویی قابل توجه در زمان و هزینه</strong> 
@@ -183,7 +181,7 @@ const AIAssistant = () => {
 
                   <div className="bg-accent/10 border-r-4 border-accent p-6 rounded-lg mt-8">
                     <p className="text-persian text-lg font-semibold text-primary">
-                      💡 نکته مهم: ترخیصان‌یار تنها یک چت‌بات ساده نیست، بلکه یک 
+                      💡 نکته مهم : ترخیصان‌یار تنها یک چت‌بات ساده نیست، بلکه یک سیستم مشاوره تخصصی هوشمند است که با تحلیل دقیق شرایط هر کالا و نیاز کاربر، راهکارهای سفارشی‌سازی شده ارائه می‌دهد. 
                       <strong className="text-primary"> سیستم مشاوره تخصصی هوشمند</strong> است که با تحلیل دقیق 
                       شرایط هر کالا و نیاز کاربر، راهکارهای سفارشی‌سازی شده ارائه می‌دهد.
                     </p>

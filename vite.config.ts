@@ -22,6 +22,12 @@ export default defineConfig(({ mode }) => ({
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'ui-vendor': ['@radix-ui/react-slot', 'class-variance-authority'],
         },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.woff2')) {
+            return 'assets/fonts/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
       },
     },
   },

@@ -54,6 +54,16 @@ const RelatedArticles = ({ currentPostId, limit = 3 }: RelatedArticlesProps) => 
             </Link>
           ))}
         </div>
+        
+        <div className="text-center mt-8">
+          <Link 
+            to="/blog"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+          >
+            <span>مقالات بیشتر</span>
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+        </div>
       </div>
     </section>
   );

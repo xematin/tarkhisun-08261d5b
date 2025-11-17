@@ -10,6 +10,7 @@ import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import RelatedArticles from "@/components/RelatedArticles";
+import FloatingCallButton from "@/components/FloatingCallButton";
 import hero480Webp from "@/assets/hero-port-480.webp";
 import hero768Webp from "@/assets/hero-port-768.webp";
 import hero1024Webp from "@/assets/hero-port-1024.webp";
@@ -340,10 +341,11 @@ const Index = () => {
           <ExchangeRates />
           <AIAssistant />
           <FAQ />
-          <RelatedArticles currentPostId={1} limit={4} />
+          <RelatedArticles currentPostId={1} limit={3} />
           <Contact />
         </main>
         <Footer />
+        <FloatingCallButton />
       </div>
     </>
   );

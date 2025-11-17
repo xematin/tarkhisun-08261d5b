@@ -76,7 +76,7 @@ const Contact = () => {
       icon: MapPin,
       title: "آدرس",
       content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 317",
-      link: "https://nshn.ir/a4_bY0rFejdR9j"
+      link: "https://B2n.ir/tarkhisun-map"
     },
     {
       icon: Clock,

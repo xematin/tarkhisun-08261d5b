@@ -40,13 +40,12 @@ const TahLanjiImportGuide = () => {
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = window.location.origin + '/blog/tah-lanji-mavani-import-guide';
     if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/tah-lanji-import-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = canonicalUrl;
+      link.href = 'https://tarkhisun.ir/blog/tah-lanji-import-guide';
       document.head.appendChild(link);
     }
 
@@ -66,7 +65,7 @@ const TahLanjiImportGuide = () => {
     setOGTag('og:title', 'واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل | ترخیصان');
     setOGTag('og:description', 'راهنمای جامع واردات ته لنجی: تعریف، ریسک‌های قانونی، جریمه‌ها و تفاوت با واردات رسمی');
     setOGTag('og:type', 'article');
-    setOGTag('og:url', canonicalUrl);
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/tah-lanji-import-guide');
     setOGTag('og:locale', 'fa_IR');
 
     // Structured Data for Article
@@ -93,7 +92,7 @@ const TahLanjiImportGuide = () => {
       "dateModified": "2025-10-05",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": 'https://tarkhisun.ir/blog/tah-lanji-import-guide'
       },
       "articleSection": "تجارت خارجی",
       "keywords": "واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, گمرک"

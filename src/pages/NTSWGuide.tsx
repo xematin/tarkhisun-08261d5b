@@ -40,13 +40,12 @@ const NTSWGuide = () => {
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = window.location.href;
     if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/ntsw-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = canonicalUrl;
+      link.href = 'https://tarkhisun.ir/blog/ntsw-guide';
       document.head.appendChild(link);
     }
 
@@ -66,7 +65,7 @@ const NTSWGuide = () => {
     setOGTag('og:title', 'سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده');
     setOGTag('og:description', 'راهنمای جامع سامانه ملی تجارت ایران - آموزش ثبت‌نام، صدور مجوز واردات و صادرات');
     setOGTag('og:type', 'article');
-    setOGTag('og:url', canonicalUrl);
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/ntsw-guide');
     setOGTag('og:locale', 'fa_IR');
 
     // Structured Data for Article
@@ -93,7 +92,7 @@ const NTSWGuide = () => {
       "dateModified": "2025-10-01",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": 'https://tarkhisun.ir/blog/ntsw-guide'
       },
       "keywords": "سامانه جامع تجارت, ntsw, واردات و صادرات, مجوز واردات, گمرک"
     };

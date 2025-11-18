@@ -90,11 +90,11 @@ const ImportExportGuide = () => {
 
     const canonicalLink = document.querySelector('link[rel="canonical"]');
     if (canonicalLink) {
-      canonicalLink.setAttribute('href', window.location.href);
+      canonicalLink.setAttribute('href', 'https://tarkhisun.ir/blog/import-export-guide');
     } else {
       const link = document.createElement('link');
       link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', window.location.href);
+      link.setAttribute('href', 'https://tarkhisun.ir/blog/import-export-guide');
       document.head.appendChild(link);
     }
   }, []);

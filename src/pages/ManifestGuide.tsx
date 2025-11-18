@@ -41,13 +41,12 @@ const ManifestGuide = () => {
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = window.location.href;
     if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/manifest-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = canonicalUrl;
+      link.href = 'https://tarkhisun.ir/blog/manifest-guide';
       document.head.appendChild(link);
     }
 
@@ -67,7 +66,7 @@ const ManifestGuide = () => {
     setOGTag('og:title', 'مانیفست در گمرک چیست؟ راهنمای جامع مانیفست بارنامه');
     setOGTag('og:description', description);
     setOGTag('og:type', 'article');
-    setOGTag('og:url', canonicalUrl);
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/manifest-guide');
     setOGTag('og:locale', 'fa_IR');
 
     // Twitter Card Tags
@@ -110,7 +109,7 @@ const ManifestGuide = () => {
       "dateModified": "2025-09-29",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": 'https://tarkhisun.ir/blog/manifest-guide'
       },
       "articleSection": "اسناد گمرکی",
       "keywords": keywordContent,
@@ -170,7 +169,7 @@ const ManifestGuide = () => {
           "@type": "ListItem",
           "position": 3,
           "name": "مانیفست در گمرک چیست",
-          "item": canonicalUrl
+          "item": 'https://tarkhisun.ir/blog/manifest-guide'
         }
       ]
     };

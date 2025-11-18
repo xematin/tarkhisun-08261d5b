@@ -40,13 +40,12 @@ const IncotermsGuide = () => {
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = window.location.href;
     if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/incoterms-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = canonicalUrl;
+      link.href = 'https://tarkhisun.ir/blog/incoterms-guide';
       document.head.appendChild(link);
     }
 
@@ -67,7 +66,7 @@ const IncotermsGuide = () => {
     setOGTag('og:description', 'راهنمای جامع اینکوترمز - آشنایی با انواع شرایط تحویل بین‌المللی کالا');
     setOGTag('og:type', 'article');
     setOGTag('og:locale', 'fa_IR');
-    setOGTag('og:url', canonicalUrl);
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/incoterms-guide');
 
     // Structured Data for Article
     const structuredData = {
@@ -93,7 +92,7 @@ const IncotermsGuide = () => {
       "dateModified": "2025-10-02",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": 'https://tarkhisun.ir/blog/incoterms-guide'
       },
       "keywords": "اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی"
     };

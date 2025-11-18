@@ -101,7 +101,7 @@ const ExchangeRateGuide = () => {
       canonicalLink.setAttribute('rel', 'canonical');
       document.head.appendChild(canonicalLink);
     }
-    canonicalLink.setAttribute('href', window.location.href);
+    canonicalLink.setAttribute('href', 'https://tarkhisun.ir/blog/exchange-rate-guide');
 
   }, []);
 

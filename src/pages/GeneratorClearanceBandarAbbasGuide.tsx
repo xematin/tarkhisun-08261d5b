@@ -55,13 +55,12 @@ const GeneratorClearanceBandarAbbasGuide = () => {
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = `${window.location.origin}/blog/generator-clearance-bandar-abbas-guide`;
     if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/generator-clearance-bandar-abbas');
     } else {
       const link = document.createElement('link');
       link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', canonicalUrl);
+      link.setAttribute('href', 'https://tarkhisun.ir/blog/generator-clearance-bandar-abbas');
       document.head.appendChild(link);
     }
 
@@ -89,7 +88,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
       "dateModified": "2025-10-09",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": 'https://tarkhisun.ir/blog/generator-clearance-bandar-abbas'
       },
       "keywords": "ترخیص ژنراتور بندرعباس, واردات ژنراتور, گمرک ژنراتور, حقوق گمرکی ژنراتور"
     };
@@ -115,7 +114,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
           "@type": "ListItem",
           "position": 3,
           "name": "ترخیص ژنراتور بندرعباس",
-          "item": canonicalUrl
+          "item": 'https://tarkhisun.ir/blog/generator-clearance-bandar-abbas'
         }
       ]
     };

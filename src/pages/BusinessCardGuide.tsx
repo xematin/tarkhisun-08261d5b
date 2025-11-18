@@ -41,11 +41,11 @@ const BusinessCardGuide = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', window.location.href);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/business-card-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = window.location.href;
+      link.href = 'https://tarkhisun.ir/blog/business-card-guide';
       document.head.appendChild(link);
     }
 

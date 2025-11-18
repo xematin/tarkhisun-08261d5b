@@ -38,13 +38,12 @@ const WaterTankClearanceGuide = () => {
     }
 
     const canonical = document.querySelector('link[rel="canonical"]');
-    const canonicalUrl = window.location.origin + '/blog/water-tank-clearance-bandar-abbas-guide';
     if (canonical) {
-      canonical.setAttribute('href', canonicalUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/water-tank-clearance-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = canonicalUrl;
+      link.href = 'https://tarkhisun.ir/blog/water-tank-clearance-guide';
       document.head.appendChild(link);
     }
 
@@ -63,7 +62,7 @@ const WaterTankClearanceGuide = () => {
     setOGTag('og:title', 'ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل');
     setOGTag('og:description', 'راهنمای جامع ترخیص مخزن ذخیره آب: مدارک، تعرفه، مراحل واردات و نکات مهم');
     setOGTag('og:type', 'article');
-    setOGTag('og:url', canonicalUrl);
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/water-tank-clearance-guide');
     setOGTag('og:locale', 'fa_IR');
 
     const articleData = {
@@ -89,7 +88,7 @@ const WaterTankClearanceGuide = () => {
       "dateModified": "2025-10-22",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": 'https://tarkhisun.ir/blog/water-tank-clearance-guide'
       },
       "keywords": keywordContent
     };
@@ -145,7 +144,7 @@ const WaterTankClearanceGuide = () => {
           "@type": "ListItem",
           "position": 3,
           "name": "ترخیص مخزن ذخیره آب",
-          "item": canonicalUrl
+          "item": 'https://tarkhisun.ir/blog/water-tank-clearance-guide'
         }
       ]
     };

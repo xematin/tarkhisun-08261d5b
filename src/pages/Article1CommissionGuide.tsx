@@ -41,11 +41,11 @@ const Article1CommissionGuide = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', window.location.href);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/customs-commission-complete-guide');
     } else {
       const link = document.createElement('link');
       link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', window.location.href);
+      link.setAttribute('href', 'https://tarkhisun.ir/blog/customs-commission-complete-guide');
       document.head.appendChild(link);
     }
 

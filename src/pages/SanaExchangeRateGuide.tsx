@@ -40,13 +40,12 @@ const SanaExchangeRateGuide = () => {
 
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
-    const currentUrl = window.location.href;
     if (canonical) {
-      canonical.setAttribute('href', currentUrl);
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/sana-exchange-rate-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = currentUrl;
+      link.href = 'https://tarkhisun.ir/blog/sana-exchange-rate-guide';
       document.head.appendChild(link);
     }
 
@@ -67,7 +66,7 @@ const SanaExchangeRateGuide = () => {
     setOGTag('og:description', 'راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها و کاربرد در واردات و صادرات');
     setOGTag('og:type', 'article');
     setOGTag('og:locale', 'fa_IR');
-    setOGTag('og:url', currentUrl);
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/sana-exchange-rate-guide');
 
     // Structured Data for Article
     const structuredData = {
@@ -93,7 +92,7 @@ const SanaExchangeRateGuide = () => {
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": currentUrl
+        "@id": 'https://tarkhisun.ir/blog/sana-exchange-rate-guide'
       },
       "keywords": "ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز"
     };

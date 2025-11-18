@@ -19,6 +19,15 @@ const Install = () => {
     document.documentElement.setAttribute("dir", "rtl");
     document.documentElement.setAttribute("lang", "fa");
 
+    // Set canonical URL
+    let canonicalLink = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', 'https://tarkhisun.ir/install');
+
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);

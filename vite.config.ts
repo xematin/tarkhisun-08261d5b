@@ -188,10 +188,18 @@ export default defineConfig(({ mode }) => ({
               id.includes('zod')) {
             return 'forms';
           }
+          
+          // Query client
+          if (id.includes('@tanstack/react-query')) {
+            return 'query-vendor';
+          }
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.woff2')) {
             return 'assets/fonts/[name]-[hash][extname]';
+          }
+          if (assetInfo.name?.match(/\.(webp|avif|jpg|jpeg|png)$/)) {
+            return 'assets/images/[name]-[hash][extname]';
           }
           if (assetInfo.name?.endsWith('.css')) {
             return 'assets/css/[name]-[hash][extname]';
@@ -209,6 +217,22 @@ export default defineConfig(({ mode }) => ({
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.info', 'console.debug'],
         passes: 2,
+        arrows: true,
+        collapse_vars: true,
+        comparisons: true,
+        computed_props: true,
+        hoist_funs: true,
+        hoist_props: true,
+        hoist_vars: false,
+        inline: true,
+        loops: true,
+        negate_iife: true,
+        properties: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        switches: true,
+        toplevel: true,
+        typeofs: true,
       },
       mangle: {
         safari10: true,

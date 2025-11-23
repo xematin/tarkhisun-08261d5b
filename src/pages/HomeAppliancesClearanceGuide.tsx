@@ -64,11 +64,11 @@ const HomeAppliancesClearanceGuide = () => {
     const canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     
     if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/home-appliances-clearance-guide');
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/home-appliances-clearance-guide';
+      link.href = 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide';
       document.head.appendChild(link);
     }
 
@@ -95,7 +95,7 @@ const HomeAppliancesClearanceGuide = () => {
       "dateModified": "2025-11-17",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/home-appliances-clearance-guide'
+        "@id": 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide'
       },
       "keywords": keywordsContent
     };
@@ -126,7 +126,7 @@ const HomeAppliancesClearanceGuide = () => {
           "@type": "ListItem",
           "position": 3,
           "name": "ترخیص لوازم خانگی از گمرک بندرعباس",
-          "item": 'https://tarkhisun.ir/blog/home-appliances-clearance-guide'
+          "item": 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide'
         }
       ]
     };

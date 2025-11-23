@@ -39,11 +39,11 @@ const CustomsTariffGuide = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/customs-tariff-definition-importance');
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/customs-tariff-guide');
     } else {
       const link = document.createElement('link');
       link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', 'https://tarkhisun.ir/blog/customs-tariff-definition-importance');
+      link.setAttribute('href', 'https://tarkhisun.ir/blog/customs-tariff-guide');
       document.head.appendChild(link);
     }
 

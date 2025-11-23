@@ -46,18 +46,18 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/customs-tariff-definition-importance" element={<CustomsTariffGuide />} />
-            <Route path="/blog/hs-code-guide-harmonized-system" element={<HSCodeGuide />} />
-            <Route path="/blog/exchange-rate-guide" element={<ExchangeRateGuide />} />
+            <Route path="/blog/customs-tariff-guide" element={<CustomsTariffGuide />} />
+            <Route path="/blog/hs-code-guide" element={<HSCodeGuide />} />
+            <Route path="/blog/customs-exchange-rate-guide" element={<ExchangeRateGuide />} />
             <Route path="/blog/ntsw-complete-guide" element={<NTSWGuide />} />
-            <Route path="/blog/incoterms-complete-guide" element={<IncotermsGuide />} />
+            <Route path="/blog/incoterms-guide" element={<IncotermsGuide />} />
             <Route path="/blog/business-card-complete-guide" element={<BusinessCardGuide />} />
-            <Route path="/blog/sana-nima-exchange-rate-difference" element={<SanaExchangeRateGuide />} />
-            <Route path="/blog/import-export-iran-complete-guide" element={<ImportExportGuide />} />
-            <Route path="/blog/manifest-customs-complete-guide" element={<ManifestGuide />} />
-            <Route path="/blog/tah-lanji-mavani-import-guide" element={<TahLanjiImportGuide />} />
-            <Route path="/blog/excavation-machinery-customs-clearance-guide" element={<ExcavationMachineryGuide />} />
-            <Route path="/blog/article-1-commission-customs-guide" element={<Article1CommissionGuide />} />
+            <Route path="/blog/sana-nima-exchange-rate-difference-guide" element={<SanaExchangeRateGuide />} />
+            <Route path="/blog/import-export-guide-iran" element={<ImportExportGuide />} />
+            <Route path="/blog/manifest-guide" element={<ManifestGuide />} />
+            <Route path="/blog/tah-lanji-import-guide" element={<TahLanjiImportGuide />} />
+            <Route path="/blog/excavation-machinery-import-guide" element={<ExcavationMachineryGuide />} />
+            <Route path="/blog/customs-article-1-commission-guide" element={<Article1CommissionGuide />} />
             <Route path="/blog/kuwait-afghanistan-transit-guide" element={<KuwaitAfghanistanTransitGuide />} />
             <Route path="/blog/islam-qala-border-crossing-guide" element={<IslamQalaGuide />} />
             <Route path="/blog/generator-clearance-bandar-abbas-guide" element={<GeneratorClearanceBandarAbbasGuide />} />

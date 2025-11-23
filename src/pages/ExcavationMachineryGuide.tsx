@@ -42,11 +42,11 @@ const ExcavationMachineryGuide = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/excavation-machinery-guide');
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/excavation-machinery-import-guide');
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/excavation-machinery-guide';
+      link.href = 'https://tarkhisun.ir/blog/excavation-machinery-import-guide';
       document.head.appendChild(link);
     }
 
@@ -66,7 +66,7 @@ const ExcavationMachineryGuide = () => {
     setOGTag('og:title', 'ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین');
     setOGTag('og:description', 'راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات و مجوزها');
     setOGTag('og:type', 'article');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/excavation-machinery-guide');
+    setOGTag('og:url', 'https://tarkhisun.ir/blog/excavation-machinery-import-guide');
     setOGTag('og:locale', 'fa_IR');
 
     // Twitter Card Tags
@@ -110,7 +110,7 @@ const ExcavationMachineryGuide = () => {
       "dateModified": "2025-10-07",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/excavation-machinery-guide'
+        "@id": 'https://tarkhisun.ir/blog/excavation-machinery-import-guide'
       },
       "keywords": "ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی",
       "articleSection": "راهنمای گمرکی"

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -170,6 +171,8 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      <PageBreadcrumb items={[{ label: "بلاگ" }]} />
       
       <main>
         {/* Hero Section */}

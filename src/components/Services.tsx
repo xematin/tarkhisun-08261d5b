@@ -89,9 +89,11 @@ const Services = () => {
                 <div className="mt-6 pt-6 border-t border-border">
                   <Link 
                     to={service.link} 
-                    className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian inline-flex items-center gap-2"
+                    className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian inline-flex items-center gap-2 hover:gap-3"
+                    aria-label={`مطالعه راهنمای ${service.title}`}
                   >
-                    اطلاعات بیشتر ←
+                    <span>اطلاعات بیشتر</span>
+                    <span className="transition-all">←</span>
                   </Link>
                 </div>
               </div>

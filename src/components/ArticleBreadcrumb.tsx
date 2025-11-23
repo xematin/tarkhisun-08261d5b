@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,6 +16,61 @@ interface ArticleBreadcrumbProps {
 }
 
 const ArticleBreadcrumb = ({ category, articleTitle }: ArticleBreadcrumbProps) => {
+  const location = useLocation();
+  const currentUrl = `https://tarkhisun.ir${location.pathname}`;
+
+  useEffect(() => {
+    // Generate Breadcrumb Schema
+    const breadcrumbList = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": "https://tarkhisun.ir/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "بلاگ",
+          "item": "https://tarkhisun.ir/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": category,
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": articleTitle,
+          "item": currentUrl
+        }
+      ]
+    };
+
+    // Add or update breadcrumb schema
+    let breadcrumbScript = document.querySelector('script[data-breadcrumb-schema="true"]');
+    if (breadcrumbScript) {
+      breadcrumbScript.textContent = JSON.stringify(breadcrumbList);
+    } else {
+      breadcrumbScript = document.createElement('script');
+      breadcrumbScript.setAttribute('type', 'application/ld+json');
+      breadcrumbScript.setAttribute('data-breadcrumb-schema', 'true');
+      breadcrumbScript.textContent = JSON.stringify(breadcrumbList);
+      document.head.appendChild(breadcrumbScript);
+    }
+
+    return () => {
+      const script = document.querySelector('script[data-breadcrumb-schema="true"]');
+      if (script) {
+        script.remove();
+      }
+    };
+  }, [category, articleTitle, currentUrl]);
+
   return (
     <div className="container mx-auto px-4 py-6">
       <Breadcrumb>

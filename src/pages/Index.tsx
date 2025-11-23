@@ -89,6 +89,24 @@ const Index = () => {
       document.head.appendChild(link);
     }
 
+    // Hreflang Tags for international SEO
+    const setHreflangTag = (hreflang: string, href: string) => {
+      let tag = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`) as HTMLLinkElement;
+      if (tag) {
+        tag.setAttribute("href", href);
+      } else {
+        const link = document.createElement("link");
+        link.rel = "alternate";
+        link.setAttribute("hreflang", hreflang);
+        link.setAttribute("href", href);
+        document.head.appendChild(link);
+      }
+    };
+
+    setHreflangTag("fa", "https://tarkhisun.ir/");
+    setHreflangTag("fa-IR", "https://tarkhisun.ir/");
+    setHreflangTag("x-default", "https://tarkhisun.ir/");
+
     // Open Graph Tags
     const setOGTag = (property: string, content: string) => {
       let tag = document.querySelector(`meta[property="${property}"]`);

@@ -42,9 +42,11 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4 space-x-reverse">
-            <Button variant="outline" size="sm" className="text-persian">
-              <Phone className="ml-2 h-4 w-4" />
-              تماس با ما
+            <Button variant="outline" size="sm" className="text-persian" asChild>
+              <a href="#contact">
+                <Phone className="ml-2 h-4 w-4" />
+                تماس با ما
+              </a>
             </Button>
           </div>
 
@@ -66,9 +68,11 @@ const Header = () => {
               {navItems.map(item => <a key={item.title} href={item.href} className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary transition-colors text-persian" onClick={() => setIsMenuOpen(false)}>
                   {item.title}
                 </a>)}
-              <Button variant="outline" size="sm" className="w-full mt-4 text-persian">
-                <Phone className="ml-2 h-4 w-4" />
-                تماس با ما
+              <Button variant="outline" size="sm" className="w-full mt-4 text-persian" asChild>
+                <a href="#contact">
+                  <Phone className="ml-2 h-4 w-4" />
+                  تماس با ما
+                </a>
               </Button>
             </div>
           </div>}

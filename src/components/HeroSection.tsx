@@ -42,15 +42,11 @@ const HeroSection = () => {
               </span>
             </h1>
             
-            <p className="text-xl text-white/90 mb-8 leading-relaxed text-persian fade-in-up animate" style={{
-            animationDelay: "0.2s"
-          }}>
-              با بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی، ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم
+            <p className="text-xl text-white/90 mb-8 leading-relaxed text-persian fade-in-up animate animation-delay-200">
+              با بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی، ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start fade-in-up animate" style={{
-            animationDelay: "0.4s"
-          }}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start fade-in-up animate animation-delay-400">
               <Button size="lg" className="btn-hero text-persian" onClick={() => document.getElementById('contact')?.scrollIntoView({
               behavior: 'smooth'
             })}>
@@ -66,7 +62,7 @@ const HeroSection = () => {
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-3 gap-6 mt-12 fade-in-up animate [animation-delay:0.6s]">
+            <div className="grid grid-cols-3 gap-6 mt-12 fade-in-up animate animation-delay-600">
               <div className="text-center">
                 <Shield className="h-8 w-8 text-accent-light mx-auto mb-2" />
                 <div className="text-2xl text-white"><strong>۲۰+</strong></div>
@@ -86,9 +82,7 @@ const HeroSection = () => {
           </div>
 
           {/* Additional Visual Element */}
-          <div className="hidden lg:flex justify-center items-center fade-in-up animate" style={{
-          animationDelay: "0.8s"
-        }}>
+          <div className="hidden lg:flex justify-center items-center fade-in-up animate animation-delay-800">
             <div className="w-96 h-96 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 flex items-center justify-center">
               <div className="text-center text-white">
                 <div className="text-6xl mb-2"><strong>۲۰+</strong></div>

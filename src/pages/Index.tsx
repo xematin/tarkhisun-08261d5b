@@ -26,7 +26,7 @@ const Index = () => {
     document.documentElement.setAttribute("lang", "fa");
 
     // SEO Meta Tags - Optimized for better ranking
-    document.title = "ترخیص کالا بندرعباس | مشاوره گمرکی و ترخیص سریع +20 سال تجربه";
+    document.title = "مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | امیدوار";
 
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -102,7 +102,7 @@ const Index = () => {
       }
     };
 
-    setOGTag("og:title", "ترخیص کالا بندرعباس | مشاوره گمرکی و ترخیص سریع +20 سال تجربه");
+    setOGTag("og:title", "مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | امیدوار");
     setOGTag(
       "og:description",
       "ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی در بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص سریع کالا، صدور کمیسیون، واردات و صادرات. تماس: 09177380080",

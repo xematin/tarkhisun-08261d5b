@@ -15,13 +15,19 @@
     <!-- Preload Critical Hero Image -->
     <link rel="preload" as="image" href="/src/assets/hero-port-1024.avif" type="image/avif" fetchpriority="high">
     
-    <!-- Preload Critical Local Fonts -->
+    <!-- Preload Critical Local Fonts - Only most used weights -->
     <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-600.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
     
+    <!-- Preconnect to external resources for faster DNS resolution -->
+    <link rel="preconnect" href="https://storage.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="preconnect" href="https://gomrok24.com" crossorigin>
+    
     <!-- DNS Prefetch for other resources -->
-    <link rel="dns-prefetch" href="https://storage.googleapis.com">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://n8n.tarkhisun.ir">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
     
     <title>ترخیصان | مشاوره گمرکی و ترخیص کالا در بندرعباس</title>
     <meta name="description" content="مشاوره تخصصی امور گمرکی بندرعباس با هوش مصنوعی ترخیصان‌یار - اولین هوش مصنوعی گمرکات. ترخیص سریع کالا بندرعباس شهید رجایی با 20 سال تجربه! تماس : 09177380080">

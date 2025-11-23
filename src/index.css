@@ -1,12 +1,4 @@
-/* Noto Sans Arabic - Local Fonts */
-@font-face {
-  font-family: 'Noto Sans Arabic';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-300.woff2') format('woff2');
-}
-
+/* Noto Sans Arabic - Local Fonts - Optimized: Only used weights */
 @font-face {
   font-family: 'Noto Sans Arabic';
   font-style: normal;
@@ -37,14 +29,6 @@
   font-weight: 700;
   font-display: swap;
   src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-700.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Noto Sans Arabic';
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-800.woff2') format('woff2');
 }
 
 @tailwind base;

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageBreadcrumb from "@/components/PageBreadcrumb";
 interface CurrencyRate {
   currency: string;
   price: string;
@@ -99,6 +100,8 @@ const Currencies = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
         <Header />
+        
+        <PageBreadcrumb items={[{ label: "نرخ ارز" }]} />
         
         <main className="container mx-auto px-4 py-20" dir="rtl">
           <div className="text-center mb-12">

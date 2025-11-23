@@ -17,7 +17,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 1,
     title: "راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس",
-    slug: "complete-guide-customs-clearance-shahid-rajaei",
+    slug: "zero-to-hundred-bandar-abbas-customs-clearance",
     excerpt: "آشنایی با مراحل ترخیص کالا، مدارک لازم و نکات مهم برای واردکنندگان در بزرگترین بندر تجاری ایران",
     category: "راهنمای ترخیص",
     date: "۱۴۰۴/۷/۵",
@@ -209,7 +209,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 17,
     title: "واردات کالا از دبی به بندرعباس | راهنمای کامل حمل و ترخیص کالا",
-    slug: "import-from-dubai-to-bandar-abbas-complete-guide",
+    slug: "dubai-to-abbas-import-guide",
     excerpt: "راهنمای جامع واردات کالا از دبی به بندرعباس: روش‌های حمل دریایی و هوایی، مدارک لازم، هزینه‌ها، زمان حمل، فرآیند ترخیص و نکات حقوقی واردات از امارات",
     category: "راهنمای ترخیص",
     date: "۱۴۰۴/۷/۱۸",

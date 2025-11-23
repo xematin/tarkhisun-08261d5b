@@ -56,11 +56,11 @@ const BandarAbbasComprehensiveGuide = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/bandar-abbas-comprehensive-guide');
+      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance');
     } else {
       const link = document.createElement('link');
       link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', 'https://tarkhisun.ir/blog/bandar-abbas-comprehensive-guide');
+      link.setAttribute('href', 'https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance');
       document.head.appendChild(link);
     }
 
@@ -86,7 +86,7 @@ const BandarAbbasComprehensiveGuide = () => {
       "dateModified": "2025-10-17",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/bandar-abbas-comprehensive-guide'
+        "@id": 'https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance'
       },
       "keywords": "صفر تا صد ترخیص کالا, بندرعباس, گمرک شهید رجایی, مراحل ترخیص, واردات"
     };

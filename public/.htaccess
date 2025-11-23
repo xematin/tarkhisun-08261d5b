@@ -15,7 +15,16 @@
   RewriteRule ^(.*)$ https://tarkhisun.ir/$1 [R=301,L]
 
   # ================================================
-  # 2. React SPA Routing
+  # 2. Remove Trailing Slash (SEO Consistency)
+  # ================================================
+  # Redirect URLs with trailing slash to non-slash version
+  # Exception: Keep homepage (/) as is
+  RewriteCond %{REQUEST_URI} !^/$
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # ================================================
+  # 3. React SPA Routing
   # ================================================
   RewriteRule ^index\.html$ - [L]
 
@@ -30,7 +39,7 @@
 
 
 # ================================================
-# 3. Compression (Gzip)
+# 4. Compression (Gzip)
 # ================================================
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/plain
@@ -45,7 +54,7 @@
 
 
 # ================================================
-# 4. Browser Caching (Best for SPA)
+# 5. Browser Caching (Best for SPA)
 # ================================================
 <IfModule mod_expires.c>
   ExpiresActive On
@@ -74,7 +83,7 @@
 
 
 # ================================================
-# 5. Security Headers (Modern + Safe)
+# 6. Security Headers (Modern + Safe)
 # ================================================
 <IfModule mod_headers.c>
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -97,7 +106,7 @@
 
 
 # ================================================
-# 6. Block sensitive files
+# 7. Block sensitive files
 # ================================================
 <FilesMatch "^\.">
   Require all denied
@@ -109,6 +118,6 @@
 
 
 # ================================================
-# 7. UTF-8 Charset
+# 8. UTF-8 Charset
 # ================================================
 AddDefaultCharset UTF-8

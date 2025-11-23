@@ -43,32 +43,13 @@ const HSCodeGuide = () => {
     // Canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/hs-code-guide');
+      canonical.setAttribute('href', window.location.href);
     } else {
       const link = document.createElement('link');
       link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/hs-code-guide';
+      link.href = window.location.href;
       document.head.appendChild(link);
     }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها');
-    setOGTag('og:description', 'راهنمای جامع سیستم کد HS، نحوه تعیین کد تعرفه کالاها، اهمیت در تجارت بین‌المللی');
-    setOGTag('og:type', 'article');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/hs-code-guide');
-    setOGTag('og:locale', 'fa_IR');
 
     // Structured Data for Article
     const articleData = {
@@ -93,7 +74,7 @@ const HSCodeGuide = () => {
       "dateModified": "2024-09-29",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/hs-code-guide'
+        "@id": window.location.href
       },
       "articleSection": "تعرفه و کدگذاری",
       "keywords": "کد HS, تعرفه هماهنگ, کد کالا, HS Code, Harmonized System"

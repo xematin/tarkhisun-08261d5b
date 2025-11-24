@@ -19,6 +19,11 @@
     
     <!-- Critical CSS for Hero Section - Inline for instant render -->
     <style>
+      /* Critical Hero Image Styles */
+      #hero-initial-image{position:absolute;inset:0;z-index:0;pointer-events:none;}
+      #hero-initial-image img{width:100%;height:100%;object-fit:cover;}
+      
+      /* Hero Gradient & Animations */
       .hero-gradient{background:linear-gradient(135deg,hsl(var(--primary)),hsl(var(--accent)));}
       .fade-in-up{opacity:0;transform:translateY(30px);transition:opacity .8s ease-out,transform .8s ease-out;}
       .fade-in-up.animate{opacity:1;transform:translateY(0);}

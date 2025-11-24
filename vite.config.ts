@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
     react(), 
     mode === "development" && componentTagger(),
     {
-      name: 'vite-plugin-lcp-preload',
+      name: 'vite-plugin-hero-injection',
       enforce: 'post' as const,
       transformIndexHtml: {
         order: 'post' as const,
@@ -24,28 +24,77 @@ export default defineConfig(({ mode }) => ({
           const { bundle } = ctx;
           if (!bundle) return html;
           
-          // Find hero images in bundle with hashed URLs
-          const hero1920 = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1920') && chunk.fileName?.endsWith('.avif')
-          );
-          const hero1024 = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1024') && chunk.fileName?.endsWith('.avif')
-          );
-          const hero480 = Object.values(bundle).find(
+          // Find ALL hero image variants with hashed URLs
+          const hero480Avif = Object.values(bundle).find(
             (chunk: any) => chunk.fileName?.includes('hero-port-480') && chunk.fileName?.endsWith('.avif')
           );
+          const hero768Avif = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-768') && chunk.fileName?.endsWith('.avif')
+          );
+          const hero1024Avif = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1024') && chunk.fileName?.endsWith('.avif')
+          );
+          const hero1440Avif = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1440') && chunk.fileName?.endsWith('.avif')
+          );
+          const hero1920Avif = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1920') && chunk.fileName?.endsWith('.avif')
+          );
           
-          if (!hero1920 || !hero1024 || !hero480) return html;
+          // WebP fallbacks
+          const hero480Webp = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-480') && chunk.fileName?.endsWith('.webp')
+          );
+          const hero768Webp = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-768') && chunk.fileName?.endsWith('.webp')
+          );
+          const hero1024Webp = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1024') && chunk.fileName?.endsWith('.webp')
+          );
+          const hero1440Webp = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1440') && chunk.fileName?.endsWith('.webp')
+          );
+          const hero1920Webp = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1920') && chunk.fileName?.endsWith('.webp')
+          );
           
-          // Generate preload tags with proper media queries
-          const preloadTags = [
-            `<link rel="preload" as="image" href="/${(hero480 as any).fileName}" type="image/avif" fetchpriority="high" media="(max-width: 767px)">`,
-            `<link rel="preload" as="image" href="/${(hero1024 as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 768px) and (max-width: 1439px)">`,
-            `<link rel="preload" as="image" href="/${(hero1920 as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 1440px)">`
-          ].join('\n    ');
+          if (!hero1920Avif || !hero1024Webp) return html;
           
-          // Insert before </head>
-          return html.replace('</head>', `    ${preloadTags}\n  </head>`);
+          // Create full <picture> element with all responsive sources
+          const pictureElement = `
+        <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <source 
+            type="image/avif" 
+            srcset="/${(hero480Avif as any).fileName} 480w, /${(hero768Avif as any).fileName} 768w, /${(hero1024Avif as any).fileName} 1024w, /${(hero1440Avif as any).fileName} 1440w, /${(hero1920Avif as any).fileName} 1920w" 
+            sizes="100vw" />
+          <source 
+            type="image/webp" 
+            srcset="/${(hero480Webp as any).fileName} 480w, /${(hero768Webp as any).fileName} 768w, /${(hero1024Webp as any).fileName} 1024w, /${(hero1440Webp as any).fileName} 1440w, /${(hero1920Webp as any).fileName} 1920w" 
+            sizes="100vw" />
+          <img 
+            src="/${(hero1024Webp as any).fileName}"
+            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا"
+            style="width:100%;height:100%;object-fit:cover;"
+            width="1920"
+            height="1080"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async" />
+        </picture>`;
+          
+          // Also add preload tags for fastest discovery
+          const preloadTags = `
+    <link rel="preload" as="image" href="/${(hero480Avif as any).fileName}" type="image/avif" fetchpriority="high" media="(max-width: 767px)">
+    <link rel="preload" as="image" href="/${(hero1024Avif as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 768px) and (max-width: 1439px)">
+    <link rel="preload" as="image" href="/${(hero1920Avif as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 1440px)">`;
+          
+          // Inject preload tags in <head>
+          html = html.replace('<!-- LCP Hero Image Preload - Generated dynamically by vite-plugin-lcp-preload -->', preloadTags);
+          
+          // Inject picture element right after <body>
+          html = html.replace('<body>', `<body>\n    ${pictureElement}`);
+          
+          return html;
         }
       }
     },

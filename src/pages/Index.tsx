@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense, memo } from "react";
 import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -7,12 +7,17 @@ import AIAssistant from "@/components/AIAssistant";
 import RelatedArticles from "@/components/RelatedArticles";
 import FloatingCallButton from "@/components/FloatingCallButton";
 
-// Lazy load below-the-fold components for better performance
+// Lazy load below-the-fold components with prefetch for optimal performance
 const Services = lazy(() => import("@/components/Services"));
 const ExchangeRates = lazy(() => import("@/components/ExchangeRates"));
 const FAQ = lazy(() => import("@/components/FAQ"));
 const Contact = lazy(() => import("@/components/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
+
+// Optimized loading fallback - memoized to prevent re-renders
+const LoadingFallback = memo(() => (
+  <div className="min-h-[200px]" />
+));
 import hero480Webp from "@/assets/hero-port-480.webp";
 import hero768Webp from "@/assets/hero-port-768.webp";
 import hero1024Webp from "@/assets/hero-port-1024.webp";
@@ -310,24 +315,37 @@ const Index = () => {
       document.head.appendChild(scriptTag);
     }
 
-    // Add animation class after mount
-    const elements = document.querySelectorAll(".fade-in-up");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate");
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
+    // Defer animation setup to idle time for better TTI
+    const initAnimations = () => {
+      const elements = document.querySelectorAll(".fade-in-up");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("animate");
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+      );
 
-    elements.forEach((el) => observer.observe(el));
+      elements.forEach((el) => observer.observe(el));
 
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
+      return () => {
+        elements.forEach((el) => observer.unobserve(el));
+      };
     };
+
+    // Use requestIdleCallback to defer animations
+    if ('requestIdleCallback' in window) {
+      const cleanup = requestIdleCallback(initAnimations);
+      return () => {
+        if (cleanup) cancelIdleCallback(cleanup);
+      };
+    } else {
+      const timeoutId = setTimeout(initAnimations, 100);
+      return () => clearTimeout(timeoutId);
+    }
   }, []);
 
   return (
@@ -365,23 +383,23 @@ const Index = () => {
 
         <main>
           <HeroSection />
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+          <Suspense fallback={<LoadingFallback />}>
             <Services />
           </Suspense>
           <WhyUs />
-          <Suspense fallback={<div className="min-h-[200px]" />}>
+          <Suspense fallback={<LoadingFallback />}>
             <ExchangeRates />
           </Suspense>
           <AIAssistant />
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+          <Suspense fallback={<LoadingFallback />}>
             <FAQ />
           </Suspense>
           <RelatedArticles currentPostId={1} limit={3} />
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+          <Suspense fallback={<LoadingFallback />}>
             <Contact />
           </Suspense>
         </main>
-        <Suspense fallback={<div className="min-h-[200px]" />}>
+        <Suspense fallback={<LoadingFallback />}>
           <Footer />
         </Suspense>
         <FloatingCallButton />

@@ -12,13 +12,25 @@
     <link rel="apple-touch-icon" href="/logo.png">
     <link rel="manifest" href="/manifest.webmanifest">
     
-    <!-- Preload Critical Hero Image -->
-    <link rel="preload" as="image" href="/src/assets/hero-port-1024.avif" type="image/avif" fetchpriority="high">
+    <!-- Preload Critical Hero Image - Mobile optimized -->
+    <link rel="preload" as="image" href="/src/assets/hero-port-768.avif" type="image/avif" fetchpriority="high" media="(max-width: 1024px)">
+    <link rel="preload" as="image" href="/src/assets/hero-port-1440.avif" type="image/avif" fetchpriority="high" media="(min-width: 1025px)">
     
-    <!-- Preload Critical Local Fonts - Only most used weights -->
+    <!-- Preload Critical Local Fonts - Only regular weight for performance -->
     <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-600.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Critical CSS for Hero Section - Inline for instant render -->
+    <style>
+      .hero-gradient{background:linear-gradient(135deg,hsl(var(--primary)),hsl(var(--accent)));}
+      .fade-in-up{opacity:0;transform:translateY(30px);transition:opacity .8s ease-out,transform .8s ease-out;}
+      .fade-in-up.animate{opacity:1;transform:translateY(0);}
+      .animation-delay-200{animation-delay:.2s;}
+      .animation-delay-400{animation-delay:.4s;}
+      .animation-delay-600{animation-delay:.6s;}
+      .animation-delay-800{animation-delay:.8s;}
+      .btn-hero{background:linear-gradient(135deg,hsl(var(--accent)),hsl(var(--accent-light)));box-shadow:0 4px 12px hsl(var(--accent)/0.3);transition:all .3s cubic-bezier(.4,0,.2,1);}
+      .btn-hero:hover{transform:translateY(-2px);box-shadow:0 8px 20px hsl(var(--accent)/0.4);}
+    </style>
     
     <!-- Preconnect to external resources for faster DNS resolution -->
     <link rel="preconnect" href="https://storage.googleapis.com" crossorigin>
@@ -77,13 +89,35 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Google Analytics - Loaded at end for better performance -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P"></script>
+    <!-- Google Analytics - Deferred for optimal performance -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-7RBYRKE10P');
+      
+      // Load Analytics only after page is interactive
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(function() {
+          var script = document.createElement('script');
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P';
+          script.defer = true;
+          document.head.appendChild(script);
+          script.onload = function() {
+            gtag('js', new Date());
+            gtag('config', 'G-7RBYRKE10P');
+          };
+        });
+      } else {
+        setTimeout(function() {
+          var script = document.createElement('script');
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P';
+          script.defer = true;
+          document.head.appendChild(script);
+          script.onload = function() {
+            gtag('js', new Date());
+            gtag('config', 'G-7RBYRKE10P');
+          };
+        }, 2000);
+      }
     </script>
   </body>
 </html>

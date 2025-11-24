@@ -716,7 +716,7 @@ const DubaiToAbbasImportGuide = () => {
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
-                  <Card className="text-center bg-gradient-to-b from-accent/10 to-transparent">
+                  <Card className="text-center bg-gradient-to-b from-accent/15 to-accent/5">
                     <CardHeader>
                       <CardTitle className="text-persian">حمل دریایی</CardTitle>
                     </CardHeader>
@@ -726,7 +726,7 @@ const DubaiToAbbasImportGuide = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="text-center bg-gradient-to-b from-accent/10 to-transparent">
+                  <Card className="text-center bg-gradient-to-b from-accent/15 to-accent/5">
                     <CardHeader>
                       <CardTitle className="text-persian">حمل هوایی</CardTitle>
                     </CardHeader>
@@ -736,7 +736,7 @@ const DubaiToAbbasImportGuide = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="text-center bg-gradient-to-b from-accent/10 to-transparent">
+                  <Card className="text-center bg-gradient-to-b from-accent/15 to-accent/5">
                     <CardHeader>
                       <CardTitle className="text-persian">ترخیص گمرکی</CardTitle>
                     </CardHeader>
@@ -950,7 +950,7 @@ const DubaiToAbbasImportGuide = () => {
               <section className="mb-12">
                 <h2 className="text-3xl font-bold mb-6 text-persian">جمع‌بندی</h2>
                 
-                <div className="bg-gradient-to-br from-accent/10 to-transparent p-8 rounded-lg border border-accent/20">
+                <div className="bg-gradient-to-br from-accent/15 to-accent/5 p-8 rounded-lg border border-accent/20">
                   <p className="text-lg text-foreground/90 text-persian leading-relaxed mb-4">
                     واردات کالا از دبی به بندرعباس یک مسیر تجاری پرسود و کارآمد برای بازرگانان ایرانی است. با توجه به نزدیکی جغرافیایی، تنوع کالاها، قیمت‌های مناسب و سهولت فرآیند، این مسیر به یکی از محبوب‌ترین گزینه‌های واردات تبدیل شده است.
                   </p>

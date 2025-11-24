@@ -60,17 +60,22 @@ export default defineConfig(({ mode }) => ({
           
           if (!hero1920Avif || !hero1024Webp) return html;
           
-          // Create full <picture> element with all responsive sources
+          // Create full <picture> element with media queries for each device size
           const pictureElement = `
         <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <source 
-            type="image/avif" 
-            srcset="/${(hero480Avif as any).fileName} 480w, /${(hero768Avif as any).fileName} 768w, /${(hero1024Avif as any).fileName} 1024w, /${(hero1440Avif as any).fileName} 1440w, /${(hero1920Avif as any).fileName} 1920w" 
-            sizes="100vw" />
-          <source 
-            type="image/webp" 
-            srcset="/${(hero480Webp as any).fileName} 480w, /${(hero768Webp as any).fileName} 768w, /${(hero1024Webp as any).fileName} 1024w, /${(hero1440Webp as any).fileName} 1440w, /${(hero1920Webp as any).fileName} 1920w" 
-            sizes="100vw" />
+          <!-- Mobile: 480px only -->
+          <source media="(max-width: 767px)" type="image/avif" srcset="/${(hero480Avif as any).fileName}" />
+          <source media="(max-width: 767px)" type="image/webp" srcset="/${(hero480Webp as any).fileName}" />
+          
+          <!-- Tablet: 1024px only -->
+          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcset="/${(hero1024Avif as any).fileName}" />
+          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcset="/${(hero1024Webp as any).fileName}" />
+          
+          <!-- Desktop: 1920px only -->
+          <source media="(min-width: 1440px)" type="image/avif" srcset="/${(hero1920Avif as any).fileName}" />
+          <source media="(min-width: 1440px)" type="image/webp" srcset="/${(hero1920Webp as any).fileName}" />
+          
+          <!-- Fallback for older browsers -->
           <img 
             src="/${(hero1024Webp as any).fileName}"
             alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا"

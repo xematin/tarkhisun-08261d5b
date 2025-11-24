@@ -2,13 +2,13 @@ import { useEffect, lazy, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import Services from "@/components/Services";
 import WhyUs from "@/components/WhyUs";
 import AIAssistant from "@/components/AIAssistant";
 import RelatedArticles from "@/components/RelatedArticles";
 import FloatingCallButton from "@/components/FloatingCallButton";
 
 // Lazy load below-the-fold components for better performance
+const Services = lazy(() => import("@/components/Services"));
 const ExchangeRates = lazy(() => import("@/components/ExchangeRates"));
 const FAQ = lazy(() => import("@/components/FAQ"));
 const Contact = lazy(() => import("@/components/Contact"));
@@ -365,7 +365,9 @@ const Index = () => {
 
         <main>
           <HeroSection />
-          <Services />
+          <Suspense fallback={<div className="min-h-[400px]" />}>
+            <Services />
+          </Suspense>
           <WhyUs />
           <Suspense fallback={<div className="min-h-[200px]" />}>
             <ExchangeRates />

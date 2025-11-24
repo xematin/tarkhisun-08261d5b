@@ -16,6 +16,40 @@ export default defineConfig(({ mode }) => ({
     react(), 
     mode === "development" && componentTagger(),
     {
+      name: 'vite-plugin-lcp-preload',
+      enforce: 'post' as const,
+      transformIndexHtml: {
+        order: 'post' as const,
+        handler(html: string, ctx: any) {
+          const { bundle } = ctx;
+          if (!bundle) return html;
+          
+          // Find hero images in bundle with hashed URLs
+          const hero1920 = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1920') && chunk.fileName?.endsWith('.avif')
+          );
+          const hero1024 = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-1024') && chunk.fileName?.endsWith('.avif')
+          );
+          const hero480 = Object.values(bundle).find(
+            (chunk: any) => chunk.fileName?.includes('hero-port-480') && chunk.fileName?.endsWith('.avif')
+          );
+          
+          if (!hero1920 || !hero1024 || !hero480) return html;
+          
+          // Generate preload tags with proper media queries
+          const preloadTags = [
+            `<link rel="preload" as="image" href="/${(hero480 as any).fileName}" type="image/avif" fetchpriority="high" media="(max-width: 767px)">`,
+            `<link rel="preload" as="image" href="/${(hero1024 as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 768px) and (max-width: 1439px)">`,
+            `<link rel="preload" as="image" href="/${(hero1920 as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 1440px)">`
+          ].join('\n    ');
+          
+          // Insert before </head>
+          return html.replace('</head>', `    ${preloadTags}\n  </head>`);
+        }
+      }
+    },
+    {
       name: 'vite-plugin-critters',
       enforce: 'post' as const,
       async transformIndexHtml(html: string) {

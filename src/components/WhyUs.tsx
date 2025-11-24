@@ -97,19 +97,19 @@ const WhyUs = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Link 
               to="/blog/complete-guide-customs-clearance-shahid-rajaei" 
-              className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white text-persian border border-white/20"
+              className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-white text-persian border-2 border-white font-semibold"
             >
               راهنمای ترخیص کالا
             </Link>
             <Link 
               to="/blog/hs-code-guide" 
-              className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white text-persian border border-white/20"
+              className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-white text-persian border-2 border-white font-semibold"
             >
               آشنایی با کد HS
             </Link>
             <a 
               href="#contact" 
-              className="px-6 py-2 bg-accent-light hover:bg-accent rounded-lg transition-colors text-white text-persian font-semibold"
+              className="px-6 py-2 bg-white hover:bg-white/90 rounded-lg transition-colors text-accent text-persian font-bold shadow-lg"
             >
               دریافت مشاوره رایگان
             </a>

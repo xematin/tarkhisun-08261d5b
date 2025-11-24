@@ -79,7 +79,7 @@ const AIAssistant = () => {
           {features.map((feature, index) => {
           const IconComponent = feature.icon;
           return <div key={index} className="card-service text-center">
-                <div className="w-16 h-16 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-accent/15 rounded-xl flex items-center justify-center mx-auto mb-4 border border-accent/20">
                   <IconComponent className="w-8 h-8 text-accent" />
                 </div>
                 
@@ -179,7 +179,7 @@ const AIAssistant = () => {
                     و <strong className="text-primary">توقف کالا</strong> نیز جلوگیری می‌کند.
                   </p>
 
-                  <div className="bg-accent/10 border-r-4 border-accent p-6 rounded-lg mt-8">
+                  <div className="bg-accent/15 border-r-4 border-accent p-6 rounded-lg mt-8">
                     <p className="text-persian text-lg font-semibold text-primary">
                       💡 نکته مهم : ترخیصان‌یار تنها یک چت‌بات ساده نیست، بلکه یک سیستم مشاوره تخصصی هوشمند است که با تحلیل دقیق شرایط هر کالا و نیاز کاربر، راهکارهای سفارشی‌سازی شده ارائه می‌دهد. 
                       <strong className="text-primary"> سیستم مشاوره تخصصی هوشمند</strong> است که با تحلیل دقیق 

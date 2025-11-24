@@ -140,7 +140,7 @@ const HSCodeGuide = () => {
             <div className="max-w-4xl mx-auto">
               
               <div className="mb-6">
-                <span className="text-sm font-medium text-accent bg-accent/10 px-3 py-2 rounded-full text-persian">
+                <span className="text-sm font-medium text-accent bg-accent/15 px-3 py-2 rounded-full text-persian">
                   تعرفه و کدگذاری
                 </span>
               </div>

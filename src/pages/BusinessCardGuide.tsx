@@ -353,42 +353,42 @@ const BusinessCardGuide = () => {
                 <h2 className="heading-secondary mb-6 text-persian">مراحل دریافت کارت بازرگانی</h2>
                 
                 <div className="space-y-4">
-                  <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
+                  <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
                     <h3 className="text-lg mb-2 text-persian"><strong>مرحله ۱: عضویت در اتاق بازرگانی</strong></h3>
                     <p className="text-body text-persian">
                       ابتدا باید در اتاق بازرگانی محل اقامت یا محل فعالیت خود عضو شوید و حق عضویت را پرداخت کنید.
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
+                  <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-2 text-persian">مرحله ۲: دریافت کد اقتصادی</h3>
                     <p className="text-body text-persian">
                       از سازمان امور مالیاتی کد اقتصادی دریافت کنید. این کد برای شناسایی فعالیت اقتصادی شما ضروری است.
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
+                  <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-2 text-persian">مرحله ۳: تکمیل فرم درخواست</h3>
                     <p className="text-body text-persian">
                       فرم درخواست کارت بازرگانی را از سایت اتاق بازرگانی دانلود کرده و با دقت تکمیل کنید.
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
+                  <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-2 text-persian">مرحله ۴: ارائه مدارک</h3>
                     <p className="text-body text-persian">
                       مدارک لازم را به همراه فرم تکمیل شده به اتاق بازرگانی تحویل دهید یا از طریق سامانه آنلاین بارگذاری کنید.
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
+                  <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-2 text-persian">مرحله ۵: پرداخت هزینه</h3>
                     <p className="text-body text-persian">
                       هزینه صدور کارت بازرگانی را پرداخت کنید. مبلغ این هزینه سالانه متفاوت است و بر اساس نوع کارت تعیین می‌شود.
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent rounded-lg p-6">
+                  <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
                     <h3 className="font-bold text-lg mb-2 text-persian">مرحله ۶: دریافت کارت</h3>
                     <p className="text-body text-persian">
                       پس از بررسی و تأیید مدارک، کارت بازرگانی شما صادر و ارسال می‌شود. این فرآیند معمولاً ۷ تا ۱۴ روز کاری طول می‌کشد.

@@ -14,29 +14,47 @@ import hero1920Webp from "@/assets/hero-port-1920.webp";
 const HeroSection = () => {
   const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی"];
   const [currentPortIndex, setCurrentPortIndex] = useState(0);
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPortIndex(prev => (prev + 1) % ports.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+  
+  // Remove server-injected hero image after React hydrates
+  useEffect(() => {
+    const initialImg = document.getElementById('hero-initial-image');
+    const reactImg = document.getElementById('hero-react-image');
+    
+    if (initialImg && reactImg) {
+      // Smooth transition from initial to React image
+      reactImg.style.transition = 'opacity 0.3s ease-in-out';
+      reactImg.style.opacity = '1';
+      
+      setTimeout(() => {
+        initialImg.remove();
+      }, 300);
+    }
+  }, []);
   return <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <picture>
-          <source type="image/avif" srcSet={`${hero480Avif} 480w, ${hero768Avif} 768w, ${hero1024Avif} 1024w, ${hero1440Avif} 1440w, ${hero1920Avif} 1920w`} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1920px" />
-          <source type="image/webp" srcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1920px" />
-          <img 
-            src={hero1024Webp} 
-            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
-            className="w-full h-full object-cover" 
-            width="1920" 
-            height="1080" 
-            fetchPriority="high" 
-            loading="eager" 
-            decoding="async"
-          />
-        </picture>
+        <div id="hero-react-image" style={{ position: 'absolute', inset: 0, opacity: 0 }}>
+          <picture>
+            <source type="image/avif" srcSet={`${hero480Avif} 480w, ${hero768Avif} 768w, ${hero1024Avif} 1024w, ${hero1440Avif} 1440w, ${hero1920Avif} 1920w`} sizes="100vw" />
+            <source type="image/webp" srcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`} sizes="100vw" />
+            <img 
+              src={hero1024Webp} 
+              alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
+              className="w-full h-full object-cover" 
+              width="1920" 
+              height="1080" 
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-accent/60"></div>
       </div>
       

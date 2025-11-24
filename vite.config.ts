@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
+// @ts-ignore - Critters types issue
+import Critters from 'critters';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,6 +15,20 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(), 
     mode === "development" && componentTagger(),
+    {
+      name: 'vite-plugin-critters',
+      enforce: 'post' as const,
+      async transformIndexHtml(html: string) {
+        const critters = new Critters({
+          path: '/',
+          preload: 'swap',
+          pruneSource: true,
+          logLevel: 'info',
+          reduceInlineStyles: false,
+        });
+        return await critters.process(html);
+      }
+    },
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo.png', 'og-image.jpg', 'robots.txt'],

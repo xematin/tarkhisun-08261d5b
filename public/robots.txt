@@ -12,6 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /install
 
 # Sitemap location
 Sitemap: https://tarkhisun.ir/sitemap.xml

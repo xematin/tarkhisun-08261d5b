@@ -28,6 +28,17 @@ const Install = () => {
     }
     canonicalLink.setAttribute('href', 'https://tarkhisun.ir/install');
 
+    // Add noindex meta tag to prevent search engines from indexing this page
+    const robotsMeta = document.querySelector('meta[name="robots"]') as HTMLMetaElement;
+    if (!robotsMeta) {
+      const meta = document.createElement('meta');
+      meta.name = 'robots';
+      meta.content = 'noindex, follow';
+      document.head.appendChild(meta);
+    } else {
+      robotsMeta.setAttribute('content', 'noindex, follow');
+    }
+
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);

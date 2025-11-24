@@ -35,7 +35,6 @@ const HeroSection = () => {
             fetchPriority="high" 
             loading="eager" 
             decoding="async"
-            style={{ contentVisibility: 'auto' }}
           />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-accent/60"></div>

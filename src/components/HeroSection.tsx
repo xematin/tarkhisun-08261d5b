@@ -42,9 +42,13 @@ const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         <div id="hero-react-image" style={{ position: 'absolute', inset: 0, opacity: 0 }}>
           <picture>
-            <source type="image/avif" srcSet={`${hero480Avif} 480w, ${hero768Avif} 768w, ${hero1024Avif} 1024w, ${hero1440Avif} 1440w, ${hero1920Avif} 1920w`} sizes="100vw" />
-            <source type="image/webp" srcSet={`${hero480Webp} 480w, ${hero768Webp} 768w, ${hero1024Webp} 1024w, ${hero1440Webp} 1440w, ${hero1920Webp} 1920w`} sizes="100vw" />
-            <img 
+            <source media="(max-width: 767px)" type="image/avif" srcSet={hero480Avif} />
+            <source media="(max-width: 767px)" type="image/webp" srcSet={hero480Webp} />
+            <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcSet={hero1024Avif} />
+            <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcSet={hero1024Webp} />
+            <source media="(min-width: 1440px)" type="image/avif" srcSet={hero1920Avif} />
+            <source media="(min-width: 1440px)" type="image/webp" srcSet={hero1920Webp} />
+            <img
               src={hero1024Webp} 
               alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران" 
               className="w-full h-full object-cover" 

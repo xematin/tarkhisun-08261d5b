@@ -30,140 +30,7 @@ const Index = () => {
     document.documentElement.setAttribute("dir", "rtl");
     document.documentElement.setAttribute("lang", "fa");
 
-    // SEO Meta Tags - Optimized for better ranking
-    document.title = "مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | ترخیص کالا";
-
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080",
-      );
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "description";
-      meta.content =
-        "ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080";
-      document.head.appendChild(meta);
-    }
-
-    // Publisher Meta Tag
-    const publisher = document.querySelector('meta[name="publisher"]');
-    if (publisher) {
-      publisher.setAttribute("content", "ترخیصان - مشاوره گمرکی بندرعباس");
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "publisher";
-      meta.content = "ترخیصان - مشاوره گمرکی بندرعباس";
-      document.head.appendChild(meta);
-    }
-
-    const author = document.querySelector('meta[name="author"]');
-    if (author) {
-      author.setAttribute("content", "Tarkhisun");
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "author";
-      meta.content = "Tarkhisun";
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag - Optimized with high-value keywords
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute(
-        "content",
-        "ترخیص کالا بندرعباس, مشاوره گمرکی, گمرک شهید رجایی, ترخیص سریع, صدور کمیسیون ماده یک, واردات صادرات, تعرفه گمرکی, ترخیصان, خدمات گمرکی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, کد تعرفه, HS Code, مشاور گمرک, ترخیص فوری",
-      );
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "keywords";
-      meta.content =
-        "ترخیص کالا بندرعباس, مشاوره گمرکی, گمرک شهید رجایی, ترخیص سریع, صدور کمیسیون ماده یک, واردات صادرات, تعرفه گمرکی, ترخیصان, خدمات گمرکی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, کد تعرفه, HS Code, مشاور گمرک, ترخیص فوری";
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute("href", "https://tarkhisun.ir/");
-    } else {
-      const link = document.createElement("link");
-      link.rel = "canonical";
-      link.href = "https://tarkhisun.ir/";
-      document.head.appendChild(link);
-    }
-
-    // Hreflang Tags for international SEO
-    const setHreflangTag = (hreflang: string, href: string) => {
-      let tag = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`) as HTMLLinkElement;
-      if (tag) {
-        tag.setAttribute("href", href);
-      } else {
-        const link = document.createElement("link");
-        link.rel = "alternate";
-        link.setAttribute("hreflang", hreflang);
-        link.setAttribute("href", href);
-        document.head.appendChild(link);
-      }
-    };
-
-    setHreflangTag("fa", "https://tarkhisun.ir/");
-    setHreflangTag("fa-IR", "https://tarkhisun.ir/");
-    setHreflangTag("x-default", "https://tarkhisun.ir/");
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute("content", content);
-      } else {
-        tag = document.createElement("meta");
-        tag.setAttribute("property", property);
-        tag.setAttribute("content", content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag("og:title", "مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | ترخیص کالا");
-    setOGTag(
-      "og:description",
-      "ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080",
-    );
-    setOGTag("og:type", "website");
-    setOGTag("og:url", "https://tarkhisun.ir/");
-    setOGTag("og:image", "https://tarkhisun.ir/og-image.jpg");
-    setOGTag("og:image:width", "1200");
-    setOGTag("og:image:height", "630");
-    setOGTag("og:image:alt", "ترخیصان - مشاور امور گمرکی بندرعباس");
-    setOGTag("og:locale", "fa_IR");
-    setOGTag("og:site_name", "ترخیصان");
-
-    // Structured Data - Organization
-    const organizationData = {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "ترخیصان - مشاوره امور گمرکی بندرعباس",
-      url: "https://tarkhisun.ir",
-      logo: "https://tarkhisun.ir/logo.png",
-      description: "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "بندرعباس",
-        addressRegion: "هرمزگان",
-        addressCountry: "IR",
-      },
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+989177380080",
-        contactType: "customer service",
-        areaServed: "IR",
-        availableLanguage: ["fa", "en"],
-      },
-      sameAs: ["https://t.me/N8NAutoBotBot"],
-    };
-
-    // Structured Data - LocalBusiness
+    // Structured Data - LocalBusiness, WebSite, and ServiceArea
     const localBusinessData = {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
@@ -226,7 +93,6 @@ const Index = () => {
       },
     };
 
-    // WebSite structured data
     const websiteData = {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -239,7 +105,6 @@ const Index = () => {
       },
     };
 
-    // Service Areas - All Iranian Ports
     const serviceAreaData = {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -299,18 +164,18 @@ const Index = () => {
         "ارائه خدمات تخصصی ترخیص کالا و مشاوره امور گمرکی در تمام بنادر اصلی ایران شامل بندرعباس شهید رجایی، بندر امام خمینی، بندر چابهار، بندر بوشهر و بندر انزلی",
     };
 
-    // Combine all structured data
     const combinedStructuredData = {
       "@context": "https://schema.org",
-      "@graph": [organizationData, localBusinessData, websiteData, serviceAreaData],
+      "@graph": [localBusinessData, websiteData, serviceAreaData],
     };
 
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
+    let scriptTag = document.querySelector('script[type="application/ld+json"][data-page="index"]');
     if (scriptTag) {
       scriptTag.textContent = JSON.stringify(combinedStructuredData);
     } else {
       scriptTag = document.createElement("script");
       scriptTag.setAttribute("type", "application/ld+json");
+      scriptTag.setAttribute("data-page", "index");
       scriptTag.textContent = JSON.stringify(combinedStructuredData);
       document.head.appendChild(scriptTag);
     }
@@ -351,6 +216,34 @@ const Index = () => {
   return (
     <>
       <Helmet>
+        {/* SEO Meta Tags */}
+        <title>مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | ترخیص کالا</title>
+        <meta name="description" content="ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080" />
+        <meta name="keywords" content="ترخیص کالا بندرعباس, مشاوره گمرکی, گمرک شهید رجایی, ترخیص سریع, صدور کمیسیون ماده یک, واردات صادرات, تعرفه گمرکی, ترخیصان, خدمات گمرکی, بندر امام خمینی, بندر چابهار, بندر بوشهر, بندر انزلی, کد تعرفه, HS Code, مشاور گمرک, ترخیص فوری" />
+        <meta name="author" content="Tarkhisun" />
+        <meta name="publisher" content="ترخیصان - مشاوره گمرکی بندرعباس" />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://tarkhisun.ir/" />
+        
+        {/* Hreflang Tags */}
+        <link rel="alternate" hrefLang="fa" href="https://tarkhisun.ir/" />
+        <link rel="alternate" hrefLang="fa-IR" href="https://tarkhisun.ir/" />
+        <link rel="alternate" hrefLang="x-default" href="https://tarkhisun.ir/" />
+        
+        {/* Open Graph Tags */}
+        <meta property="og:title" content="مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | ترخیص کالا" />
+        <meta property="og:description" content="ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://tarkhisun.ir/" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="ترخیصان - مشاور امور گمرکی بندرعباس" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:site_name" content="ترخیصان" />
+        
+        {/* Hero Image Preload */}
         <link
           rel="preload"
           as="image"

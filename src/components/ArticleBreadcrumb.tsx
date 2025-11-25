@@ -40,11 +40,6 @@ const ArticleBreadcrumb = ({ category, articleTitle }: ArticleBreadcrumbProps) =
         {
           "@type": "ListItem",
           "position": 3,
-          "name": category,
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
           "name": articleTitle,
           "item": currentUrl
         }

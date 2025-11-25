@@ -32,12 +32,16 @@ const PageBreadcrumb = ({ items }: PageBreadcrumbProps) => {
           "name": "خانه",
           "item": "https://tarkhisun.ir/"
         },
-        ...items.map((item, index) => ({
-          "@type": "ListItem",
-          "position": index + 2,
-          "name": item.label,
-          ...(item.href && { "item": `https://tarkhisun.ir${item.href}` })
-        }))
+        ...items.map((item, index) => {
+          const isLastItem = index === items.length - 1;
+          return {
+            "@type": "ListItem",
+            "position": index + 2,
+            "name": item.label,
+            // All items except the last one must have "item" field
+            ...((!isLastItem || item.href) && { "item": `https://tarkhisun.ir${item.href}` })
+          };
+        })
       ]
     };
 

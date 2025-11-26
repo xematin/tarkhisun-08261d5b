@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -8,142 +9,102 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Phone, CheckCircle2, AlertCircle, FileText, Package, Shield, DollarSign } from "lucide-react";
 
 const HomeAppliancesClearanceGuide = () => {
+  const description = "راهنمای جامع و تخصصی ترخیص لوازم خانگی از گمرک بندرعباس شهید رجایی: انواع لوازم خانگی قابل واردات، مدارک ضروری، کدهای تعرفه HS، محاسبه دقیق حقوق و عوارض گمرکی، استانداردهای ملی ایران، مجوزهای سازمان ملی استاندارد، نکات کلیدی خرید و ترخیص یخچال، تلویزیون، ماشین لباسشویی، ظرفشویی، اجاق گاز و سایر لوازم خانگی از بندرعباس";
+  const keywordsContent = "ترخیص لوازم خانگی, گمرک بندرعباس, واردات لوازم خانگی, ترخیص یخچال از گمرک, ترخیص تلویزیون از گمرک, ترخیص ماشین لباسشویی, حقوق گمرکی لوازم خانگی, کد تعرفه لوازم خانگی, استاندارد لوازم خانگی, مجوز واردات لوازم خانگی, ترخیص ظرفشویی, ترخیص اجاق گاز, شهید رجایی بندرعباس, مدارک ترخیص لوازم خانگی, هزینه ترخیص لوازم خانگی";
+  
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات",
+    "description": description,
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "author": {
+      "@type": "Organization",
+      "name": "تیم ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      }
+    },
+    "datePublished": "2025-11-17",
+    "dateModified": "2025-11-17",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide"
+    },
+    "keywords": keywordsContent
+  };
+
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "ترخیص لوازم خانگی از گمرک بندرعباس"
+      }
+    ]
+  };
+
   useEffect(() => {
     // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات یخچال، تلویزیون، ماشین لباسشویی | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    const description = "راهنمای جامع و تخصصی ترخیص لوازم خانگی از گمرک بندرعباس شهید رجایی: انواع لوازم خانگی قابل واردات، مدارک ضروری، کدهای تعرفه HS، محاسبه دقیق حقوق و عوارض گمرکی، استانداردهای ملی ایران، مجوزهای سازمان ملی استاندارد، نکات کلیدی خرید و ترخیص یخچال، تلویزیون، ماشین لباسشویی، ظرفشویی، اجاق گاز و سایر لوازم خانگی از بندرعباس";
-    
-    if (metaDescription) {
-      metaDescription.setAttribute('content', description);
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = description;
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    const keywordsContent = "ترخیص لوازم خانگی, گمرک بندرعباس, واردات لوازم خانگی, ترخیص یخچال از گمرک, ترخیص تلویزیون از گمرک, ترخیص ماشین لباسشویی, حقوق گمرکی لوازم خانگی, کد تعرفه لوازم خانگی, استاندارد لوازم خانگی, مجوز واردات لوازم خانگی, ترخیص ظرفشویی, ترخیص اجاق گاز, شهید رجایی بندرعباس, مدارک ترخیص لوازم خانگی, هزینه ترخیص لوازم خانگی";
-    
-    if (keywords) {
-      keywords.setAttribute('content', keywordsContent);
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = keywordsContent;
-      document.head.appendChild(meta);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات | ترخیصان');
-    setOGTag('og:description', description);
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-    setOGTag('og:image', 'https://tarkhisun.ir/og-image.jpg');
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide';
-      document.head.appendChild(link);
-    }
-
-    // Structured Data - Article Schema
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات",
-      "description": description,
-      "image": "https://tarkhisun.ir/og-image.jpg",
-      "author": {
-        "@type": "Organization",
-        "name": "تیم ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://tarkhisun.ir/logo.png"
-        }
-      },
-      "datePublished": "2025-11-17",
-      "dateModified": "2025-11-17",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide'
-      },
-      "keywords": keywordsContent
-    };
-
-    const scriptTag = document.createElement('script');
-    scriptTag.type = 'application/ld+json';
-    scriptTag.text = JSON.stringify(structuredData);
-    document.head.appendChild(scriptTag);
-
-    // Breadcrumb Structured Data
-    const breadcrumbData = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "خانه",
-          "item": "https://tarkhisun.ir/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "بلاگ",
-          "item": "https://tarkhisun.ir/blog"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "ترخیص لوازم خانگی از گمرک بندرعباس",
-          "item": 'https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide'
-        }
-      ]
-    };
-
-    const breadcrumbScript = document.createElement('script');
-    breadcrumbScript.type = 'application/ld+json';
-    breadcrumbScript.text = JSON.stringify(breadcrumbData);
-    document.head.appendChild(breadcrumbScript);
-
-    return () => {
-      // Cleanup scripts on unmount
-      document.querySelectorAll('script[type="application/ld+json"]').forEach(script => script.remove());
-    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Helmet>
+        <title>ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات یخچال، تلویزیون، ماشین لباسشویی | ترخیصان</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywordsContent} />
+        <meta name="author" content="تیم ترخیصان" />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide" />
+        
+        {/* Open Graph Tags */}
+        <meta property="og:title" content="ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات | ترخیصان" />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/home-appliances-clearance-bandar-abbas-guide" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:site_name" content="ترخیصان" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات | ترخیصان" />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbData)}
+        </script>
+      </Helmet>
+      
+      <div className="min-h-screen bg-background">
       <Header />
       
       <main>
@@ -756,6 +717,7 @@ const HomeAppliancesClearanceGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

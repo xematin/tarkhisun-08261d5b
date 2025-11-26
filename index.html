@@ -6,7 +6,7 @@
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#1a472a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ترخیصان">
     <link rel="apple-touch-icon" href="/logo.png">
@@ -121,24 +121,26 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Deferred Google Tag Manager for zero main thread impact -->
+    <!-- Google Analytics 4 - Deferred for Performance -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      
-      // Defer GTM loading using requestIdleCallback
-      function loadGTM() {
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-XXXXXXXXX');
+      // Defer GA4 loading for better Core Web Vitals
+      function loadGA4() {
+        var script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P';
+        script.async = true;
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7RBYRKE10P');
       }
       
-      // Load GTM only after page is fully interactive
+      // Load after page is interactive
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadGTM, { timeout: 3000 });
+        requestIdleCallback(loadGA4, { timeout: 3000 });
       } else {
-        setTimeout(loadGTM, 3000);
+        setTimeout(loadGA4, 2000);
       }
     </script>
   </body>

@@ -243,6 +243,13 @@ const Index = () => {
         <meta property="og:locale" content="fa_IR" />
         <meta property="og:site_name" content="ترخیصان" />
         
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان | ترخیص کالا" />
+        <meta name="twitter:description" content="ترخیص کالا بندرعباس و مشاوره گمرکی تخصصی بندر شهید رجایی با +20 سال تجربه. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:site" content="@tarkhisun" />
+        
         {/* Hero Image Preload */}
         <link
           rel="preload"

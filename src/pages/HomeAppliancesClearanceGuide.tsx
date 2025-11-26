@@ -39,29 +39,6 @@ const HomeAppliancesClearanceGuide = () => {
     "keywords": keywordsContent
   };
 
-  const breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "خانه",
-        "item": "https://tarkhisun.ir/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "بلاگ",
-        "item": "https://tarkhisun.ir/blog"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "ترخیص لوازم خانگی از گمرک بندرعباس"
-      }
-    ]
-  };
 
   useEffect(() => {
     // Set RTL direction for Persian content
@@ -98,9 +75,6 @@ const HomeAppliancesClearanceGuide = () => {
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbData)}
         </script>
       </Helmet>
       

@@ -87,14 +87,30 @@ export default defineConfig(({ mode }) => ({
             decoding="async" />
         </picture>`;
           
-          // Also add preload tags for fastest discovery
-          const preloadTags = `
-    <link rel="preload" as="image" href="/${(hero480Avif as any).fileName}" type="image/avif" fetchpriority="high" media="(max-width: 767px)">
-    <link rel="preload" as="image" href="/${(hero1024Avif as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 768px) and (max-width: 1439px)">
-    <link rel="preload" as="image" href="/${(hero1920Avif as any).fileName}" type="image/avif" fetchpriority="high" media="(min-width: 1440px)">`;
+          // Conditional preload tags - only for homepage
+          const conditionalPreloadScript = `
+    <script>
+      if (location.pathname === '/') {
+        var preloads = [
+          { href: '/${(hero480Avif as any).fileName}', media: '(max-width: 767px)' },
+          { href: '/${(hero1024Avif as any).fileName}', media: '(min-width: 768px) and (max-width: 1439px)' },
+          { href: '/${(hero1920Avif as any).fileName}', media: '(min-width: 1440px)' }
+        ];
+        preloads.forEach(function(p) {
+          var link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = p.href;
+          link.type = 'image/avif';
+          link.fetchPriority = 'high';
+          link.media = p.media;
+          document.head.appendChild(link);
+        });
+      }
+    </script>`;
           
-          // Inject preload tags in <head>
-          html = html.replace('<!-- LCP Hero Image Preload - Generated dynamically by vite-plugin-lcp-preload -->', preloadTags);
+          // Inject conditional preload script in <head>
+          html = html.replace('<!-- LCP Hero Image Preload - Generated dynamically by vite-plugin-lcp-preload -->', conditionalPreloadScript);
           
           // Inject picture element right after <body>
           html = html.replace('<body>', `<body>\n    ${pictureElement}`);

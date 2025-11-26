@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -37,6 +38,39 @@ const FAQ = () => {
       answer: "ترخیصان‌یار اولین هوش مصنوعی تخصصی گمرکات در ایران است که کاملاً رایگان از طریق تلگرام در دسترس است. این ابزار می‌تواند به سوالات گمرکی شما پاسخ دهد، مراحل ترخیص را راهنمایی کند، مدارک لازم را مشخص کند، و تخمین اولیه هزینه‌ها را ارائه دهد."
     }
   ];
+
+  useEffect(() => {
+    // FAQ Schema for Rich Snippets
+    const faqSchema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    };
+
+    let scriptTag = document.querySelector('script[type="application/ld+json"][data-faq="faq"]');
+    if (scriptTag) {
+      scriptTag.textContent = JSON.stringify(faqSchema);
+    } else {
+      scriptTag = document.createElement("script");
+      scriptTag.setAttribute("type", "application/ld+json");
+      scriptTag.setAttribute("data-faq", "faq");
+      scriptTag.textContent = JSON.stringify(faqSchema);
+      document.head.appendChild(scriptTag);
+    }
+
+    return () => {
+      // Cleanup on unmount
+      const script = document.querySelector('script[type="application/ld+json"][data-faq="faq"]');
+      if (script) script.remove();
+    };
+  }, []);
 
   return (
     <section id="faq" className="py-20 bg-muted/30">

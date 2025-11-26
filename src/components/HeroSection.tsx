@@ -67,7 +67,7 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-right">
             <h1 className="heading-primary text-white mb-6 fade-in-up animate">
-              مشاوره امور گمرکی<br />
+              <strong>ترخیصان</strong> - مشاوره امور گمرکی<br />
               <span key={currentPortIndex} className="text-accent-light inline-block animate-fade-in">
                 {ports[currentPortIndex]}
               </span>

@@ -44,8 +44,8 @@ const Blog = () => {
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
     
-    // SEO Meta Tags
-    document.title = "بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیصان";
+    // SEO Meta Tags - Brand removed to prevent cannibalization with homepage
+    document.title = "بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا و واردات";
     
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -81,7 +81,7 @@ const Blog = () => {
       }
     };
 
-    setOGTag('og:title', 'بلاگ مشاوره امور گمرکی بندرعباس | ترخیصان');
+    setOGTag('og:title', 'بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا');
     setOGTag('og:description', 'مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی');
     setOGTag('og:type', 'website');
     setOGTag('og:locale', 'fa_IR');

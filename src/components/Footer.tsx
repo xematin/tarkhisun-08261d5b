@@ -46,7 +46,7 @@ const Footer = () => {
               <div className="text-2xl text-persian"><strong>ترخیصان</strong></div>
             </div>
             
-            <p className="text-primary-foreground/80 leading-relaxed text-persian">بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی. ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم.</p>
+            <p className="text-primary-foreground/80 leading-relaxed text-persian">بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی. ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم.</p>
             
             <div className="flex items-center gap-2 text-accent-light">
               <Bot className="w-5 h-5" />
@@ -127,7 +127,7 @@ const Footer = () => {
             <p className="text-primary-foreground/60 text-sm text-persian">تمامی حقوق برای تیم ترخیصان محفوظ است © {persianYear}</p>
             
             <div className="flex items-center gap-6 text-sm text-primary-foreground/60">
-              <span className="text-persian">طراحی سایت و خدمات برنامه‌نویسی © OctanDev</span>
+              <span className="text-persian">طراحی سایت و خدمات برنامه‌نویسی © <a href="https://t.me/OctanDev" target="_blank" rel="noopener noreferrer" className="hover:text-primary-foreground transition-colors duration-200">OctanDev</a></span>
             </div>
           </div>
         </div>

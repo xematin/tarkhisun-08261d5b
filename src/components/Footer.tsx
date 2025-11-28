@@ -97,7 +97,7 @@ const Footer = () => {
               
               <div className="flex items-start gap-3 text-primary-foreground/80">
                 <MapPin className="w-5 h-5 mt-0.5" />
-                <span className="text-persian">بندرعباس، بندر شهید رجایی</span>
+                <span className="text-persian">بندرعباس، چهارراه سازمان </span>
               </div>
             </div>
           </div>

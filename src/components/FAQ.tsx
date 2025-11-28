@@ -79,7 +79,7 @@ const FAQ = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
             <HelpCircle className="w-8 h-8 text-primary" />
           </div>
-          <h2 className="heading-secondary mb-4">سوالات متداول</h2>
+          <h2 className="heading-secondary mb-4">سوالات متداول <strong>ترخیصان</strong></h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-persian">
             پاسخ سوالات رایج درباره ترخیص کالا، هزینه‌ها، و خدمات ترخیصان
           </p>

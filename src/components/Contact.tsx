@@ -90,9 +90,9 @@ const Contact = () => {
     <section id="contact" className="py-20 bg-gradient-to-br from-secondary to-white">
       <div className="container mx-auto px-4" dir="rtl">
         <div className="text-center mb-16">
-          <h2 className="heading-secondary mb-4">تماس با ما</h2>
+          <h2 className="heading-secondary mb-4">تماس با <strong>ترخیصان</strong></h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-persian">
-            برای دریافت مشاوره رایگان و کسب اطلاعات بیشتر با ما در تماس باشید
+            برای دریافت مشاوره رایگان از تیم <strong>ترخیصان</strong> و کسب اطلاعات بیشتر درباره خدمات گمرکی بندرعباس با ما در تماس باشید
           </p>
         </div>
 
@@ -100,7 +100,7 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="order-2 lg:order-1">
             <div className="bg-white rounded-2xl shadow-soft p-8">
-              <h3 className="heading-tertiary mb-6">درخواست مشاوره رایگان</h3>
+              <h3 className="heading-tertiary mb-6">درخواست مشاوره رایگان از <strong>ترخیصان</strong></h3>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">

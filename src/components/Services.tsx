@@ -51,9 +51,9 @@ const Services = () => {
     <section id="services" className="contain-layout gpu-accelerated py-20 bg-background">
       <div className="container mx-auto px-4" dir="rtl">
         <div className="text-center mb-16">
-          <h2 className="heading-secondary mb-4">خدمات ما</h2>
+          <h2 className="heading-secondary mb-4">خدمات <strong>ترخیصان</strong></h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-persian">
-            با تیم مجرب و متخصص، تمام نیازهای گمرکی و ترخیص کالای شما را پوشش می‌دهیم
+            <strong>ترخیصان</strong> با تیم مجرب و متخصص، تمام نیازهای گمرکی و ترخیص کالای شما را در بندرعباس و سراسر ایران پوشش می‌دهد
           </p>
         </div>
 
@@ -104,7 +104,7 @@ const Services = () => {
         {/* CTA Section */}
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl p-8 max-w-3xl mx-auto">
-            <h3 className="heading-tertiary mb-4">نیاز به مشاوره تخصصی دارید؟</h3>
+            <h3 className="heading-tertiary mb-4">نیاز به مشاوره تخصصی <strong>ترخیصان</strong> دارید؟</h3>
             <p className="text-muted-foreground mb-6 text-persian">
               کارشناسان ما آماده ارائه مشاوره رایگان و بررسی پرونده شما هستند
             </p>

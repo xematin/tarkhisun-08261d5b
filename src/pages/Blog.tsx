@@ -44,7 +44,7 @@ const Blog = () => {
     document.documentElement.setAttribute("lang", "fa");
 
     // SEO Meta Tags - Brand removed to prevent cannibalization with homepage
-    document.title = "بلاگ گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا";
+    document.title = "بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا";
 
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {

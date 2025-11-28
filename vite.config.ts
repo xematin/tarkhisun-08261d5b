@@ -188,17 +188,7 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          {
-            urlPattern: /^https:\/\/www\.googletagmanager\.com\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'google-analytics-cache',
-              expiration: {
-                maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
-              }
-            }
-          },
+          // Google Analytics excluded from Service Worker caching for real-time tracking
           {
             urlPattern: /^https:\/\/gomrok24\.com\/.*/i,
             handler: 'NetworkFirst',

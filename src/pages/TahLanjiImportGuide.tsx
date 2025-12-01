@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,109 +11,77 @@ import { ArrowRight, Ship, Package, AlertTriangle, CheckCircle2, XCircle, Scale,
 
 const TahLanjiImportGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌ها | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع واردات ته لنجی (ملوانی): تعریف، تفاوت با واردات رسمی، روش انجام، ریسک‌های قانونی، جریمه‌ها، مزایا و معایب و چرا باید از واردات رسمی استفاده کنید');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع واردات ته لنجی (ملوانی): تعریف، تفاوت با واردات رسمی، روش انجام، ریسک‌های قانونی، جریمه‌ها، مزایا و معایب و چرا باید از واردات رسمی استفاده کنید';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, لنج, ترخیص کالا, گمرک بندرعباس, واردات رسمی, ریسک واردات, قوانین گمرکی, جریمه قاچاق');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, لنج, ترخیص کالا, گمرک بندرعباس, واردات رسمی, ریسک واردات, قوانین گمرکی, جریمه قاچاق';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/tah-lanji-import-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/tah-lanji-import-guide';
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل | ترخیصان');
-    setOGTag('og:description', 'راهنمای جامع واردات ته لنجی: تعریف، ریسک‌های قانونی، جریمه‌ها و تفاوت با واردات رسمی');
-    setOGTag('og:type', 'article');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/tah-lanji-import-guide');
-    setOGTag('og:locale', 'fa_IR');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌ها",
-      "description": "راهنمای جامع واردات ته لنجی (ملوانی): تعریف، تفاوت با واردات رسمی، روش انجام، ریسک‌های قانونی و جریمه‌ها",
-      "author": {
-        "@type": "Organization",
-        "name": "تیم ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2025-10-05",
-      "dateModified": "2025-10-05",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/tah-lanji-import-guide'
-      },
-      "articleSection": "تجارت خارجی",
-      "keywords": "واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, گمرک"
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
   }, []);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌ها",
+    "description": "راهنمای جامع واردات ته لنجی (ملوانی): تعریف، تفاوت با واردات رسمی، روش انجام، ریسک‌های قانونی و جریمه‌ها",
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "author": {
+      "@type": "Organization",
+      "name": "تیم ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "datePublished": "2025-10-05",
+    "dateModified": "2025-10-05",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/tah-lanji-import-guide"
+    },
+    "articleSection": "تجارت خارجی",
+    "keywords": "واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, گمرک"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.ir" },
+      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.ir/blog" },
+      { "@type": "ListItem", "position": 3, "name": "واردات ته لنجی یا ملوانی" }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌ها</title>
+        <meta name="description" content="راهنمای جامع واردات ته لنجی (ملوانی): تعریف، تفاوت با واردات رسمی، روش انجام، ریسک‌های قانونی، جریمه‌ها، مزایا و معایب و چرا باید از واردات رسمی استفاده کنید" />
+        <meta name="keywords" content="واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, لنج, ترخیص کالا, گمرک بندرعباس, واردات رسمی, ریسک واردات, قوانین گمرکی, جریمه قاچاق" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/tah-lanji-import-guide" />
+        <meta property="og:title" content="واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل" />
+        <meta property="og:description" content="راهنمای جامع واردات ته لنجی: تعریف، ریسک‌های قانونی، جریمه‌ها و تفاوت با واردات رسمی" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/tah-lanji-import-guide" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل" />
+        <meta name="twitter:description" content="راهنمای جامع واردات ته لنجی و ریسک‌های قانونی آن" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
       
       <main>
         <ArticleBreadcrumb 
@@ -537,6 +506,7 @@ const TahLanjiImportGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

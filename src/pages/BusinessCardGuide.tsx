@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,108 +11,76 @@ import { ArrowRight, CheckCircle2, FileText, Calendar, Clock, User, AlertCircle 
 
 const BusinessCardGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور، مزایا و نحوه درخواست کارت بازرگانی برای واردات و صادرات');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور، مزایا و نحوه درخواست کارت بازرگانی برای واردات و صادرات';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات, اتاق بازرگانی, مدارک کارت بازرگانی, انواع کارت بازرگانی, صدور کارت بازرگانی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات, اتاق بازرگانی, مدارک کارت بازرگانی, انواع کارت بازرگانی, صدور کارت بازرگانی';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/business-card-complete-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/business-card-complete-guide';
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور');
-    setOGTag('og:description', 'راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و نحوه درخواست');
-    setOGTag('og:type', 'article');
-    setOGTag('og:url', window.location.href);
-    setOGTag('og:locale', 'fa_IR');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور",
-      "description": "راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور و نحوه درخواست کارت بازرگانی",
-      "author": {
-        "@type": "Organization",
-        "name": "ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2025-10-03",
-      "dateModified": "2025-10-03",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": window.location.href
-      },
-      "keywords": "کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات"
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
   }, []);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور",
+    "description": "راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور و نحوه درخواست کارت بازرگانی",
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "author": {
+      "@type": "Organization",
+      "name": "ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "datePublished": "2025-10-03",
+    "dateModified": "2025-10-03",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/business-card-complete-guide"
+    },
+    "keywords": "کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.ir" },
+      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.ir/blog" },
+      { "@type": "ListItem", "position": 3, "name": "کارت بازرگانی چیست؟" }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور</title>
+        <meta name="description" content="راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور، مزایا و نحوه درخواست کارت بازرگانی برای واردات و صادرات" />
+        <meta name="keywords" content="کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات, اتاق بازرگانی, مدارک کارت بازرگانی, انواع کارت بازرگانی, صدور کارت بازرگانی" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/business-card-complete-guide" />
+        <meta property="og:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
+        <meta property="og:description" content="راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و نحوه درخواست" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/business-card-complete-guide" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
+        <meta name="twitter:description" content="راهنمای جامع کارت بازرگانی: مدارک، شرایط و نحوه درخواست" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
       
       <main>
         <ArticleBreadcrumb category="تجارت بین‌الملل" articleTitle="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
@@ -554,6 +523,7 @@ const BusinessCardGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

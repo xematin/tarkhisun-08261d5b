@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,108 +11,92 @@ import { ArrowRight, DollarSign, TrendingUp, Scale, FileText, CheckCircle2, Aler
 
 const SanaExchangeRateGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها، مزایا و معایب هر کدام برای واردات و صادرات در گمرک ایران');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها، مزایا و معایب هر کدام برای واردات و صادرات در گمرک ایران';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز, واردات, صادرات, گمرک, سامانه نیما, سامانه سنا');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز, واردات, صادرات, گمرک, سامانه نیما, سامانه سنا';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/sana-exchange-rate-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/sana-exchange-rate-guide';
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل');
-    setOGTag('og:description', 'راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها و کاربرد در واردات و صادرات');
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/sana-exchange-rate-guide');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل",
-      "description": "راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها، مزایا و معایب هر کدام برای واردات و صادرات",
-      "datePublished": "2025-10-03",
-      "dateModified": "2025-10-03",
-      "author": {
-        "@type": "Organization",
-        "name": "تیم ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/sana-exchange-rate-guide'
-      },
-      "keywords": "ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز"
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
   }, []);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل",
+    "description": "راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها، مزایا و معایب هر کدام برای واردات و صادرات",
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "datePublished": "2025-10-03",
+    "dateModified": "2025-10-03",
+    "author": {
+      "@type": "Organization",
+      "name": "تیم ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/sana-exchange-rate-guide"
+    },
+    "keywords": "ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "تفاوت ارز سنا و نیمایی"
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل</title>
+        <meta name="description" content="راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها، مزایا و معایب هر کدام برای واردات و صادرات در گمرک ایران" />
+        <meta name="keywords" content="ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز, واردات, صادرات, گمرک, سامانه نیما, سامانه سنا" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/sana-exchange-rate-guide" />
+        <meta property="og:title" content="تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل" />
+        <meta property="og:description" content="راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها و کاربرد در واردات و صادرات" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/sana-exchange-rate-guide" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل" />
+        <meta name="twitter:description" content="راهنمای جامع تفاوت ارز سنا و ارز نیمایی و نحوه استفاده در واردات و صادرات" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
       
       <main>
         <ArticleBreadcrumb category="تجارت بین‌الملل" articleTitle="تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل" />
@@ -464,6 +449,7 @@ const SanaExchangeRateGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

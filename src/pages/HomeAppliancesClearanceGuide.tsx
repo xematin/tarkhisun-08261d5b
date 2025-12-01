@@ -7,6 +7,7 @@ import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
 import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Phone, CheckCircle2, AlertCircle, FileText, Package, Shield, DollarSign } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const HomeAppliancesClearanceGuide = () => {
   const description = "راهنمای جامع و تخصصی ترخیص لوازم خانگی از گمرک بندرعباس شهید رجایی: انواع لوازم خانگی قابل واردات، مدارک ضروری، کدهای تعرفه HS، محاسبه دقیق حقوق و عوارض گمرکی، استانداردهای ملی ایران، مجوزهای سازمان ملی استاندارد، نکات کلیدی خرید و ترخیص یخچال، تلویزیون، ماشین لباسشویی، ظرفشویی، اجاق گاز و سایر لوازم خانگی از بندرعباس";
@@ -135,6 +136,14 @@ const HomeAppliancesClearanceGuide = () => {
                 </div>
               </div>
 
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/home-appliances-container.webp"
+                alt="ترخیص لوازم خانگی از گمرک بندرعباس - کانتینر حاوی یخچال، ماشین لباسشویی و تلویزیون"
+                caption="ترخیص لوازم خانگی از گمرک شهید رجایی بندرعباس"
+                priority
+              />
+
               {/* Article Content */}
               <div className="prose prose-lg max-w-none text-foreground">
                 
@@ -216,6 +225,13 @@ const HomeAppliancesClearanceGuide = () => {
                     </ul>
                   </div>
                 </section>
+
+                {/* Second Image */}
+                <ArticleImage
+                  src="/images/blog/home-appliances-warehouse.webp"
+                  alt="انبار لوازم خانگی وارداتی - یخچال، ماشین لباسشویی، تلویزیون و اجاق گاز"
+                  caption="انواع لوازم خانگی قابل واردات از طریق گمرک بندرعباس"
+                />
 
                 {/* مدارک لازم */}
                 <section className="mb-12">

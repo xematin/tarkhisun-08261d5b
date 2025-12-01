@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, ArrowRight } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const CarPartsImportGuide = () => {
   useEffect(() => {
@@ -176,6 +177,14 @@ const CarPartsImportGuide = () => {
                   </p>
                 </header>
 
+                {/* Hero Image */}
+                <ArticleImage
+                  src="/images/blog/car-parts-engine.webp"
+                  alt="قطعات یدکی خودرو - موتور، گیربکس و قطعات مکانیکی"
+                  caption="انواع قطعات یدکی خودرو قابل واردات از گمرک"
+                  priority
+                />
+
                 {/* Introduction */}
                 <section className="mb-12">
                   <Card className="card-service">
@@ -274,6 +283,13 @@ const CarPartsImportGuide = () => {
                       </CardContent>
                     </Card>
                   </section>
+
+                  {/* Second Image */}
+                  <ArticleImage
+                    src="/images/blog/car-parts-warehouse.webp"
+                    alt="انبار قطعات یدکی خودرو - لنت ترمز، فیلتر روغن و باتری"
+                    caption="انبار قطعات یدکی خودرو وارداتی"
+                  />
 
                   {/* Section 2 */}
                   <section className="mb-12">

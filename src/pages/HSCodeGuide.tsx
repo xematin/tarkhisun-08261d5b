@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, User, ArrowRight, CheckCircle, AlertTriangle, Search, Globe, Calculator } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const HSCodeGuide = () => {
   useEffect(() => {
@@ -145,6 +146,14 @@ const HSCodeGuide = () => {
                   {/* Main Content */}
                   <div className="lg:col-span-2 space-y-8">
                     
+                    {/* Hero Image */}
+                    <ArticleImage
+                      src="/images/blog/hs-code-documents.webp"
+                      alt="کد HS کالا - اسناد گمرکی و تعرفه هماهنگ"
+                      caption="سیستم کد HS - طبقه‌بندی استاندارد کالاها در تجارت بین‌المللی"
+                      priority
+                    />
+
                     {/* Introduction */}
                     <div className="prose prose-lg max-w-none text-persian">
                       <p className="text-lg leading-relaxed text-muted-foreground">
@@ -233,6 +242,13 @@ const HSCodeGuide = () => {
                         </CardContent>
                       </Card>
                     </div>
+
+                    {/* Second Image */}
+                    <ArticleImage
+                      src="/images/blog/hs-code-trade.webp"
+                      alt="تجارت بین‌المللی و کد تعرفه گمرکی"
+                      caption="اهمیت کد HS در تجارت بین‌المللی و ترخیص کالا"
+                    />
 
                     {/* Importance of HS Code */}
                     <Card className="card-service">

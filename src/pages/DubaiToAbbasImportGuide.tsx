@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Ship, FileText, DollarSign, Clock, AlertCircle, CheckCircle, Package, Globe, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ArticleImage from "@/components/ArticleImage";
 
 const DubaiToAbbasImportGuide = () => {
   useEffect(() => {
@@ -189,6 +190,14 @@ const DubaiToAbbasImportGuide = () => {
 
               <Separator className="my-8" />
 
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/dubai-port-cargo.webp"
+                alt="بندر دبی - کشتی‌های باری و کانتینرهای صادراتی به ایران"
+                caption="بندر جبل علی دبی - مبدأ واردات کالا به بندرعباس"
+                priority
+              />
+
               {/* Introduction */}
               <section className="mb-12">
                 <p className="text-lg text-foreground/90 text-persian leading-relaxed mb-6">
@@ -286,6 +295,13 @@ const DubaiToAbbasImportGuide = () => {
               </section>
 
               <Separator className="my-12" />
+
+              {/* Second Image */}
+              <ArticleImage
+                src="/images/blog/dubai-shipping.webp"
+                alt="حمل دریایی کالا از دبی به بندرعباس - کشتی باری در حال بارگیری"
+                caption="حمل دریایی کالا از دبی به بندرعباس - سریع‌ترین مسیر واردات"
+              />
 
               {/* Section 2 */}
               <section id="goods-types" className="mb-12">

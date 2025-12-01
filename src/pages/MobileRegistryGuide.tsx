@@ -121,8 +121,8 @@ const MobileRegistryGuide = () => {
               </div>
 
               <ArticleImage
-                src="/images/blog/mobile-phone-registry.webp"
-                alt="رجیستری گوشی موبایل - ترخیص تلفن همراه از گمرک"
+                src="/images/blog/mobile-imei-registry.webp"
+                alt="گوشی‌های موبایل و کد IMEI برای رجیستری در گمرک"
                 caption="راهنمای ترخیص موبایل و رجیستری گوشی از گمرک"
                 priority
               />

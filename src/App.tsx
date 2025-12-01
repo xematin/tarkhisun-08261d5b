@@ -73,7 +73,8 @@ const AppContent = () => {
         <Route path="/blog/dubai-to-abbas-import-guide" element={<DubaiToAbbasImportGuide />} />
         <Route path="/blog/water-tank-clearance-bandar-abbas-guide" element={<WaterTankClearanceGuide />} />
         <Route path="/blog/car-parts-import-customs-clearance-guide" element={<CarPartsImportGuide />} />
-        <Route path="/blog/zero-to-hundred-bandar-abbas-customs-clearance" element={<BandarAbbasComprehensiveGuide />} />
+        <Route path="/blog/bandar-abbas-comprehensive-clearance-guide" element={<BandarAbbasComprehensiveGuide />} />
+        <Route path="/blog/zero-to-hundred-bandar-abbas-customs-clearance" element={<BlogPost />} />
         <Route path="/blog/home-appliances-clearance-bandar-abbas-guide" element={<HomeAppliancesClearanceGuide />} />
         <Route path="/blog/mobile-phone-customs-clearance-registry-guide" element={<MobileRegistryGuide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />

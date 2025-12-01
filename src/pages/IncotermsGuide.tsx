@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,104 +11,64 @@ import { ArrowRight, Ship, Truck, Package, FileText, CheckCircle2, AlertCircle }
 
 const IncotermsGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/incoterms-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/incoterms-guide';
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا');
-    setOGTag('og:description', 'راهنمای جامع اینکوترمز - آشنایی با انواع شرایط تحویل بین‌المللی کالا');
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/incoterms-guide');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا",
-      "description": "راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات",
-      "author": {
-        "@type": "Organization",
-        "name": "ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2025-10-02",
-      "dateModified": "2025-10-02",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/incoterms-guide'
-      },
-      "keywords": "اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی"
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
+    window.scrollTo(0, 0);
   }, []);
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا",
+    "description": "راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات",
+    "author": {
+      "@type": "Organization",
+      "name": "ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "datePublished": "2025-10-02",
+    "dateModified": "2025-12-01",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/incoterms-guide"
+    },
+    "keywords": "اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی",
+    "articleSection": "تجارت بین‌المللی",
+    "image": "https://tarkhisun.ir/og-image.jpg"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "اینکوترمز چیست؟ راهنمای شرایط تحویل بین‌المللی کالا"
+      }
+    ]
+  };
 
   const incotermsTypes = [
     {
@@ -163,6 +124,25 @@ const IncotermsGuide = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا</title>
+        <meta name="description" content="راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات" />
+        <meta name="keywords" content="اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/incoterms-guide" />
+        <meta property="og:title" content="اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا" />
+        <meta property="og:description" content="راهنمای جامع اینکوترمز - آشنایی با انواع شرایط تحویل بین‌المللی کالا" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/incoterms-guide" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا" />
+        <meta name="twitter:description" content="راهنمای جامع اینکوترمز - آشنایی با انواع شرایط تحویل بین‌المللی کالا" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
       <Header />
       
       <main>

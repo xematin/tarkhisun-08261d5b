@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,163 +11,118 @@ import { ArrowRight, CheckCircle2, AlertCircle, FileText, DollarSign, Package, W
 
 const ExcavationMachineryGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات، مجوزها و نکات مهم ترخیص انواع ماشین آلات سنگین ساختمانی و معدنی از بندرعباس');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات، مجوزها و نکات مهم ترخیص انواع ماشین آلات سنگین ساختمانی و معدنی از بندرعباس';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    const keywordContent = 'ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی ماشین حفاری, کد تعرفه ماشین آلات, ترخیص بیل مکانیکی, واردات لودر, ترخیص بلدوزر, ماشین آلات ساختمانی, ماشین آلات معدنی, مدارک ترخیص ماشین آلات, بندرعباس, شهید رجایی, تعرفه گمرکی ماشین آلات, مجوز واردات ماشین آلات';
-    if (keywords) {
-      keywords.setAttribute('content', keywordContent);
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = keywordContent;
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/excavation-machinery-import-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/excavation-machinery-import-guide';
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین');
-    setOGTag('og:description', 'راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات و مجوزها');
-    setOGTag('og:type', 'article');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/excavation-machinery-import-guide');
-    setOGTag('og:locale', 'fa_IR');
-
-    // Twitter Card Tags
-    const setTwitterTag = (name: string, content: string) => {
-      let tag = document.querySelector(`meta[name="${name}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('name', name);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setTwitterTag('twitter:card', 'summary_large_image');
-    setTwitterTag('twitter:title', 'ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل');
-    setTwitterTag('twitter:description', 'راهنمای جامع ترخیص ماشین آلات حفاری از گمرک بندرعباس');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین",
-      "description": "راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات، مجوزها و نکات مهم",
-      "author": {
-        "@type": "Organization",
-        "name": "تیم ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2025-10-07",
-      "dateModified": "2025-10-07",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/excavation-machinery-import-guide'
-      },
-      "keywords": "ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی",
-      "articleSection": "راهنمای گمرکی"
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
-    // FAQ Structured Data
-    const faqStructuredData = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "آیا واردات ماشین آلات حفاری نیاز به مجوز دارد؟",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "بله، واردات ماشین آلات حفاری نیاز به کارت بازرگانی، ثبت سفارش در سامانه جامع تجارت (NTSW) و در برخی موارد مجوزهای استاندارد دارد."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "حقوق گمرکی ماشین آلات حفاری چقدر است؟",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "حقوق گمرکی ماشین آلات حفاری بین ۴ تا ۱۵ درصد ارزش CIF کالا است که بسته به نوع، سال ساخت و کد تعرفه متغیر است."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "آیا می‌توان ماشین آلات حفاری دست دوم وارد کرد؟",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "بله، با رعایت شرایط سنی (معمولاً کمتر از ۱۰ سال) و استانداردهای زیست محیطی می‌توان ماشین آلات حفاری دست دوم وارد کرد."
-          }
-        }
-      ]
-    };
-
-    const faqScript = document.createElement('script');
-    faqScript.setAttribute('type', 'application/ld+json');
-    faqScript.textContent = JSON.stringify(faqStructuredData);
-    document.head.appendChild(faqScript);
-
+    window.scrollTo(0, 0);
   }, []);
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین",
+    "description": "راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات، مجوزها و نکات مهم",
+    "author": {
+      "@type": "Organization",
+      "name": "تیم ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "datePublished": "2025-10-07",
+    "dateModified": "2025-10-07",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/excavation-machinery-import-guide"
+    },
+    "keywords": "ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی",
+    "articleSection": "راهنمای گمرکی",
+    "image": "https://tarkhisun.ir/og-image.jpg"
+  };
+
+  const faqStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "آیا واردات ماشین آلات حفاری نیاز به مجوز دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "بله، واردات ماشین آلات حفاری نیاز به کارت بازرگانی، ثبت سفارش در سامانه جامع تجارت (NTSW) و در برخی موارد مجوزهای استاندارد دارد."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "حقوق گمرکی ماشین آلات حفاری چقدر است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "حقوق گمرکی ماشین آلات حفاری بین ۴ تا ۱۵ درصد ارزش CIF کالا است که بسته به نوع، سال ساخت و کد تعرفه متغیر است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "آیا می‌توان ماشین آلات حفاری دست دوم وارد کرد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "بله، با رعایت شرایط سنی (معمولاً کمتر از ۱۰ سال) و استانداردهای زیست محیطی می‌توان ماشین آلات حفاری دست دوم وارد کرد."
+        }
+      }
+    ]
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "ترخیص ماشین آلات حفاری از گمرک"
+      }
+    ]
+  };
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین</title>
+        <meta name="description" content="راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات، مجوزها و نکات مهم ترخیص انواع ماشین آلات سنگین ساختمانی و معدنی از بندرعباس" />
+        <meta name="keywords" content="ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی ماشین حفاری, کد تعرفه ماشین آلات, ترخیص بیل مکانیکی, واردات لودر, ترخیص بلدوزر, ماشین آلات ساختمانی, ماشین آلات معدنی, مدارک ترخیص ماشین آلات, بندرعباس, شهید رجایی, تعرفه گمرکی ماشین آلات, مجوز واردات ماشین آلات" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/excavation-machinery-import-guide" />
+        <meta property="og:title" content="ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین" />
+        <meta property="og:description" content="راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات و مجوزها" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/excavation-machinery-import-guide" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل" />
+        <meta name="twitter:description" content="راهنمای جامع ترخیص ماشین آلات حفاری از گمرک بندرعباس" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqStructuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
       <Header />
       
       <main>

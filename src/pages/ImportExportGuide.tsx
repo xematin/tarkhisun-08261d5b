@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -12,95 +13,84 @@ const ImportExportGuide = () => {
   useEffect(() => {
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    document.title = "راهنمای کامل صادرات و واردات در ایران | قوانین، مراحل و نکات مهم";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها، تعرفه گمرکی، محدودیت‌ها و نکات مهم برای تجارت بین‌المللی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها، تعرفه گمرکی، محدودیت‌ها و نکات مهم برای تجارت بین‌المللی';
-      document.head.appendChild(meta);
-    }
-
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'صادرات و واردات, صادرات ایران, واردات کالا, تجارت خارجی, گمرک ایران, صادرات کالا, واردات محصول, مجوز صادرات, قوانین واردات, تعرفه گمرکی, بازرگانی خارجی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'صادرات و واردات, صادرات ایران, واردات کالا, تجارت خارجی, گمرک ایران, صادرات کالا, واردات محصول, مجوز صادرات, قوانین واردات, تعرفه گمرکی, بازرگانی خارجی';
-      document.head.appendChild(meta);
-    }
-
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'راهنمای کامل صادرات و واردات در ایران | ترخیصان');
-    setOGTag('og:description', 'راهنمای جامع صادرات و واردات کالا در ایران با تمام جزئیات');
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "راهنمای کامل صادرات و واردات در ایران",
-      "description": "راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها و نکات مهم",
-      "author": {
-        "@type": "Organization",
-        "name": "ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2025-10-05",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": window.location.href
-      }
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
-    const canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (canonicalLink) {
-      canonicalLink.setAttribute('href', 'https://tarkhisun.ir/blog/import-export-guide-iran');
-    } else {
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', 'https://tarkhisun.ir/blog/import-export-guide-iran');
-      document.head.appendChild(link);
-    }
+    window.scrollTo(0, 0);
   }, []);
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "راهنمای کامل صادرات و واردات در ایران",
+    "description": "راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها و نکات مهم",
+    "author": {
+      "@type": "Organization",
+      "name": "ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "datePublished": "2025-10-05",
+    "dateModified": "2025-12-01",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/import-export-guide-iran"
+    },
+    "keywords": "صادرات و واردات, صادرات ایران, واردات کالا, تجارت خارجی, گمرک ایران",
+    "articleSection": "تجارت بین‌المللی",
+    "image": "https://tarkhisun.ir/og-image.jpg"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "راهنمای کامل صادرات و واردات در ایران"
+      }
+    ]
+  };
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>راهنمای کامل صادرات و واردات در ایران | قوانین، مراحل و نکات مهم</title>
+        <meta name="description" content="راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها، تعرفه گمرکی، محدودیت‌ها و نکات مهم برای تجارت بین‌المللی" />
+        <meta name="keywords" content="صادرات و واردات, صادرات ایران, واردات کالا, تجارت خارجی, گمرک ایران, صادرات کالا, واردات محصول, مجوز صادرات, قوانین واردات, تعرفه گمرکی, بازرگانی خارجی" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/import-export-guide-iran" />
+        <meta property="og:title" content="راهنمای کامل صادرات و واردات در ایران" />
+        <meta property="og:description" content="راهنمای جامع صادرات و واردات کالا در ایران با تمام جزئیات" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/import-export-guide-iran" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="راهنمای کامل صادرات و واردات در ایران" />
+        <meta name="twitter:description" content="راهنمای جامع صادرات و واردات کالا در ایران با تمام جزئیات" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
       <Header />
       
       <main dir="rtl">

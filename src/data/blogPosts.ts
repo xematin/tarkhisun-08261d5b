@@ -263,7 +263,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 20,
     title: "صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک بندرعباس",
-    slug: "zero-to-hundred-bandar-abbas-customs-clearance",
+    slug: "bandar-abbas-comprehensive-clearance-guide",
     excerpt:
       "راهنمای جامع و گام‌به‌گام ترخیص کالا از بندرعباس: تمام مراحل ترخیص، مدارک لازم، هزینه‌ها، زمان ترخیص، نکات کلیدی و راهکارهای عملی برای سرعت‌بخشی به فرآیند",
     category: "راهنمای ترخیص",

@@ -29,7 +29,8 @@ const DubaiToAbbasImportGuide = () => {
         <meta property="og:title" content="واردات کالا از دبی به بندرعباس | راهنمای کامل حمل و ترخیص" />
         <meta property="og:description" content="راهنمای جامع واردات کالا از دبی به بندرعباس: روش‌های حمل، مدارک، هزینه‌ها و نکات مهم" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`${window.location.origin}/blog/dubai-to-abbas-import-guide`} />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/dubai-to-abbas-import-guide" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
         
         {/* Article Tags */}
@@ -48,7 +49,7 @@ const DubaiToAbbasImportGuide = () => {
             "@type": "Article",
             "headline": "واردات کالا از دبی به بندرعباس | راهنمای کامل حمل و ترخیص کالا از امارات",
             "description": "راهنمای جامع واردات کالا از دبی به بندرعباس: روش‌های حمل، مدارک لازم، هزینه‌ها، زمان ترخیص، مراحل گمرکی و نکات کلیدی تجارت با امارات",
-            "image": window.location.origin + "/placeholder.svg",
+            "image": "https://tarkhisun.ir/og-image.jpg",
             "author": {
               "@type": "Organization",
               "name": "ترخیصان"
@@ -58,14 +59,14 @@ const DubaiToAbbasImportGuide = () => {
               "name": "ترخیصان",
               "logo": {
                 "@type": "ImageObject",
-                "url": window.location.origin + "/placeholder.svg"
+                "url": "https://tarkhisun.ir/logo.png"
               }
             },
             "datePublished": "2025-10-21",
             "dateModified": "2025-10-21",
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": window.location.origin + "/blog/dubai-to-abbas-import-guide"
+              "@id": "https://tarkhisun.ir/blog/dubai-to-abbas-import-guide"
             },
             "keywords": ["واردات از دبی", "بندرعباس", "حمل کالا", "ترخیص کالا", "امارات", "تجارت خارجی"]
           })}
@@ -123,19 +124,18 @@ const DubaiToAbbasImportGuide = () => {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "خانه",
-                "item": window.location.origin + "/"
+                "item": "https://tarkhisun.ir/"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "بلاگ",
-                "item": window.location.origin + "/blog"
+                "item": "https://tarkhisun.ir/blog"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
-                "name": "واردات کالا از دبی به بندرعباس",
-                "item": window.location.origin + "/blog/dubai-to-abbas-import-guide"
+                "name": "واردات کالا از دبی به بندرعباس"
               }
             ]
           })}

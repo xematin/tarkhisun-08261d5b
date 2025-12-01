@@ -23,7 +23,7 @@ const CarPartsImportGuide = () => {
         "@type": "Article",
         "headline": "ترخیص قطعات یدکی خودرو از گمرک | راهنمای کامل واردات قطعات",
         "description": "راهنمای جامع ترخیص قطعات یدکی خودرو از گمرک: انواع قطعات، مدارک لازم، کد تعرفه HS، حقوق گمرکی، استانداردها، مجوزهای لازم، مراحل واردات و نکات کلیدی خرید و ترخیص",
-        "image": window.location.origin + "/og-image.jpg",
+        "image": "https://tarkhisun.ir/og-image.jpg",
         "author": {
           "@type": "Organization",
           "name": "ترخیصان"
@@ -33,14 +33,14 @@ const CarPartsImportGuide = () => {
           "name": "ترخیصان",
           "logo": {
             "@type": "ImageObject",
-            "url": window.location.origin + "/logo.png"
+            "url": "https://tarkhisun.ir/logo.png"
           }
         },
         "datePublished": "2025-10-13",
         "dateModified": "2025-10-13",
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": window.location.href
+          "@id": "https://tarkhisun.ir/blog/car-parts-import-customs-clearance-guide"
         },
         "keywords": "ترخیص قطعات یدکی خودرو، واردات قطعات خودرو، گمرک بندرعباس، قطعات یدکی وارداتی، کد HS قطعات خودرو، حقوق گمرکی قطعات، استاندارد قطعات خودرو، مجوز واردات قطعات، قطعات اصلی خودرو، قطعات بدنه خودرو"
       },
@@ -104,19 +104,18 @@ const CarPartsImportGuide = () => {
             "@type": "ListItem",
             "position": 1,
             "name": "خانه",
-            "item": window.location.origin
+            "item": "https://tarkhisun.ir/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "بلاگ",
-            "item": window.location.origin + "/blog"
+            "item": "https://tarkhisun.ir/blog"
           },
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "ترخیص قطعات یدکی خودرو از گمرک",
-            "item": window.location.href
+            "name": "ترخیص قطعات یدکی خودرو از گمرک"
           }
         ]
       }
@@ -133,7 +132,8 @@ const CarPartsImportGuide = () => {
         <meta property="og:title" content="ترخیص قطعات یدکی خودرو از گمرک | راهنمای کامل واردات قطعات" />
         <meta property="og:description" content="راهنمای جامع ترخیص قطعات یدکی خودرو از گمرک بندرعباس: مدارک، کد HS، حقوق گمرکی، استانداردها و نکات کلیدی" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/car-parts-import-customs-clearance-guide" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

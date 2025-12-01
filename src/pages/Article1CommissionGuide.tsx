@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,106 +11,75 @@ import { ArrowRight, CheckCircle, AlertTriangle, FileText, Scale, Clock, Users }
 
 const Article1CommissionGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض، آرای کمیسیون و نکات کلیدی برای واردکنندگان');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض، آرای کمیسیون و نکات کلیدی برای واردکنندگان';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'کمیسیون ماده 1, کمیسیون ماده یک گمرک, اختلاف ارزش گمرکی, اعتراض به ارزیابی گمرک, رسیدگی به اختلافات گمرکی, ارزش گمرکی کالا, قانون امور گمرکی, حقوق واردکنندگان, اعتراض گمرکی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'کمیسیون ماده 1, کمیسیون ماده یک گمرک, اختلاف ارزش گمرکی, اعتراض به ارزیابی گمرک, رسیدگی به اختلافات گمرکی, ارزش گمرکی کالا, قانون امور گمرکی, حقوق واردکنندگان, اعتراض گمرکی';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/customs-article-1-commission-guide');
-    } else {
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', 'https://tarkhisun.ir/blog/customs-article-1-commission-guide');
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی');
-    setOGTag('og:description', 'راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی و مراحل اعتراض');
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "کمیسیون ماده 1 گمرک چیست؟ راهنمای کامل رسیدگی به اختلافات ارزش گمرکی",
-      "description": "راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض و نکات کلیدی",
-      "datePublished": "2025-10-17",
-      "dateModified": "2025-10-17",
-      "author": {
-        "@type": "Organization",
-        "name": "تیم ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": window.location.href
-      }
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
   }, []);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "کمیسیون ماده 1 گمرک چیست؟ راهنمای کامل رسیدگی به اختلافات ارزش گمرکی",
+    "description": "راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض و نکات کلیدی",
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "datePublished": "2025-10-17",
+    "dateModified": "2025-10-17",
+    "author": {
+      "@type": "Organization",
+      "name": "تیم ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/customs-article-1-commission-guide"
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.ir" },
+      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.ir/blog" },
+      { "@type": "ListItem", "position": 3, "name": "کمیسیون ماده 1 گمرک" }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی</title>
+        <meta name="description" content="راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض، آرای کمیسیون و نکات کلیدی برای واردکنندگان" />
+        <meta name="keywords" content="کمیسیون ماده 1, کمیسیون ماده یک گمرک, اختلاف ارزش گمرکی, اعتراض به ارزیابی گمرک, رسیدگی به اختلافات گمرکی, ارزش گمرکی کالا, قانون امور گمرکی, حقوق واردکنندگان" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/customs-article-1-commission-guide" />
+        <meta property="og:title" content="کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی" />
+        <meta property="og:description" content="راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی و مراحل اعتراض" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/customs-article-1-commission-guide" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل" />
+        <meta name="twitter:description" content="راهنمای جامع کمیسیون ماده 1 گمرک و نحوه رسیدگی به اختلافات ارزش گمرکی" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
       
       <main>
         <ArticleBreadcrumb 
@@ -561,6 +531,7 @@ const Article1CommissionGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

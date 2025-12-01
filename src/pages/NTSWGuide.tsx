@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,108 +11,92 @@ import { ArrowRight, CheckCircle, Globe, FileText, Users, Shield, Clock, BarChar
 
 const NTSWGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'راهنمای جامع سامانه ملی تجارت ایران (NTSW) - آموزش گام به گام ثبت‌نام، صدور مجوز واردات و صادرات، خدمات الکترونیک تجاری و ارتباط با گمرک');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'راهنمای جامع سامانه ملی تجارت ایران (NTSW) - آموزش گام به گام ثبت‌نام، صدور مجوز واردات و صادرات، خدمات الکترونیک تجاری و ارتباط با گمرک';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'سامانه جامع تجارت, ntsw, سامانه ملی تجارت, ثبت نام ntsw, واردات و صادرات, مجوز واردات, گواهی ثبت سفارش, پروانه گمرکی, تجارت الکترونیک');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'سامانه جامع تجارت, ntsw, سامانه ملی تجارت, ثبت نام ntsw, واردات و صادرات, مجوز واردات, گواهی ثبت سفارش, پروانه گمرکی, تجارت الکترونیک';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/ntsw-guide');
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = 'https://tarkhisun.ir/blog/ntsw-guide';
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده');
-    setOGTag('og:description', 'راهنمای جامع سامانه ملی تجارت ایران - آموزش ثبت‌نام، صدور مجوز واردات و صادرات');
-    setOGTag('og:type', 'article');
-    setOGTag('og:url', 'https://tarkhisun.ir/blog/ntsw-guide');
-    setOGTag('og:locale', 'fa_IR');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "سامانه جامع تجارت (ntsw.ir) - راهنمای کامل ثبت‌نام و استفاده",
-      "description": "راهنمای جامع سامانه ملی تجارت ایران (NTSW) - آموزش گام به گام ثبت‌نام، صدور مجوز واردات و صادرات، خدمات الکترونیک تجاری و ارتباط با گمرک",
-      "author": {
-        "@type": "Organization",
-        "name": "ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2025-10-01",
-      "dateModified": "2025-10-01",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": 'https://tarkhisun.ir/blog/ntsw-guide'
-      },
-      "keywords": "سامانه جامع تجارت, ntsw, واردات و صادرات, مجوز واردات, گمرک"
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
   }, []);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "سامانه جامع تجارت (ntsw.ir) - راهنمای کامل ثبت‌نام و استفاده",
+    "description": "راهنمای جامع سامانه ملی تجارت ایران (NTSW) - آموزش گام به گام ثبت‌نام، صدور مجوز واردات و صادرات، خدمات الکترونیک تجاری و ارتباط با گمرک",
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "author": {
+      "@type": "Organization",
+      "name": "ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "datePublished": "2025-10-01",
+    "dateModified": "2025-10-01",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/ntsw-guide"
+    },
+    "keywords": "سامانه جامع تجارت, ntsw, واردات و صادرات, مجوز واردات, گمرک"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "سامانه جامع تجارت ایران"
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده</title>
+        <meta name="description" content="راهنمای جامع سامانه ملی تجارت ایران (NTSW) - آموزش گام به گام ثبت‌نام، صدور مجوز واردات و صادرات، خدمات الکترونیک تجاری و ارتباط با گمرک" />
+        <meta name="keywords" content="سامانه جامع تجارت, ntsw, سامانه ملی تجارت, ثبت نام ntsw, واردات و صادرات, مجوز واردات, گواهی ثبت سفارش, پروانه گمرکی, تجارت الکترونیک" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/ntsw-guide" />
+        <meta property="og:title" content="سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده" />
+        <meta property="og:description" content="راهنمای جامع سامانه ملی تجارت ایران - آموزش ثبت‌نام، صدور مجوز واردات و صادرات" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/ntsw-guide" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده" />
+        <meta name="twitter:description" content="راهنمای جامع سامانه ملی تجارت ایران - آموزش ثبت‌نام، صدور مجوز واردات و صادرات" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
       
       <main>
         <ArticleBreadcrumb 
@@ -498,6 +483,7 @@ const NTSWGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
@@ -10,104 +11,91 @@ import { ArrowRight, Phone, Mail, MessageCircle } from "lucide-react";
 
 const ExchangeRateGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-    
-    // SEO Meta Tags
-    document.title = "نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی | ترخیصان";
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی، عوارض و سود بازرگانی در گمرک ایران. راهنمای جامع واردکنندگان');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی، عوارض و سود بازرگانی در گمرک ایران. راهنمای جامع واردکنندگان';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'نرخ ارز گمرکی, نرخ ارز گمرک, محاسبه حقوق گمرکی, عوارض گمرکی, سود بازرگانی, نرخ ارز بانک مرکزی, حقوق ورودی, ترخیص کالا, واردات, گمرک ایران, بندرعباس, شهید رجایی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'نرخ ارز گمرکی, نرخ ارز گمرک, محاسبه حقوق گمرکی, عوارض گمرکی, سود بازرگانی, نرخ ارز بانک مرکزی, حقوق ورودی, ترخیص کالا, واردات, گمرک ایران, بندرعباس, شهید رجایی';
-      document.head.appendChild(meta);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag('og:title', 'نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی');
-    setOGTag('og:description', 'نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی در گمرک ایران');
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-
-    // Structured Data for Article
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی",
-      "description": "نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی، عوارض و سود بازرگانی در گمرک ایران",
-      "datePublished": "2025-10-01",
-      "dateModified": "2025-10-01",
-      "author": {
-        "@type": "Organization",
-        "name": "تیم ترخیصان"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": window.location.href
-      }
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
-
-    // Canonical URL
-    let canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (!canonicalLink) {
-      canonicalLink = document.createElement('link');
-      canonicalLink.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.setAttribute('href', 'https://tarkhisun.ir/blog/customs-exchange-rate-guide');
-
   }, []);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی",
+    "description": "نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی، عوارض و سود بازرگانی در گمرک ایران",
+    "image": "https://tarkhisun.ir/og-image.jpg",
+    "datePublished": "2025-10-01",
+    "dateModified": "2025-10-01",
+    "author": {
+      "@type": "Organization",
+      "name": "تیم ترخیصان"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ترخیصان",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tarkhisun.ir/logo.png"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "بندرعباس",
+        "addressRegion": "هرمزگان",
+        "addressCountry": "IR"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://tarkhisun.ir/blog/customs-exchange-rate-guide"
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://tarkhisun.ir"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "بلاگ",
+        "item": "https://tarkhisun.ir/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "نرخ ارز گمرکی چیست؟"
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی</title>
+        <meta name="description" content="نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی، عوارض و سود بازرگانی در گمرک ایران. راهنمای جامع واردکنندگان" />
+        <meta name="keywords" content="نرخ ارز گمرکی, نرخ ارز گمرک, محاسبه حقوق گمرکی, عوارض گمرکی, سود بازرگانی, نرخ ارز بانک مرکزی, حقوق ورودی, ترخیص کالا, واردات, گمرک ایران, بندرعباس, شهید رجایی" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/customs-exchange-rate-guide" />
+        <meta property="og:title" content="نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی" />
+        <meta property="og:description" content="نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی در گمرک ایران" />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/customs-exchange-rate-guide" />
+        <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی" />
+        <meta name="twitter:description" content="نرخ ارز گمرکی و تفاوت آن با نرخ ارز آزاد، روش محاسبه حقوق ورودی در گمرک ایران" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
       
       <main>
         <ArticleBreadcrumb category="تعرفه و مالیات" articleTitle="نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی" />
@@ -480,6 +468,7 @@ const ExchangeRateGuide = () => {
       
       <Footer />
     </div>
+    </>
   );
 };
 

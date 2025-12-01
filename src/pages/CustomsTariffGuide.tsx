@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, User, Phone, Mail } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const CustomsTariffGuide = () => {
   useEffect(() => {
@@ -148,6 +149,14 @@ const CustomsTariffGuide = () => {
                   {/* Main Content */}
                   <div className="lg:col-span-2 space-y-8">
                     
+                    {/* Hero Image */}
+                    <ArticleImage
+                      src="/images/blog/tariff-calculator.webp"
+                      alt="محاسبه تعرفه گمرکی و حقوق ورودی کالا"
+                      caption="محاسبه دقیق تعرفه گمرکی برای تعیین هزینه نهایی واردات ضروری است"
+                      priority
+                    />
+
                     {/* Introduction */}
                     <div className="prose prose-lg max-w-none text-persian">
                       <p className="text-lg leading-relaxed text-muted-foreground">
@@ -235,6 +244,13 @@ const CustomsTariffGuide = () => {
                         ))}
                       </div>
                     </div>
+
+                    {/* Image 2 */}
+                    <ArticleImage
+                      src="/images/blog/tariff-documents.webp"
+                      alt="مدارک و اسناد گمرکی برای محاسبه تعرفه"
+                      caption="اسناد گمرکی نقش مهمی در تعیین تعرفه و حقوق ورودی دارند"
+                    />
 
                     {/* Calculation */}
                     <Card className="card-service">

@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Phone, Mail, MessageCircle } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const ExchangeRateGuide = () => {
   useEffect(() => {
@@ -128,6 +129,14 @@ const ExchangeRateGuide = () => {
           <div className="container mx-auto px-4" dir="rtl">
             <div className="max-w-4xl mx-auto prose prose-lg">
               
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/exchange-rate-chart.webp"
+                alt="نمودار نرخ ارز و تأثیر آن بر هزینه‌های گمرکی"
+                caption="نرخ ارز گمرکی تأثیر مستقیم بر هزینه ترخیص کالا دارد"
+                priority
+              />
+
               {/* Introduction */}
               <section className="mb-12">
                 <p className="text-lg text-muted-foreground leading-relaxed text-persian mb-6">
@@ -221,6 +230,13 @@ const ExchangeRateGuide = () => {
                   </p>
                 </Card>
               </section>
+
+              {/* Image 2 */}
+              <ArticleImage
+                src="/images/blog/exchange-rate-currency.webp"
+                alt="ارز و دلار برای محاسبه نرخ گمرکی"
+                caption="تفاوت نرخ ارز گمرکی با نرخ ارز آزاد در محاسبات گمرکی"
+              />
 
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">نحوه محاسبه حقوق و عوارض گمرکی با نرخ ارز گمرکی</h2>

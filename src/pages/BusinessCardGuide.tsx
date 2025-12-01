@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, Calendar, Clock, User, AlertCircle } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const BusinessCardGuide = () => {
   useEffect(() => {
@@ -125,6 +126,14 @@ const BusinessCardGuide = () => {
           <div className="container mx-auto px-4" dir="rtl">
             <div className="max-w-4xl mx-auto prose prose-lg">
               
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/business-card-office.webp"
+                alt="محیط کاری تجاری و دریافت کارت بازرگانی"
+                caption="کارت بازرگانی مجوز رسمی فعالیت در تجارت خارجی است"
+                priority
+              />
+
               {/* Definition Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">کارت بازرگانی چیست؟</h2>
@@ -184,6 +193,13 @@ const BusinessCardGuide = () => {
                   </Card>
                 </div>
               </section>
+
+              {/* Image 2 */}
+              <ArticleImage
+                src="/images/blog/business-card-handshake.webp"
+                alt="معامله تجاری و توافق بین‌المللی با کارت بازرگانی"
+                caption="کارت بازرگانی امکان فعالیت رسمی در تجارت بین‌المللی را فراهم می‌کند"
+              />
 
               {/* Requirements Section */}
               <section className="mb-12">

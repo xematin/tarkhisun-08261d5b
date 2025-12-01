@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, FileText, TrendingUp, Shield, AlertCircle, CheckCircle2, Clock, Users, Building2 } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const IslamQalaGuide = () => {
   useEffect(() => {
@@ -102,6 +103,14 @@ const IslamQalaGuide = () => {
                     تیم ترخیصان
                   </div>
                 </div>
+
+                <ArticleImage
+                  src="/images/blog/islam-qala-border.webp"
+                  alt="گذرگاه مرزی اسلام قلعه - مرز ایران و افغانستان"
+                  caption="نمایی از گذرگاه مرزی اسلام قلعه در مرز ایران و افغانستان"
+                  priority
+                  className="mt-8"
+                />
               </div>
             </div>
           </section>

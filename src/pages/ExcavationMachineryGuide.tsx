@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, AlertCircle, FileText, DollarSign, Package, Wrench } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const ExcavationMachineryGuide = () => {
   useEffect(() => {
@@ -149,6 +150,14 @@ const ExcavationMachineryGuide = () => {
                 <span className="badge-primary">مدارک ترخیص</span>
                 <span className="badge-primary">واردات قانونی</span>
               </div>
+
+              <ArticleImage
+                src="/images/blog/excavation-machinery.webp"
+                alt="ماشین آلات حفاری و سنگین ساختمانی برای واردات و ترخیص از گمرک"
+                caption="ماشین آلات حفاری - بیل مکانیکی و لودر برای پروژه‌های ساختمانی"
+                priority
+                className="mt-8 max-w-3xl mx-auto"
+              />
             </div>
           </div>
         </section>

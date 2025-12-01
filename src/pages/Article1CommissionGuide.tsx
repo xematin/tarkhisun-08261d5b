@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle, AlertTriangle, FileText, Scale, Clock, Users } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const Article1CommissionGuide = () => {
   useEffect(() => {
@@ -99,6 +100,14 @@ const Article1CommissionGuide = () => {
               <p className="text-xl text-muted-foreground mb-8 text-persian">
                 آشنایی جامع با کمیسیون ماده یک، نحوه رسیدگی به اختلافات ارزش گمرکی و مراحل اعتراض
               </p>
+
+              <ArticleImage
+                src="/images/blog/commission-legal.webp"
+                alt="کمیسیون ماده 1 گمرک - رسیدگی به اختلافات ارزش گمرکی"
+                caption="جلسه کمیسیون ماده یک برای رسیدگی به اختلافات ارزش گمرکی"
+                priority
+                className="mt-4"
+              />
             </div>
           </div>
         </section>

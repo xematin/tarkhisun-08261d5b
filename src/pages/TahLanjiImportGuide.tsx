@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Ship, Package, AlertTriangle, CheckCircle2, XCircle, Scale, FileText, Users } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const TahLanjiImportGuide = () => {
   useEffect(() => {
@@ -113,6 +114,14 @@ const TahLanjiImportGuide = () => {
                   <span>۱۴۰۴/۷/۱۴</span>
                   <span>۱۶ دقیقه مطالعه</span>
                 </div>
+
+                <ArticleImage
+                  src="/images/blog/lanji-boat.webp"
+                  alt="لنج سنتی در بنادر جنوب ایران - واردات ته لنجی"
+                  caption="لنج‌های سنتی در بنادر جنوبی ایران"
+                  priority
+                  className="mt-8"
+                />
               </div>
             </div>
           </section>

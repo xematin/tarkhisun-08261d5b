@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Droplet, FileText, CheckCircle2, AlertCircle, Calculator, Package, Shield } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const WaterTankClearanceGuide = () => {
   useEffect(() => {
@@ -150,6 +151,13 @@ const WaterTankClearanceGuide = () => {
               <p className="text-xl text-muted-foreground text-persian leading-relaxed">
                 راهنمای جامع ترخیص مخزن ذخیره آب: انواع تانکر، مدارک لازم، کد تعرفه HS، حقوق گمرکی، استانداردها و مجوزهای بهداشتی
               </p>
+
+              <ArticleImage
+                src="/images/blog/water-tank-storage.webp"
+                alt="مخزن ذخیره آب - تانکر آب برای ترخیص از گمرک"
+                caption="انواع مخازن ذخیره آب قابل واردات و ترخیص از گمرک بندرعباس"
+                priority
+              />
             </header>
 
             {/* Introduction */}

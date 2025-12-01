@@ -207,6 +207,12 @@ const BlogPost = () => {
                       </div>
                     </div>
 
+                    <ArticleImage
+                      src="/images/blog/cargo-ship-port.webp"
+                      alt="کشتی باری در بندر شهید رجایی - حمل کالا به بندرعباس"
+                      caption="حمل کالا به بندر شهید رجایی بندرعباس"
+                    />
+
                     {/* Important Tips */}
                     <Card className="bg-amber-50 border-amber-200">
                       <CardContent className="p-6">

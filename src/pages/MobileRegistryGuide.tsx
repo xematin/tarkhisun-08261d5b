@@ -203,6 +203,12 @@ const MobileRegistryGuide = () => {
                 </p>
               </section>
 
+              <ArticleImage
+                src="/images/blog/mobile-smartphones.webp"
+                alt="گوشی‌های موبایل برای رجیستری و ترخیص از گمرک"
+                caption="انواع گوشی‌های موبایل قابل رجیستری در گمرک"
+              />
+
               <section className="mb-8">
                 <h2 className="text-2xl font-bold mb-4 text-foreground flex items-center gap-2">
                   <CheckCircle className="w-6 h-6 text-primary" />

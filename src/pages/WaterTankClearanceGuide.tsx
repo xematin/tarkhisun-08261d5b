@@ -263,6 +263,12 @@ const WaterTankClearanceGuide = () => {
               </div>
             </section>
 
+            <ArticleImage
+              src="/images/blog/customs-documents.webp"
+              alt="مدارک ترخیص مخزن آب از گمرک"
+              caption="مدارک و اسناد لازم برای ترخیص مخزن ذخیره آب"
+            />
+
             {/* Standards */}
             <section className="mb-10">
               <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2 text-persian">

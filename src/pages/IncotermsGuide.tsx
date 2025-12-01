@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Ship, Truck, Package, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const IncotermsGuide = () => {
   useEffect(() => {
@@ -183,6 +184,14 @@ const IncotermsGuide = () => {
           <div className="container mx-auto px-4" dir="rtl">
             <div className="max-w-4xl mx-auto">
               
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/incoterms-shipping.webp"
+                alt="حمل دریایی کالا و شرایط تحویل اینکوترمز در تجارت بین‌المللی"
+                caption="اینکوترمز شرایط تحویل کالا در تجارت بین‌المللی را مشخص می‌کند"
+                priority
+              />
+
               {/* Introduction */}
               <section className="mb-12">
                 <p className="text-lg leading-relaxed mb-6 text-persian">
@@ -302,6 +311,13 @@ const IncotermsGuide = () => {
                   </div>
                 </div>
               </section>
+
+              {/* Image 2 */}
+              <ArticleImage
+                src="/images/blog/incoterms-contract.webp"
+                alt="قرارداد تجاری بین‌المللی و تعیین شرایط تحویل کالا"
+                caption="انتخاب صحیح اینکوترمز در قراردادهای تجاری بسیار مهم است"
+              />
 
               {/* Selection Tips */}
               <section className="mb-12">

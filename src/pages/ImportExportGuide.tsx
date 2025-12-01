@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, TrendingUp, Scale, Globe, ShieldCheck, Package } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const ImportExportGuide = () => {
   useEffect(() => {
@@ -118,6 +119,14 @@ const ImportExportGuide = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/import-export-container.webp"
+                alt="کانتینرهای صادراتی و وارداتی در بندر - راهنمای صادرات و واردات ایران"
+                caption="تجارت بین‌المللی و حمل کالا از طریق کانتینر در بنادر ایران"
+                priority
+              />
+
               {/* Introduction */}
               <section className="mb-12">
                 <div className="prose prose-lg max-w-none">
@@ -215,6 +224,13 @@ const ImportExportGuide = () => {
                   ))}
                 </div>
               </section>
+
+              {/* Image 2 */}
+              <ArticleImage
+                src="/images/blog/import-export-shipping.webp"
+                alt="کشتی باری در حال حمل کالا - واردات و صادرات بین‌المللی"
+                caption="حمل دریایی کالا یکی از روش‌های اصلی تجارت بین‌المللی"
+              />
 
               {/* واردات */}
               <section className="mb-12">

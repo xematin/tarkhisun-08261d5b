@@ -7,6 +7,7 @@ import RelatedArticles from '@/components/RelatedArticles';
 import { Card, CardContent } from '@/components/ui/card';
 import { Phone, FileText, CreditCard, CheckCircle, AlertCircle, Clock, DollarSign, Smartphone } from 'lucide-react';
 import ArticleImage from "@/components/ArticleImage";
+import mobileRegistryCustomsImg from "@/assets/mobile-registry-customs.webp";
 
 const MobileRegistryGuide = () => {
   useEffect(() => {
@@ -204,9 +205,9 @@ const MobileRegistryGuide = () => {
               </section>
 
               <ArticleImage
-                src="/images/blog/mobile-smartphones.webp"
-                alt="گوشی‌های موبایل برای رجیستری و ترخیص از گمرک"
-                caption="انواع گوشی‌های موبایل قابل رجیستری در گمرک"
+                src={mobileRegistryCustomsImg}
+                alt="رجیستری حضوری گوشی موبایل در گمرک با بررسی کد IMEI و مدارک"
+                caption="فرآیند رجیستری حضوری موبایل در گمرک"
               />
 
               <section className="mb-8">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageBreadcrumb from "@/components/PageBreadcrumb";
@@ -38,145 +39,75 @@ const Blog = () => {
     setCurrentPage(1); // Reset to first page when category changes
   };
 
+  // Calculate pagination
+  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
+  const baseUrl = "https://tarkhisun.ir/blog";
+  const canonicalUrl = currentPage === 1 ? baseUrl : `${baseUrl}?page=${currentPage}`;
+
   useEffect(() => {
     // Set RTL direction for Persian content
     document.documentElement.setAttribute("dir", "rtl");
     document.documentElement.setAttribute("lang", "fa");
-
-    // SEO Meta Tags - Brand removed to prevent cannibalization with homepage
-    document.title = "بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا";
-
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        "content",
-        "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا، قوانین گمرکی و آخرین اخبار تجاری ایران",
-      );
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "description";
-      meta.content =
-        "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا، قوانین گمرکی و آخرین اخبار تجاری ایران";
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute(
-        "content",
-        "مشاوره امور گمرکی, بندرعباس, شهید رجایی, ترخیص کالا, واردات, صادرات, گمرک, تجارت بین المللی, قوانین گمرکی",
-      );
-    } else {
-      const meta = document.createElement("meta");
-      meta.name = "keywords";
-      meta.content =
-        "مشاوره امور گمرکی, بندرعباس, شهید رجایی, ترخیص کالا, واردات, صادرات, گمرک, تجارت بین المللی, قوانین گمرکی";
-      document.head.appendChild(meta);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute("content", content);
-      } else {
-        tag = document.createElement("meta");
-        tag.setAttribute("property", property);
-        tag.setAttribute("content", content);
-        document.head.appendChild(tag);
-      }
-    };
-
-    setOGTag("og:title", "بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا");
-    setOGTag("og:description", "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی");
-    setOGTag("og:type", "website");
-    setOGTag("og:locale", "fa_IR");
-
-    // Structured Data for Blog
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      name: "بلاگ مشاوره امور گمرکی بندرعباس",
-      description: "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا و قوانین گمرکی",
-      url: window.location.href,
-      publisher: {
-        "@type": "Organization",
-        name: "ترخیصان",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "بندرعباس",
-          addressRegion: "هرمزگان",
-          addressCountry: "IR",
-        },
-      },
-    };
-
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement("script");
-      scriptTag.setAttribute("type", "application/ld+json");
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
   }, []);
 
-  // Canonical URL and Pagination Schema
+  // Structured Data for Blog
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "بلاگ مشاوره امور گمرکی بندرعباس | ترخیصان",
+    description: "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا و قوانین گمرکی",
+    url: "https://tarkhisun.ir/blog",
+    publisher: {
+      "@type": "Organization",
+      name: "ترخیصان",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "بندرعباس",
+        addressRegion: "هرمزگان",
+        addressCountry: "IR",
+      },
+    },
+  };
+
+  // Scroll to top when page changes
   useEffect(() => {
-    const baseUrl = "https://tarkhisun.ir/blog";
-    const totalPages = Math.ceil(blogPosts.length / postsPerPage);
-
-    // Set or update Canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    const canonicalUrl = currentPage === 1 ? baseUrl : `${baseUrl}?page=${currentPage}`;
-
-    if (canonical) {
-      canonical.setAttribute("href", canonicalUrl);
-    } else {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      canonical.href = canonicalUrl;
-      document.head.appendChild(canonical);
-    }
-
-    // Remove old pagination links
-    document.querySelectorAll('link[rel="next"], link[rel="prev"]').forEach((link) => link.remove());
-
-    // Add rel="next" if not on last page
-    if (currentPage < totalPages) {
-      const nextLink = document.createElement("link");
-      nextLink.rel = "next";
-      nextLink.href = `${baseUrl}?page=${currentPage + 1}`;
-      document.head.appendChild(nextLink);
-    }
-
-    // Add rel="prev" if not on first page
-    if (currentPage > 1) {
-      const prevLink = document.createElement("link");
-      prevLink.rel = "prev";
-      prevLink.href = currentPage === 2 ? baseUrl : `${baseUrl}?page=${currentPage - 1}`;
-      document.head.appendChild(prevLink);
-    }
-
-    // Scroll to top when page changes
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [currentPage, postsPerPage]);
+  }, [currentPage]);
 
-  // Calculate pagination
+  // Calculate pagination for display
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      <Helmet>
+        <title>بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا</title>
+        <meta name="description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا، قوانین گمرکی و آخرین اخبار تجاری ایران" />
+        <meta name="keywords" content="مشاوره امور گمرکی, بندرعباس, شهید رجایی, ترخیص کالا, واردات, صادرات, گمرک, تجارت بین المللی, قوانین گمرکی, ترخیصان" />
+        <link rel="canonical" href={canonicalUrl} />
+        {currentPage > 1 && (
+          <link rel="prev" href={currentPage === 2 ? baseUrl : `${baseUrl}?page=${currentPage - 1}`} />
+        )}
+        {currentPage < totalPages && (
+          <link rel="next" href={`${baseUrl}?page=${currentPage + 1}`} />
+        )}
+        <meta property="og:title" content="بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا | ترخیصان" />
+        <meta property="og:description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="fa_IR" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content="ترخیصان" />
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Helmet>
+      <div className="min-h-screen bg-background">
+        <Header />
 
       <PageBreadcrumb items={[{ label: "بلاگ" }]} />
 
@@ -351,6 +282,7 @@ const Blog = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

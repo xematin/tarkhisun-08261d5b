@@ -73,22 +73,27 @@ const Currencies = () => {
   };
   return <>
       <Helmet>
-        <title>نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | گمرک ۲۴</title>
+        <title>نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | ترخیصان</title>
         <meta name="description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان شامل دلار، یورو، پوند، ین و سایر ارزها. بروزرسانی مداوم قیمت‌ها برای محاسبه دقیق هزینه‌های تجاری." />
-        <meta name="keywords" content="نرخ ارز، قیمت ارز، دلار، یورو، پوند، نرخ ارز امروز، قیمت ارز لحظه‌ای، محاسبه ارز، گمرک، واردات، صادرات" />
+        <meta name="keywords" content="نرخ ارز، قیمت ارز، دلار، یورو، پوند، نرخ ارز امروز، قیمت ارز لحظه‌ای، محاسبه ارز، گمرک، واردات، صادرات، ترخیصان" />
         <link rel="canonical" href="https://tarkhisun.ir/currencies" />
-        <meta property="og:title" content="نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان" />
+        <meta property="og:title" content="نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | ترخیصان" />
         <meta property="og:description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان با بروزرسانی مداوم" />
         <meta property="og:url" content="https://tarkhisun.ir/currencies" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="ترخیصان" />
         
         <script type="application/ld+json">
           {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "name": "نرخ ارز امروز",
+          "name": "نرخ ارز امروز | ترخیصان",
           "description": "صفحه نرخ ارز با قیمت‌های لحظه‌ای تمامی ارزهای جهان",
           "url": "https://tarkhisun.ir/currencies",
+          "publisher": {
+            "@type": "Organization",
+            "name": "ترخیصان"
+          },
           "mainEntity": {
             "@type": "Table",
             "name": "جدول نرخ ارز",

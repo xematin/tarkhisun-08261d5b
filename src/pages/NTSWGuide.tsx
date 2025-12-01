@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle, Globe, FileText, Users, Shield, Clock, BarChart } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const NTSWGuide = () => {
   useEffect(() => {
@@ -147,6 +148,14 @@ const NTSWGuide = () => {
           <div className="container mx-auto px-4" dir="rtl">
             <div className="max-w-4xl mx-auto">
 
+              {/* Hero Image */}
+              <ArticleImage
+                src="/images/blog/ntsw-digital-trade.webp"
+                alt="سامانه جامع تجارت ایران - پلتفرم دیجیتال تجارت الکترونیک"
+                caption="سامانه جامع تجارت (NTSW) - پنجره واحد تجارت خارجی ایران"
+                priority
+              />
+
               {/* Introduction */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian"><strong>سامانه جامع تجارت چیست؟</strong></h2>
@@ -205,6 +214,13 @@ const NTSWGuide = () => {
                   </Card>
                 </div>
               </section>
+
+              {/* Second Image */}
+              <ArticleImage
+                src="/images/blog/ntsw-business.webp"
+                alt="خدمات الکترونیکی سامانه جامع تجارت برای بازرگانان"
+                caption="خدمات الکترونیک تجاری در سامانه NTSW"
+              />
 
               {/* Services */}
               <section className="mb-12">

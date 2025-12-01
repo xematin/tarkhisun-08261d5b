@@ -105,9 +105,9 @@ const IslamQalaGuide = () => {
                 </div>
 
                 <ArticleImage
-                  src="/images/blog/islam-qala-border.webp"
-                  alt="گذرگاه مرزی اسلام قلعه - مرز ایران و افغانستان"
-                  caption="نمایی از گذرگاه مرزی اسلام قلعه در مرز ایران و افغانستان"
+                  src="/images/blog/afghanistan-iran-map.webp"
+                  alt="نقشه مرز ایران و افغانستان - موقعیت گذرگاه اسلام قلعه"
+                  caption="موقعیت جغرافیایی گذرگاه مرزی اسلام قلعه در مرز ایران و افغانستان"
                   priority
                   className="mt-8"
                 />
@@ -190,6 +190,13 @@ const IslamQalaGuide = () => {
                     </CardContent>
                   </Card>
                 </div>
+
+                <ArticleImage
+                  src="/images/blog/islam-qala-border.webp"
+                  alt="گمرک اسلام قلعه - حمل و نقل کالا در مرز ایران و افغانستان"
+                  caption="حمل و نقل کالا در گمرک اسلام قلعه"
+                  className="my-8"
+                />
 
                 {/* Importance */}
                 <div className="mb-12">

@@ -123,9 +123,9 @@ const GeneratorClearanceBandarAbbasGuide = () => {
               </p>
 
               <ArticleImage
-                src="/images/blog/generator-power.webp"
-                alt="ژنراتور برق - دیزل ژنراتور برای ترخیص از گمرک بندرعباس"
-                caption="انواع ژنراتور برق قابل واردات و ترخیص از گمرک"
+                src="/images/blog/generator-diesel.webp"
+                alt="دیزل ژنراتور صنعتی - ترخیص ژنراتور از گمرک بندرعباس"
+                caption="دیزل ژنراتور صنعتی قابل واردات و ترخیص از گمرک"
                 priority
               />
             </header>
@@ -228,6 +228,12 @@ const GeneratorClearanceBandarAbbasGuide = () => {
                 ))}
               </div>
             </section>
+
+            <ArticleImage
+              src="/images/blog/customs-documents.webp"
+              alt="مدارک ترخیص ژنراتور از گمرک - اسناد و مدارک لازم"
+              caption="مدارک و اسناد لازم برای ترخیص ژنراتور از گمرک بندرعباس"
+            />
 
             {/* Clearance Steps */}
             <section className="mb-10">

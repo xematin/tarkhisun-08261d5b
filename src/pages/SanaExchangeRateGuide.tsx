@@ -273,6 +273,12 @@ const SanaExchangeRateGuide = () => {
                 </CardContent>
               </Card>
 
+              <ArticleImage
+                src="/images/blog/exchange-rate-currency.webp"
+                alt="مقایسه نرخ ارز نیما و سنا - تفاوت سامانه‌های ارزی"
+                caption="مقایسه تفاوت نرخ ارز در سامانه‌های نیما و سنا"
+              />
+
               {/* Key Differences */}
               <Card className="mb-12 border-accent/30">
                 <CardHeader>

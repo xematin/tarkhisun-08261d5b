@@ -282,6 +282,12 @@ const ExcavationMachineryGuide = () => {
                 </Card>
               </section>
 
+              <ArticleImage
+                src="/images/blog/excavator-construction.webp"
+                alt="بیل مکانیکی در پروژه ساختمانی - ماشین آلات حفاری"
+                caption="ماشین آلات حفاری در حال کار در پروژه ساختمانی"
+              />
+
               {/* Required Documents */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">

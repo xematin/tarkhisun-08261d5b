@@ -251,6 +251,12 @@ const TahLanjiImportGuide = () => {
                   </div>
                 </div>
 
+                <ArticleImage
+                  src="/images/blog/lanji-port.webp"
+                  alt="بندر لنج - واردات غیررسمی و ریسک‌های قانونی"
+                  caption="بنادر جنوبی ایران - مسیر حمل کالاهای وارداتی"
+                />
+
                 {/* Section 4: ریسک‌ها و عواقب */}
                 <div>
                   <h2 className="heading-secondary mb-6 text-persian flex items-center gap-3">

@@ -307,6 +307,12 @@ const ManifestGuide = () => {
                   </div>
                 </div>
 
+                <ArticleImage
+                  src="/images/blog/cargo-ship-port.webp"
+                  alt="کشتی باری در بندر - مانیفست دریایی"
+                  caption="کشتی باری با مانیفست دریایی در بندر"
+                />
+
                 {/* نقش مانیفست در ترخیص */}
                 <div className="mb-12">
                   <h2 className="heading-secondary mb-6 text-persian">

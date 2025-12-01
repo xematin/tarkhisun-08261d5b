@@ -212,6 +212,12 @@ const BandarAbbasComprehensiveGuide = () => {
               </p>
             </section>
 
+            <ArticleImage
+              src="/images/blog/cargo-ship-port.webp"
+              alt="حمل کالا به بندر شهید رجایی بندرعباس"
+              caption="کشتی‌های باری در اسکله بندر شهید رجایی"
+            />
+
             {/* Section 3: Shipping and Arrival */}
             <section className="mb-10">
               <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">

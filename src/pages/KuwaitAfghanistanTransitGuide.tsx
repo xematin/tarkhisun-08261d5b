@@ -217,6 +217,12 @@ const KuwaitAfghanistanTransitGuide = () => {
                 </div>
               </div>
 
+              <ArticleImage
+                src="/images/blog/customs-documents.webp"
+                alt="اسناد و مدارک ترانزیت کویت به افغانستان"
+                caption="مدارک گمرکی لازم برای ترانزیت کالا"
+              />
+
               <div className="bg-card rounded-lg p-6 border mb-6">
                 <div className="flex items-start gap-3 mb-4">
                   <Clock className="h-6 w-6 text-primary mt-1 flex-shrink-0" />

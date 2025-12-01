@@ -187,6 +187,12 @@ const Article1CommissionGuide = () => {
                 </CardContent>
               </Card>
 
+              <ArticleImage
+                src="/images/blog/legal-documents.webp"
+                alt="بررسی اسناد و مدارک در کمیسیون ماده 1 گمرک"
+                caption="بررسی اسناد و مدارک در جلسات کمیسیون ماده یک"
+              />
+
               {/* Commission Duties */}
               <Card className="card-service mb-8">
                 <CardHeader>

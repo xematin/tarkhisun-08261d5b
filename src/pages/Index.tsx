@@ -211,42 +211,11 @@ const Index = () => {
 
   return (
     <>
+      {/* Hreflang Tags only - All other SEO tags are in index.html to prevent duplicates */}
       <Helmet>
-        {/* SEO Meta Tags - Brand First for Brand Search */}
-        <title>ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا</title>
-        <meta name="description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080" />
-        <meta name="keywords" content="ترخیصان، Tarkhisun، ترخیص کالا بندرعباس، مشاوره گمرکی بندرعباس، ترخیص کالا بندر شهید رجایی، هوش مصنوعی گمرکی، ترخیصان یار، AI گمرکی، مشاور گمرکی بندرعباس، حقوق گمرکی، کمیسیون ماده یک، واردات صادرات، تعرفه گمرکی، خدمات گمرکی، بندر امام خمینی، بندر چابهار، بندر بوشهر، بندر انزلی، کد تعرفه، HS Code، ترخیص فوری" />
-        <meta name="author" content="Tarkhisun" />
-        <meta name="publisher" content="ترخیصان - مشاوره گمرکی بندرعباس" />
-        
-        {/* Canonical URL */}
-        <link rel="canonical" href="https://tarkhisun.ir/" />
-        
-        {/* Hreflang Tags */}
         <link rel="alternate" hrefLang="fa" href="https://tarkhisun.ir/" />
         <link rel="alternate" hrefLang="fa-IR" href="https://tarkhisun.ir/" />
         <link rel="alternate" hrefLang="x-default" href="https://tarkhisun.ir/" />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا" />
-        <meta property="og:description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://tarkhisun.ir/" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="ترخیصان - مشاور امور گمرکی بندرعباس" />
-        <meta property="og:locale" content="fa_IR" />
-        <meta property="og:site_name" content="ترخیصان" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا" />
-        <meta name="twitter:description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080" />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
-        <meta name="twitter:site" content="@tarkhisun" />
-        
-        {/* Hero Image Preload handled by vite-plugin-hero-injection for optimal LCP */}
       </Helmet>
 
       <div className="min-h-screen bg-background">

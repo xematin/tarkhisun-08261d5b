@@ -96,12 +96,20 @@ const Blog = () => {
         {currentPage < totalPages && (
           <link rel="next" href={`${baseUrl}?page=${currentPage + 1}`} />
         )}
-        <meta property="og:title" content="بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا | ترخیصان" />
+        <meta property="og:title" content="بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" />
         <meta property="og:description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="fa_IR" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:site_name" content="ترخیصان" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="بلاگ ترخیصان - مقالات تخصصی گمرکی و ترخیص کالا" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" />
+        <meta name="twitter:description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" />
+        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

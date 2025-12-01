@@ -221,9 +221,9 @@ const Index = () => {
       <div className="min-h-screen bg-background">
         <Header />
 
-        {/* Hidden SEO Content for Brand Keywords */}
+        {/* Hidden SEO Content for Brand Keywords - Using span to avoid duplicate H1 (main H1 is in HeroSection) */}
         <div className="sr-only">
-          <h1>ترخیصان - Tarkhisun</h1>
+          <span><strong>ترخیصان - Tarkhisun</strong></span>
           <p>ترخیصان (Tarkhisun) بهترین مشاور امور گمرکی در بندرعباس با هوش مصنوعی ترخیصان‌یار، اولین سیستم هوش مصنوعی گمرکات ایران. ما با بیش از 20 سال تجربه در ترخیص کالا و مشاوره گمرکی، خدمات حرفه‌ای در بندر شهید رجایی، بندر امام خمینی، بندر چابهار و سایر بنادر ایران ارائه می‌دهیم.</p>
         </div>
 

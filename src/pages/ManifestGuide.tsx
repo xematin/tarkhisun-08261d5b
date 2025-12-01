@@ -7,6 +7,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, FileText, Ship, Plane, Truck, CheckCircle2, AlertCircle } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const ManifestGuide = () => {
   useEffect(() => {
@@ -155,6 +156,14 @@ const ManifestGuide = () => {
                 <p className="text-xl text-muted-foreground leading-relaxed text-persian">
                   مانیفست یکی از مهم‌ترین اسناد گمرکی است که نقش حیاتی در فرآیند ترخیص کالا دارد. در این مقاله به طور کامل با تعریف، انواع، کاربرد و نکات مهم مانیفست آشنا می‌شوید.
                 </p>
+
+                <ArticleImage
+                  src="/images/blog/manifest-documents.webp"
+                  alt="مانیفست گمرکی - اسناد و مدارک حمل کالا در گمرک"
+                  caption="مانیفست بارنامه - سند اصلی حمل و نقل کالا در گمرکات"
+                  priority
+                  className="mt-8"
+                />
               </article>
             </div>
           </section>

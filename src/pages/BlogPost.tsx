@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, User, ArrowRight, CheckCircle, AlertTriangle, FileText } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const BlogPost = () => {
   useEffect(() => {
@@ -132,6 +133,14 @@ const BlogPost = () => {
                     تیم ترخیصان
                   </div>
                 </div>
+
+                <ArticleImage
+                  src="/images/blog/bandar-abbas-port.webp"
+                  alt="بندر شهید رجایی بندرعباس - بزرگترین بندر تجاری ایران برای ترخیص کالا"
+                  caption="نمای بندر شهید رجایی بندرعباس - مرکز اصلی ترخیص کالا در ایران"
+                  priority
+                  className="mt-8"
+                />
               </div>
             </div>
           </section>

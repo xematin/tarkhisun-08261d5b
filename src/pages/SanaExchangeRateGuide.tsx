@@ -8,6 +8,7 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, DollarSign, TrendingUp, Scale, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const SanaExchangeRateGuide = () => {
   useEffect(() => {
@@ -127,6 +128,14 @@ const SanaExchangeRateGuide = () => {
                 <span>⏱️ زمان مطالعه: ۱۶ دقیقه</span>
                 <span>✍️ تیم ترخیصان</span>
               </div>
+
+              <ArticleImage
+                src="/images/blog/sana-currency-exchange.webp"
+                alt="نرخ ارز سنا و نیمایی - تفاوت سامانه‌های ارزی در واردات و صادرات"
+                caption="مقایسه سامانه‌های ارزی سنا و نیما برای واردکنندگان و صادرکنندگان"
+                priority
+                className="mt-8"
+              />
             </div>
           </div>
         </section>

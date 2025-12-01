@@ -7,6 +7,7 @@ import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
 import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, FileText, Clock, Calculator, AlertTriangle, Ship, Package } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const BandarAbbasComprehensiveGuide = () => {
   useEffect(() => {
@@ -108,6 +109,13 @@ const BandarAbbasComprehensiveGuide = () => {
                 <span>•</span>
                 <span>زمان مطالعه: ۲۵ دقیقه</span>
               </div>
+
+              <ArticleImage
+                src="/images/blog/shahid-rajaei-port.webp"
+                alt="گمرک شهید رجایی بندرعباس - بزرگترین بندر تجاری ایران"
+                caption="نمای بندر شهید رجایی - مرکز اصلی ترخیص کالا در ایران"
+                priority
+              />
             </header>
 
             {/* Introduction */}

@@ -6,6 +6,7 @@ import ArticleBreadcrumb from '@/components/ArticleBreadcrumb';
 import RelatedArticles from '@/components/RelatedArticles';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Ship, FileText, Clock, AlertCircle, CheckCircle, MapPin, DollarSign, Shield } from 'lucide-react';
+import ArticleImage from "@/components/ArticleImage";
 
 const KuwaitAfghanistanTransitGuide = () => {
   const navigate = useNavigate();
@@ -63,6 +64,13 @@ const KuwaitAfghanistanTransitGuide = () => {
                 <span>زمان مطالعه: ۱۲ دقیقه</span>
               </div>
             </header>
+
+            <ArticleImage
+              src="/images/blog/transit-truck.webp"
+              alt="ترانزیت کالا از کویت به افغانستان - کامیون حمل بین المللی"
+              caption="ترانزیت کالا در مسیر کویت به افغانستان از طریق ایران"
+              priority
+            />
 
             {/* Introduction */}
             <section className="prose prose-lg max-w-none mb-8">

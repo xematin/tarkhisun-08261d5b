@@ -6,6 +6,7 @@ import ArticleBreadcrumb from '@/components/ArticleBreadcrumb';
 import RelatedArticles from '@/components/RelatedArticles';
 import { Card, CardContent } from '@/components/ui/card';
 import { Phone, FileText, CreditCard, CheckCircle, AlertCircle, Clock, DollarSign, Smartphone } from 'lucide-react';
+import ArticleImage from "@/components/ArticleImage";
 
 const MobileRegistryGuide = () => {
   useEffect(() => {
@@ -118,6 +119,13 @@ const MobileRegistryGuide = () => {
                 </span>
                 <span>تاریخ انتشار: ۱۴۰۴/۸/۲۷</span>
               </div>
+
+              <ArticleImage
+                src="/images/blog/mobile-phone-registry.webp"
+                alt="رجیستری گوشی موبایل - ترخیص تلفن همراه از گمرک"
+                caption="راهنمای ترخیص موبایل و رجیستری گوشی از گمرک"
+                priority
+              />
             </header>
 
             <div className="prose prose-lg max-w-none">

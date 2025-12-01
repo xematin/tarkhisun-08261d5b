@@ -7,6 +7,7 @@ import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
 import RelatedArticles from "@/components/RelatedArticles";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, CheckCircle2, AlertCircle, Calculator, FileCheck } from "lucide-react";
+import ArticleImage from "@/components/ArticleImage";
 
 const GeneratorClearanceBandarAbbasGuide = () => {
   useEffect(() => {
@@ -120,6 +121,13 @@ const GeneratorClearanceBandarAbbasGuide = () => {
               <p className="text-xl text-muted-foreground text-persian leading-relaxed">
                 راهنمای جامع ترخیص ژنراتور از گمرک بندرعباس: انواع ژنراتور، مدارک لازم، کد تعرفه HS، حقوق گمرکی، مراحل واردات و نکات کلیدی
               </p>
+
+              <ArticleImage
+                src="/images/blog/generator-power.webp"
+                alt="ژنراتور برق - دیزل ژنراتور برای ترخیص از گمرک بندرعباس"
+                caption="انواع ژنراتور برق قابل واردات و ترخیص از گمرک"
+                priority
+              />
             </header>
 
             {/* Introduction */}

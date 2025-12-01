@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -7,498 +8,348 @@ import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, User, Phone, Mail } from "lucide-react";
+
 const CustomsTariffGuide = () => {
   useEffect(() => {
-    // Set RTL direction for Persian content
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'fa');
-
-    // SEO Meta Tags
-    document.title = "تعریف و اهمیت تعرفه گمرکی در واردات و صادرات | راهنمای جامع تعرفه کالا";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی، اهمیت تعرفه در تجارت بین‌المللی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'description';
-      meta.content = 'آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی، اهمیت تعرفه در تجارت بین‌المللی';
-      document.head.appendChild(meta);
-    }
-
-    // Keywords Meta Tag
-    const keywords = document.querySelector('meta[name="keywords"]');
-    if (keywords) {
-      keywords.setAttribute('content', 'تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, تعرفه صادرات, حقوق ورودی, مالیات واردات, تعرفه هماهنگ, گمرک ایران, محاسبه تعرفه, انواع تعرفه گمرکی');
-    } else {
-      const meta = document.createElement('meta');
-      meta.name = 'keywords';
-      meta.content = 'تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, تعرفه صادرات, حقوق ورودی, مالیات واردات, تعرفه هماهنگ, گمرک ایران, محاسبه تعرفه, انواع تعرفه گمرکی';
-      document.head.appendChild(meta);
-    }
-
-    // Canonical URL
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://tarkhisun.ir/blog/customs-tariff-guide');
-    } else {
-      const link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      link.setAttribute('href', 'https://tarkhisun.ir/blog/customs-tariff-guide');
-      document.head.appendChild(link);
-    }
-
-    // Open Graph Tags
-    const setOGTag = (property: string, content: string) => {
-      let tag = document.querySelector(`meta[property="${property}"]`);
-      if (tag) {
-        tag.setAttribute('content', content);
-      } else {
-        tag = document.createElement('meta');
-        tag.setAttribute('property', property);
-        tag.setAttribute('content', content);
-        document.head.appendChild(tag);
-      }
-    };
-    setOGTag('og:title', 'تعریف و اهمیت تعرفه گمرکی در واردات و صادرات');
-    setOGTag('og:description', 'راهنمای کامل تعرفه گمرکی، انواع تعرفه کالا و نحوه محاسبه حقوق ورودی');
-    setOGTag('og:type', 'article');
-    setOGTag('og:locale', 'fa_IR');
-
-    // Structured Data for Article
-    const articleData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "تعریف و اهمیت تعرفه گمرکی در واردات و صادرات",
-      "description": "آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی",
-      "author": {
-        "@type": "Organization",
-        "name": "ترخیصان - مشاوره امور گمرکی بندرعباس"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "ترخیصان",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "بندرعباس",
-          "addressRegion": "هرمزگان",
-          "addressCountry": "IR"
-        }
-      },
-      "datePublished": "2024-09-30",
-      "dateModified": "2024-09-30",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": window.location.href
-      },
-      "keywords": "تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, حقوق ورودی"
-    };
-    
-    // BreadcrumbList Structured Data
-    const breadcrumbData = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "خانه",
-          "item": window.location.origin + "/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "بلاگ",
-          "item": window.location.origin + "/blog"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "تعریف و اهمیت تعرفه گمرکی",
-          "item": window.location.href
-        }
-      ]
-    };
-
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@graph": [articleData, breadcrumbData]
-    };
-    
-    let scriptTag = document.querySelector('script[type="application/ld+json"]');
-    if (scriptTag) {
-      scriptTag.textContent = JSON.stringify(structuredData);
-    } else {
-      scriptTag = document.createElement('script');
-      scriptTag.setAttribute('type', 'application/ld+json');
-      scriptTag.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(scriptTag);
-    }
+    window.scrollTo(0, 0);
   }, []);
-  return <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main>
-        <ArticleBreadcrumb category="تعرفه و مالیات" articleTitle="تعریف و اهمیت تعرفه گمرکی در واردات و صادرات" />
-        
-        <article className="py-8">
-          <div className="container mx-auto px-4" dir="rtl">
-            <div className="max-w-7xl mx-auto">
 
-              {/* Article Header */}
-              <header className="mb-12 text-center max-w-4xl mx-auto">
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "تعریف و اهمیت تعرفه گمرکی در واردات و صادرات",
+        "description": "آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی",
+        "image": "https://tarkhisun.ir/og-image.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "ترخیصان - مشاوره امور گمرکی بندرعباس"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ترخیصان",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://tarkhisun.ir/logo.png"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "بندرعباس",
+            "addressRegion": "هرمزگان",
+            "addressCountry": "IR"
+          }
+        },
+        "datePublished": "2024-09-30",
+        "dateModified": "2024-09-30",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://tarkhisun.ir/blog/customs-tariff-guide"
+        },
+        "keywords": "تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, حقوق ورودی"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "خانه",
+            "item": "https://tarkhisun.ir/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "بلاگ",
+            "item": "https://tarkhisun.ir/blog"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "تعریف و اهمیت تعرفه گمرکی"
+          }
+        ]
+      }
+    ]
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>تعریف و اهمیت تعرفه گمرکی در واردات و صادرات | راهنمای جامع تعرفه کالا</title>
+        <meta name="description" content="آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی، اهمیت تعرفه در تجارت بین‌المللی" />
+        <meta name="keywords" content="تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, تعرفه صادرات, حقوق ورودی, مالیات واردات, تعرفه هماهنگ, گمرک ایران, محاسبه تعرفه, انواع تعرفه گمرکی" />
+        <link rel="canonical" href="https://tarkhisun.ir/blog/customs-tariff-guide" />
+        <meta property="og:title" content="تعریف و اهمیت تعرفه گمرکی در واردات و صادرات" />
+        <meta property="og:description" content="راهنمای کامل تعرفه گمرکی، انواع تعرفه کالا و نحوه محاسبه حقوق ورودی" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://tarkhisun.ir/blog/customs-tariff-guide" />
+        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:locale" content="fa_IR" />
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Helmet>
+
+      <div className="min-h-screen bg-background">
+        <Header />
+        
+        <main>
+          <ArticleBreadcrumb 
+            category="تعرفه و مالیات"
+            articleTitle="تعریف و اهمیت تعرفه گمرکی"
+          />
+
+          {/* Hero Section */}
+          <section className="py-12 bg-gradient-to-br from-secondary to-white">
+            <div className="container mx-auto px-4" dir="rtl">
+              <div className="max-w-4xl mx-auto">
                 <div className="mb-6">
-                  <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1 rounded-full text-persian">
+                  <span className="text-sm font-medium text-accent bg-accent/15 px-3 py-2 rounded-full text-persian">
                     تعرفه و مالیات
                   </span>
                 </div>
-                
+
                 <h1 className="heading-primary mb-6 text-persian">
                   تعریف و اهمیت تعرفه گمرکی
-                  <br />
-                  <span className="text-accent">در واردات و صادرات</span>
+                  <span className="text-accent block">در واردات و صادرات</span>
                 </h1>
-                
+
                 <p className="text-xl text-muted-foreground mb-8 text-persian leading-relaxed">
-                  راهنمای جامع تعرفه گمرکی، انواع تعرفه کالا، نحوه محاسبه حقوق ورودی و عوارض گمرکی برای واردکنندگان و صادرکنندگان
+                  آشنایی کامل با تعرفه گمرکی، انواع تعرفه کالا، نحوه محاسبه حقوق ورودی و عوارض گمرکی و اهمیت آن در تجارت بین‌المللی
                 </p>
-                
-                <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground text-persian">
+
+                <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground text-persian">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
-                    <span>۱۴۰۳/۷/۹</span>
+                    ۱۴۰۳/۷/۱۰
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
-                    <span>۱۲ دقیقه مطالعه</span>
+                    ۱۴ دقیقه مطالعه
                   </div>
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4" />
-                    <span>تیم ترخیصان</span>
+                    تیم ترخیصان
                   </div>
                 </div>
-              </header>
+              </div>
+            </div>
+          </section>
 
-              <div className="grid lg:grid-cols-12 gap-8">
-                
-                {/* Main Content */}
-                <div className="lg:col-span-8">
-                  <div className="prose prose-lg max-w-none text-persian">
+          {/* Main Content */}
+          <section className="py-16">
+            <div className="container mx-auto px-4" dir="rtl">
+              <div className="max-w-4xl mx-auto">
+                <div className="grid lg:grid-cols-3 gap-12">
+                  
+                  {/* Main Content */}
+                  <div className="lg:col-span-2 space-y-8">
                     
-                    {/* Section 1 */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">تعرفه گمرکی چیست؟</h2>
-                      <div className="space-y-4 text-foreground leading-relaxed">
-                        <p>
-                          <strong>تعرفه گمرکی</strong> (Customs Tariff) به مجموعه نرخ‌ها و حقوق ورودی یا خروجی گفته می‌شود که دولت‌ها بر کالاهای وارداتی و صادراتی اعمال می‌کنند. این تعرفه‌ها معمولاً به صورت درصدی از ارزش کالا یا به صورت مبلغ ثابت برای هر واحد کالا تعیین می‌شوند.
-                        </p>
-                        <p>
-                          تعرفه گمرکی یکی از مهم‌ترین ابزارهای سیاست تجاری کشورها است که اهداف مختلفی از جمله حمایت از تولید داخلی، ایجاد درآمد برای دولت، کنترل واردات و تنظیم تراز تجاری را دنبال می‌کند. برای درک بهتر هزینه‌های <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا</Link>، آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کد HS</Link> و <Link to="/blog/customs-exchange-rate-guide" className="text-accent hover:underline">نرخ ارز گمرکی</Link> ضروری است.
-                        </p>
-                      </div>
-                    </section>
+                    {/* Introduction */}
+                    <div className="prose prose-lg max-w-none text-persian">
+                      <p className="text-lg leading-relaxed text-muted-foreground">
+                        <strong>تعرفه گمرکی</strong> یکی از مهم‌ترین مفاهیم در{" "}
+                        <Link to="/blog/import-export-guide-iran" className="text-primary hover:underline">
+                          تجارت بین‌المللی
+                        </Link>{" "}
+                        است که تأثیر مستقیم بر هزینه نهایی کالاهای وارداتی و صادراتی دارد. درک صحیح تعرفه گمرکی به بازرگانان کمک می‌کند تا محاسبات دقیق‌تری از هزینه‌های خود داشته باشند.
+                      </p>
+                    </div>
 
-                    {/* Section 2 */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">انواع تعرفه گمرکی</h2>
+                    {/* Definition */}
+                    <Card className="card-service">
+                      <CardContent className="p-6">
+                        <h2 className="heading-tertiary text-persian mb-4">تعرفه گمرکی چیست؟</h2>
+                        <div className="space-y-4 text-persian">
+                          <p>
+                            <strong>تعرفه گمرکی</strong> به مجموعه قوانین و مقرراتی گفته می‌شود که نرخ حقوق ورودی و خروجی کالاها را تعیین می‌کند. 
+                            این تعرفه‌ها بر اساس{" "}
+                            <Link to="/blog/hs-code-guide" className="text-primary hover:underline">
+                              کد HS کالا
+                            </Link>{" "}
+                            مشخص می‌شوند.
+                          </p>
+                          <p>
+                            تعرفه گمرکی ابزاری برای کنترل واردات و صادرات، حمایت از تولید داخلی و کسب درآمد برای دولت است.
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Types of Tariffs */}
+                    <div>
+                      <h2 className="heading-tertiary mb-6 text-persian">انواع تعرفه گمرکی</h2>
                       
-                      <Card className="mb-6 border-r-4 border-r-accent">
-                        <CardContent className="p-6">
-                      <h3 className="text-xl mb-4 text-persian"><strong>۱. تعرفه حقوق ورودی (Import Duty)</strong></h3>
-                      <p className="text-muted-foreground text-persian leading-relaxed">
-                        این نوع تعرفه بر کالاهای وارداتی اعمال می‌شود و معمولاً به عنوان درصدی از ارزش گمرکی کالا محاسبه می‌گردد. نرخ این تعرفه بر اساس نوع کالا، کشور مبدأ و توافقات تجاری متفاوت است.
-                      </p>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="mb-6 border-r-4 border-r-accent">
-                        <CardContent className="p-6">
-                      <h3 className="text-xl mb-4 text-persian"><strong>۲. سود بازرگانی</strong></h3>
-                      <p className="text-muted-foreground text-persian leading-relaxed">
-                        سود بازرگانی یک نوع عوارض است که به منظور حمایت از تولیدکنندگان داخلی و جبران اختلاف قیمت کالای داخلی و خارجی اخذ می‌شود. این نرخ معمولاً برای کالاهایی که تولید داخلی دارند بالاتر است.
-                      </p>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="mb-6 border-r-4 border-r-accent">
-                        <CardContent className="p-6">
-                      <h3 className="text-xl mb-4 text-persian"><strong>۳. مالیات بر ارزش افزوده (VAT)</strong></h3>
-                      <p className="text-muted-foreground text-persian leading-relaxed">
-                        مالیات بر ارزش افزوده بر روی ارزش کالا به اضافه حقوق ورودی و سایر عوارض محاسبه می‌شود. این مالیات در ایران معمولاً ۹ درصد است و بر تمام کالاهای وارداتی اعمال می‌گردد.
-                      </p>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="border-r-4 border-r-accent">
-                        <CardContent className="p-6">
-                      <h3 className="text-xl mb-4 text-persian"><strong>۴. عوارض ویژه</strong></h3>
-                      <p className="text-muted-foreground text-persian leading-relaxed">
-                        برخی کالاها مشمول عوارض ویژه‌ای می‌شوند که بر اساس سیاست‌های خاص اقتصادی و حمایتی تعیین می‌گردند. این عوارض ممکن است شامل حقوق پادمپینگ، حقوق تلافی‌جویانه و سایر عوارض باشد.
-                      </p>
-                        </CardContent>
-                      </Card>
-                    </section>
-
-                    {/* Section 3 */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">اهمیت تعرفه گمرکی در تجارت بین‌المللی</h2>
-                      <div className="bg-secondary/30 rounded-xl p-6 mb-6">
-                        <ul className="space-y-4 text-foreground text-persian">
-                          <li className="flex items-start gap-3">
-                            <span className="text-accent text-xl mt-1">✓</span>
-                            <div>
-                              <strong>حمایت از تولید داخلی:</strong> با اعمال تعرفه‌های بالا بر کالاهای وارداتی، تولیدات داخلی رقابت‌پذیرتر می‌شوند و از صنایع داخلی حمایت می‌گردد.
-                            </div>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <span className="text-accent text-xl mt-1">✓</span>
-                            <div>
-                              <strong>ایجاد درآمد دولتی:</strong> تعرفه‌های گمرکی یکی از منابع مهم درآمد دولت‌ها به شمار می‌روند که برای تأمین بودجه و هزینه‌های عمومی استفاده می‌شود.
-                            </div>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <span className="text-accent text-xl mt-1">✓</span>
-                            <div>
-                              <strong>تنظیم تراز تجاری:</strong> دولت‌ها با تنظیم تعرفه‌ها می‌توانند واردات و صادرات را کنترل کرده و تراز تجاری کشور را مدیریت کنند.
-                            </div>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <span className="text-accent text-xl mt-1">✓</span>
-                            <div>
-                              <strong>حمایت از اشتغال:</strong> با محدود کردن واردات کالاهای خارجی، اشتغال در بخش‌های تولیدی داخلی حفظ و توسعه می‌یابد.
-                            </div>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <span className="text-accent text-xl mt-1">✓</span>
-                            <div>
-                              <strong>کنترل کیفیت:</strong> تعرفه‌های متفاوت می‌تواند مشوقی برای واردات کالاهای باکیفیت و بازدارنده برای کالاهای بی‌کیفیت باشد.
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </section>
-
-                    {/* Section 4 */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">نحوه محاسبه تعرفه گمرکی</h2>
-                      <div className="space-y-4 text-foreground leading-relaxed">
-                        <p>
-                          محاسبه تعرفه گمرکی بر اساس فرمول زیر انجام می‌شود:
-                        </p>
-                        
-                        <Card className="bg-accent/5 border-2 border-accent/20">
+                      <div className="space-y-4">
+                        <Card className="card-service">
                           <CardContent className="p-6">
-                            <div className="text-center space-y-4">
-                              <p className="text-lg font-semibold text-persian">فرمول کلی محاسبه:</p>
-                              <div className="bg-background/50 rounded-lg p-4 font-mono text-sm">
-                                <p className="mb-2">ارزش گمرکی = CIF (هزینه کالا + حمل + بیمه)</p>
-                                <p className="mb-2">حقوق ورودی = ارزش گمرکی × نرخ تعرفه</p>
-                                <p className="mb-2">سود بازرگانی = ارزش گمرکی × نرخ سود بازرگانی</p>
-                                <p>مالیات بر ارزش افزوده = (ارزش گمرکی + حقوق ورودی + سود بازرگانی) × ۹٪</p>
-                              </div>
-                            </div>
+                            <h3 className="font-bold text-lg mb-2 text-persian">۱. تعرفه ارزشی (Ad Valorem)</h3>
+                            <p className="text-muted-foreground text-persian">
+                              درصدی از ارزش کالا که به عنوان حقوق گمرکی پرداخت می‌شود. مثلاً ۱۵٪ ارزش CIF کالا.
+                            </p>
                           </CardContent>
                         </Card>
-
-                        <p className="mt-6">
-                          <strong>مثال عملی:</strong> فرض کنید کالایی با ارزش CIF معادل ۱۰,۰۰۰ دلار وارد می‌شود:
-                        </p>
                         
-                        <ul className="list-disc pr-6 space-y-2 text-muted-foreground text-persian">
-                          <li>حقوق ورودی (۱۵٪): ۱,۵۰۰ دلار</li>
-                          <li>سود بازرگانی (۴٪): ۴۰۰ دلار</li>
-                          <li>ارزش پایه مالیات: ۱۱,۹۰۰ دلار</li>
-                          <li>مالیات بر ارزش افزوده (۹٪): ۱,۰۷۱ دلار</li>
-                          <li><strong>جمع کل هزینه‌های گمرکی: ۲,۹۷۱ دلار</strong></li>
-                        </ul>
-                      </div>
-                    </section>
-
-                    {/* Section 5 */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">عوامل مؤثر بر نرخ تعرفه</h2>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <Card>
-                          <CardContent className="p-4">
-                            <h3 className="font-semibold mb-2 text-persian">نوع کالا</h3>
-                            <p className="text-sm text-muted-foreground text-persian">
-                              کالاهای ضروری معمولاً تعرفه کمتری دارند در حالی که کالاهای لوکس تعرفه بالاتری دارند
+                        <Card className="card-service">
+                          <CardContent className="p-6">
+                            <h3 className="font-bold text-lg mb-2 text-persian">۲. تعرفه خاص (Specific)</h3>
+                            <p className="text-muted-foreground text-persian">
+                              مبلغ ثابتی به ازای هر واحد کالا (وزن، تعداد، حجم). مثلاً ۱۰۰ دلار به ازای هر تن.
                             </p>
                           </CardContent>
                         </Card>
-
-                        <Card>
-                          <CardContent className="p-4">
-                            <h3 className="font-semibold mb-2 text-persian">کشور مبدأ</h3>
-                            <p className="text-sm text-muted-foreground text-persian">
-                              کشورهایی که با ایران توافقات تجاری دارند ممکن است از تعرفه‌های ترجیحی بهره‌مند شوند
-                            </p>
-                          </CardContent>
-                        </Card>
-
-                        <Card>
-                          <CardContent className="p-4">
-                            <h3 className="font-semibold mb-2 text-persian">کد تعرفه (HS Code)</h3>
-                            <p className="text-sm text-muted-foreground text-persian">
-                              هر کالا بر اساس کد HS خود دارای نرخ تعرفه مشخصی است که در تعرفه مقررات صادرات و واردات مشخص شده
-                            </p>
-                          </CardContent>
-                        </Card>
-
-                        <Card>
-                          <CardContent className="p-4">
-                            <h3 className="font-semibold mb-2 text-persian">سیاست‌های تجاری</h3>
-                            <p className="text-sm text-muted-foreground text-persian">
-                              دولت می‌تواند بر اساس سیاست‌های اقتصادی و حمایتی، نرخ تعرفه‌ها را تغییر دهد
+                        
+                        <Card className="card-service">
+                          <CardContent className="p-6">
+                            <h3 className="font-bold text-lg mb-2 text-persian">۳. تعرفه مرکب (Mixed)</h3>
+                            <p className="text-muted-foreground text-persian">
+                              ترکیبی از تعرفه ارزشی و خاص. مثلاً ۱۰٪ ارزش به علاوه ۵۰ دلار به ازای هر واحد.
                             </p>
                           </CardContent>
                         </Card>
                       </div>
-                    </section>
+                    </div>
 
-                    {/* Section 6 */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">نکات مهم برای واردکنندگان</h2>
-                      <Card className="bg-accent/5">
-                        <CardContent className="p-6">
-                          <ul className="space-y-3 text-foreground text-persian">
-                            <li className="flex items-start gap-3">
-                              <span className="text-accent text-lg mt-1">⚠️</span>
-                              <span>قبل از واردات، حتماً نرخ تعرفه کالای خود را از طریق کد HS بررسی کنید</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                              <span className="text-accent text-lg mt-1">⚠️</span>
-                              <span>از معافیت‌ها و مشوق‌های تعرفه‌ای مطلع شوید</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                              <span className="text-accent text-lg mt-1">⚠️</span>
-                              <span>تغییرات تعرفه‌ها را به صورت منظم پیگیری کنید</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                              <span className="text-accent text-lg mt-1">⚠️</span>
-                              <span>هزینه‌های تعرفه را در محاسبات قیمت تمام شده کالا در نظر بگیرید</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                              <span className="text-accent text-lg mt-1">⚠️</span>
-                              <span>از مشاوران گمرکی برای محاسبه دقیق هزینه‌ها استفاده کنید</span>
-                            </li>
-                          </ul>
-                        </CardContent>
-                      </Card>
-                    </section>
-
-                    {/* Conclusion */}
-                    <section className="mb-12">
-                      <h2 className="heading-secondary mb-6 text-persian">جمع‌بندی</h2>
-                      <div className="space-y-4 text-foreground leading-relaxed">
-                        <p>
-                          تعرفه گمرکی یکی از مهم‌ترین عوامل تأثیرگذار بر هزینه واردات و صادرات است که شناخت دقیق آن برای فعالان حوزه تجارت بین‌المللی ضروری است. با درک صحیح از انواع تعرفه‌ها، نحوه محاسبه آن‌ها و عوامل مؤثر بر نرخ‌ها، می‌توان تصمیمات بهتری در خصوص واردات کالا اتخاذ کرد.
-                        </p>
-                        <p>
-                          توصیه می‌شود قبل از هرگونه اقدام برای واردات، با کارشناسان و مشاوران گمرکی مشورت کنید تا از آخرین تعرفه‌ها، معافیت‌ها و تغییرات قوانین مطلع شوید.
-                        </p>
-                      </div>
-                    </section>
-
-                  </div>
-                </div>
-
-                {/* Sidebar */}
-                <aside className="lg:col-span-4">
-                  <div className="sticky top-8 space-y-6">
-                    
-                    {/* CTA Card */}
-                    <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold mb-4 text-persian">نیاز به مشاوره دارید؟</h3>
-                        <p className="text-sm text-muted-foreground mb-4 text-persian">
-                          کارشناسان ما آماده ارائه مشاوره در زمینه تعرفه گمرکی و محاسبه هزینه‌های واردات هستند
-                        </p>
-                        <Button variant="cta" className="w-full text-persian">
-                          دریافت مشاوره رایگان
-                        </Button>
-                      </CardContent>
-                    </Card>
-
-                    {/* Table of Contents */}
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold mb-4 text-persian">فهرست مطالب</h3>
-                        <ul className="space-y-2 text-sm text-persian">
-                          <li>
-                            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
-                              تعرفه گمرکی چیست؟
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
-                              انواع تعرفه گمرکی
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
-                              اهمیت تعرفه گمرکی
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
-                              نحوه محاسبه تعرفه
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
-                              عوامل مؤثر بر نرخ تعرفه
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
-                              نکات مهم برای واردکنندگان
-                            </a>
-                          </li>
-                        </ul>
-                      </CardContent>
-                    </Card>
-
-                    {/* Contact Info */}
-                    <Card className="bg-secondary/50">
-                      <CardContent className="p-6">
-                        <h3 className="font-semibold mb-4 text-persian">تماس با ما</h3>
-                        <div className="space-y-3 text-sm text-persian">
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            <Phone className="w-4 h-4 text-accent" />
-                            <span>موبایل : 09177380080</span>
+                    {/* Importance */}
+                    <div>
+                      <h2 className="heading-tertiary mb-6 text-persian">اهمیت تعرفه گمرکی</h2>
+                      
+                      <div className="space-y-3">
+                        {[
+                          "تعیین هزینه نهایی کالای وارداتی",
+                          "حمایت از تولیدات داخلی",
+                          "کسب درآمد برای دولت",
+                          "کنترل حجم واردات و صادرات",
+                          "اجرای سیاست‌های تجاری",
+                          "تنظیم بازار داخلی"
+                        ].map((item, index) => (
+                          <div key={index} className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg text-persian">
+                            <span className="w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-sm font-bold">
+                              {index + 1}
+                            </span>
+                            <span>{item}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            <Mail className="w-4 h-4 text-accent" />
-                            <span>ایمیل : info@tarkhisan.ir</span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Calculation */}
+                    <Card className="card-service">
+                      <CardContent className="p-6">
+                        <h2 className="heading-tertiary text-persian mb-4">نحوه محاسبه تعرفه گمرکی</h2>
+                        <div className="space-y-4 text-persian">
+                          <p>
+                            برای محاسبه تعرفه گمرکی، ابتدا باید <strong>ارزش گمرکی</strong> کالا مشخص شود:
+                          </p>
+                          <div className="bg-accent/10 p-4 rounded-lg">
+                            <p className="font-mono text-center text-lg">
+                              ارزش گمرکی = ارزش CIF کالا × <Link to="/blog/customs-exchange-rate-guide" className="text-accent hover:underline">نرخ ارز گمرکی</Link>
+                            </p>
+                          </div>
+                          <p>
+                            سپس حقوق ورودی بر اساس درصد تعرفه محاسبه می‌شود:
+                          </p>
+                          <div className="bg-accent/10 p-4 rounded-lg">
+                            <p className="font-mono text-center text-lg">
+                              حقوق ورودی = ارزش گمرکی × درصد تعرفه
+                            </p>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
+                    {/* Factors */}
+                    <div>
+                      <h2 className="heading-tertiary mb-6 text-persian">عوامل مؤثر بر تعرفه گمرکی</h2>
+                      
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {[
+                          { title: "نوع کالا", desc: "کالاهای ضروری تعرفه کمتری دارند" },
+                          { title: "کشور مبدأ", desc: "توافقات تجاری بر تعرفه تأثیر می‌گذارد" },
+                          { title: "سیاست‌های حمایتی", desc: "حمایت از تولید داخلی" },
+                          { title: "شرایط اقتصادی", desc: "تورم و نرخ ارز" }
+                        ].map((item, index) => (
+                          <Card key={index} className="card-service">
+                            <CardContent className="p-4">
+                              <h3 className="font-bold mb-1 text-persian">{item.title}</h3>
+                              <p className="text-sm text-muted-foreground text-persian">{item.desc}</p>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-8 rounded-2xl">
+                      <h2 className="text-2xl font-bold mb-4 text-persian">نیاز به مشاوره در محاسبه تعرفه دارید؟</h2>
+                      <p className="mb-6 opacity-90 text-persian">
+                        تیم متخصص ترخیصان با دانش کامل از تعرفه‌های گمرکی، آماده کمک به شما در محاسبه هزینه‌های{" "}
+                        <Link to="/blog/bandar-abbas-comprehensive-clearance-guide" className="text-primary-foreground underline">ترخیص کالا</Link> است.
+                      </p>
+                      <Button asChild size="lg" variant="secondary">
+                        <Link to="/#contact">
+                          درخواست مشاوره رایگان
+                          <ArrowLeft className="mr-2 w-5 h-5" />
+                        </Link>
+                      </Button>
+                    </div>
+
                   </div>
-                </aside>
 
-              </div>
+                  {/* Sidebar */}
+                  <div className="lg:col-span-1 space-y-6">
+                    <Card className="card-service sticky top-24">
+                      <CardContent className="p-6">
+                        <h3 className="font-bold text-lg mb-4 text-persian">مشاوره تخصصی گمرکی</h3>
+                        <p className="text-muted-foreground mb-4 text-persian text-sm">
+                          تیم ترخیصان با بیش از ۲۰ سال تجربه آماده پاسخگویی به سؤالات شماست.
+                        </p>
+                        <div className="space-y-3">
+                          <a href="tel:+989177380080" className="flex items-center gap-2 text-accent hover:underline text-persian">
+                            <Phone className="w-4 h-4" />
+                            ۰۹۱۷۷۳۸۰۰۸۰
+                          </a>
+                          <a href="mailto:info@tarkhisun.ir" className="flex items-center gap-2 text-accent hover:underline">
+                            <Mail className="w-4 h-4" />
+                            info@tarkhisun.ir
+                          </a>
+                        </div>
+                        <Button asChild className="w-full mt-4">
+                          <Link to="/#contact">تماس با ما</Link>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
 
-              {/* Back to Blog */}
-              <div className="mt-12 text-center">
-                <Link to="/blog">
-                  <Button variant="outline" size="lg" className="text-persian">
-                    <ArrowLeft className="ml-2 h-4 w-4" />
-                    بازگشت به بلاگ
+                </div>
+
+                {/* Related Articles */}
+                <div className="mt-16">
+                  <RelatedArticles currentPostId={3} />
+                </div>
+
+                {/* Back to Blog */}
+                <div className="text-center mt-12">
+                  <Button asChild variant="outline">
+                    <Link to="/blog">
+                      <ArrowLeft className="ml-2 w-4 h-4 rotate-180" />
+                      بازگشت به بلاگ
+                    </Link>
                   </Button>
-                </Link>
+                </div>
+
               </div>
-
             </div>
-          </div>
-        </article>
+          </section>
+        </main>
 
-        {/* Related Articles */}
-        <RelatedArticles currentPostId={3} />
-      </main>
-      
-      <Footer />
-    </div>;
+        <Footer />
+      </div>
+    </>
+  );
 };
+
 export default CustomsTariffGuide;

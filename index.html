@@ -3,26 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    
+
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1a472a">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ترخیصان">
-    <link rel="apple-touch-icon" href="/logo.png">
-    <link rel="manifest" href="/manifest.webmanifest">
-    
+    <meta name="theme-color" content="#1a472a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ترخیصان" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
     <!-- LCP Hero Image Preload - Generated dynamically by vite-plugin-lcp-preload -->
-    
+
     <!-- Preload only critical font (regular weight) for instant text render -->
-    <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2" as="font" type="font/woff2" crossorigin>
-    
+    <link
+      rel="preload"
+      href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <!-- Critical CSS for Hero Section - Inline for instant render -->
     <style>
       /* Critical Hero Image Styles */
       #hero-initial-image{position:absolute;inset:0;z-index:0;pointer-events:none;}
       #hero-initial-image img{width:100%;height:100%;object-fit:cover;}
-      
+
       /* Hero Gradient & Animations */
       .hero-gradient{background:linear-gradient(135deg,hsl(var(--primary)),hsl(var(--accent)));}
       .fade-in-up{opacity:0;transform:translateY(30px);transition:opacity .8s ease-out,transform .8s ease-out;}
@@ -34,90 +40,102 @@
       .btn-hero{background:linear-gradient(135deg,hsl(var(--accent)),hsl(var(--accent-light)));box-shadow:0 4px 12px hsl(var(--accent)/0.3);transition:all .3s cubic-bezier(.4,0,.2,1);}
       .btn-hero:hover{transform:translateY(-2px);box-shadow:0 8px 20px hsl(var(--accent)/0.4);}
     </style>
-    
+
     <!-- Preconnect to external resources for faster DNS resolution -->
-    <link rel="preconnect" href="https://storage.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
-    <link rel="preconnect" href="https://gomrok24.com" crossorigin>
-    
+    <link rel="preconnect" href="https://storage.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://gomrok24.com" crossorigin />
+
     <!-- DNS Prefetch for other resources -->
-    <link rel="dns-prefetch" href="https://n8n.tarkhisun.ir">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    
+    <link rel="dns-prefetch" href="https://n8n.tarkhisun.ir" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
     <!-- Primary SEO Meta Tags (Single Source of Truth - No duplicates in React) -->
     <title>ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا</title>
-    <meta name="description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080">
-    <meta name="author" content="Tarkhisun">
-    <meta name="publisher" content="ترخیصان - مشاوره گمرکی بندرعباس">
-    <meta name="keywords" content="ترخیصان، Tarkhisun، ترخیص کالا بندرعباس، مشاوره گمرکی بندرعباس، ترخیص کالا بندر شهید رجایی، هوش مصنوعی گمرکی، ترخیصان یار، AI گمرکی، مشاور گمرکی بندرعباس، حقوق گمرکی، کمیسیون ماده یک، واردات صادرات، تعرفه گمرکی، خدمات گمرکی، بندر امام خمینی، بندر چابهار، بندر بوشهر، بندر انزلی، کد تعرفه، HS Code، ترخیص فوری">
-    
+    <meta
+      name="description"
+      content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080"
+    />
+    <meta name="author" content="Tarkhisun" />
+    <meta name="publisher" content="ترخیصان - مشاوره گمرکی بندرعباس" />
+    <meta
+      name="keywords"
+      content="ترخیصان، Tarkhisun، ترخیص کالا بندرعباس، مشاوره گمرکی بندرعباس، ترخیص کالا بندر شهید رجایی، هوش مصنوعی گمرکی، ترخیصان یار، AI گمرکی، مشاور گمرکی بندرعباس، حقوق گمرکی، کمیسیون ماده یک، واردات صادرات، تعرفه گمرکی، خدمات گمرکی، بندر امام خمینی، بندر چابهار، بندر بوشهر، بندر انزلی، کد تعرفه، HS Code، ترخیص فوری"
+    />
+
     <!-- Robots Meta -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://tarkhisun.ir/">
-    
+    <link rel="canonical" href="https://tarkhisun.ir/" />
+
     <!-- Hreflang Tags -->
-    <link rel="alternate" hreflang="fa" href="https://tarkhisun.ir/">
-    <link rel="alternate" hreflang="fa-IR" href="https://tarkhisun.ir/">
-    <link rel="alternate" hreflang="x-default" href="https://tarkhisun.ir/">
-    
+    <link rel="alternate" hreflang="fa" href="https://tarkhisun.ir/" />
+    <link rel="alternate" hreflang="fa-IR" href="https://tarkhisun.ir/" />
+    <link rel="alternate" hreflang="x-default" href="https://tarkhisun.ir/" />
+
     <!-- Open Graph Tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://tarkhisun.ir/">
-    <meta property="og:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا">
-    <meta property="og:description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080">
-    <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="ترخیصان - مشاور امور گمرکی بندرعباس">
-    <meta property="og:locale" content="fa_IR">
-    <meta property="og:site_name" content="ترخیصان">
-    
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tarkhisun.ir/" />
+    <meta property="og:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا" />
+    <meta
+      property="og:description"
+      content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080"
+    />
+    <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ترخیصان - مشاور امور گمرکی بندرعباس" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:site_name" content="ترخیصان" />
+
     <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا">
-    <meta name="twitter:description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080">
-    <meta name="twitter:site" content="@tarkhisun">
-    <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg">
-    
-  
-  
-  
-  <link rel="icon" type="image/x-icon" href="https://storage.googleapis.com/gpt-engineer-file-uploads/JblElcVtcxYUM4aeOFzbo1WIaNz2/uploads/1758802559395-3c007755-7c54-42ac-92cf-2f8541f47e1f-removebg.png">
-  
-  <!-- Organization Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
-    "url": "https://tarkhisun.ir",
-    "logo": "https://tarkhisun.ir/logo.png",
-    "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "بندرعباس",
-      "addressRegion": "هرمزگان",
-      "addressCountry": "IR"
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+989177380080",
-      "contactType": "customer service",
-      "areaServed": "IR",
-      "availableLanguage": ["fa", "en"]
-    },
-    "sameAs": ["https://t.me/N8NAutoBotBot"]
-  }
-  </script>
-  
-</head>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا" />
+    <meta
+      name="twitter:description"
+      content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی ترخیصان‌یار. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080"
+    />
+    <meta name="twitter:site" content="@tarkhisun" />
+    <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://storage.googleapis.com/gpt-engineer-file-uploads/JblElcVtcxYUM4aeOFzbo1WIaNz2/uploads/1758802559395-3c007755-7c54-42ac-92cf-2f8541f47e1f-removebg.png"
+    />
+
+    <!-- Organization Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
+        "url": "https://tarkhisun.ir",
+        "logo": "https://tarkhisun.ir/logo.png",
+        "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "بندرعباس",
+          "addressRegion": "هرمزگان",
+          "addressCountry": "IR"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+989177380080",
+          "contactType": "customer service",
+          "areaServed": "IR",
+          "availableLanguage": ["fa", "en"]
+        },
+        "sameAs": ["https://t.me/N8NAutoBotBot"]
+      }
+    </script>
+  </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
+
     <!-- Google Analytics 4 - Deferred for Performance -->
     <script>
       // Defer GA4 loading for better Core Web Vitals
@@ -126,13 +144,13 @@
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RBYRKE10P';
         script.async = true;
         document.head.appendChild(script);
-        
+
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-7RBYRKE10P');
       }
-      
+
       // Load after page is interactive
       if ('requestIdleCallback' in window) {
         requestIdleCallback(loadGA4, { timeout: 3000 });
@@ -140,5 +158,6 @@
         setTimeout(loadGA4, 2000);
       }
     </script>
+    <script src="https://analytics.ahrefs.com/analytics.js" data-key="AHo7wVhkJBPuLlpiV0864Q" async></script>
   </body>
 </html>

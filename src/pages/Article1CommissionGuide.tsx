@@ -127,10 +127,10 @@ const Article1CommissionGuide = () => {
                 </CardHeader>
                 <CardContent className="space-y-4 text-persian">
                   <p className="text-lg leading-relaxed">
-                    <strong>کمیسیون ماده 1</strong> یکی از مهم‌ترین نهادهای حل اختلاف در سیستم گمرکی ایران است که طبق <strong>ماده 1 آیین‌نامه اجرایی قانون امور گمرکی</strong> تشکیل می‌شود. این کمیسیون برای رسیدگی به <strong>اختلافات ارزش گمرکی کالاهای وارداتی</strong> و اعتراضات واردکنندگان به ارزیابی‌های گمرک ایجاد شده است.
+                    <strong>کمیسیون ماده 1</strong> یکی از مهم‌ترین نهادهای حل اختلاف در سیستم گمرکی ایران است که طبق <strong>ماده 1 آیین‌نامه اجرایی قانون امور گمرکی</strong> تشکیل می‌شود. این کمیسیون برای رسیدگی به <strong>اختلافات ارزش گمرکی کالاهای وارداتی</strong> و اعتراضات واردکنندگان به ارزیابی‌های گمرک ایجاد شده است. آشنایی با <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه‌های گمرکی</Link> و <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای HS</Link> برای درک بهتر این موضوع مفید است.
                   </p>
                   <p className="text-lg leading-relaxed">
-                    زمانی که بین واردکننده و گمرک در مورد <strong>ارزش اظهاری کالا</strong> اختلاف نظر وجود داشته باشد، پرونده به کمیسیون ماده 1 ارجاع می‌شود تا با بررسی اسناد و مدارک، تصمیم نهایی را اتخاذ کند.
+                    زمانی که بین واردکننده و گمرک در مورد <strong>ارزش اظهاری کالا</strong> اختلاف نظر وجود داشته باشد، پرونده به کمیسیون ماده 1 ارجاع می‌شود. برای <Link to="/blog/bandar-abbas-comprehensive-clearance-guide" className="text-accent hover:underline">ترخیص کالا از بندرعباس</Link> و سایر گمرکات، آگاهی از این کمیسیون اهمیت دارد.
                   </p>
                 </CardContent>
               </Card>

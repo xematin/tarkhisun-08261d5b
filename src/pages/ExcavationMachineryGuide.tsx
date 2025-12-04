@@ -170,7 +170,7 @@ const ExcavationMachineryGuide = () => {
               {/* Introduction */}
               <section className="mb-12">
                 <p className="text-lg text-muted-foreground leading-relaxed text-persian mb-6">
-                  ترخیص ماشین آلات حفاری و سنگین ساختمانی از گمرک، فرآیندی تخصصی است که نیازمند آگاهی از قوانین، مقررات و تعرفه‌های گمرکی می‌باشد. این راهنما تمام اطلاعات لازم برای واردات قانونی انواع ماشین آلات حفاری شامل بیل مکانیکی (Excavator)، لودر (Loader)، بلدوزر (Bulldozer)، گریدر و کامیون‌های معدنی را در اختیار شما قرار می‌دهد.
+                  ترخیص ماشین آلات حفاری و سنگین ساختمانی از گمرک، فرآیندی تخصصی است که نیازمند آگاهی از قوانین، مقررات و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه‌های گمرکی</Link> می‌باشد. این راهنما تمام اطلاعات لازم از جمله <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای HS</Link> برای واردات قانونی انواع ماشین آلات حفاری شامل بیل مکانیکی (Excavator)، لودر (Loader)، بلدوزر (Bulldozer)، گریدر و کامیون‌های معدنی را در اختیار شما قرار می‌دهد. برای <Link to="/blog/bandar-abbas-comprehensive-clearance-guide" className="text-accent hover:underline">ترخیص از بندرعباس</Link>، با مراحل گمرکی آشنا شوید.
                 </p>
               </section>
 

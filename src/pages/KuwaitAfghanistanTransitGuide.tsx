@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb';
@@ -75,7 +75,7 @@ const KuwaitAfghanistanTransitGuide = () => {
             {/* Introduction */}
             <section className="prose prose-lg max-w-none mb-8">
               <p className="text-lg leading-relaxed text-foreground">
-                ترانزیت کالا از کویت به افغانستان یکی از مسیرهای مهم تجاری در منطقه خاورمیانه و آسیای میانه است. با توجه به موقعیت جغرافیایی استراتژیک کویت و دسترسی به بندر بصره عراق، این مسیر گزینه‌ای مقرون به صرفه برای صادرکنندگان و واردکنندگان به افغانستان محسوب می‌شود. در این راهنما به بررسی جامع فرآیند ترانزیت، مدارک لازم، هزینه‌ها و نکات کلیدی می‌پردازیم.
+                ترانزیت کالا از کویت به افغانستان یکی از مسیرهای مهم تجاری در منطقه خاورمیانه و آسیای میانه است. با توجه به موقعیت جغرافیایی استراتژیک کویت و دسترسی به بندر بصره عراق، این مسیر گزینه‌ای مقرون به صرفه برای صادرکنندگان و واردکنندگان به افغانستان محسوب می‌شود. برای آشنایی با <Link to="/blog/islam-qala-border-crossing-guide" className="text-accent hover:underline">گذرگاه مرزی اسلام قلعه</Link> و <Link to="/blog/incoterms-guide" className="text-accent hover:underline">شرایط تحویل اینکوترمز</Link>، مقالات مرتبط را مطالعه کنید. در این راهنما به بررسی جامع فرآیند ترانزیت، <Link to="/blog/manifest-guide" className="text-accent hover:underline">مدارک لازم</Link>، هزینه‌ها و نکات کلیدی می‌پردازیم.
               </p>
             </section>
 

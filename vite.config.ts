@@ -5,6 +5,37 @@ import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
 // @ts-ignore - Critters types issue
 import Critters from 'critters';
+// @ts-ignore - Prerenderer types issue
+import prerender from '@prerenderer/rollup-plugin';
+
+// All routes to pre-render for SEO
+const routesToPrerender = [
+  '/',
+  '/blog',
+  '/currencies',
+  '/blog/home-appliances-clearance-bandar-abbas-guide',
+  '/blog/mobile-phone-registry-import-guide',
+  '/blog/dubai-to-bandar-abbas-import-guide',
+  '/blog/car-parts-import-clearance-guide',
+  '/blog/ntsw-single-window-trade-guide',
+  '/blog/hs-code-tariff-guide',
+  '/blog/customs-tariff-guide',
+  '/blog/exchange-rate-customs-guide',
+  '/blog/manifest-shipping-document-guide',
+  '/blog/incoterms-international-trade-guide',
+  '/blog/import-export-guide',
+  '/blog/tah-lanji-import-guide',
+  '/blog/sana-exchange-rate-guide',
+  '/blog/business-card-import-guide',
+  '/blog/commission-fee-guide',
+  '/blog/excavation-machinery-import-guide',
+  '/blog/generator-clearance-bandar-abbas-guide',
+  '/blog/water-tank-clearance-guide',
+  '/blog/islam-qala-afghanistan-transit-guide',
+  '/blog/kuwait-afghanistan-transit-guide',
+  '/blog/zero-to-hundred-bandar-abbas-customs-clearance',
+  '/blog/bandar-abbas-comprehensive-clearance-guide',
+];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -244,6 +275,22 @@ export default defineConfig(({ mode }) => ({
       },
       devOptions: {
         enabled: false
+      }
+    }),
+    // Pre-rendering for SEO - generates static HTML for all routes
+    mode === 'production' && prerender({
+      routes: routesToPrerender,
+      renderer: '@prerenderer/renderer-puppeteer',
+      rendererOptions: {
+        maxConcurrentRoutes: 4,
+        renderAfterTime: 3000, // Wait 3 seconds for React to render
+      },
+      postProcess(renderedRoute: any) {
+        // Remove any duplicate hero images that might be injected
+        renderedRoute.html = renderedRoute.html
+          .replace(/<script[^>]*>if\s*\(location\.pathname[^<]*<\/script>/g, '')
+          .replace(/<!--.*?-->/gs, '');
+        return renderedRoute;
       }
     })
   ].filter(Boolean),

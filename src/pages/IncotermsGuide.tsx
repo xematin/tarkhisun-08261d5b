@@ -195,12 +195,12 @@ const IncotermsGuide = () => {
               {/* Introduction */}
               <section className="mb-12">
                 <p className="text-lg leading-relaxed mb-6 text-persian">
-                  <strong>اینکوترمز (Incoterms)</strong> مخفف عبارت International Commercial Terms به معنای "شرایط تجاری بین‌المللی" است که توسط اتاق بازرگانی بین‌المللی (ICC) تدوین شده و مجموعه‌ای از قوانین استاندارد برای تعیین مسئولیت‌ها، هزینه‌ها و ریسک‌های مربوط به حمل و تحویل کالا در تجارت بین‌المللی را مشخص می‌کند.
+                  <strong>اینکوترمز (Incoterms)</strong> مخفف عبارت International Commercial Terms به معنای "شرایط تجاری بین‌المللی" است که توسط اتاق بازرگانی بین‌المللی (ICC) تدوین شده و مجموعه‌ای از قوانین استاندارد برای تعیین مسئولیت‌ها، هزینه‌ها و ریسک‌های مربوط به حمل و تحویل کالا در <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">تجارت بین‌المللی</Link> را مشخص می‌کند. برای <Link to="/blog/dubai-to-abbas-import-guide" className="text-accent hover:underline">واردات از دبی</Link> یا سایر کشورها، آشنایی با این شرایط ضروری است.
                 </p>
                 
                 <div className="bg-accent/10 border-r-4 border-accent p-6 rounded-lg mb-6">
                   <p className="text-persian font-medium">
-                    نکته مهم: اینکوترمز تعیین می‌کند که چه کسی مسئول پرداخت هزینه حمل، بیمه، بارگیری، تخلیه و حقوق گمرکی است و در چه نقطه‌ای مسئولیت و ریسک از فروشنده به خریدار منتقل می‌شود.
+                    نکته مهم: اینکوترمز تعیین می‌کند که چه کسی مسئول پرداخت هزینه حمل، بیمه، بارگیری، تخلیه و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">حقوق گمرکی</Link> است و در چه نقطه‌ای مسئولیت و ریسک از فروشنده به خریدار منتقل می‌شود.
                   </p>
                 </div>
               </section>

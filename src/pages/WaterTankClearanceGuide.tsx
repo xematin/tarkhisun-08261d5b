@@ -164,7 +164,7 @@ const WaterTankClearanceGuide = () => {
             <section className="mb-8">
               <p className="text-lg leading-relaxed text-foreground text-persian">
                 <strong>مخزن ذخیره آب</strong> یکی از محصولات پرتقاضا در بازار ایران است که واردات آن از کشورهای مختلف انجام می‌شود.
-                <strong>ترخیص مخزن آب از گمرک بندرعباس</strong> نیاز به آشنایی با مقررات، استانداردها و مجوزهای لازم دارد.
+                <strong>ترخیص مخزن آب از گمرک بندرعباس</strong> نیاز به آشنایی با مقررات، استانداردها و مجوزهای لازم دارد. برای آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای تعرفه HS</Link> و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">محاسبه حقوق گمرکی</Link>، مقالات مرتبط را مطالعه کنید.
               </p>
             </section>
 

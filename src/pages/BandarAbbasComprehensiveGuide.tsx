@@ -121,7 +121,7 @@ const BandarAbbasComprehensiveGuide = () => {
             {/* Introduction */}
             <section className="mb-8">
               <p className="text-lg leading-relaxed text-foreground">
-                <strong>ترخیص کالا از بندرعباس</strong> یکی از مهم‌ترین فرآیندهای واردات در ایران است. <strong>گمرک شهید رجایی</strong> به عنوان بزرگترین بندر تجاری کشور، سالانه میلیون‌ها تن کالا را پردازش می‌کند. در این راهنمای جامع، تمام مراحل <strong>ترخیص کالا</strong> از صفر تا صد را به صورت گام‌به‌گام توضیح می‌دهیم تا واردکنندگان بتوانند با آگاهی کامل اقدام به واردات کنند.
+                <strong>ترخیص کالا از بندرعباس</strong> یکی از مهم‌ترین فرآیندهای <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات در ایران</Link> است. <strong>گمرک شهید رجایی</strong> به عنوان بزرگترین بندر تجاری کشور، سالانه میلیون‌ها تن کالا را پردازش می‌کند. در این راهنمای جامع، تمام مراحل <strong>ترخیص کالا</strong> از صفر تا صد را به صورت گام‌به‌گام توضیح می‌دهیم. برای آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای HS</Link> و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه‌های گمرکی</Link>، مقالات مرتبط را مطالعه کنید تا واردکنندگان بتوانند با آگاهی کامل اقدام به واردات کنند.
               </p>
             </section>
 

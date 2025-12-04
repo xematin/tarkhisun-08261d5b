@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb';
@@ -150,10 +151,10 @@ const MobileRegistryGuide = () => {
                   رجیستری موبایل چیست؟
                 </h2>
                 <p className="text-foreground/90 leading-relaxed mb-4">
-                  <strong>رجیستری گوشی موبایل</strong> یا <strong>ثبت IMEI</strong> فرآیندی است که برای تمامی تلفن‌های همراه وارداتی به ایران الزامی است. طبق مصوبه سازمان تنظیم مقررات و ارتباطات رادیویی، هر دستگاه موبایلی که از خارج از کشور وارد می‌شود باید در سامانه <strong>رجیستری گمرک</strong> ثبت شود تا بتواند در شبکه‌های تلفن همراه ایران فعالیت کنند.
+                  <strong>رجیستری گوشی موبایل</strong> یا <strong>ثبت IMEI</strong> فرآیندی است که برای تمامی تلفن‌های همراه وارداتی به ایران الزامی است. طبق مصوبه سازمان تنظیم مقررات و ارتباطات رادیویی، هر دستگاه موبایلی که از خارج از کشور وارد می‌شود باید در سامانه <strong>رجیستری گمرک</strong> ثبت شود تا بتواند در شبکه‌های تلفن همراه ایران فعالیت کنند. برای آشنایی با <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه‌های گمرکی</Link> موبایل، مقاله مربوطه را مطالعه کنید.
                 </p>
                 <p className="text-foreground/90 leading-relaxed mb-4">
-                  این سیستم برای جلوگیری از قاچاق گوشی موبایل و کنترل واردات طراحی شده است. اگر گوشی موبایل شما <strong>رجیستری نشود</strong>، پس از مدت زمان مشخصی (معمولاً ۳۰ روز برای مسافران) از دسترسی به شبکه محروم خواهد شد.
+                  این سیستم برای جلوگیری از قاچاق گوشی موبایل و کنترل واردات طراحی شده است. اگر گوشی موبایل شما <strong>رجیستری نشود</strong>، پس از مدت زمان مشخصی (معمولاً ۳۰ روز برای مسافران) از دسترسی به شبکه محروم خواهد شد. برای واردات تجاری موبایل، به <Link to="/blog/business-card-complete-guide" className="text-accent hover:underline">کارت بازرگانی</Link> و <Link to="/blog/ntsw-complete-guide" className="text-accent hover:underline">ثبت سفارش در سامانه جامع تجارت</Link> نیاز دارید.
                 </p>
 
                 <Card className="mt-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">

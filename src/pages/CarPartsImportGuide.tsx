@@ -190,10 +190,10 @@ const CarPartsImportGuide = () => {
                   <Card className="card-service">
                     <CardContent className="p-8">
                       <p className="text-lg leading-relaxed text-persian mb-4">
-                        با توجه به رشد صنعت خودرو در ایران و نیاز روزافزون به <strong>قطعات یدکی باکیفیت</strong>، واردات قطعات خودرو به یکی از حوزه‌های مهم تجاری تبدیل شده است. <strong>ترخیص قطعات یدکی خودرو</strong> از گمرک نیازمند آگاهی از قوانین، مقررات، استانداردها و فرآیندهای گمرکی است.
+                        با توجه به رشد صنعت خودرو در ایران و نیاز روزافزون به <strong>قطعات یدکی باکیفیت</strong>، واردات قطعات خودرو به یکی از حوزه‌های مهم تجاری تبدیل شده است. <strong>ترخیص قطعات یدکی خودرو</strong> از گمرک نیازمند آگاهی از قوانین، مقررات، استانداردها و فرآیندهای گمرکی است. برای درک بهتر <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای تعرفه HS</Link> و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">نحوه محاسبه تعرفه گمرکی</Link>، مقالات مرتبط را مطالعه کنید.
                       </p>
                       <p className="text-lg leading-relaxed text-persian">
-                        در این مقاله جامع، به بررسی کامل <strong>مراحل واردات و ترخیص قطعات یدکی خودرو</strong>، انواع قطعات، مدارک مورد نیاز، کدهای HS، حقوق گمرکی، استانداردهای اجباری، مجوزهای لازم و نکات کلیدی برای موفقیت در این حوزه می‌پردازیم.
+                        در این مقاله جامع، به بررسی کامل <strong>مراحل واردات و ترخیص قطعات یدکی خودرو</strong>، انواع قطعات، مدارک مورد نیاز، کدهای HS، حقوق گمرکی، استانداردهای اجباری، مجوزهای لازم و نکات کلیدی برای موفقیت در این حوزه می‌پردازیم. برای ترخیص از <Link to="/blog/zero-to-hundred-bandar-abbas-customs-clearance" className="text-accent hover:underline">گمرک بندرعباس</Link>، با فرآیندهای این بندر آشنا شوید.
                       </p>
                     </CardContent>
                   </Card>

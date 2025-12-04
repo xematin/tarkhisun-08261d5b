@@ -134,8 +134,8 @@ const GeneratorClearanceBandarAbbasGuide = () => {
             <section className="mb-8">
               <p className="text-lg leading-relaxed text-foreground text-persian">
                 <strong>ژنراتور</strong> یکی از تجهیزات ضروری در صنایع مختلف است که تقاضای زیادی برای واردات آن وجود دارد. 
-                <strong>ترخیص ژنراتور از گمرک بندرعباس</strong> نیاز به شناخت کامل مدارک، تعرفه‌ها و مراحل قانونی دارد.
-                در این راهنما، تمام اطلاعات لازم برای واردات و ترخیص انواع ژنراتور را ارائه می‌دهیم.
+                <strong>ترخیص ژنراتور از گمرک بندرعباس</strong> نیاز به شناخت کامل مدارک، <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه‌های گمرکی</Link> و مراحل قانونی دارد.
+                در این راهنما، تمام اطلاعات لازم از جمله <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای HS</Link> و نحوه <Link to="/blog/ntsw-complete-guide" className="text-accent hover:underline">ثبت سفارش در سامانه جامع تجارت</Link> برای واردات و ترخیص انواع ژنراتور را ارائه می‌دهیم.
               </p>
             </section>
 

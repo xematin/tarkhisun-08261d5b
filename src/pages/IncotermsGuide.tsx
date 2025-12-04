@@ -127,7 +127,7 @@ const IncotermsGuide = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا</title>
-        <meta name="description" content="راهنمای جامع اینکوترمز (Incoterms) - آشنایی با انواع شرایط تحویل بین‌المللی کالا، FOB، CIF، EXW، DAP، DDP و نحوه انتخاب اینکوترمز مناسب برای واردات و صادرات" />
+        <meta name="description" content="راهنمای اینکوترمز: شرایط تحویل بین‌المللی کالا FOB، CIF، EXW، DAP، DDP و انتخاب مناسب برای واردات" />
         <meta name="keywords" content="اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک" />
         <link rel="canonical" href="https://tarkhisun.ir/blog/incoterms-guide" />
         <meta property="og:title" content="اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا" />

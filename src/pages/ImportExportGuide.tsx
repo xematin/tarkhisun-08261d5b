@@ -75,7 +75,7 @@ const ImportExportGuide = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>راهنمای کامل صادرات و واردات در ایران | قوانین، مراحل و نکات مهم</title>
-        <meta name="description" content="راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها، تعرفه گمرکی، محدودیت‌ها و نکات مهم برای تجارت بین‌المللی" />
+        <meta name="description" content="راهنمای صادرات و واردات کالا در ایران: مراحل، مدارک، قوانین، مجوزها و نکات تجارت بین‌المللی" />
         <meta name="keywords" content="صادرات و واردات, صادرات ایران, واردات کالا, تجارت خارجی, گمرک ایران, صادرات کالا, واردات محصول, مجوز صادرات, قوانین واردات, تعرفه گمرکی, بازرگانی خارجی" />
         <link rel="canonical" href="https://tarkhisun.ir/blog/import-export-guide-iran" />
         <meta property="og:title" content="راهنمای کامل صادرات و واردات در ایران" />

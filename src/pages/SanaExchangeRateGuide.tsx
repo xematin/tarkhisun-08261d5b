@@ -77,7 +77,7 @@ const SanaExchangeRateGuide = () => {
     <>
       <Helmet>
         <title>تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل</title>
-        <meta name="description" content="راهنمای جامع تفاوت ارز سنا (SANA) و ارز نیمایی (NIMA)، نحوه تخصیص، نرخ‌ها، مزایا و معایب هر کدام برای واردات و صادرات در گمرک ایران" />
+        <meta name="description" content="راهنمای تفاوت ارز سنا (SANA) و نیمایی (NIMA): نحوه تخصیص، نرخ‌ها و کاربرد در واردات و صادرات" />
         <meta name="keywords" content="ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز, واردات, صادرات, گمرک, سامانه نیما, سامانه سنا" />
         <link rel="canonical" href="https://tarkhisun.ir/blog/sana-exchange-rate-guide" />
         <meta property="og:title" content="تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل" />

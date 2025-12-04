@@ -77,7 +77,7 @@ const NTSWGuide = () => {
     <>
       <Helmet>
         <title>سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده</title>
-        <meta name="description" content="راهنمای جامع سامانه ملی تجارت ایران (NTSW) - آموزش گام به گام ثبت‌نام، صدور مجوز واردات و صادرات، خدمات الکترونیک تجاری و ارتباط با گمرک" />
+        <meta name="description" content="راهنمای سامانه جامع تجارت (NTSW): ثبت‌نام، صدور مجوز واردات و صادرات و خدمات الکترونیک تجاری" />
         <meta name="keywords" content="سامانه جامع تجارت, ntsw, سامانه ملی تجارت, ثبت نام ntsw, واردات و صادرات, مجوز واردات, گواهی ثبت سفارش, پروانه گمرکی, تجارت الکترونیک" />
         <link rel="canonical" href="https://tarkhisun.ir/blog/ntsw-guide" />
         <meta property="og:title" content="سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده" />

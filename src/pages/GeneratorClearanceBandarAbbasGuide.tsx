@@ -79,7 +79,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
     <>
       <Helmet>
         <title>ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک ژنراتور</title>
-        <meta name="description" content="راهنمای جامع ترخیص ژنراتور از گمرک بندرعباس: مدارک لازم، کد تعرفه HS، حقوق گمرکی، مراحل واردات، مجوزهای لازم و نکات کلیدی ترخیص انواع ژنراتور برق" />
+        <meta name="description" content="راهنمای ترخیص ژنراتور از گمرک بندرعباس: مدارک، کد تعرفه، حقوق گمرکی و مراحل واردات دیزل ژنراتور" />
         <meta name="keywords" content="ترخیص ژنراتور بندرعباس, واردات ژنراتور, گمرک ژنراتور, حقوق گمرکی ژنراتور, کد تعرفه ژنراتور, مدارک واردات ژنراتور, ژنراتور برق, ترخیص دیزل ژنراتور, واردات موتور برق" />
         <link rel="canonical" href="https://tarkhisun.ir/blog/generator-clearance-bandar-abbas-guide" />
         <meta property="og:title" content="ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک" />

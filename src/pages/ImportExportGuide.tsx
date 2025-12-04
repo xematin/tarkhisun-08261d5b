@@ -131,7 +131,7 @@ const ImportExportGuide = () => {
               <section className="mb-12">
                 <div className="prose prose-lg max-w-none">
                   <p className="text-lg text-muted-foreground leading-relaxed text-persian mb-6">
-                    صادرات و واردات کالا یکی از مهم‌ترین ارکان اقتصاد هر کشور است که نقش بسزایی در توسعه اقتصادی، ایجاد اشتغال و افزایش درآمد ملی دارد. در ایران نیز با توجه به موقعیت استراتژیک جغرافیایی و دسترسی به بازارهای مختلف، تجارت خارجی اهمیت ویژه‌ای دارد.
+                    صادرات و واردات کالا یکی از مهم‌ترین ارکان اقتصاد هر کشور است که نقش بسزایی در توسعه اقتصادی، ایجاد اشتغال و افزایش درآمد ملی دارد. در ایران نیز با توجه به موقعیت استراتژیک جغرافیایی و دسترسی به بازارهای مختلف، تجارت خارجی اهمیت ویژه‌ای دارد. برای شروع فعالیت تجاری، دریافت <Link to="/blog/business-card-complete-guide" className="text-accent hover:underline">کارت بازرگانی</Link> و آشنایی با <Link to="/blog/ntsw-complete-guide" className="text-accent hover:underline">سامانه جامع تجارت</Link> ضروری است.
                   </p>
                 </div>
               </section>

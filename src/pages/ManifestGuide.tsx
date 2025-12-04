@@ -181,13 +181,13 @@ const ManifestGuide = () => {
                   </h2>
                   
                   <p className="text-lg leading-relaxed text-muted-foreground mb-6 text-persian">
-                    <strong className="text-foreground">مانیفست (Manifest)</strong> یک سند رسمی و اجباری است که توسط شرکت حمل‌ونقل (کشتیرانی، هواپیمایی یا حمل‌ونقل زمینی) تهیه و به گمرک ارائه می‌شود. این سند شامل فهرست کامل محموله‌های موجود در وسیله نقلیه (کشتی، هواپیما، کامیون) است.
+                    <strong className="text-foreground">مانیفست (Manifest)</strong> یک سند رسمی و اجباری است که توسط شرکت حمل‌ونقل (کشتیرانی، هواپیمایی یا حمل‌ونقل زمینی) تهیه و به گمرک ارائه می‌شود. این سند شامل فهرست کامل محموله‌های موجود در وسیله نقلیه (کشتی، هواپیما، کامیون) است و برای <Link to="/blog/bandar-abbas-comprehensive-clearance-guide" className="text-accent hover:underline">ترخیص کالا از بندرعباس</Link> و سایر گمرکات ضروری است.
                   </p>
 
                   <Card className="bg-accent/5 border-accent/20">
                     <CardContent className="pt-6">
                       <p className="text-base text-persian leading-relaxed">
-                        <strong className="text-accent">نکته مهم:</strong> مانیفست باید قبل از ورود وسیله نقلیه به گمرک مقصد، به صورت الکترونیکی در سامانه گمرک ثبت شود. این امر برای کنترل و نظارت بر محموله‌های وارداتی و صادراتی الزامی است.
+                        <strong className="text-accent">نکته مهم:</strong> مانیفست باید قبل از ورود وسیله نقلیه به گمرک مقصد، به صورت الکترونیکی در <Link to="/blog/ntsw-complete-guide" className="text-accent hover:underline">سامانه جامع تجارت</Link> ثبت شود. این امر برای کنترل و نظارت بر محموله‌های وارداتی و صادراتی الزامی است. همچنین آشنایی با <Link to="/blog/incoterms-guide" className="text-accent hover:underline">شرایط تحویل اینکوترمز</Link> برای درک مسئولیت‌های حمل ضروری است.
                       </p>
                     </CardContent>
                   </Card>

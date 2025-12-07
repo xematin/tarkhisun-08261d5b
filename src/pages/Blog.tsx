@@ -86,9 +86,9 @@ const Blog = () => {
   return (
     <>
       <Helmet>
-        <title>بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا</title>
-        <meta name="description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا، قوانین گمرکی و آخرین اخبار تجاری ایران" />
-        <meta name="keywords" content="مشاوره امور گمرکی, بندرعباس, شهید رجایی, ترخیص کالا, واردات, صادرات, گمرک, تجارت بین المللی, قوانین گمرکی, ترخیصان" />
+        <title>{currentPage === 1 ? "بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا" : `بلاگ گمرکی بندرعباس - صفحه ${currentPage} | مقالات ترخیص کالا`}</title>
+        <meta name="description" content={currentPage === 1 ? "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا، قوانین گمرکی و آخرین اخبار تجاری ایران" : `صفحه ${currentPage} از ${totalPages} - مقالات تخصصی گمرکی بندرعباس شهید رجایی و راهنمای ترخیص کالا`} />
+        <meta name="keywords" content="مشاوره امور گمرکی, بندرعباس, شهید رجایی, ترخیص کالا, واردات, صادرات, گمرک, تجارت بین المللی, قوانین گمرکی" />
         <link rel="canonical" href={canonicalUrl} />
         {currentPage > 1 && (
           <link rel="prev" href={currentPage === 2 ? baseUrl : `${baseUrl}?page=${currentPage - 1}`} />
@@ -96,8 +96,8 @@ const Blog = () => {
         {currentPage < totalPages && (
           <link rel="next" href={`${baseUrl}?page=${currentPage + 1}`} />
         )}
-        <meta property="og:title" content="بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" />
-        <meta property="og:description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" />
+        <meta property="og:title" content={currentPage === 1 ? "بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" : `بلاگ گمرکی بندرعباس - صفحه ${currentPage}`} />
+        <meta property="og:description" content={currentPage === 1 ? "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" : `صفحه ${currentPage} از ${totalPages} - مقالات تخصصی گمرکی بندرعباس`} />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="fa_IR" />
         <meta property="og:url" content={canonicalUrl} />
@@ -107,8 +107,8 @@ const Blog = () => {
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="بلاگ ترخیصان - مقالات تخصصی گمرکی و ترخیص کالا" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" />
-        <meta name="twitter:description" content="مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" />
+        <meta name="twitter:title" content={currentPage === 1 ? "بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" : `بلاگ گمرکی - صفحه ${currentPage}`} />
+        <meta name="twitter:description" content={currentPage === 1 ? "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" : `صفحه ${currentPage} از ${totalPages} - مقالات گمرکی`} />
         <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

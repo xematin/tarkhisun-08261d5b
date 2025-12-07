@@ -133,7 +133,62 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static SEO Content for Crawlers - Hidden when React hydrates -->
+      <div id="static-seo-content" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+        <header>
+          <nav aria-label="منوی اصلی">
+            <a href="/">ترخیصان - صفحه اصلی</a>
+            <a href="/blog">بلاگ آموزشی گمرکی</a>
+            <a href="/currencies">نرخ ارز امروز</a>
+          </nav>
+        </header>
+        
+        <main>
+          <h1>ترخیصان - مشاوره امور گمرکی بندرعباس شهید رجایی</h1>
+          <p>مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با بیش از ۲۰ سال تجربه. اولین سیستم هوش مصنوعی تخصصی گمرکات ایران - ترخیصان‌یار.</p>
+          
+          <h2>خدمات گمرکی ترخیصان</h2>
+          <ul>
+            <li>ترخیص کالا از بندرعباس و بندر شهید رجایی</li>
+            <li>مشاوره تخصصی امور گمرکی</li>
+            <li>صدور کمیسیون ماده یک</li>
+            <li>واردات و صادرات کالا</li>
+            <li>محاسبه تعرفه و حقوق گمرکی</li>
+          </ul>
+          
+          <h2>مقالات آموزشی گمرکی</h2>
+          <nav aria-label="مقالات مرتبط">
+            <a href="/blog/home-appliances-clearance-bandar-abbas-guide">راهنمای ترخیص لوازم خانگی از بندرعباس</a>
+            <a href="/blog/dubai-to-bandar-abbas-import-guide">واردات کالا از دبی به بندرعباس</a>
+            <a href="/blog/car-parts-import-complete-guide">راهنمای کامل واردات قطعات خودرو</a>
+            <a href="/blog/ntsw-complete-guide">راهنمای سامانه NTSW</a>
+            <a href="/blog/hs-code-complete-guide">راهنمای کد تعرفه HS Code</a>
+            <a href="/blog/mobile-phone-registry-guide">ترخیص و رجیستری موبایل</a>
+            <a href="/blog/incoterms-complete-guide">اینکوترمز و شرایط تحویل کالا</a>
+            <a href="/blog/generator-clearance-bandar-abbas-guide">ترخیص دیزل ژنراتور</a>
+            <a href="/blog/water-tank-clearance-bandar-abbas-guide">ترخیص مخزن آب</a>
+            <a href="/blog/customs-tariff-calculation-guide">محاسبه تعرفه گمرکی</a>
+          </nav>
+          
+          <h2>بنادر تحت پوشش</h2>
+          <ul>
+            <li>بندرعباس شهید رجایی</li>
+            <li>بندر امام خمینی</li>
+            <li>بندر چابهار</li>
+            <li>بندر بوشهر</li>
+            <li>بندر انزلی</li>
+            <li>بندر کیش</li>
+          </ul>
+          
+          <section>
+            <h2>تماس با ما</h2>
+            <p>تلفن: <a href="tel:+989177380080">۰۹۱۷۷۳۸۰۰۸۰</a></p>
+            <p>آدرس: بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد ۳۱۷</p>
+          </section>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
 
     <!-- Google Analytics 4 - Deferred for Performance -->

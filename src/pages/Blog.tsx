@@ -41,7 +41,7 @@ const Blog = () => {
 
   // Calculate pagination
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
-  const baseUrl = "https://tarkhisun.ir/blog";
+  const baseUrl = "https://tarkhisun.com/blog";
   const canonicalUrl = currentPage === 1 ? baseUrl : `${baseUrl}?page=${currentPage}`;
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Blog = () => {
     "@type": "Blog",
     name: "بلاگ مشاوره امور گمرکی بندرعباس | ترخیصان",
     description: "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا و قوانین گمرکی",
-    url: "https://tarkhisun.ir/blog",
+    url: "https://tarkhisun.com/blog",
     publisher: {
       "@type": "Organization",
       name: "ترخیصان",
@@ -102,14 +102,14 @@ const Blog = () => {
         <meta property="og:locale" content="fa_IR" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:site_name" content="ترخیصان" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="بلاگ ترخیصان - مقالات تخصصی گمرکی و ترخیص کالا" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={currentPage === 1 ? "بلاگ گمرکی بندرعباس | مقالات تخصصی ترخیص کالا" : `بلاگ گمرکی - صفحه ${currentPage}`} />
         <meta name="twitter:description" content={currentPage === 1 ? "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی" : `صفحه ${currentPage} از ${totalPages} - مقالات گمرکی`} />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

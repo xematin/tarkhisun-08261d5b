@@ -24,7 +24,7 @@ const BlogPost = () => {
         "@type": "Article",
         "headline": "راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس",
         "description": "راهنمای گام به گام ترخیص کالا از گمرک شهید رجایی بندرعباس، مدارک لازم، مراحل و نکات مهم برای واردکنندگان",
-        "image": "https://tarkhisun.ir/og-image.jpg",
+        "image": "https://tarkhisun.com/og-image.jpg",
         "author": {
           "@type": "Organization",
           "name": "ترخیصان - مشاوره امور گمرکی"
@@ -34,14 +34,14 @@ const BlogPost = () => {
           "name": "ترخیصان",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://tarkhisun.ir/logo.png"
+            "url": "https://tarkhisun.com/logo.png"
           }
         },
         "datePublished": "2024-09-27",
         "dateModified": "2024-09-27",
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance"
+          "@id": "https://tarkhisun.com/blog/zero-to-hundred-bandar-abbas-customs-clearance"
         },
         "articleSection": "راهنمای ترخیص",
         "keywords": "ترخیص کالا, گمرک شهید رجایی, بندرعباس, مشاوره امور گمرکی"
@@ -53,13 +53,13 @@ const BlogPost = () => {
             "@type": "ListItem",
             "position": 1,
             "name": "خانه",
-            "item": "https://tarkhisun.ir"
+            "item": "https://tarkhisun.com"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "بلاگ",
-            "item": "https://tarkhisun.ir/blog"
+            "item": "https://tarkhisun.com/blog"
           },
           {
             "@type": "ListItem",
@@ -77,17 +77,17 @@ const BlogPost = () => {
         <title>راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس | ترخیصان</title>
         <meta name="description" content="راهنمای گام به گام ترخیص کالا از گمرک شهید رجایی بندرعباس، مدارک لازم، مراحل و نکات مهم برای واردکنندگان" />
         <meta name="keywords" content="ترخیص کالا, گمرک شهید رجایی, بندرعباس, مشاوره امور گمرکی, واردات, صادرات, مدارک گمرکی, کوتاژ, بارنامه" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/zero-to-hundred-bandar-abbas-customs-clearance" />
         <meta property="og:title" content="راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس | ترخیصان" />
         <meta property="og:description" content="راهنمای گام به گام ترخیص کالا از گمرک شهید رجایی بندرعباس، مدارک لازم، مراحل و نکات مهم برای واردکنندگان" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/zero-to-hundred-bandar-abbas-customs-clearance" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/zero-to-hundred-bandar-abbas-customs-clearance" />
         <meta property="og:type" content="article" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس | ترخیصان" />
         <meta name="twitter:description" content="راهنمای گام به گام ترخیص کالا از گمرک شهید رجایی بندرعباس، مدارک لازم، مراحل و نکات مهم" />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>

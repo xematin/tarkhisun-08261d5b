@@ -21,7 +21,7 @@ const BusinessCardGuide = () => {
     "@type": "Article",
     "headline": "کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور",
     "description": "راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور و نحوه درخواست کارت بازرگانی",
-    "image": "https://tarkhisun.ir/og-image.jpg",
+    "image": "https://tarkhisun.com/og-image.jpg",
     "author": {
       "@type": "Organization",
       "name": "ترخیصان"
@@ -31,7 +31,7 @@ const BusinessCardGuide = () => {
       "name": "ترخیصان",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://tarkhisun.ir/logo.png"
+        "url": "https://tarkhisun.com/logo.png"
       },
       "address": {
         "@type": "PostalAddress",
@@ -44,7 +44,7 @@ const BusinessCardGuide = () => {
     "dateModified": "2025-10-03",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://tarkhisun.ir/blog/business-card-complete-guide"
+      "@id": "https://tarkhisun.com/blog/business-card-complete-guide"
     },
     "keywords": "کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات"
   };
@@ -53,8 +53,8 @@ const BusinessCardGuide = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.ir" },
-      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.ir/blog" },
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.com" },
+      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.com/blog" },
       { "@type": "ListItem", "position": 3, "name": "کارت بازرگانی چیست؟" }
     ]
   };
@@ -65,18 +65,18 @@ const BusinessCardGuide = () => {
         <title>کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور</title>
         <meta name="description" content="راهنمای کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و هزینه صدور برای واردات و صادرات" />
         <meta name="keywords" content="کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات, اتاق بازرگانی, مدارک کارت بازرگانی, انواع کارت بازرگانی, صدور کارت بازرگانی" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/business-card-complete-guide" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/business-card-complete-guide" />
         <meta property="og:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
         <meta property="og:description" content="راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و نحوه درخواست" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/business-card-complete-guide" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/business-card-complete-guide" />
         <meta property="og:locale" content="fa_IR" />
         <meta property="og:site_name" content="ترخیصان" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
         <meta name="twitter:description" content="راهنمای جامع کارت بازرگانی: مدارک، شرایط و نحوه درخواست" />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>

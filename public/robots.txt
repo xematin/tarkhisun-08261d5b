@@ -16,4 +16,4 @@ Disallow: /install
 Disallow: /contact
 
 # Sitemap location
-Sitemap: https://tarkhisun.ir/sitemap.xml
+Sitemap: https://tarkhisun.com/sitemap.xml

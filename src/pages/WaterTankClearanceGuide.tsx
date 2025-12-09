@@ -12,8 +12,8 @@ import ArticleImage from "@/components/ArticleImage";
 
 const WaterTankClearanceGuide = () => {
   useEffect(() => {
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', 'fa');
+    document.documentElement.setAttribute("dir", "rtl");
+    document.documentElement.setAttribute("lang", "fa");
     window.scrollTo(0, 0);
   }, []);
 
@@ -22,115 +22,120 @@ const WaterTankClearanceGuide = () => {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل واردات تانکر آب",
-        "description": "راهنمای جامع ترخیص مخزن ذخیره آب از گمرک بندرعباس: انواع تانکر آب، مدارک لازم، کد تعرفه HS، حقوق گمرکی، مراحل واردات و استانداردها",
-        "image": "https://tarkhisun.ir/og-image.jpg",
-        "author": {
+        headline: "ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل واردات تانکر آب",
+        description:
+          "راهنمای جامع ترخیص مخزن ذخیره آب از گمرک بندرعباس: انواع تانکر آب، مدارک لازم، کد تعرفه HS، حقوق گمرکی، مراحل واردات و استانداردها",
+        image: "https://tarkhisun.com/og-image.jpg",
+        author: {
           "@type": "Organization",
-          "name": "ترخیصان"
+          name: "ترخیصان",
         },
-        "publisher": {
+        publisher: {
           "@type": "Organization",
-          "name": "ترخیصان",
-          "logo": {
+          name: "ترخیصان",
+          logo: {
             "@type": "ImageObject",
-            "url": "https://tarkhisun.ir/logo.png"
+            url: "https://tarkhisun.com/logo.png",
           },
-          "address": {
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "بندرعباس",
-            "addressRegion": "هرمزگان",
-            "addressCountry": "IR"
-          }
+            addressLocality: "بندرعباس",
+            addressRegion: "هرمزگان",
+            addressCountry: "IR",
+          },
         },
-        "datePublished": "2025-10-22",
-        "dateModified": "2025-10-22",
-        "mainEntityOfPage": {
+        datePublished: "2025-10-22",
+        dateModified: "2025-10-22",
+        mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": "https://tarkhisun.ir/blog/water-tank-clearance-bandar-abbas-guide"
+          "@id": "https://tarkhisun.com/blog/water-tank-clearance-bandar-abbas-guide",
         },
-        "keywords": "ترخیص مخزن آب, تانکر ذخیره آب, واردات مخزن آب, گمرک بندرعباس"
+        keywords: "ترخیص مخزن آب, تانکر ذخیره آب, واردات مخزن آب, گمرک بندرعباس",
       },
       {
         "@type": "FAQPage",
-        "mainEntity": [
+        mainEntity: [
           {
             "@type": "Question",
-            "name": "آیا واردات مخزن ذخیره آب نیاز به مجوز دارد؟",
-            "acceptedAnswer": {
+            name: "آیا واردات مخزن ذخیره آب نیاز به مجوز دارد؟",
+            acceptedAnswer: {
               "@type": "Answer",
-              "text": "بله، برای واردات مخزن آب به کارت بازرگانی، ثبت سفارش در سامانه جامع تجارت و در برخی موارد مجوز سازمان استاندارد و بهداشت نیاز است."
-            }
+              text: "بله، برای واردات مخزن آب به کارت بازرگانی، ثبت سفارش در سامانه جامع تجارت و در برخی موارد مجوز سازمان استاندارد و بهداشت نیاز است.",
+            },
           },
           {
             "@type": "Question",
-            "name": "حقوق گمرکی مخزن ذخیره آب چقدر است؟",
-            "acceptedAnswer": {
+            name: "حقوق گمرکی مخزن ذخیره آب چقدر است؟",
+            acceptedAnswer: {
               "@type": "Answer",
-              "text": "حقوق گمرکی مخزن آب بین 5 تا 26 درصد ارزش CIF کالا است که بسته به جنس، ظرفیت و کد تعرفه متفاوت است."
-            }
+              text: "حقوق گمرکی مخزن آب بین 5 تا 26 درصد ارزش CIF کالا است که بسته به جنس، ظرفیت و کد تعرفه متفاوت است.",
+            },
           },
           {
             "@type": "Question",
-            "name": "کد تعرفه HS مخزن آب چیست؟",
-            "acceptedAnswer": {
+            name: "کد تعرفه HS مخزن آب چیست؟",
+            acceptedAnswer: {
               "@type": "Answer",
-              "text": "کد تعرفه مخازن آب بسته به جنس متفاوت است: مخازن پلاستیکی 3925.10، مخازن فلزی 7309 و مخازن فایبرگلاس 7020."
-            }
-          }
-        ]
+              text: "کد تعرفه مخازن آب بسته به جنس متفاوت است: مخازن پلاستیکی 3925.10، مخازن فلزی 7309 و مخازن فایبرگلاس 7020.",
+            },
+          },
+        ],
       },
       {
         "@type": "BreadcrumbList",
-        "itemListElement": [
+        itemListElement: [
           {
             "@type": "ListItem",
-            "position": 1,
-            "name": "خانه",
-            "item": "https://tarkhisun.ir/"
+            position: 1,
+            name: "خانه",
+            item: "https://tarkhisun.com/",
           },
           {
             "@type": "ListItem",
-            "position": 2,
-            "name": "بلاگ",
-            "item": "https://tarkhisun.ir/blog"
+            position: 2,
+            name: "بلاگ",
+            item: "https://tarkhisun.com/blog",
           },
           {
             "@type": "ListItem",
-            "position": 3,
-            "name": "ترخیص مخزن ذخیره آب"
-          }
-        ]
-      }
-    ]
+            position: 3,
+            name: "ترخیص مخزن ذخیره آب",
+          },
+        ],
+      },
+    ],
   };
 
   return (
     <>
       <Helmet>
         <title>ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل واردات تانکر آب</title>
-        <meta name="description" content="راهنمای ترخیص مخزن آب از گمرک بندرعباس: مدارک، کد تعرفه، حقوق گمرکی و مجوزهای بهداشتی واردات تانکر" />
-        <meta name="keywords" content="ترخیص مخزن آب, تانکر ذخیره آب, واردات مخزن آب, گمرک بندرعباس, حقوق گمرکی مخزن آب, کد تعرفه مخزن آب, مخزن پلی اتیلن, مخزن فایبرگلاس, تانکر استیل, مجوز بهداشت مخزن آب, استاندارد مخزن آب, واردات تانکر" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/water-tank-clearance-bandar-abbas-guide" />
+        <meta
+          name="description"
+          content="راهنمای ترخیص مخزن آب از گمرک بندرعباس: مدارک، کد تعرفه، حقوق گمرکی و مجوزهای بهداشتی واردات تانکر"
+        />
+        <meta
+          name="keywords"
+          content="ترخیص مخزن آب, تانکر ذخیره آب, واردات مخزن آب, گمرک بندرعباس, حقوق گمرکی مخزن آب, کد تعرفه مخزن آب, مخزن پلی اتیلن, مخزن فایبرگلاس, تانکر استیل, مجوز بهداشت مخزن آب, استاندارد مخزن آب, واردات تانکر"
+        />
+        <link rel="canonical" href="https://tarkhisun.com/blog/water-tank-clearance-bandar-abbas-guide" />
         <meta property="og:title" content="ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل" />
-        <meta property="og:description" content="راهنمای جامع ترخیص مخزن ذخیره آب: مدارک، تعرفه، مراحل واردات و نکات مهم" />
+        <meta
+          property="og:description"
+          content="راهنمای جامع ترخیص مخزن ذخیره آب: مدارک، تعرفه، مراحل واردات و نکات مهم"
+        />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/water-tank-clearance-bandar-abbas-guide" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/water-tank-clearance-bandar-abbas-guide" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
         <Header />
 
         <main className="container mx-auto px-4 py-8 max-w-4xl" dir="rtl">
-          <ArticleBreadcrumb 
-            category="راهنمای ترخیص" 
-            articleTitle="ترخیص مخزن ذخیره آب"
-          />
+          <ArticleBreadcrumb category="راهنمای ترخیص" articleTitle="ترخیص مخزن ذخیره آب" />
 
           <article className="prose prose-lg max-w-none">
             {/* Article Header */}
@@ -141,15 +146,16 @@ const WaterTankClearanceGuide = () => {
                 </span>
                 <span className="text-sm text-muted-foreground text-persian">۱۴۰۴/۸/۱</span>
               </div>
-              
+
               <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-persian">
                 ترخیص مخزن ذخیره آب از <strong>گمرک بندرعباس</strong>
                 <br />
                 <span className="text-accent">راهنمای کامل واردات تانکر آب</span>
               </h1>
-              
+
               <p className="text-xl text-muted-foreground text-persian leading-relaxed">
-                راهنمای جامع ترخیص مخزن ذخیره آب: انواع تانکر، مدارک لازم، کد تعرفه HS، حقوق گمرکی، استانداردها و مجوزهای بهداشتی
+                راهنمای جامع ترخیص مخزن ذخیره آب: انواع تانکر، مدارک لازم، کد تعرفه HS، حقوق گمرکی، استانداردها و
+                مجوزهای بهداشتی
               </p>
 
               <ArticleImage
@@ -163,8 +169,18 @@ const WaterTankClearanceGuide = () => {
             {/* Introduction */}
             <section className="mb-8">
               <p className="text-lg leading-relaxed text-foreground text-persian">
-                <strong>مخزن ذخیره آب</strong> یکی از محصولات پرتقاضا در بازار ایران است که واردات آن از کشورهای مختلف انجام می‌شود.
-                <strong>ترخیص مخزن آب از گمرک بندرعباس</strong> نیاز به آشنایی با مقررات، استانداردها و مجوزهای لازم دارد. برای آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای تعرفه HS</Link> و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">محاسبه حقوق گمرکی</Link>، مقالات مرتبط را مطالعه کنید.
+                <strong>مخزن ذخیره آب</strong> یکی از محصولات پرتقاضا در بازار ایران است که واردات آن از کشورهای مختلف
+                انجام می‌شود.
+                <strong>ترخیص مخزن آب از گمرک بندرعباس</strong> نیاز به آشنایی با مقررات، استانداردها و مجوزهای لازم
+                دارد. برای آشنایی با{" "}
+                <Link to="/blog/hs-code-guide" className="text-accent hover:underline">
+                  کدهای تعرفه HS
+                </Link>{" "}
+                و{" "}
+                <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">
+                  محاسبه حقوق گمرکی
+                </Link>
+                ، مقالات مرتبط را مطالعه کنید.
               </p>
             </section>
 
@@ -180,7 +196,7 @@ const WaterTankClearanceGuide = () => {
                   { title: "مخزن پلی‌اتیلن", desc: "سبک، مقاوم، مناسب مصارف خانگی", icon: Package },
                   { title: "مخزن فایبرگلاس", desc: "مقاوم در برابر خوردگی، عمر طولانی", icon: Shield },
                   { title: "مخزن استیل", desc: "بهداشتی، مناسب صنایع غذایی", icon: CheckCircle2 },
-                  { title: "مخزن گالوانیزه", desc: "اقتصادی، مقاوم در برابر زنگ‌زدگی", icon: FileText }
+                  { title: "مخزن گالوانیزه", desc: "اقتصادی، مقاوم در برابر زنگ‌زدگی", icon: FileText },
                 ].map((item, index) => (
                   <Card key={index} className="card-service">
                     <CardContent className="p-4 flex items-start gap-3">
@@ -199,7 +215,11 @@ const WaterTankClearanceGuide = () => {
             <section className="mb-10">
               <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2 text-persian">
                 <Calculator className="w-6 h-6 text-accent" />
-                کد تعرفه <Link to="/blog/hs-code-guide" className="text-primary hover:underline">HS</Link> مخزن آب
+                کد تعرفه{" "}
+                <Link to="/blog/hs-code-guide" className="text-primary hover:underline">
+                  HS
+                </Link>{" "}
+                مخزن آب
               </h2>
 
               <div className="overflow-x-auto">
@@ -253,7 +273,7 @@ const WaterTankClearanceGuide = () => {
                   "پکینگ لیست",
                   "گواهی مبدأ",
                   "گواهی استاندارد (برای مخازن آب آشامیدنی)",
-                  "مجوز بهداشت (در صورت نیاز)"
+                  "مجوز بهداشت (در صورت نیاز)",
                 ].map((item, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg">
                     <CheckCircle2 className="w-5 h-5 text-accent flex-shrink-0" />
@@ -279,7 +299,7 @@ const WaterTankClearanceGuide = () => {
               <Card className="bg-accent/5 border-accent/20">
                 <CardContent className="p-6">
                   <p className="text-persian leading-relaxed mb-4">
-                    مخازن آب آشامیدنی باید دارای <strong>استاندارد ملی ایران</strong> باشند. همچنین برای برخی کاربردها، 
+                    مخازن آب آشامیدنی باید دارای <strong>استاندارد ملی ایران</strong> باشند. همچنین برای برخی کاربردها،
                     <strong>مجوز سازمان غذا و دارو</strong> نیز الزامی است.
                   </p>
                   <ul className="space-y-2 text-persian">
@@ -322,7 +342,12 @@ const WaterTankClearanceGuide = () => {
               <h2 className="text-2xl font-bold mb-4 text-persian">نیاز به مشاوره در ترخیص مخزن آب دارید؟</h2>
               <p className="mb-6 opacity-90 text-persian">
                 تیم متخصص ترخیصان با تجربه در{" "}
-                <Link to="/blog/bandar-abbas-comprehensive-clearance-guide" className="text-primary-foreground underline">ترخیص کالا از بندرعباس</Link>{" "}
+                <Link
+                  to="/blog/bandar-abbas-comprehensive-clearance-guide"
+                  className="text-primary-foreground underline"
+                >
+                  ترخیص کالا از بندرعباس
+                </Link>{" "}
                 آماده کمک به شماست.
               </p>
               <Button asChild size="lg" variant="secondary">
@@ -332,7 +357,6 @@ const WaterTankClearanceGuide = () => {
                 </Link>
               </Button>
             </section>
-
           </article>
 
           {/* Related Articles */}

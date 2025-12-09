@@ -1,5 +1,6 @@
 import { Bot, Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const persianYear = currentYear - 621;
@@ -55,6 +56,11 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
+              <img 
+                src={tarkhisunLogo} 
+                alt="لوگو ترخیصان" 
+                className="h-12 w-12 object-contain"
+              />
               <div className="text-2xl text-persian">
                 <strong>ترخیصان</strong>
               </div>

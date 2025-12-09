@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
+import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navItems = [{
@@ -26,7 +27,12 @@ const Header = () => {
       <div className="container mx-auto px-4" dir="rtl">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-4 space-x-reverse">
+          <div className="flex items-center space-x-3 space-x-reverse">
+            <img 
+              src={tarkhisunLogo} 
+              alt="لوگو ترخیصان" 
+              className="h-10 w-10 object-contain"
+            />
             <div className="flex flex-col">
               <div className="text-xl text-primary text-persian font-bold">ترخیصان</div>
               <span className="text-xs text-muted-foreground">TARKHISUN</span>

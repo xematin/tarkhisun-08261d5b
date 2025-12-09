@@ -10,7 +10,7 @@ const Contact = () => {
     name: "",
     email: "",
     phone: "",
-    message: ""
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -18,7 +18,7 @@ const Contact = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -32,14 +32,14 @@ const Contact = () => {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
-        message: formData.message
+        message: formData.message,
       });
 
       // Send GET request to webhook
       const webhookUrl = `https://n8n.tarkhisun.ir/webhook/0a5e1b61-647b-476b-aa3d-c058a87b5220?${params.toString()}`;
       await fetch(webhookUrl, {
-        method: 'GET',
-        mode: 'no-cors'
+        method: "GET",
+        mode: "no-cors",
       });
 
       toast({
@@ -52,7 +52,7 @@ const Contact = () => {
       toast({
         title: "خطا در ارسال",
         description: "لطفاً دوباره تلاش کنید",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -64,35 +64,38 @@ const Contact = () => {
       icon: Phone,
       title: "تماس تلفنی",
       content: "09177380080",
-      link: "tel:+989177380080"
+      link: "tel:+989177380080",
     },
     {
       icon: Mail,
       title: "ایمیل",
-      content: "info@tarkhisun.ir",
-      link: "mailto:info@tarkhisun.ir"
+      content: "info@tarkhisun.com",
+      link: "mailto:info@tarkhisun.com",
     },
     {
       icon: MapPin,
       title: "آدرس",
       content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 317",
-      link: "https://B2n.ir/tarkhisun-map"
+      link: "https://B2n.ir/tarkhisun-map",
     },
     {
       icon: Clock,
       title: "ساعت کاری",
       content: "شنبه تا پنجشنبه: ۸ تا ۱۸",
-      link: null
-    }
+      link: null,
+    },
   ];
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-br from-secondary to-white">
       <div className="container mx-auto px-4" dir="rtl">
         <div className="text-center mb-16">
-          <h2 className="heading-secondary mb-4">تماس با <strong>ترخیصان</strong></h2>
+          <h2 className="heading-secondary mb-4">
+            تماس با <strong>ترخیصان</strong>
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-persian">
-            برای دریافت مشاوره رایگان از تیم <strong>ترخیصان</strong> و کسب اطلاعات بیشتر درباره خدمات گمرکی بندرعباس با ما در تماس باشید
+            برای دریافت مشاوره رایگان از تیم <strong>ترخیصان</strong> و کسب اطلاعات بیشتر درباره خدمات گمرکی بندرعباس با
+            ما در تماس باشید
           </p>
         </div>
 
@@ -100,8 +103,10 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="order-2 lg:order-1">
             <div className="bg-white rounded-2xl shadow-soft p-8">
-              <h3 className="heading-tertiary mb-6">درخواست مشاوره رایگان از <strong>ترخیصان</strong></h3>
-              
+              <h3 className="heading-tertiary mb-6">
+                درخواست مشاوره رایگان از <strong>ترخیصان</strong>
+              </h3>
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -119,7 +124,7 @@ const Contact = () => {
                       placeholder="نام خود را وارد کنید"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2 text-persian">
                       شماره تماس *
@@ -168,12 +173,7 @@ const Contact = () => {
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
-                  size="lg" 
-                  className="w-full btn-hero"
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" size="lg" className="w-full btn-hero" disabled={isSubmitting}>
                   <Send className="mr-2 h-5 w-5" />
                   {isSubmitting ? "در حال ارسال..." : "ارسال درخواست"}
                 </Button>
@@ -191,18 +191,23 @@ const Contact = () => {
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon;
                 return (
-                  <div key={index} className="flex items-start gap-4 p-6 bg-white rounded-xl shadow-soft hover:shadow-medium transition-all duration-300">
+                  <div
+                    key={index}
+                    className="flex items-start gap-4 p-6 bg-white rounded-xl shadow-soft hover:shadow-medium transition-all duration-300"
+                  >
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                       <IconComponent className="w-6 h-6 text-primary" />
                     </div>
-                    
+
                     <div className="flex-1">
-                      <h4 className="text-primary mb-2 text-persian"><strong>{info.title}</strong></h4>
+                      <h4 className="text-primary mb-2 text-persian">
+                        <strong>{info.title}</strong>
+                      </h4>
                       {info.link ? (
-                        <a 
+                        <a
                           href={info.link}
                           className="text-muted-foreground hover:text-accent transition-colors text-persian"
-                          {...(info.link.startsWith('http') && { target: '_blank', rel: 'noopener noreferrer' })}
+                          {...(info.link.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                           {info.content}
                         </a>

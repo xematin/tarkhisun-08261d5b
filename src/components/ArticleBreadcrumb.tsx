@@ -17,33 +17,33 @@ interface ArticleBreadcrumbProps {
 
 const ArticleBreadcrumb = ({ category, articleTitle }: ArticleBreadcrumbProps) => {
   const location = useLocation();
-  const currentUrl = `https://tarkhisun.ir${location.pathname}`;
+  const currentUrl = `https://tarkhisun.com${location.pathname}`;
 
   useEffect(() => {
     // Generate Breadcrumb Schema
     const breadcrumbList = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "itemListElement": [
+      itemListElement: [
         {
           "@type": "ListItem",
-          "position": 1,
-          "name": "خانه",
-          "item": "https://tarkhisun.ir/"
+          position: 1,
+          name: "خانه",
+          item: "https://tarkhisun.com/",
         },
         {
           "@type": "ListItem",
-          "position": 2,
-          "name": "بلاگ",
-          "item": "https://tarkhisun.ir/blog"
+          position: 2,
+          name: "بلاگ",
+          item: "https://tarkhisun.com/blog",
         },
         {
           "@type": "ListItem",
-          "position": 3,
-          "name": articleTitle,
-          "item": currentUrl
-        }
-      ]
+          position: 3,
+          name: articleTitle,
+          item: currentUrl,
+        },
+      ],
     };
 
     // Add or update breadcrumb schema
@@ -51,9 +51,9 @@ const ArticleBreadcrumb = ({ category, articleTitle }: ArticleBreadcrumbProps) =
     if (breadcrumbScript) {
       breadcrumbScript.textContent = JSON.stringify(breadcrumbList);
     } else {
-      breadcrumbScript = document.createElement('script');
-      breadcrumbScript.setAttribute('type', 'application/ld+json');
-      breadcrumbScript.setAttribute('data-breadcrumb-schema', 'true');
+      breadcrumbScript = document.createElement("script");
+      breadcrumbScript.setAttribute("type", "application/ld+json");
+      breadcrumbScript.setAttribute("data-breadcrumb-schema", "true");
       breadcrumbScript.textContent = JSON.stringify(breadcrumbList);
       document.head.appendChild(breadcrumbScript);
     }
@@ -77,11 +77,11 @@ const ArticleBreadcrumb = ({ category, articleTitle }: ArticleBreadcrumbProps) =
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          
+
           <BreadcrumbSeparator>
             <ChevronLeft className="w-4 h-4" />
           </BreadcrumbSeparator>
-          
+
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -89,21 +89,19 @@ const ArticleBreadcrumb = ({ category, articleTitle }: ArticleBreadcrumbProps) =
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          
+
           <BreadcrumbSeparator>
             <ChevronLeft className="w-4 h-4" />
           </BreadcrumbSeparator>
-          
+
           <BreadcrumbItem>
-            <BreadcrumbLink className="text-muted-foreground">
-              {category}
-            </BreadcrumbLink>
+            <BreadcrumbLink className="text-muted-foreground">{category}</BreadcrumbLink>
           </BreadcrumbItem>
-          
+
           <BreadcrumbSeparator>
             <ChevronLeft className="w-4 h-4" />
           </BreadcrumbSeparator>
-          
+
           <BreadcrumbItem>
             <BreadcrumbPage className="text-foreground font-medium line-clamp-1 max-w-[200px] md:max-w-none">
               {articleTitle}

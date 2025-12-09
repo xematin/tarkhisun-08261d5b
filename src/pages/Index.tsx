@@ -31,7 +31,7 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       name: "ترخیصان - مشاوره امور گمرکی بندرعباس",
-      image: "https://tarkhisun.ir/logo.png",
+      image: "https://tarkhisun.com/logo.png",
       description: "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با بیش از 20 سال تجربه",
       address: {
         "@type": "PostalAddress",
@@ -47,7 +47,7 @@ const Index = () => {
       telephone: "+98-917-738-0080",
       priceRange: "$$",
       openingHours: "Mo-Su 00:00-23:59",
-      url: "https://tarkhisun.ir",
+      url: "https://tarkhisun.com",
       areaServed: {
         "@type": "GeoCircle",
         geoMidpoint: {
@@ -93,10 +93,10 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: "ترخیصان",
-      url: "https://tarkhisun.ir",
+      url: "https://tarkhisun.com",
       potentialAction: {
         "@type": "SearchAction",
-        target: "https://tarkhisun.ir/blog?search={search_term_string}",
+        target: "https://tarkhisun.com/blog?search={search_term_string}",
         "query-input": "required name=search_term_string",
       },
     };
@@ -213,9 +213,9 @@ const Index = () => {
     <>
       {/* Hreflang Tags only - All other SEO tags are in index.html to prevent duplicates */}
       <Helmet>
-        <link rel="alternate" hrefLang="fa" href="https://tarkhisun.ir/" />
-        <link rel="alternate" hrefLang="fa-IR" href="https://tarkhisun.ir/" />
-        <link rel="alternate" hrefLang="x-default" href="https://tarkhisun.ir/" />
+        <link rel="alternate" hrefLang="fa" href="https://tarkhisun.com/" />
+        <link rel="alternate" hrefLang="fa-IR" href="https://tarkhisun.com/" />
+        <link rel="alternate" hrefLang="x-default" href="https://tarkhisun.com/" />
       </Helmet>
 
       <div className="min-h-screen bg-background">

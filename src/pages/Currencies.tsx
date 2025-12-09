@@ -76,20 +76,20 @@ const Currencies = () => {
         <title>نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | ترخیصان</title>
         <meta name="description" content="نرخ ارز لحظه‌ای دلار، یورو، پوند و سایر ارزها. بروزرسانی مداوم قیمت‌ها برای محاسبات تجاری و گمرکی" />
         <meta name="keywords" content="نرخ ارز، قیمت ارز، دلار، یورو، پوند، نرخ ارز امروز، قیمت ارز لحظه‌ای، محاسبه ارز، گمرک، واردات، صادرات، ترخیصان" />
-        <link rel="canonical" href="https://tarkhisun.ir/currencies" />
+        <link rel="canonical" href="https://tarkhisun.com/currencies" />
         <meta property="og:title" content="نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان" />
         <meta property="og:description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان با بروزرسانی مداوم" />
-        <meta property="og:url" content="https://tarkhisun.ir/currencies" />
+        <meta property="og:url" content="https://tarkhisun.com/currencies" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="ترخیصان" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="نرخ ارز لحظه‌ای - ترخیصان" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان" />
         <meta name="twitter:description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان با بروزرسانی مداوم" />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         
         <script type="application/ld+json">
           {JSON.stringify({
@@ -97,7 +97,7 @@ const Currencies = () => {
           "@type": "WebPage",
           "name": "نرخ ارز امروز | ترخیصان",
           "description": "صفحه نرخ ارز با قیمت‌های لحظه‌ای تمامی ارزهای جهان",
-          "url": "https://tarkhisun.ir/currencies",
+          "url": "https://tarkhisun.com/currencies",
           "publisher": {
             "@type": "Organization",
             "name": "ترخیصان"

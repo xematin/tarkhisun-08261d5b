@@ -21,7 +21,7 @@ const Article1CommissionGuide = () => {
     "@type": "Article",
     "headline": "کمیسیون ماده 1 گمرک چیست؟ راهنمای کامل رسیدگی به اختلافات ارزش گمرکی",
     "description": "راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض و نکات کلیدی",
-    "image": "https://tarkhisun.ir/og-image.jpg",
+    "image": "https://tarkhisun.com/og-image.jpg",
     "datePublished": "2025-10-17",
     "dateModified": "2025-10-17",
     "author": {
@@ -33,7 +33,7 @@ const Article1CommissionGuide = () => {
       "name": "ترخیصان",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://tarkhisun.ir/logo.png"
+        "url": "https://tarkhisun.com/logo.png"
       },
       "address": {
         "@type": "PostalAddress",
@@ -44,7 +44,7 @@ const Article1CommissionGuide = () => {
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://tarkhisun.ir/blog/customs-article-1-commission-guide"
+      "@id": "https://tarkhisun.com/blog/customs-article-1-commission-guide"
     }
   };
 
@@ -52,8 +52,8 @@ const Article1CommissionGuide = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.ir" },
-      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.ir/blog" },
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://tarkhisun.com" },
+      { "@type": "ListItem", "position": 2, "name": "بلاگ", "item": "https://tarkhisun.com/blog" },
       { "@type": "ListItem", "position": 3, "name": "کمیسیون ماده 1 گمرک" }
     ]
   };
@@ -64,18 +64,18 @@ const Article1CommissionGuide = () => {
         <title>کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی</title>
         <meta name="description" content="راهنمای کمیسیون ماده 1 گمرک: رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض و نکات کلیدی" />
         <meta name="keywords" content="کمیسیون ماده 1, کمیسیون ماده یک گمرک, اختلاف ارزش گمرکی, اعتراض به ارزیابی گمرک, رسیدگی به اختلافات گمرکی, ارزش گمرکی کالا, قانون امور گمرکی, حقوق واردکنندگان" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/customs-article-1-commission-guide" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/customs-article-1-commission-guide" />
         <meta property="og:title" content="کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی" />
         <meta property="og:description" content="راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی و مراحل اعتراض" />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="fa_IR" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/customs-article-1-commission-guide" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/customs-article-1-commission-guide" />
         <meta property="og:site_name" content="ترخیصان" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل" />
         <meta name="twitter:description" content="راهنمای جامع کمیسیون ماده 1 گمرک و نحوه رسیدگی به اختلافات ارزش گمرکی" />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>

@@ -40,11 +40,11 @@ const ExcavationMachineryGuide = () => {
     "dateModified": "2025-10-07",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://tarkhisun.ir/blog/excavation-machinery-import-guide"
+      "@id": "https://tarkhisun.com/blog/excavation-machinery-import-guide"
     },
     "keywords": "ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی",
     "articleSection": "راهنمای گمرکی",
-    "image": "https://tarkhisun.ir/og-image.jpg"
+    "image": "https://tarkhisun.com/og-image.jpg"
   };
 
   const faqStructuredData = {
@@ -86,13 +86,13 @@ const ExcavationMachineryGuide = () => {
         "@type": "ListItem",
         "position": 1,
         "name": "خانه",
-        "item": "https://tarkhisun.ir"
+        "item": "https://tarkhisun.com"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "بلاگ",
-        "item": "https://tarkhisun.ir/blog"
+        "item": "https://tarkhisun.com/blog"
       },
       {
         "@type": "ListItem",
@@ -108,18 +108,18 @@ const ExcavationMachineryGuide = () => {
         <title>ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین</title>
         <meta name="description" content="راهنمای ترخیص ماشین آلات حفاری از گمرک: مدارک، تعرفه، کد HS و مجوزهای واردات ماشین آلات سنگین" />
         <meta name="keywords" content="ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی ماشین حفاری, کد تعرفه ماشین آلات, ترخیص بیل مکانیکی, واردات لودر, ترخیص بلدوزر, ماشین آلات ساختمانی, ماشین آلات معدنی, مدارک ترخیص ماشین آلات, بندرعباس, شهید رجایی, تعرفه گمرکی ماشین آلات, مجوز واردات ماشین آلات" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/excavation-machinery-import-guide" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/excavation-machinery-import-guide" />
         <meta property="og:title" content="ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین" />
         <meta property="og:description" content="راهنمای جامع ترخیص ماشین آلات حفاری از گمرک: مدارک لازم، تعرفه و حقوق گمرکی، کد HS، مراحل واردات و مجوزها" />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="fa_IR" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/excavation-machinery-import-guide" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/excavation-machinery-import-guide" />
         <meta property="og:site_name" content="ترخیصان" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل" />
         <meta name="twitter:description" content="راهنمای جامع ترخیص ماشین آلات حفاری از گمرک بندرعباس" />
-        <meta name="twitter:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
         <script type="application/ld+json">{JSON.stringify(faqStructuredData)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>

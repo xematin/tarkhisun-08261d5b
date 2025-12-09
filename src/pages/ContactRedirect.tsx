@@ -14,7 +14,7 @@ const ContactRedirect = () => {
         <meta name="robots" content="noindex, nofollow" />
         
         {/* Canonical to homepage contact section */}
-        <link rel="canonical" href="https://tarkhisun.ir/#contact" />
+        <link rel="canonical" href="https://tarkhisun.com/#contact" />
         
         {/* Unique title to prevent duplicate content issues */}
         <title>انتقال به صفحه تماس | ترخیصان</title>

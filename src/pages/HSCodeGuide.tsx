@@ -24,7 +24,7 @@ const HSCodeGuide = () => {
         "@type": "Article",
         "headline": "کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها",
         "description": "راهنمای جامع سیستم کد HS، نحوه تعیین کد تعرفه کالاها، اهمیت در تجارت بین‌المللی و جستجوی صحیح کد کالا",
-        "image": "https://tarkhisun.ir/og-image.jpg",
+        "image": "https://tarkhisun.com/og-image.jpg",
         "author": {
           "@type": "Organization",
           "name": "ترخیصان - مشاوره امور گمرکی"
@@ -34,14 +34,14 @@ const HSCodeGuide = () => {
           "name": "ترخیصان",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://tarkhisun.ir/logo.png"
+            "url": "https://tarkhisun.com/logo.png"
           }
         },
         "datePublished": "2024-09-29",
         "dateModified": "2024-09-29",
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://tarkhisun.ir/blog/hs-code-guide"
+          "@id": "https://tarkhisun.com/blog/hs-code-guide"
         },
         "articleSection": "تعرفه و کدگذاری",
         "keywords": "کد HS, تعرفه هماهنگ, کد کالا, HS Code, Harmonized System"
@@ -53,13 +53,13 @@ const HSCodeGuide = () => {
             "@type": "ListItem",
             "position": 1,
             "name": "خانه",
-            "item": "https://tarkhisun.ir/"
+            "item": "https://tarkhisun.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "بلاگ",
-            "item": "https://tarkhisun.ir/blog"
+            "item": "https://tarkhisun.com/blog"
           },
           {
             "@type": "ListItem",
@@ -77,12 +77,12 @@ const HSCodeGuide = () => {
         <title>کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها | ترخیصان</title>
         <meta name="description" content="راهنمای جامع سیستم کد HS، نحوه تعیین کد تعرفه کالاها، اهمیت در تجارت بین‌المللی و جستجوی صحیح کد کالا در گمرک" />
         <meta name="keywords" content="کد HS, تعرفه هماهنگ, کد کالا, HS Code, Harmonized System, تعرفه گمرکی, کد تعرفه, طبقه‌بندی کالا, تجارت بین‌المللی, گمرک ایران" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/hs-code-guide" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/hs-code-guide" />
         <meta property="og:title" content="کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها" />
         <meta property="og:description" content="راهنمای جامع سیستم کد HS، نحوه تعیین کد تعرفه کالاها و اهمیت در تجارت بین‌المللی" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/hs-code-guide" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/hs-code-guide" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

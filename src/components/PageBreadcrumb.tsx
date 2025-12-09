@@ -25,24 +25,24 @@ const PageBreadcrumb = ({ items }: PageBreadcrumbProps) => {
     const breadcrumbList = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "itemListElement": [
+      itemListElement: [
         {
           "@type": "ListItem",
-          "position": 1,
-          "name": "خانه",
-          "item": "https://tarkhisun.ir/"
+          position: 1,
+          name: "خانه",
+          item: "https://tarkhisun.com/",
         },
         ...items.map((item, index) => {
           const isLastItem = index === items.length - 1;
           return {
             "@type": "ListItem",
-            "position": index + 2,
-            "name": item.label,
+            position: index + 2,
+            name: item.label,
             // All items except the last one must have "item" field
-            ...((!isLastItem || item.href) && { "item": `https://tarkhisun.ir${item.href}` })
+            ...((!isLastItem || item.href) && { item: `https://tarkhisun.com${item.href}` }),
           };
-        })
-      ]
+        }),
+      ],
     };
 
     // Add or update breadcrumb schema
@@ -50,9 +50,9 @@ const PageBreadcrumb = ({ items }: PageBreadcrumbProps) => {
     if (breadcrumbScript) {
       breadcrumbScript.textContent = JSON.stringify(breadcrumbList);
     } else {
-      breadcrumbScript = document.createElement('script');
-      breadcrumbScript.setAttribute('type', 'application/ld+json');
-      breadcrumbScript.setAttribute('data-breadcrumb-schema', 'true');
+      breadcrumbScript = document.createElement("script");
+      breadcrumbScript.setAttribute("type", "application/ld+json");
+      breadcrumbScript.setAttribute("data-breadcrumb-schema", "true");
       breadcrumbScript.textContent = JSON.stringify(breadcrumbList);
       document.head.appendChild(breadcrumbScript);
     }
@@ -76,13 +76,13 @@ const PageBreadcrumb = ({ items }: PageBreadcrumbProps) => {
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-          
+
           {items.map((item, index) => (
             <div key={index} className="inline-flex items-center gap-1.5">
               <BreadcrumbSeparator>
                 <ChevronLeft className="w-4 h-4" />
               </BreadcrumbSeparator>
-              
+
               <BreadcrumbItem>
                 {item.href ? (
                   <BreadcrumbLink asChild>
@@ -91,9 +91,7 @@ const PageBreadcrumb = ({ items }: PageBreadcrumbProps) => {
                     </Link>
                   </BreadcrumbLink>
                 ) : (
-                  <BreadcrumbPage className="text-foreground font-medium">
-                    {item.label}
-                  </BreadcrumbPage>
+                  <BreadcrumbPage className="text-foreground font-medium">{item.label}</BreadcrumbPage>
                 )}
               </BreadcrumbItem>
             </div>

@@ -11,8 +11,8 @@ import ArticleImage from "@/components/ArticleImage";
 
 const BandarAbbasComprehensiveGuide = () => {
   useEffect(() => {
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', 'fa');
+    document.documentElement.setAttribute("dir", "rtl");
+    document.documentElement.setAttribute("lang", "fa");
     window.scrollTo(0, 0);
   }, []);
 
@@ -21,80 +21,84 @@ const BandarAbbasComprehensiveGuide = () => {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک شهید رجایی",
-        "description": "راهنمای جامع و کامل ترخیص کالا از گمرک بندرعباس با تمام مراحل، مدارک و هزینه‌ها",
-        "image": "https://tarkhisun.ir/og-image.jpg",
-        "author": {
+        headline: "صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک شهید رجایی",
+        description: "راهنمای جامع و کامل ترخیص کالا از گمرک بندرعباس با تمام مراحل، مدارک و هزینه‌ها",
+        image: "https://tarkhisun.com/og-image.jpg",
+        author: {
           "@type": "Organization",
-          "name": "تیم ترخیصان"
+          name: "تیم ترخیصان",
         },
-        "publisher": {
+        publisher: {
           "@type": "Organization",
-          "name": "ترخیصان",
-          "logo": {
+          name: "ترخیصان",
+          logo: {
             "@type": "ImageObject",
-            "url": "https://tarkhisun.ir/logo.png"
-          }
+            url: "https://tarkhisun.com/logo.png",
+          },
         },
-        "datePublished": "2025-10-17",
-        "dateModified": "2025-10-17",
-        "mainEntityOfPage": {
+        datePublished: "2025-10-17",
+        dateModified: "2025-10-17",
+        mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": "https://tarkhisun.ir/blog/bandar-abbas-comprehensive-clearance-guide"
+          "@id": "https://tarkhisun.com/blog/bandar-abbas-comprehensive-clearance-guide",
         },
-        "keywords": "صفر تا صد ترخیص کالا, بندرعباس, گمرک شهید رجایی, مراحل ترخیص, واردات"
+        keywords: "صفر تا صد ترخیص کالا, بندرعباس, گمرک شهید رجایی, مراحل ترخیص, واردات",
       },
       {
         "@type": "BreadcrumbList",
-        "itemListElement": [
+        itemListElement: [
           {
             "@type": "ListItem",
-            "position": 1,
-            "name": "خانه",
-            "item": "https://tarkhisun.ir/"
+            position: 1,
+            name: "خانه",
+            item: "https://tarkhisun.com/",
           },
           {
             "@type": "ListItem",
-            "position": 2,
-            "name": "بلاگ",
-            "item": "https://tarkhisun.ir/blog"
+            position: 2,
+            name: "بلاگ",
+            item: "https://tarkhisun.com/blog",
           },
           {
             "@type": "ListItem",
-            "position": 3,
-            "name": "صفر تا صد ترخیص کالا از بندرعباس"
-          }
-        ]
-      }
-    ]
+            position: 3,
+            name: "صفر تا صد ترخیص کالا از بندرعباس",
+          },
+        ],
+      },
+    ],
   };
 
   return (
     <>
       <Helmet>
         <title>صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک شهید رجایی</title>
-        <meta name="description" content="راهنمای ترخیص کالا از گمرک بندرعباس: مراحل، مدارک، هزینه‌ها و نکات کلیدی واردات از شهید رجایی" />
-        <meta name="keywords" content="صفر تا صد ترخیص کالا, ترخیص کالا بندرعباس, گمرک شهید رجایی, مراحل ترخیص کالا, مدارک ترخیص گمرک, هزینه ترخیص بندرعباس, واردات از بندرعباس, ترخیص گمرکی, راهنمای ترخیص کالا, فرآیند ترخیص" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/bandar-abbas-comprehensive-clearance-guide" />
+        <meta
+          name="description"
+          content="راهنمای ترخیص کالا از گمرک بندرعباس: مراحل، مدارک، هزینه‌ها و نکات کلیدی واردات از شهید رجایی"
+        />
+        <meta
+          name="keywords"
+          content="صفر تا صد ترخیص کالا, ترخیص کالا بندرعباس, گمرک شهید رجایی, مراحل ترخیص کالا, مدارک ترخیص گمرک, هزینه ترخیص بندرعباس, واردات از بندرعباس, ترخیص گمرکی, راهنمای ترخیص کالا, فرآیند ترخیص"
+        />
+        <link rel="canonical" href="https://tarkhisun.com/blog/bandar-abbas-comprehensive-clearance-guide" />
         <meta property="og:title" content="صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک شهید رجایی" />
-        <meta property="og:description" content="راهنمای جامع ترخیص کالا از گمرک بندرعباس با تمام مراحل، مدارک، هزینه‌ها و نکات کلیدی" />
+        <meta
+          property="og:description"
+          content="راهنمای جامع ترخیص کالا از گمرک بندرعباس با تمام مراحل، مدارک، هزینه‌ها و نکات کلیدی"
+        />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/bandar-abbas-comprehensive-clearance-guide" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/bandar-abbas-comprehensive-clearance-guide" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background" dir="rtl">
         <Header />
-        
+
         <main className="container mx-auto px-4 py-8 max-w-4xl">
-          <ArticleBreadcrumb 
-            category="راهنمای ترخیص" 
-            articleTitle="صفر تا صد ترخیص کالا از بندرعباس"
-          />
+          <ArticleBreadcrumb category="راهنمای ترخیص" articleTitle="صفر تا صد ترخیص کالا از بندرعباس" />
 
           <article className="prose prose-lg max-w-none" itemScope itemType="https://schema.org/Article">
             {/* Article Header */}
@@ -103,7 +107,9 @@ const BandarAbbasComprehensiveGuide = () => {
                 صفر تا صد ترخیص کالا از <strong>بندرعباس</strong> | راهنمای کامل <strong>گمرک شهید رجایی</strong>
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                <time dateTime="2025-10-17" itemProp="datePublished">۱۴۰۴/۷/۲۶</time>
+                <time dateTime="2025-10-17" itemProp="datePublished">
+                  ۱۴۰۴/۷/۲۶
+                </time>
                 <span>•</span>
                 <span itemProp="author">تیم ترخیصان</span>
                 <span>•</span>
@@ -121,24 +127,39 @@ const BandarAbbasComprehensiveGuide = () => {
             {/* Introduction */}
             <section className="mb-8">
               <p className="text-lg leading-relaxed text-foreground">
-                <strong>ترخیص کالا از بندرعباس</strong> یکی از مهم‌ترین فرآیندهای <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات در ایران</Link> است. <strong>گمرک شهید رجایی</strong> به عنوان بزرگترین بندر تجاری کشور، سالانه میلیون‌ها تن کالا را پردازش می‌کند. در این راهنمای جامع، تمام مراحل <strong>ترخیص کالا</strong> از صفر تا صد را به صورت گام‌به‌گام توضیح می‌دهیم. برای آشنایی با <Link to="/blog/hs-code-guide" className="text-accent hover:underline">کدهای HS</Link> و <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">تعرفه‌های گمرکی</Link>، مقالات مرتبط را مطالعه کنید تا واردکنندگان بتوانند با آگاهی کامل اقدام به واردات کنند.
+                <strong>ترخیص کالا از بندرعباس</strong> یکی از مهم‌ترین فرآیندهای{" "}
+                <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">
+                  واردات در ایران
+                </Link>{" "}
+                است. <strong>گمرک شهید رجایی</strong> به عنوان بزرگترین بندر تجاری کشور، سالانه میلیون‌ها تن کالا را
+                پردازش می‌کند. در این راهنمای جامع، تمام مراحل <strong>ترخیص کالا</strong> از صفر تا صد را به صورت
+                گام‌به‌گام توضیح می‌دهیم. برای آشنایی با{" "}
+                <Link to="/blog/hs-code-guide" className="text-accent hover:underline">
+                  کدهای HS
+                </Link>{" "}
+                و{" "}
+                <Link to="/blog/customs-tariff-guide" className="text-accent hover:underline">
+                  تعرفه‌های گمرکی
+                </Link>
+                ، مقالات مرتبط را مطالعه کنید تا واردکنندگان بتوانند با آگاهی کامل اقدام به واردات کنند.
               </p>
             </section>
 
             {/* Main Content Sections */}
-            
+
             {/* Section 1: Pre-import Preparations */}
             <section className="mb-10">
               <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
                 <FileText className="w-6 h-6 text-primary" />
                 مرحله اول: <strong>آماده‌سازی قبل از واردات</strong>
               </h2>
-              
+
               <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
                 ۱. اخذ <strong>کارت بازرگانی</strong>
               </h3>
               <p className="leading-relaxed mb-4">
-                اولین قدم برای <strong>ترخیص کالا از بندرعباس</strong>، داشتن <strong>کارت بازرگانی</strong> معتبر است. این کارت از اتاق بازرگانی صادر می‌شود و حاوی کدهای ۱۰ رقمی کالاهای مجاز برای واردات است.
+                اولین قدم برای <strong>ترخیص کالا از بندرعباس</strong>، داشتن <strong>کارت بازرگانی</strong> معتبر است.
+                این کارت از اتاق بازرگانی صادر می‌شود و حاوی کدهای ۱۰ رقمی کالاهای مجاز برای واردات است.
               </p>
               <div className="bg-muted/50 p-4 rounded-lg mb-4">
                 <p className="font-semibold mb-2 flex items-center gap-2">
@@ -158,14 +179,23 @@ const BandarAbbasComprehensiveGuide = () => {
                 ۲. ثبت‌نام در <strong>سامانه جامع تجارت (NTSW)</strong>
               </h3>
               <p className="leading-relaxed mb-4">
-                برای <strong>ترخیص کالا</strong>، ثبت‌نام در <Link to="/blog/ntsw-complete-guide" className="text-primary hover:underline"><strong>سامانه جامع تجارت</strong></Link> الزامی است. این سامانه تمام فرآیندهای ثبت سفارش، صدور مجوز و پیگیری ترخیص را دیجیتالی کرده است.
+                برای <strong>ترخیص کالا</strong>، ثبت‌نام در{" "}
+                <Link to="/blog/ntsw-complete-guide" className="text-primary hover:underline">
+                  <strong>سامانه جامع تجارت</strong>
+                </Link>{" "}
+                الزامی است. این سامانه تمام فرآیندهای ثبت سفارش، صدور مجوز و پیگیری ترخیص را دیجیتالی کرده است.
               </p>
 
               <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
                 ۳. شناسایی دقیق <strong>کد تعرفه (HS Code)</strong>
               </h3>
               <p className="leading-relaxed mb-4">
-                تعیین <Link to="/blog/hs-code-guide" className="text-primary hover:underline"><strong>کد تعرفه صحیح</strong></Link> از مهم‌ترین مراحل است. هر کالا یک کد ۱۰ رقمی دارد که <strong>حقوق گمرکی</strong> و مجوزهای لازم را مشخص می‌کند.
+                تعیین{" "}
+                <Link to="/blog/hs-code-guide" className="text-primary hover:underline">
+                  <strong>کد تعرفه صحیح</strong>
+                </Link>{" "}
+                از مهم‌ترین مراحل است. هر کالا یک کد ۱۰ رقمی دارد که <strong>حقوق گمرکی</strong> و مجوزهای لازم را مشخص
+                می‌کند.
               </p>
             </section>
 
@@ -176,11 +206,10 @@ const BandarAbbasComprehensiveGuide = () => {
                 مرحله دوم: <strong>ثبت سفارش و خرید کالا</strong>
               </h2>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۱. ثبت سفارش در سامانه جامع تجارت
-              </h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">۱. ثبت سفارش در سامانه جامع تجارت</h3>
               <p className="leading-relaxed mb-4">
-                پس از انتخاب کالا و تأمین‌کننده خارجی، باید <strong>ثبت سفارش</strong> انجام شود. این مرحله شامل وارد کردن اطلاعات کامل کالا، مبدأ، ارزش و مشخصات حمل است.
+                پس از انتخاب کالا و تأمین‌کننده خارجی، باید <strong>ثبت سفارش</strong> انجام شود. این مرحله شامل وارد
+                کردن اطلاعات کامل کالا، مبدأ، ارزش و مشخصات حمل است.
               </p>
               <div className="bg-muted/50 p-4 rounded-lg mb-4">
                 <p className="font-semibold mb-2 flex items-center gap-2">
@@ -197,18 +226,20 @@ const BandarAbbasComprehensiveGuide = () => {
                 </ul>
               </div>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۲. تأمین ارز و انتقال وجه
-              </h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">۲. تأمین ارز و انتقال وجه</h3>
               <p className="leading-relaxed mb-4">
-                بعد از ثبت سفارش، باید ارز مورد نیاز از طریق <strong>سامانه نیما</strong> یا <strong>صرافی‌های مجاز</strong> تأمین شود. <Link to="/blog/sana-nima-exchange-rate-difference-guide" className="text-primary hover:underline">نرخ ارز سنا و نیما</Link> در محاسبات بسیار حائز اهمیت است.
+                بعد از ثبت سفارش، باید ارز مورد نیاز از طریق <strong>سامانه نیما</strong> یا{" "}
+                <strong>صرافی‌های مجاز</strong> تأمین شود.{" "}
+                <Link to="/blog/sana-nima-exchange-rate-difference-guide" className="text-primary hover:underline">
+                  نرخ ارز سنا و نیما
+                </Link>{" "}
+                در محاسبات بسیار حائز اهمیت است.
               </p>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۳. دریافت مجوزهای لازم
-              </h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">۳. دریافت مجوزهای لازم</h3>
               <p className="leading-relaxed mb-4">
-                برخی کالاها نیاز به <strong>مجوزهای ویژه</strong> دارند (استاندارد، بهداشت، محیط زیست، ارتباطات و...). این مجوزها قبل از ورود کالا به <strong>گمرک بندرعباس</strong> باید اخذ شوند.
+                برخی کالاها نیاز به <strong>مجوزهای ویژه</strong> دارند (استاندارد، بهداشت، محیط زیست، ارتباطات و...).
+                این مجوزها قبل از ورود کالا به <strong>گمرک بندرعباس</strong> باید اخذ شوند.
               </p>
             </section>
 
@@ -225,11 +256,10 @@ const BandarAbbasComprehensiveGuide = () => {
                 مرحله سوم: <strong>حمل و رسیدن کالا به بندرعباس</strong>
               </h2>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۱. انتخاب نوع حمل
-              </h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">۱. انتخاب نوع حمل</h3>
               <p className="leading-relaxed mb-4">
-                حمل کالا به <strong>بندرعباس</strong> معمولاً از طریق <strong>دریا</strong> انجام می‌شود. حمل دریایی اقتصادی‌تر است اما زمان‌برتر. حمل هوایی برای کالاهای فوری و با ارزش مناسب است.
+                حمل کالا به <strong>بندرعباس</strong> معمولاً از طریق <strong>دریا</strong> انجام می‌شود. حمل دریایی
+                اقتصادی‌تر است اما زمان‌برتر. حمل هوایی برای کالاهای فوری و با ارزش مناسب است.
               </p>
 
               <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
@@ -241,20 +271,33 @@ const BandarAbbasComprehensiveGuide = () => {
                   مدارک حمل ضروری:
                 </p>
                 <ul className="space-y-2 mr-6">
-                  <li>• <strong>بارنامه (Bill of Lading)</strong> - سند مالکیت کالا</li>
-                  <li>• <strong>پکینگ لیست (Packing List)</strong> - لیست بسته‌بندی</li>
-                  <li>• <strong>اینویس (Commercial Invoice)</strong> - فاکتور تجاری</li>
-                  <li>• <strong>گواهی مبدأ (Certificate of Origin)</strong></li>
+                  <li>
+                    • <strong>بارنامه (Bill of Lading)</strong> - سند مالکیت کالا
+                  </li>
+                  <li>
+                    • <strong>پکینگ لیست (Packing List)</strong> - لیست بسته‌بندی
+                  </li>
+                  <li>
+                    • <strong>اینویس (Commercial Invoice)</strong> - فاکتور تجاری
+                  </li>
+                  <li>
+                    • <strong>گواهی مبدأ (Certificate of Origin)</strong>
+                  </li>
                   <li>• گواهی‌های استاندارد و کیفیت</li>
                   <li>• بیمه‌نامه (در صورت بیمه کردن)</li>
                 </ul>
               </div>
 
               <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۳. ثبت <Link to="/blog/manifest-guide" className="text-primary hover:underline"><strong>مانیفست</strong></Link> در گمرک
+                ۳. ثبت{" "}
+                <Link to="/blog/manifest-guide" className="text-primary hover:underline">
+                  <strong>مانیفست</strong>
+                </Link>{" "}
+                در گمرک
               </h3>
               <p className="leading-relaxed mb-4">
-                پس از رسیدن کشتی به <strong>بندرعباس</strong>، خط کشتیرانی یا نماینده آن <strong>مانیفست بار</strong> را در سامانه گمرک ثبت می‌کند. این سند حاوی لیست تمام محموله‌های روی کشتی است.
+                پس از رسیدن کشتی به <strong>بندرعباس</strong>، خط کشتیرانی یا نماینده آن <strong>مانیفست بار</strong> را
+                در سامانه گمرک ثبت می‌کند. این سند حاوی لیست تمام محموله‌های روی کشتی است.
               </p>
             </section>
 
@@ -269,7 +312,8 @@ const BandarAbbasComprehensiveGuide = () => {
                 ۱. تکمیل و ثبت <strong>اظهارنامه گمرکی</strong>
               </h3>
               <p className="leading-relaxed mb-4">
-                <strong>اظهارنامه گمرکی</strong> مهم‌ترین سند در فرآیند <strong>ترخیص کالا از گمرک</strong> است. این سند توسط <strong>ترخیصکار گمرکی</strong> یا واردکننده در <strong>سامانه جامع گمرکی</strong> تکمیل می‌شود.
+                <strong>اظهارنامه گمرکی</strong> مهم‌ترین سند در فرآیند <strong>ترخیص کالا از گمرک</strong> است. این سند
+                توسط <strong>ترخیصکار گمرکی</strong> یا واردکننده در <strong>سامانه جامع گمرکی</strong> تکمیل می‌شود.
               </p>
               <div className="bg-muted/50 p-4 rounded-lg mb-4">
                 <p className="font-semibold mb-2 flex items-center gap-2">
@@ -285,25 +329,28 @@ const BandarAbbasComprehensiveGuide = () => {
                 </ul>
               </div>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۲. ارزیابی و بازرسی کالا
-              </h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">۲. ارزیابی و بازرسی کالا</h3>
               <p className="leading-relaxed mb-4">
-                پس از ثبت اظهارنامه، کالا توسط <strong>ارزیاب گمرک</strong> بررسی می‌شود. بازرسی می‌تواند <strong>سبز</strong> (بدون بازرسی فیزیکی)، <strong>زرد</strong> (بررسی اسنادی) یا <strong>قرمز</strong> (بازرسی کامل فیزیکی) باشد.
+                پس از ثبت اظهارنامه، کالا توسط <strong>ارزیاب گمرک</strong> بررسی می‌شود. بازرسی می‌تواند{" "}
+                <strong>سبز</strong> (بدون بازرسی فیزیکی)، <strong>زرد</strong> (بررسی اسنادی) یا <strong>قرمز</strong>{" "}
+                (بازرسی کامل فیزیکی) باشد.
               </p>
 
               <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
                 ۳. محاسبه و پرداخت <strong>حقوق و عوارض گمرکی</strong>
               </h3>
               <p className="leading-relaxed mb-4">
-                پس از تأیید اظهارنامه، <Link to="/blog/customs-tariff-guide" className="text-primary hover:underline"><strong>حقوق گمرکی</strong></Link> محاسبه می‌شود. این هزینه‌ها شامل حقوق ورودی، سود بازرگانی، مالیات بر ارزش افزوده و عوارض مختلف است.
+                پس از تأیید اظهارنامه،{" "}
+                <Link to="/blog/customs-tariff-guide" className="text-primary hover:underline">
+                  <strong>حقوق گمرکی</strong>
+                </Link>{" "}
+                محاسبه می‌شود. این هزینه‌ها شامل حقوق ورودی، سود بازرگانی، مالیات بر ارزش افزوده و عوارض مختلف است.
               </p>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-                ۴. ترخیص نهایی و خروج کالا
-              </h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">۴. ترخیص نهایی و خروج کالا</h3>
               <p className="leading-relaxed mb-4">
-                پس از پرداخت تمام هزینه‌ها و تأیید نهایی، <strong>پروانه سبز گمرکی</strong> صادر شده و کالا از <strong>گمرک بندرعباس</strong> خارج می‌شود.
+                پس از پرداخت تمام هزینه‌ها و تأیید نهایی، <strong>پروانه سبز گمرکی</strong> صادر شده و کالا از{" "}
+                <strong>گمرک بندرعباس</strong> خارج می‌شود.
               </p>
             </section>
 
@@ -324,23 +371,33 @@ const BandarAbbasComprehensiveGuide = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border border-border p-3"><strong>حقوق ورودی</strong></td>
+                      <td className="border border-border p-3">
+                        <strong>حقوق ورودی</strong>
+                      </td>
                       <td className="border border-border p-3">۴ تا ۵۵ درصد ارزش CIF (بسته به کد تعرفه)</td>
                     </tr>
                     <tr className="bg-muted/30">
-                      <td className="border border-border p-3"><strong>سود بازرگانی</strong></td>
+                      <td className="border border-border p-3">
+                        <strong>سود بازرگانی</strong>
+                      </td>
                       <td className="border border-border p-3">۱ تا ۱۰ درصد ارزش CIF</td>
                     </tr>
                     <tr>
-                      <td className="border border-border p-3"><strong>مالیات ارزش افزوده</strong></td>
+                      <td className="border border-border p-3">
+                        <strong>مالیات ارزش افزوده</strong>
+                      </td>
                       <td className="border border-border p-3">۹ درصد ارزش کالا + حقوق ورودی</td>
                     </tr>
                     <tr className="bg-muted/30">
-                      <td className="border border-border p-3"><strong>هزینه انبارداری</strong></td>
+                      <td className="border border-border p-3">
+                        <strong>هزینه انبارداری</strong>
+                      </td>
                       <td className="border border-border p-3">روزانه ۵۰,۰۰۰ تا ۵۰۰,۰۰۰ تومان</td>
                     </tr>
                     <tr>
-                      <td className="border border-border p-3"><strong>حق‌الزحمه ترخیصکار</strong></td>
+                      <td className="border border-border p-3">
+                        <strong>حق‌الزحمه ترخیصکار</strong>
+                      </td>
                       <td className="border border-border p-3">۰.۵ تا ۲ درصد ارزش کالا</td>
                     </tr>
                   </tbody>
@@ -357,28 +414,36 @@ const BandarAbbasComprehensiveGuide = () => {
 
               <div className="space-y-4">
                 <div className="flex gap-4 items-start">
-                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">۱</div>
+                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    ۱
+                  </div>
                   <div>
                     <p className="font-semibold">ثبت اظهارنامه و بررسی اولیه</p>
                     <p className="text-muted-foreground">۱ تا ۲ روز کاری</p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start">
-                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">۲</div>
+                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    ۲
+                  </div>
                   <div>
                     <p className="font-semibold">ارزیابی و بازرسی کالا</p>
                     <p className="text-muted-foreground">۱ تا ۳ روز کاری</p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start">
-                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">۳</div>
+                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    ۳
+                  </div>
                   <div>
                     <p className="font-semibold">محاسبه و پرداخت حقوق</p>
                     <p className="text-muted-foreground">۱ روز کاری</p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start">
-                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">۴</div>
+                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    ۴
+                  </div>
                   <div>
                     <p className="font-semibold">صدور پروانه و خروج کالا</p>
                     <p className="text-muted-foreground">۱ روز کاری</p>
@@ -388,7 +453,10 @@ const BandarAbbasComprehensiveGuide = () => {
 
               <div className="bg-accent/10 p-4 rounded-lg mt-6">
                 <p className="font-semibold text-accent">مجموع زمان تقریبی: ۴ تا ۷ روز کاری</p>
-                <p className="text-sm text-muted-foreground mt-2">این زمان‌بندی برای کالاهای معمولی است. کالاهای نیازمند مجوزهای خاص ممکن است زمان بیشتری نیاز داشته باشند.</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  این زمان‌بندی برای کالاهای معمولی است. کالاهای نیازمند مجوزهای خاص ممکن است زمان بیشتری نیاز داشته
+                  باشند.
+                </p>
               </div>
             </section>
 
@@ -406,7 +474,9 @@ const BandarAbbasComprehensiveGuide = () => {
                 </div>
                 <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
                   <p className="font-semibold text-amber-800 mb-2">⚠️ دقت در کد تعرفه</p>
-                  <p className="text-amber-700">انتخاب کد تعرفه اشتباه می‌تواند منجر به جریمه سنگین یا توقیف کالا شود.</p>
+                  <p className="text-amber-700">
+                    انتخاب کد تعرفه اشتباه می‌تواند منجر به جریمه سنگین یا توقیف کالا شود.
+                  </p>
                 </div>
                 <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
                   <p className="font-semibold text-amber-800 mb-2">⚠️ زمان‌بندی مناسب</p>
@@ -428,7 +498,6 @@ const BandarAbbasComprehensiveGuide = () => {
                 </Link>
               </Button>
             </section>
-
           </article>
 
           {/* Related Articles */}

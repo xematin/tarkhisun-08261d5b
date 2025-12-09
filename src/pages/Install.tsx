@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
 const Install = () => {
@@ -22,25 +22,25 @@ const Install = () => {
     // Set canonical URL
     let canonicalLink = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
     if (!canonicalLink) {
-      canonicalLink = document.createElement('link');
-      canonicalLink.setAttribute('rel', 'canonical');
+      canonicalLink = document.createElement("link");
+      canonicalLink.setAttribute("rel", "canonical");
       document.head.appendChild(canonicalLink);
     }
-    canonicalLink.setAttribute('href', 'https://tarkhisun.ir/install');
+    canonicalLink.setAttribute("href", "https://tarkhisun.com/install");
 
     // Add noindex meta tag to prevent search engines from indexing this page
     const robotsMeta = document.querySelector('meta[name="robots"]') as HTMLMetaElement;
     if (!robotsMeta) {
-      const meta = document.createElement('meta');
-      meta.name = 'robots';
-      meta.content = 'noindex, follow';
+      const meta = document.createElement("meta");
+      meta.name = "robots";
+      meta.content = "noindex, follow";
       document.head.appendChild(meta);
     } else {
-      robotsMeta.setAttribute('content', 'noindex, follow');
+      robotsMeta.setAttribute("content", "noindex, follow");
     }
 
     // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    if (window.matchMedia("(display-mode: standalone)").matches) {
       setIsInstalled(true);
     }
 
@@ -51,16 +51,16 @@ const Install = () => {
       setIsInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener("beforeinstallprompt", handler);
 
     // Listen for app installed event
-    window.addEventListener('appinstalled', () => {
+    window.addEventListener("appinstalled", () => {
       setIsInstalled(true);
       setIsInstallable(false);
     });
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
 
@@ -72,8 +72,8 @@ const Install = () => {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+    if (outcome === "accepted") {
+      console.log("User accepted the install prompt");
     }
 
     setDeferredPrompt(null);
@@ -84,31 +84,31 @@ const Install = () => {
     {
       icon: <Zap className="h-6 w-6" />,
       title: "دسترسی سریع",
-      description: "با یک کلیک از صفحه اصلی گوشی، به اپلیکیشن دسترسی داشته باشید"
+      description: "با یک کلیک از صفحه اصلی گوشی، به اپلیکیشن دسترسی داشته باشید",
     },
     {
       icon: <Shield className="h-6 w-6" />,
       title: "استفاده آفلاین",
-      description: "حتی بدون اینترنت می‌توانید به محتوا و اطلاعات ذخیره‌شده دسترسی داشته باشید"
+      description: "حتی بدون اینترنت می‌توانید به محتوا و اطلاعات ذخیره‌شده دسترسی داشته باشید",
     },
     {
       icon: <Smartphone className="h-6 w-6" />,
       title: "تجربه بومی",
-      description: "تجربه‌ای شبیه به اپلیکیشن‌های بومی با رابط کاربری بهینه‌شده"
-    }
+      description: "تجربه‌ای شبیه به اپلیکیشن‌های بومی با رابط کاربری بهینه‌شده",
+    },
   ];
 
   const installSteps = [
     "روی دکمه «نصب اپلیکیشن» کلیک کنید",
     "در پنجره باز شده، گزینه نصب را تایید کنید",
     "اپلیکیشن روی صفحه اصلی گوشی شما نمایش داده می‌شود",
-    "از دسترسی سریع و آفلاین لذت ببرید!"
+    "از دسترسی سریع و آفلاین لذت ببرید!",
   ];
 
   return (
     <div className="min-h-screen flex flex-col" dir="rtl">
       <Header />
-      
+
       <main className="flex-1 container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Hero Section */}
@@ -116,9 +116,7 @@ const Install = () => {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-primary/10 rounded-full mb-6">
               <Download className="h-10 w-10 text-primary" />
             </div>
-            <h1 className="text-4xl font-bold mb-4 text-foreground">
-              نصب اپلیکیشن ترخیصان
-            </h1>
+            <h1 className="text-4xl font-bold mb-4 text-foreground">نصب اپلیکیشن ترخیصان</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               اپلیکیشن ترخیصان را روی گوشی خود نصب کنید و از امکانات ویژه آفلاین و دسترسی سریع بهره‌مند شوید
             </p>
@@ -128,26 +126,16 @@ const Install = () => {
           {isInstalled ? (
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8 text-center">
               <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />
-              <h2 className="text-xl font-semibold text-green-800 mb-2">
-                اپلیکیشن نصب شده است! ✓
-              </h2>
-              <p className="text-green-700">
-                اپلیکیشن ترخیصان با موفقیت روی دستگاه شما نصب شده است
-              </p>
+              <h2 className="text-xl font-semibold text-green-800 mb-2">اپلیکیشن نصب شده است! ✓</h2>
+              <p className="text-green-700">اپلیکیشن ترخیصان با موفقیت روی دستگاه شما نصب شده است</p>
             </div>
           ) : isInstallable ? (
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-8 mb-8 text-center">
-              <Button 
-                size="lg" 
-                onClick={handleInstallClick}
-                className="text-lg px-8 py-6 mb-4"
-              >
+              <Button size="lg" onClick={handleInstallClick} className="text-lg px-8 py-6 mb-4">
                 <Download className="ml-2 h-5 w-5" />
                 نصب اپلیکیشن
               </Button>
-              <p className="text-sm text-muted-foreground">
-                با کلیک روی دکمه بالا، اپلیکیشن را نصب کنید
-              </p>
+              <p className="text-sm text-muted-foreground">با کلیک روی دکمه بالا، اپلیکیشن را نصب کنید</p>
             </div>
           ) : (
             <div className="bg-accent/10 border border-accent/20 rounded-lg p-6 mb-8">
@@ -177,7 +165,7 @@ const Install = () => {
           {/* Features */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {features.map((feature, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-card border border-border rounded-lg p-6 text-center hover:shadow-lg transition-shadow"
               >
@@ -207,11 +195,7 @@ const Install = () => {
 
           {/* Call to Action */}
           <div className="text-center mt-12">
-            <Button 
-              size="lg" 
-              variant="outline"
-              onClick={() => window.location.href = '/'}
-            >
+            <Button size="lg" variant="outline" onClick={() => (window.location.href = "/")}>
               بازگشت به صفحه اصلی
             </Button>
           </div>

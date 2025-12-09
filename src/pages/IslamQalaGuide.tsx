@@ -7,73 +7,93 @@ import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
 import RelatedArticles from "@/components/RelatedArticles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, FileText, TrendingUp, Shield, AlertCircle, CheckCircle2, Clock, Users, Building2 } from "lucide-react";
+import {
+  ArrowRight,
+  MapPin,
+  FileText,
+  TrendingUp,
+  Shield,
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  Users,
+  Building2,
+} from "lucide-react";
 import ArticleImage from "@/components/ArticleImage";
 
 const IslamQalaGuide = () => {
   useEffect(() => {
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', 'fa');
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.documentElement.setAttribute("dir", "rtl");
+    document.documentElement.setAttribute("lang", "fa");
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "اسلام قلعه | راهنمای کامل گذرگاه مرزی ایران و افغانستان",
-    "description": "راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت جغرافیایی، خدمات گمرکی، مراحل ترانزیت، مدارک لازم، تجهیزات، ساعات کاری، تعرفه‌ها و نکات مهم تجارت با افغانستان",
-    "author": {
+    headline: "اسلام قلعه | راهنمای کامل گذرگاه مرزی ایران و افغانستان",
+    description:
+      "راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت جغرافیایی، خدمات گمرکی، مراحل ترانزیت، مدارک لازم، تجهیزات، ساعات کاری، تعرفه‌ها و نکات مهم تجارت با افغانستان",
+    author: {
       "@type": "Organization",
-      "name": "ترخیصان - مشاوره امور گمرکی"
+      name: "ترخیصان - مشاوره امور گمرکی",
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "ترخیصان",
-      "address": {
+      name: "ترخیصان",
+      address: {
         "@type": "PostalAddress",
-        "addressLocality": "بندرعباس",
-        "addressRegion": "هرمزگان",
-        "addressCountry": "IR"
-      }
+        addressLocality: "بندرعباس",
+        addressRegion: "هرمزگان",
+        addressCountry: "IR",
+      },
     },
-    "datePublished": "2025-10-09",
-    "dateModified": "2025-10-09",
-    "mainEntityOfPage": {
+    datePublished: "2025-10-09",
+    dateModified: "2025-10-09",
+    mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": typeof window !== 'undefined' ? window.location.href : ''
+      "@id": typeof window !== "undefined" ? window.location.href : "",
     },
-    "keywords": "اسلام قلعه, گذرگاه مرزی, مرز ایران و افغانستان, گمرک اسلام قلعه, ترانزیت به افغانستان, صادرات به افغانستان, واردات از افغانستان, تجارت با افغانستان, مرز دوغارون, هرات"
+    keywords:
+      "اسلام قلعه, گذرگاه مرزی, مرز ایران و افغانستان, گمرک اسلام قلعه, ترانزیت به افغانستان, صادرات به افغانستان, واردات از افغانستان, تجارت با افغانستان, مرز دوغارون, هرات",
   };
 
   return (
     <>
       <Helmet>
         <title>اسلام قلعه | راهنمای کامل گذرگاه مرزی ایران و افغانستان | ترخیصان</title>
-        <meta name="description" content="راهنمای گذرگاه مرزی اسلام قلعه: خدمات گمرکی، مراحل ترانزیت، مدارک و تعرفه‌های تجارت با افغانستان" />
-        <meta name="keywords" content="اسلام قلعه, گذرگاه مرزی, مرز ایران و افغانستان, گمرک اسلام قلعه, ترانزیت به افغانستان, صادرات به افغانستان, واردات از افغانستان, تجارت با افغانستان, مرز دوغارون, هرات, مشاوره گمرکی, ترخیص کالا, حمل و نقل بین المللی" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/islam-qala-border-crossing-guide" />
-        
+        <meta
+          name="description"
+          content="راهنمای گذرگاه مرزی اسلام قلعه: خدمات گمرکی، مراحل ترانزیت، مدارک و تعرفه‌های تجارت با افغانستان"
+        />
+        <meta
+          name="keywords"
+          content="اسلام قلعه, گذرگاه مرزی, مرز ایران و افغانستان, گمرک اسلام قلعه, ترانزیت به افغانستان, صادرات به افغانستان, واردات از افغانستان, تجارت با افغانستان, مرز دوغارون, هرات, مشاوره گمرکی, ترخیص کالا, حمل و نقل بین المللی"
+        />
+        <link rel="canonical" href="https://tarkhisun.com/blog/islam-qala-border-crossing-guide" />
+
         {/* Open Graph Tags */}
         <meta property="og:title" content="اسلام قلعه | راهنمای کامل گذرگاه مرزی ایران و افغانستان" />
-        <meta property="og:description" content="راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت، خدمات، مراحل و نکات تجارت با افغانستان" />
+        <meta
+          property="og:description"
+          content="راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت، خدمات، مراحل و نکات تجارت با افغانستان"
+        />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="fa_IR" />
-        
+
         {/* Schema.org Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
         <Header />
-        
+
         <main>
-          <ArticleBreadcrumb 
+          <ArticleBreadcrumb
             category="گذرگاه‌های مرزی"
             articleTitle="اسلام قلعه - راهنمای کامل گذرگاه مرزی ایران و افغانستان"
           />
-          
+
           {/* Hero Section */}
           <section className="py-20 bg-gradient-to-br from-secondary to-white">
             <div className="container mx-auto px-4" dir="rtl">
@@ -82,15 +102,16 @@ const IslamQalaGuide = () => {
                   <MapPin className="w-4 h-4" />
                   گذرگاه‌های مرزی
                 </div>
-                
+
                 <h1 className="heading-primary mb-6 text-persian">
                   اسلام قلعه
                   <br />
                   <span className="text-accent">راهنمای کامل گذرگاه مرزی ایران و افغانستان</span>
                 </h1>
-                
+
                 <p className="text-xl text-muted-foreground mb-8 text-persian leading-relaxed">
-                  راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت جغرافیایی، خدمات گمرکی، مراحل ترانزیت و صادرات، مدارک لازم و نکات کلیدی تجارت با افغانستان
+                  راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت جغرافیایی، خدمات گمرکی، مراحل ترانزیت و صادرات، مدارک لازم
+                  و نکات کلیدی تجارت با افغانستان
                 </p>
 
                 <div className="flex flex-wrap justify-center gap-4 text-sm">
@@ -119,7 +140,6 @@ const IslamQalaGuide = () => {
           <section className="py-16">
             <div className="container mx-auto px-4" dir="rtl">
               <article className="max-w-4xl mx-auto prose prose-lg text-persian">
-                
                 {/* Introduction */}
                 <Card className="mb-12 border-r-4 border-r-accent">
                   <CardContent className="p-6">
@@ -128,7 +148,21 @@ const IslamQalaGuide = () => {
                       <strong>گذرگاه مرزی اسلام قلعه چیست؟</strong>
                     </h2>
                     <p className="text-muted-foreground leading-relaxed text-persian">
-                      اسلام قلعه یکی از مهم‌ترین و استراتژیک‌ترین گذرگاه‌های مرزی ایران در مرز با افغانستان است که در استان خراسان رضوی واقع شده و نقش حیاتی در <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">تجارت دو کشور</Link> ایفا می‌کند. این مرز در مقابل شهر و گذرگاه دوغارون افغانستان قرار دارد و یکی از اصلی‌ترین مسیرهای صادرات کالا به افغانستان و <Link to="/blog/kuwait-afghanistan-transit-guide" className="text-accent hover:underline">ترانزیت به کشورهای آسیای میانه</Link> محسوب می‌شود. برای آشنایی با <Link to="/blog/manifest-guide" className="text-accent hover:underline">مانیفست و مدارک گمرکی</Link>، مقاله مربوطه را مطالعه کنید.
+                      اسلام قلعه یکی از مهم‌ترین و استراتژیک‌ترین گذرگاه‌های مرزی ایران در مرز با افغانستان است که در
+                      استان خراسان رضوی واقع شده و نقش حیاتی در{" "}
+                      <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">
+                        تجارت دو کشور
+                      </Link>{" "}
+                      ایفا می‌کند. این مرز در مقابل شهر و گذرگاه دوغارون افغانستان قرار دارد و یکی از اصلی‌ترین مسیرهای
+                      صادرات کالا به افغانستان و{" "}
+                      <Link to="/blog/kuwait-afghanistan-transit-guide" className="text-accent hover:underline">
+                        ترانزیت به کشورهای آسیای میانه
+                      </Link>{" "}
+                      محسوب می‌شود. برای آشنایی با{" "}
+                      <Link to="/blog/manifest-guide" className="text-accent hover:underline">
+                        مانیفست و مدارک گمرکی
+                      </Link>
+                      ، مقاله مربوطه را مطالعه کنید.
                     </p>
                   </CardContent>
                 </Card>
@@ -139,7 +173,7 @@ const IslamQalaGuide = () => {
                     <MapPin className="w-6 h-6 text-accent" />
                     موقعیت جغرافیایی
                   </h2>
-                  
+
                   <Card className="mb-6">
                     <CardContent className="p-6">
                       <div className="grid md:grid-cols-2 gap-6">
@@ -164,7 +198,7 @@ const IslamQalaGuide = () => {
                             </li>
                           </ul>
                         </div>
-                        
+
                         <div>
                           <h3 className="font-bold text-lg mb-3 text-persian">سمت افغانستان</h3>
                           <ul className="space-y-2 text-muted-foreground text-persian">
@@ -204,7 +238,7 @@ const IslamQalaGuide = () => {
                     <TrendingUp className="w-6 h-6 text-accent" />
                     اهمیت استراتژیک اسلام قلعه
                   </h2>
-                  
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <Card className="border-t-4 border-t-accent">
                       <CardContent className="p-6">
@@ -268,7 +302,7 @@ const IslamQalaGuide = () => {
                     <Building2 className="w-6 h-6 text-accent" />
                     خدمات و تجهیزات گمرک اسلام قلعه
                   </h2>
-                  
+
                   <Card>
                     <CardContent className="p-6">
                       <div className="space-y-6">
@@ -342,51 +376,54 @@ const IslamQalaGuide = () => {
                     <FileText className="w-6 h-6 text-accent" />
                     مراحل صادرات کالا از اسلام قلعه
                   </h2>
-                  
+
                   <div className="space-y-4">
                     {[
                       {
                         step: "۱",
                         title: "ثبت سفارش در سامانه جامع تجارت",
-                        description: "ثبت اطلاعات کالا، خریدار و مقصد در سامانه ntsw.ir و دریافت کد رهگیری"
+                        description: "ثبت اطلاعات کالا، خریدار و مقصد در سامانه ntsw.ir و دریافت کد رهگیری",
                       },
                       {
                         step: "۲",
                         title: "تهیه اسناد و مدارک",
-                        description: "آماده‌سازی پروفرما، لیست بسته‌بندی، گواهی مبدا و سایر مدارک مورد نیاز"
+                        description: "آماده‌سازی پروفرما، لیست بسته‌بندی، گواهی مبدا و سایر مدارک مورد نیاز",
                       },
                       {
                         step: "۳",
                         title: "حمل کالا به گمرک",
-                        description: "انتقال کالا توسط باربری مجاز به پایانه صادراتی اسلام قلعه"
+                        description: "انتقال کالا توسط باربری مجاز به پایانه صادراتی اسلام قلعه",
                       },
                       {
                         step: "۴",
                         title: "ثبت اظهارنامه گمرکی",
-                        description: "تکمیل اظهارنامه صادراتی در سیستم گمرک توسط کارشناس ترخیص"
+                        description: "تکمیل اظهارنامه صادراتی در سیستم گمرک توسط کارشناس ترخیص",
                       },
                       {
                         step: "۵",
                         title: "بازرسی و معاینه فیزیکی",
-                        description: "بررسی کالا توسط مامورین گمرک و تایید مطابقت با اسناد"
+                        description: "بررسی کالا توسط مامورین گمرک و تایید مطابقت با اسناد",
                       },
                       {
                         step: "۶",
                         title: "پرداخت هزینه‌ها و عوارض",
-                        description: "تسویه عوارض صادراتی، هزینه خدمات و سایر بهای خدمات"
+                        description: "تسویه عوارض صادراتی، هزینه خدمات و سایر بهای خدمات",
                       },
                       {
                         step: "۷",
                         title: "دریافت مجوز خروج",
-                        description: "اخذ برگ ترخیص و تایید نهایی برای خروج کالا از مرز"
+                        description: "اخذ برگ ترخیص و تایید نهایی برای خروج کالا از مرز",
                       },
                       {
                         step: "۸",
                         title: "تحویل به طرف افغانستانی",
-                        description: "عبور کالا از مرز و تحویل به گمرک دوغارون افغانستان"
-                      }
+                        description: "عبور کالا از مرز و تحویل به گمرک دوغارون افغانستان",
+                      },
                     ].map((item, index) => (
-                      <Card key={index} className="border-r-4 border-r-accent/30 hover:border-r-accent transition-colors">
+                      <Card
+                        key={index}
+                        className="border-r-4 border-r-accent/30 hover:border-r-accent transition-colors"
+                      >
                         <CardContent className="p-6">
                           <div className="flex gap-4">
                             <div className="flex-shrink-0 w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
@@ -409,7 +446,7 @@ const IslamQalaGuide = () => {
                     <FileText className="w-6 h-6 text-accent" />
                     مدارک لازم برای صادرات
                   </h2>
-                  
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <Card>
                       <CardContent className="p-6">
@@ -483,7 +520,7 @@ const IslamQalaGuide = () => {
                     <Clock className="w-6 h-6 text-accent" />
                     ساعات کاری و تعرفه‌ها
                   </h2>
-                  
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <Card className="border-t-4 border-t-accent">
                       <CardContent className="p-6">
@@ -547,7 +584,7 @@ const IslamQalaGuide = () => {
                     <TrendingUp className="w-6 h-6 text-accent" />
                     کالاهای پرتردد از اسلام قلعه
                   </h2>
-                  
+
                   <Card>
                     <CardContent className="p-6">
                       <div className="grid md:grid-cols-3 gap-6">
@@ -592,7 +629,7 @@ const IslamQalaGuide = () => {
                     <Shield className="w-6 h-6 text-accent" />
                     نکات مهم و توصیه‌ها
                   </h2>
-                  
+
                   <div className="space-y-4">
                     <Card className="border-r-4 border-r-green-500">
                       <CardContent className="p-6">
@@ -601,7 +638,8 @@ const IslamQalaGuide = () => {
                           <div>
                             <h3 className="font-bold mb-2 text-persian">بررسی قوانین افغانستان</h3>
                             <p className="text-muted-foreground text-persian">
-                              پیش از صادرات، از مجوزها و محدودیت‌های وارداتی طرف افغانستانی اطمینان حاصل کنید و قوانین گمرکی افغانستان را بررسی نمایید.
+                              پیش از صادرات، از مجوزها و محدودیت‌های وارداتی طرف افغانستانی اطمینان حاصل کنید و قوانین
+                              گمرکی افغانستان را بررسی نمایید.
                             </p>
                           </div>
                         </div>
@@ -615,7 +653,8 @@ const IslamQalaGuide = () => {
                           <div>
                             <h3 className="font-bold mb-2 text-persian">بیمه محموله</h3>
                             <p className="text-muted-foreground text-persian">
-                              حتماً بیمه جامع محموله را تهیه کنید. با توجه به مسافت و شرایط جاده‌ای، بیمه کامل ضروری است.
+                              حتماً بیمه جامع محموله را تهیه کنید. با توجه به مسافت و شرایط جاده‌ای، بیمه کامل ضروری
+                              است.
                             </p>
                           </div>
                         </div>
@@ -629,7 +668,8 @@ const IslamQalaGuide = () => {
                           <div>
                             <h3 className="font-bold mb-2 text-persian">انتخاب باربری مطمئن</h3>
                             <p className="text-muted-foreground text-persian">
-                              از شرکت‌های حمل و نقل با سابقه و مجوز رسمی استفاده کنید. راننده باید کارت TIR معتبر داشته باشد.
+                              از شرکت‌های حمل و نقل با سابقه و مجوز رسمی استفاده کنید. راننده باید کارت TIR معتبر داشته
+                              باشد.
                             </p>
                           </div>
                         </div>
@@ -643,7 +683,8 @@ const IslamQalaGuide = () => {
                           <div>
                             <h3 className="font-bold mb-2 text-persian">مشاوره تخصصی</h3>
                             <p className="text-muted-foreground text-persian">
-                              برای صادرات موفق و بدون دردسر، از خدمات مشاوران گمرکی مجرب استفاده کنید و با آنها هماهنگی کامل داشته باشید.
+                              برای صادرات موفق و بدون دردسر، از خدمات مشاوران گمرکی مجرب استفاده کنید و با آنها هماهنگی
+                              کامل داشته باشید.
                             </p>
                           </div>
                         </div>
@@ -657,7 +698,8 @@ const IslamQalaGuide = () => {
                           <div>
                             <h3 className="font-bold mb-2 text-persian">پیگیری مستمر</h3>
                             <p className="text-muted-foreground text-persian">
-                              وضعیت کالا را از طریق سامانه‌های آنلاین پیگیری کنید و با راننده در تماس باشید تا از عبور موفق از مرز اطمینان حاصل کنید.
+                              وضعیت کالا را از طریق سامانه‌های آنلاین پیگیری کنید و با راننده در تماس باشید تا از عبور
+                              موفق از مرز اطمینان حاصل کنید.
                             </p>
                           </div>
                         </div>
@@ -671,7 +713,8 @@ const IslamQalaGuide = () => {
                   <CardContent className="p-8 text-center">
                     <h2 className="text-2xl font-bold mb-4 text-persian">نیاز به مشاوره دارید؟</h2>
                     <p className="text-muted-foreground mb-6 text-persian max-w-2xl mx-auto">
-                      تیم متخصص ترخیصان آماده ارائه مشاوره رایگان در زمینه صادرات از طریق اسلام قلعه و ترانزیت به افغانستان است. با ما تماس بگیرید.
+                      تیم متخصص ترخیصان آماده ارائه مشاوره رایگان در زمینه صادرات از طریق اسلام قلعه و ترانزیت به
+                      افغانستان است. با ما تماس بگیرید.
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
                       <Link to="/">
@@ -689,7 +732,6 @@ const IslamQalaGuide = () => {
                     </div>
                   </CardContent>
                 </Card>
-
               </article>
 
               {/* Related Articles */}

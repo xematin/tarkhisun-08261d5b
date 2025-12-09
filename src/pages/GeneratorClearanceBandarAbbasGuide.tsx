@@ -23,7 +23,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
         "@type": "Article",
         "headline": "ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک ژنراتور",
         "description": "راهنمای جامع ترخیص ژنراتور از گمرک بندرعباس: مدارک لازم، کد تعرفه HS، حقوق گمرکی، مراحل واردات و نکات کلیدی",
-        "image": "https://tarkhisun.ir/og-image.jpg",
+        "image": "https://tarkhisun.com/og-image.jpg",
         "author": {
           "@type": "Organization",
           "name": "ترخیصان"
@@ -33,7 +33,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
           "name": "ترخیصان",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://tarkhisun.ir/logo.png"
+            "url": "https://tarkhisun.com/logo.png"
           },
           "address": {
             "@type": "PostalAddress",
@@ -46,7 +46,7 @@ const GeneratorClearanceBandarAbbasGuide = () => {
         "dateModified": "2025-10-09",
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://tarkhisun.ir/blog/generator-clearance-bandar-abbas-guide"
+          "@id": "https://tarkhisun.com/blog/generator-clearance-bandar-abbas-guide"
         },
         "keywords": "ترخیص ژنراتور بندرعباس, واردات ژنراتور, گمرک ژنراتور, حقوق گمرکی ژنراتور"
       },
@@ -57,13 +57,13 @@ const GeneratorClearanceBandarAbbasGuide = () => {
             "@type": "ListItem",
             "position": 1,
             "name": "خانه",
-            "item": "https://tarkhisun.ir/"
+            "item": "https://tarkhisun.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "بلاگ",
-            "item": "https://tarkhisun.ir/blog"
+            "item": "https://tarkhisun.com/blog"
           },
           {
             "@type": "ListItem",
@@ -81,12 +81,12 @@ const GeneratorClearanceBandarAbbasGuide = () => {
         <title>ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک ژنراتور</title>
         <meta name="description" content="راهنمای ترخیص ژنراتور از گمرک بندرعباس: مدارک، کد تعرفه، حقوق گمرکی و مراحل واردات دیزل ژنراتور" />
         <meta name="keywords" content="ترخیص ژنراتور بندرعباس, واردات ژنراتور, گمرک ژنراتور, حقوق گمرکی ژنراتور, کد تعرفه ژنراتور, مدارک واردات ژنراتور, ژنراتور برق, ترخیص دیزل ژنراتور, واردات موتور برق" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/generator-clearance-bandar-abbas-guide" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/generator-clearance-bandar-abbas-guide" />
         <meta property="og:title" content="ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک" />
         <meta property="og:description" content="راهنمای جامع ترخیص ژنراتور از گمرک بندرعباس با تمام جزئیات مدارک، تعرفه و مراحل" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/generator-clearance-bandar-abbas-guide" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/generator-clearance-bandar-abbas-guide" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

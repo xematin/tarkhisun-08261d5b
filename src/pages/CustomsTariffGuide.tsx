@@ -24,7 +24,7 @@ const CustomsTariffGuide = () => {
         "@type": "Article",
         "headline": "تعریف و اهمیت تعرفه گمرکی در واردات و صادرات",
         "description": "آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی",
-        "image": "https://tarkhisun.ir/og-image.jpg",
+        "image": "https://tarkhisun.com/og-image.jpg",
         "author": {
           "@type": "Organization",
           "name": "ترخیصان - مشاوره امور گمرکی بندرعباس"
@@ -34,7 +34,7 @@ const CustomsTariffGuide = () => {
           "name": "ترخیصان",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://tarkhisun.ir/logo.png"
+            "url": "https://tarkhisun.com/logo.png"
           },
           "address": {
             "@type": "PostalAddress",
@@ -47,7 +47,7 @@ const CustomsTariffGuide = () => {
         "dateModified": "2024-09-30",
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://tarkhisun.ir/blog/customs-tariff-guide"
+          "@id": "https://tarkhisun.com/blog/customs-tariff-guide"
         },
         "keywords": "تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, حقوق ورودی"
       },
@@ -58,13 +58,13 @@ const CustomsTariffGuide = () => {
             "@type": "ListItem",
             "position": 1,
             "name": "خانه",
-            "item": "https://tarkhisun.ir/"
+            "item": "https://tarkhisun.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "بلاگ",
-            "item": "https://tarkhisun.ir/blog"
+            "item": "https://tarkhisun.com/blog"
           },
           {
             "@type": "ListItem",
@@ -82,12 +82,12 @@ const CustomsTariffGuide = () => {
         <title>تعریف و اهمیت تعرفه گمرکی در واردات و صادرات | راهنمای جامع تعرفه کالا</title>
         <meta name="description" content="آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی، اهمیت تعرفه در تجارت بین‌المللی" />
         <meta name="keywords" content="تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, تعرفه صادرات, حقوق ورودی, مالیات واردات, تعرفه هماهنگ, گمرک ایران, محاسبه تعرفه, انواع تعرفه گمرکی" />
-        <link rel="canonical" href="https://tarkhisun.ir/blog/customs-tariff-guide" />
+        <link rel="canonical" href="https://tarkhisun.com/blog/customs-tariff-guide" />
         <meta property="og:title" content="تعریف و اهمیت تعرفه گمرکی در واردات و صادرات" />
         <meta property="og:description" content="راهنمای کامل تعرفه گمرکی، انواع تعرفه کالا و نحوه محاسبه حقوق ورودی" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://tarkhisun.ir/blog/customs-tariff-guide" />
-        <meta property="og:image" content="https://tarkhisun.ir/og-image.jpg" />
+        <meta property="og:url" content="https://tarkhisun.com/blog/customs-tariff-guide" />
+        <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta property="og:locale" content="fa_IR" />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
@@ -328,9 +328,9 @@ const CustomsTariffGuide = () => {
                             <Phone className="w-4 h-4" />
                             ۰۹۱۷۷۳۸۰۰۸۰
                           </a>
-                          <a href="mailto:info@tarkhisun.ir" className="flex items-center gap-2 text-accent hover:underline">
+                          <a href="mailto:info@tarkhisun.com" className="flex items-center gap-2 text-accent hover:underline">
                             <Mail className="w-4 h-4" />
-                            info@tarkhisun.ir
+                            info@tarkhisun.com
                           </a>
                         </div>
                         <Button asChild className="w-full mt-4">

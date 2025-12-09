@@ -11,8 +11,8 @@
   # 1. Force HTTPS + non-WWW (Zero Redirect Loop)
   # ================================================
   RewriteCond %{HTTPS} off [OR]
-  RewriteCond %{HTTP_HOST} ^www\.tarkhisun\.ir$ [NC]
-  RewriteRule ^(.*)$ https://tarkhisun.ir/$1 [R=301,L]
+  RewriteCond %{HTTP_HOST} ^www\.tarkhisun\.com$ [NC]
+  RewriteRule ^(.*)$ https://tarkhisun.com/$1 [R=301,L]
 
   # ================================================
   # 2. Remove Trailing Slash (SEO Consistency)

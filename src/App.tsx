@@ -35,6 +35,7 @@ const BandarAbbasComprehensiveGuide = lazy(() => import("./pages/BandarAbbasComp
 const HomeAppliancesClearanceGuide = lazy(() => import("./pages/HomeAppliancesClearanceGuide"));
 const MobileRegistryGuide = lazy(() => import("./pages/MobileRegistryGuide"));
 const ExportCardGuide = lazy(() => import("./pages/ExportCardGuide"));
+const ImportedCarSystemGuide = lazy(() => import("./pages/ImportedCarSystemGuide"));
 
 const queryClient = new QueryClient();
 
@@ -79,6 +80,7 @@ const AppContent = () => {
         <Route path="/blog/home-appliances-clearance-bandar-abbas-guide" element={<HomeAppliancesClearanceGuide />} />
         <Route path="/blog/mobile-phone-customs-clearance-registry-guide" element={<MobileRegistryGuide />} />
         <Route path="/blog/export-card-complete-guide" element={<ExportCardGuide />} />
+        <Route path="/blog/imported-car-system-guide" element={<ImportedCarSystemGuide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/currencies" element={<Currencies />} />
         <Route path="/install" element={<Install />} />

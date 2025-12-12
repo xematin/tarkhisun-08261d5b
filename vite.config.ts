@@ -5,41 +5,6 @@ import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
 // @ts-ignore - Critters types issue
 import Critters from 'critters';
-import vitePrerender from 'vite-plugin-prerender';
-
-// All routes to pre-render (24 pages)
-const routesToPrerender = [
-  '/',
-  '/blog',
-  '/currencies',
-  '/install',
-  '/contact',
-  // Blog articles (19 articles)
-  '/blog/zero-to-hundred-bandar-abbas-customs-clearance',
-  '/blog/bandar-abbas-comprehensive-clearance-guide',
-  '/blog/commission-guide',
-  '/blog/business-card-guide',
-  '/blog/hs-code-guide',
-  '/blog/car-parts-import-guide',
-  '/blog/kuwait-afghanistan-transit-guide',
-  '/blog/islam-qala-guide',
-  '/blog/manifest-guide',
-  '/blog/home-appliances-clearance-bandar-abbas-guide',
-  '/blog/dubai-to-abbas-import-guide',
-  '/blog/customs-tariff-guide',
-  '/blog/ntsw-guide',
-  '/blog/mobile-registry-guide',
-  '/blog/exchange-rate-guide',
-  '/blog/sana-exchange-rate-guide',
-  '/blog/incoterms-guide',
-  '/blog/import-export-guide',
-  '/blog/excavation-machinery-guide',
-  '/blog/tah-lanji-import-guide',
-  '/blog/generator-clearance-bandar-abbas-guide',
-  '/blog/water-tank-clearance-guide',
-  '/blog/export-card-complete-guide',
-  '/blog/imported-car-system-guide',
-];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -280,23 +245,7 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: false
       }
-    }),
-    // Pre-rendering plugin - generates static HTML for all routes
-    vitePrerender({
-      staticDir: path.join(__dirname, 'dist'),
-      routes: routesToPrerender,
-      renderer: new vitePrerender.PuppeteerRenderer({
-        maxConcurrentRoutes: 4,
-        renderAfterTime: 5000, // Wait 5s for React to fully render
-        headless: true,
-      }),
-      postProcess(renderedRoute) {
-        // Ensure proper encoding for Persian content
-        renderedRoute.html = renderedRoute.html
-          .replace(/http-equiv="Content-Type" content="[^"]*"/g, 'http-equiv="Content-Type" content="text/html; charset=utf-8"');
-        return renderedRoute;
-      },
-    }),
+    })
   ].filter(Boolean),
   resolve: {
     alias: {

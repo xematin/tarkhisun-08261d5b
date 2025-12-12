@@ -101,19 +101,35 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
 
-    <!-- Organization Structured Data -->
+    <!-- Organization + Logo Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
+        "@id": "https://tarkhisun.com/#organization",
         "name": "ترخیصان - مشاوره امور گمرکی بندرعباس",
+        "alternateName": ["ترخیصان", "Tarkhisun", "tarkhisun.com"],
         "url": "https://tarkhisun.com",
-        "logo": "https://tarkhisun.com/logo.png",
-        "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://tarkhisun.com/#logo",
+          "url": "https://tarkhisun.com/logo.png",
+          "contentUrl": "https://tarkhisun.com/logo.png",
+          "width": 512,
+          "height": 512,
+          "caption": "ترخیصان - لوگوی مشاوره گمرکی بندرعباس"
+        },
+        "image": {
+          "@id": "https://tarkhisun.com/#logo"
+        },
+        "description": "مشاوره تخصصی امور گمرکی و ترخیص کالا در بندرعباس شهید رجایی با بیش از ۲۰ سال تجربه",
+        "foundingDate": "2004",
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 317",
           "addressLocality": "بندرعباس",
           "addressRegion": "هرمزگان",
+          "postalCode": "79177",
           "addressCountry": "IR"
         },
         "contactPoint": {

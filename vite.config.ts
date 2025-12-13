@@ -245,7 +245,7 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: false
       }
-    }),
+    })
   ].filter(Boolean),
   resolve: {
     alias: {

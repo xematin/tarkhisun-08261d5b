@@ -3,8 +3,41 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
+import vitePrerender from 'vite-plugin-prerender';
 // @ts-ignore - Critters types issue
 import Critters from 'critters';
+
+// لیست ۲۶ route برای pre-rendering (SSG)
+const prerenderRoutes = [
+  '/',
+  '/blog',
+  '/currencies',
+  // ۲۳ مقاله بلاگ
+  '/blog/customs-tariff-guide',
+  '/blog/hs-code-guide',
+  '/blog/customs-exchange-rate-guide',
+  '/blog/ntsw-complete-guide',
+  '/blog/incoterms-guide',
+  '/blog/business-card-complete-guide',
+  '/blog/sana-nima-exchange-rate-difference-guide',
+  '/blog/import-export-guide-iran',
+  '/blog/manifest-guide',
+  '/blog/tah-lanji-import-guide',
+  '/blog/excavation-machinery-import-guide',
+  '/blog/customs-article-1-commission-guide',
+  '/blog/kuwait-afghanistan-transit-guide',
+  '/blog/islam-qala-border-crossing-guide',
+  '/blog/generator-clearance-bandar-abbas-guide',
+  '/blog/dubai-to-abbas-import-guide',
+  '/blog/water-tank-clearance-bandar-abbas-guide',
+  '/blog/car-parts-import-customs-clearance-guide',
+  '/blog/bandar-abbas-comprehensive-clearance-guide',
+  '/blog/zero-to-hundred-bandar-abbas-customs-clearance',
+  '/blog/home-appliances-clearance-bandar-abbas-guide',
+  '/blog/mobile-phone-customs-clearance-registry-guide',
+  '/blog/export-card-complete-guide',
+  '/blog/imported-car-system-guide',
+];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -245,7 +278,25 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: false
       }
-    })
+    }),
+    // SSG Pre-rendering - باید آخرین پلاگین باشد
+    vitePrerender({
+      staticDir: path.join(__dirname, 'dist'),
+      routes: prerenderRoutes,
+      renderer: new (vitePrerender as any).PuppeteerRenderer({
+        renderAfterTime: 5000, // ۵ ثانیه صبر برای hydration کامل React
+        headless: true,
+        maxConcurrentRoutes: 4,
+      }),
+      postProcess(renderedRoute: any) {
+        // حفظ encoding UTF-8 برای محتوای فارسی
+        renderedRoute.html = renderedRoute.html.replace(
+          '<meta charset="utf-8">',
+          '<meta charset="UTF-8">'
+        );
+        return renderedRoute;
+      },
+    }),
   ].filter(Boolean),
   resolve: {
     alias: {

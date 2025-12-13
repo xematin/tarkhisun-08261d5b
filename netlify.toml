@@ -3,14 +3,78 @@
   publish = "dist"
   command = "npm run build"
 
-# SPA fallback for client-side routing
+# ==================================================================
+# Prerender.io Integration for SEO
+# ==================================================================
+# Bot User-Agents that should receive pre-rendered pages
+# These redirects send crawler requests to Prerender.io service
+# 
+# SETUP STEPS:
+# 1. Sign up at https://prerender.io (free plan: 250 pages/month)
+# 2. Get your Prerender Token from dashboard
+# 3. Replace YOUR_PRERENDER_TOKEN below with your actual token
+# ==================================================================
+
+# Googlebot
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://tarkhisun.com/:splat"
+  status = 200
+  force = true
+  conditions = {User-Agent = [".*Googlebot.*"]}
+  headers = {X-Prerender-Token = "YOUR_PRERENDER_TOKEN"}
+
+# Bingbot
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://tarkhisun.com/:splat"
+  status = 200
+  force = true
+  conditions = {User-Agent = [".*bingbot.*"]}
+  headers = {X-Prerender-Token = "YOUR_PRERENDER_TOKEN"}
+
+# Facebook crawler
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://tarkhisun.com/:splat"
+  status = 200
+  force = true
+  conditions = {User-Agent = [".*facebookexternalhit.*"]}
+  headers = {X-Prerender-Token = "YOUR_PRERENDER_TOKEN"}
+
+# Twitter crawler
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://tarkhisun.com/:splat"
+  status = 200
+  force = true
+  conditions = {User-Agent = [".*Twitterbot.*"]}
+  headers = {X-Prerender-Token = "YOUR_PRERENDER_TOKEN"}
+
+# LinkedIn crawler
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://tarkhisun.com/:splat"
+  status = 200
+  force = true
+  conditions = {User-Agent = [".*LinkedInBot.*"]}
+  headers = {X-Prerender-Token = "YOUR_PRERENDER_TOKEN"}
+
+# Telegram crawler
+[[redirects]]
+  from = "/*"
+  to = "https://service.prerender.io/https://tarkhisun.com/:splat"
+  status = 200
+  force = true
+  conditions = {User-Agent = [".*TelegramBot.*"]}
+  headers = {X-Prerender-Token = "YOUR_PRERENDER_TOKEN"}
+
+# SPA fallback for regular users (must be AFTER bot redirects)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Netlify Prerendering for SEO (requires Netlify Pro plan)
-# Enable in Netlify Dashboard: Site Settings > Build & deploy > Prerendering
 [build.processing]
   skip_processing = false
 

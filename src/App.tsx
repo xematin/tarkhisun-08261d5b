@@ -36,6 +36,10 @@ const HomeAppliancesClearanceGuide = lazy(() => import("./pages/HomeAppliancesCl
 const MobileRegistryGuide = lazy(() => import("./pages/MobileRegistryGuide"));
 const ExportCardGuide = lazy(() => import("./pages/ExportCardGuide"));
 const ImportedCarSystemGuide = lazy(() => import("./pages/ImportedCarSystemGuide"));
+const BusinessConsultingGuide = lazy(() => import("./pages/BusinessConsultingGuide"));
+const CustomsClearanceCompanyGuide = lazy(() => import("./pages/CustomsClearanceCompanyGuide"));
+const InternationalShippingGuide = lazy(() => import("./pages/InternationalShippingGuide"));
+const TradingCompanyGuide = lazy(() => import("./pages/TradingCompanyGuide"));
 
 const queryClient = new QueryClient();
 
@@ -81,6 +85,10 @@ const AppContent = () => {
         <Route path="/blog/mobile-phone-customs-clearance-registry-guide" element={<MobileRegistryGuide />} />
         <Route path="/blog/export-card-complete-guide" element={<ExportCardGuide />} />
         <Route path="/blog/imported-car-system-guide" element={<ImportedCarSystemGuide />} />
+        <Route path="/blog/business-consulting-guide" element={<BusinessConsultingGuide />} />
+        <Route path="/blog/customs-clearance-company-guide" element={<CustomsClearanceCompanyGuide />} />
+        <Route path="/blog/international-shipping-guide" element={<InternationalShippingGuide />} />
+        <Route path="/blog/trading-company-guide" element={<TradingCompanyGuide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/currencies" element={<Currencies />} />
         <Route path="/install" element={<Install />} />

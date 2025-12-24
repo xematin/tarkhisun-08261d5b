@@ -2,9 +2,9 @@ import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Calculator, TrendingUp, Percent, BadgePercent, CircleDollarSign } from "lucide-react";
+import { Calculator, TrendingUp, Percent, BadgePercent, CircleDollarSign, RotateCcw } from "lucide-react";
 
 // Tax brackets for 1405 (in million Tomans - annual, based on taxable income after exemption)
 const TAX_EXEMPTION_ANNUAL = 48; // 48 million Tomans annual exemption (480 million Rials)
@@ -20,15 +20,35 @@ const formatNumber = (num: number): string => {
   return new Intl.NumberFormat("fa-IR").format(Math.round(num));
 };
 
+// Normalize Persian/Arabic digits to English
+const normalizeDigits = (str: string): string => {
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+  
+  let result = str;
+  for (let i = 0; i < 10; i++) {
+    result = result.replace(new RegExp(persianDigits[i], "g"), i.toString());
+    result = result.replace(new RegExp(arabicDigits[i], "g"), i.toString());
+  }
+  return result;
+};
+
+// Extract only numeric value from string
+const extractNumber = (str: string): number => {
+  const normalized = normalizeDigits(str);
+  const cleaned = normalized.replace(/[^\d.]/g, "");
+  return parseFloat(cleaned) || 0;
+};
+
 const TaxCalculator1405 = () => {
-  const [income, setIncome] = useState<string>("");
+  const [incomeRaw, setIncomeRaw] = useState<number>(0);
+  const [displayValue, setDisplayValue] = useState<string>("");
   const [period, setPeriod] = useState<"monthly" | "annual">("monthly");
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   const calculateTax = useMemo(() => {
-    const numericIncome = parseFloat(income.replace(/,/g, "")) || 0;
-    
     // Convert to annual if monthly
-    const annualIncome = period === "monthly" ? numericIncome * 12 : numericIncome;
+    const annualIncome = period === "monthly" ? incomeRaw * 12 : incomeRaw;
     
     // Apply exemption
     const taxableIncome = Math.max(0, annualIncome - TAX_EXEMPTION_ANNUAL);
@@ -82,15 +102,31 @@ const TaxCalculator1405 = () => {
       effectiveRate,
       breakdown,
     };
-  }, [income, period]);
+  }, [incomeRaw, period]);
 
   const handleIncomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^\d]/g, "");
-    if (value) {
-      setIncome(formatNumber(parseInt(value)));
+    const rawValue = e.target.value;
+    const numericValue = extractNumber(rawValue);
+    
+    setIncomeRaw(numericValue);
+    
+    if (numericValue > 0) {
+      setDisplayValue(formatNumber(numericValue));
     } else {
-      setIncome("");
+      setDisplayValue("");
     }
+  };
+
+  const handleCalculate = () => {
+    if (incomeRaw > 0) {
+      setShowResults(true);
+    }
+  };
+
+  const handleReset = () => {
+    setIncomeRaw(0);
+    setDisplayValue("");
+    setShowResults(false);
   };
 
   return (
@@ -123,37 +159,71 @@ const TaxCalculator1405 = () => {
                 type="text"
                 inputMode="numeric"
                 placeholder="مثال: ۱۰۰"
-                value={income}
+                value={displayValue}
                 onChange={handleIncomeChange}
                 className="pr-10 text-lg text-persian"
-                dir="rtl"
+                dir="ltr"
+                style={{ textAlign: "right" }}
               />
             </div>
           </div>
 
+          {/* Period Selection - Button Style */}
           <div className="space-y-2">
             <Label className="text-persian font-medium">دوره درآمد</Label>
-            <RadioGroup
-              value={period}
-              onValueChange={(value) => setPeriod(value as "monthly" | "annual")}
-              className="flex gap-4"
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setPeriod("monthly")}
+                className={`flex-1 py-3 px-4 rounded-lg border-2 text-persian font-medium transition-all ${
+                  period === "monthly"
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background hover:bg-secondary/50"
+                }`}
+              >
+                ماهانه
+              </button>
+              <button
+                type="button"
+                onClick={() => setPeriod("annual")}
+                className={`flex-1 py-3 px-4 rounded-lg border-2 text-persian font-medium transition-all ${
+                  period === "annual"
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background hover:bg-secondary/50"
+                }`}
+              >
+                سالانه
+              </button>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-2">
+            <Button
+              onClick={handleCalculate}
+              disabled={incomeRaw <= 0}
+              className="flex-1 text-persian"
+              size="lg"
             >
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <RadioGroupItem value="monthly" id="monthly" />
-                <Label htmlFor="monthly" className="text-persian cursor-pointer">ماهانه</Label>
-              </div>
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <RadioGroupItem value="annual" id="annual" />
-                <Label htmlFor="annual" className="text-persian cursor-pointer">سالانه</Label>
-              </div>
-            </RadioGroup>
+              <Calculator className="h-5 w-5 ml-2" />
+              محاسبه مالیات
+            </Button>
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              size="lg"
+              className="text-persian"
+            >
+              <RotateCcw className="h-5 w-5 ml-2" />
+              پاک کردن
+            </Button>
           </div>
         </div>
 
         <Separator />
 
         {/* Results Section */}
-        {income && (
+        {showResults && incomeRaw > 0 && (
           <div className="space-y-4">
             {/* Summary Cards */}
             <div className="grid grid-cols-2 gap-4">
@@ -235,6 +305,13 @@ const TaxCalculator1405 = () => {
                 </span>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!showResults && (
+          <div className="text-center py-6 text-muted-foreground text-persian">
+            درآمد خود را وارد کرده و روی «محاسبه مالیات» کلیک کنید
           </div>
         )}
 

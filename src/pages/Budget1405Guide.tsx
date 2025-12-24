@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
 import ArticleImage from "@/components/ArticleImage";
 import RelatedArticles from "@/components/RelatedArticles";
+import TaxCalculator1405 from "@/components/TaxCalculator1405";
 import { Link } from "react-router-dom";
 import { 
   FileText, 
@@ -659,7 +660,7 @@ const Budget1405Guide = () => {
                     </div>
                   </div>
 
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 mb-8">
                     <p className="text-green-700 dark:text-green-400 text-persian text-sm flex items-start gap-2">
                       <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
                       <span>
@@ -667,6 +668,9 @@ const Budget1405Guide = () => {
                       </span>
                     </p>
                   </div>
+
+                  {/* Tax Calculator */}
+                  <TaxCalculator1405 />
                 </section>
 
                 {/* Customs Tariffs */}

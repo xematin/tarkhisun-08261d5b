@@ -127,6 +127,38 @@ const CustomsTariff2025Guide = () => {
               "@type": "Answer",
               text: "براساس لایحه بودجه ۱۴۰۵، حقوق ورودی خودروهای بنزینی با حجم موتور بالای ۳۰۰۰ سی‌سی، ۱۳۰ درصد تعیین شده است."
             }
+          },
+          {
+            "@type": "Question",
+            name: "تفاوت نرخ ارز گمرکی با نرخ بازار آزاد چیست؟",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "نرخ ارز گمرکی ۹۴,۳۰۰ تومان نرخی ثابت است که در لایحه بودجه تعیین می‌شود و صرفاً برای محاسبه حقوق ورودی گمرکی استفاده می‌شود. این نرخ معمولاً با نرخ بازار آزاد تفاوت دارد."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "آیا تعرفه‌های گمرکی ۱۴۰۵ قطعی است؟",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "تعرفه‌های اعلام شده براساس لایحه بودجه است. پس از تصویب نهایی در مجلس و شورای نگهبان، این تعرفه‌ها قطعی خواهند شد و ممکن است تغییراتی داشته باشند."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "هزینه کامل ترخیص خودرو برقی چقدر است؟",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "برای خودرو برقی ۳۵,۰۰۰ دلاری: حقوق ورودی ۴٪ معادل ۱۳۲ میلیون تومان، مالیات ارزش افزوده ۱۰٪ معادل ۳۴۳ میلیون تومان و مجموع هزینه ترخیص حدود ۴۷۵ میلیون تومان است."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "تعرفه گوشی زیر ۶۰۰ یورو چقدر است؟",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "حقوق ورودی گوشی‌های موبایل با ارزش کمتر از ۶۰۰ یورو، ۱۲ درصد است و هزینه رجیستری ۹۰۰ هزار تومان به آن اضافه می‌شود."
+            }
           }
         ]
       }
@@ -400,6 +432,55 @@ const CustomsTariff2025Guide = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Car Calculation Example */}
+                  <div className="bg-gradient-to-r from-green-500/10 to-green-500/5 rounded-xl p-6 border border-green-500/20">
+                    <h4 className="font-bold text-lg text-foreground mb-4 text-persian flex items-center gap-2">
+                      <Calculator className="w-5 h-5 text-green-600" />
+                      مثال عملی: محاسبه تعرفه خودرو برقی تسلا مدل ۳
+                    </h4>
+                    <p className="text-muted-foreground mb-4 text-persian">
+                      فرض کنید یک خودرو برقی تسلا مدل ۳ به ارزش CIF <strong>۳۵,۰۰۰ دلار</strong> وارد می‌شود:
+                    </p>
+                    <div className="space-y-2 text-persian">
+                      <div className="flex justify-between p-3 bg-background/50 rounded-lg">
+                        <span>ارزش ارزی خودرو (CIF):</span>
+                        <span className="font-mono font-bold">۳۵,۰۰۰ دلار</span>
+                      </div>
+                      <div className="flex justify-between p-3 bg-background/50 rounded-lg">
+                        <span>تبدیل به ریال (× ۹۴,۳۰۰):</span>
+                        <span className="font-mono">۳,۳۰۰,۵۰۰,۰۰۰ تومان</span>
+                      </div>
+                      <div className="flex justify-between p-3 bg-background/50 rounded-lg">
+                        <span>حقوق ورودی (۴٪ خودرو برقی):</span>
+                        <span className="font-mono">۱۳۲,۰۲۰,۰۰۰ تومان</span>
+                      </div>
+                      <div className="flex justify-between p-3 bg-background/50 rounded-lg">
+                        <span>مالیات ارزش افزوده (۱۰٪):</span>
+                        <span className="font-mono">۳۴۳,۲۵۲,۰۰۰ تومان</span>
+                      </div>
+                      <div className="flex justify-between p-3 bg-green-500/20 rounded-lg font-bold">
+                        <span>مجموع هزینه ترخیص:</span>
+                        <span className="font-mono text-green-700">≈ ۴۷۵,۰۰۰,۰۰۰ تومان</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 p-4 bg-green-500/10 rounded-lg">
+                      <p className="text-sm text-muted-foreground text-persian">
+                        <strong className="text-green-700">نکته:</strong> همین خودرو اگر بنزینی بود با تعرفه ۱۰۰٪، هزینه ترخیص آن بیش از ۳,۶۰۰,۰۰۰,۰۰۰ تومان می‌شد!
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Related Link */}
+                  <div className="mt-6 p-4 bg-muted/30 rounded-xl border">
+                    <p className="text-muted-foreground text-persian text-sm">
+                      📖 برای اطلاعات بیشتر درباره واردات خودرو برقی، مقاله 
+                      <Link to="/blog/electric-car-tariff-guide" className="text-primary hover:underline mx-1">
+                        راهنمای تعرفه واردات خودرو برقی
+                      </Link>
+                      را مطالعه کنید.
+                    </p>
+                  </div>
                 </section>
 
                 {/* Mobile Tariffs Section */}
@@ -425,12 +506,16 @@ const CustomsTariff2025Guide = () => {
                       جزئیات تعرفه گوشی موبایل
                     </h3>
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
+                      <div className="flex justify-between items-center p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                        <span className="text-persian font-medium">حقوق ورودی گوشی زیر ۶۰۰ یورو</span>
+                        <span className="bg-green-500/20 text-green-700 px-4 py-2 rounded-full font-bold">۱۲٪</span>
+                      </div>
+                      <div className="flex justify-between items-center p-4 bg-red-500/10 rounded-lg border border-red-500/20">
                         <span className="text-persian font-medium">حقوق ورودی گوشی بالای ۶۰۰ یورو</span>
-                        <span className="bg-primary/20 text-primary px-4 py-2 rounded-full font-bold">۴۰٪</span>
+                        <span className="bg-red-500/20 text-red-700 px-4 py-2 rounded-full font-bold">۴۰٪</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
-                        <span className="text-persian font-medium">هزینه رجیستری</span>
+                        <span className="text-persian font-medium">هزینه رجیستری (ثابت)</span>
                         <span className="bg-primary/20 text-primary px-4 py-2 rounded-full font-bold">۹۰۰,۰۰۰ تومان</span>
                       </div>
                       <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
@@ -635,10 +720,28 @@ const CustomsTariff2025Guide = () => {
                           <TableCell className="text-center text-muted-foreground">بدون تغییر</TableCell>
                         </TableRow>
                         <TableRow>
+                          <TableCell className="text-persian font-medium">خودرو بنزینی +۳۰۰۰cc</TableCell>
+                          <TableCell className="text-center text-muted-foreground">۱۳۰٪</TableCell>
+                          <TableCell className="text-center font-bold text-red-600">۱۳۰٪</TableCell>
+                          <TableCell className="text-center text-muted-foreground">بدون تغییر</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="text-persian font-medium">گوشی زیر ۶۰۰ یورو</TableCell>
+                          <TableCell className="text-center text-muted-foreground">۱۲٪</TableCell>
+                          <TableCell className="text-center font-bold text-green-600">۱۲٪</TableCell>
+                          <TableCell className="text-center text-muted-foreground">بدون تغییر</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="text-persian font-medium">گوشی بالای ۶۰۰ یورو</TableCell>
+                          <TableCell className="text-center text-muted-foreground">۴۰٪</TableCell>
+                          <TableCell className="text-center font-bold text-red-600">۴۰٪</TableCell>
+                          <TableCell className="text-center text-muted-foreground">بدون تغییر</TableCell>
+                        </TableRow>
+                        <TableRow className="bg-orange-500/10">
                           <TableCell className="text-persian font-medium">نرخ ارز گمرکی</TableCell>
-                          <TableCell className="text-center text-muted-foreground">-</TableCell>
-                          <TableCell className="text-center font-bold text-primary">۹۴,۳۰۰ تومان</TableCell>
-                          <TableCell className="text-center text-orange-600">جدید</TableCell>
+                          <TableCell className="text-center text-muted-foreground">۶۸,۵۰۰ تومان</TableCell>
+                          <TableCell className="text-center font-bold text-orange-600">۹۴,۳۰۰ تومان</TableCell>
+                          <TableCell className="text-center text-red-600 font-bold">+۳۸٪ افزایش</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell className="text-persian font-medium">رجیستری گوشی</TableCell>
@@ -648,6 +751,19 @@ const CustomsTariff2025Guide = () => {
                         </TableRow>
                       </TableBody>
                     </Table>
+                  </div>
+
+                  <div className="bg-amber-500/10 rounded-xl p-5 border border-amber-500/20">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="w-6 h-6 text-amber-600 mt-1" />
+                      <div>
+                        <h4 className="font-bold text-foreground mb-2 text-persian">نکته مهم درباره افزایش نرخ ارز گمرکی</h4>
+                        <p className="text-muted-foreground text-sm text-persian">
+                          با افزایش ۳۸ درصدی نرخ ارز گمرکی از ۶۸,۵۰۰ به ۹۴,۳۰۰ تومان، هزینه ترخیص تمام کالاها 
+                          به همین نسبت افزایش می‌یابد، حتی اگر درصد تعرفه‌ها تغییر نکرده باشد.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </section>
 
@@ -687,7 +803,7 @@ const CustomsTariff2025Guide = () => {
                       </h3>
                       <p className="text-muted-foreground text-persian">
                         حقوق ورودی گوشی‌های موبایل با ارزش بیش از ۶۰۰ یورو، ۴۰ درصد تعیین شده 
-                        و هزینه رجیستری ۹۰۰ هزار تومان است.
+                        و هزینه رجیستری ۹۰۰ هزار تومان است. گوشی‌های زیر ۶۰۰ یورو ۱۲ درصد تعرفه دارند.
                       </p>
                     </div>
                     <div className="bg-card rounded-xl border p-5">
@@ -699,6 +815,73 @@ const CustomsTariff2025Guide = () => {
                         بالای ۳۰۰۰ سی‌سی، ۱۳۰ درصد تعیین شده که بالاترین تعرفه است.
                       </p>
                     </div>
+                    <div className="bg-card rounded-xl border p-5">
+                      <h3 className="font-bold text-foreground mb-2 text-persian">
+                        ۵. تفاوت نرخ ارز گمرکی با نرخ بازار آزاد چیست؟
+                      </h3>
+                      <p className="text-muted-foreground text-persian">
+                        نرخ ارز گمرکی (۹۴,۳۰۰ تومان) نرخی ثابت است که در لایحه بودجه تعیین می‌شود و صرفاً 
+                        برای محاسبه حقوق ورودی گمرکی استفاده می‌شود. این نرخ معمولاً با نرخ بازار آزاد تفاوت دارد.
+                      </p>
+                    </div>
+                    <div className="bg-card rounded-xl border p-5">
+                      <h3 className="font-bold text-foreground mb-2 text-persian">
+                        ۶. آیا تعرفه‌های گمرکی ۱۴۰۵ قطعی است؟
+                      </h3>
+                      <p className="text-muted-foreground text-persian">
+                        تعرفه‌های اعلام شده براساس لایحه بودجه است. پس از تصویب نهایی در مجلس و شورای نگهبان، 
+                        این تعرفه‌ها قطعی خواهند شد و ممکن است تغییراتی داشته باشند.
+                      </p>
+                    </div>
+                    <div className="bg-card rounded-xl border p-5">
+                      <h3 className="font-bold text-foreground mb-2 text-persian">
+                        ۷. هزینه کامل ترخیص خودرو برقی چقدر است؟
+                      </h3>
+                      <p className="text-muted-foreground text-persian">
+                        برای خودرو برقی ۳۵,۰۰۰ دلاری: حقوق ورودی ۴٪ معادل ۱۳۲ میلیون تومان، مالیات ارزش افزوده ۱۰٪ 
+                        معادل ۳۴۳ میلیون تومان و مجموع هزینه ترخیص حدود ۴۷۵ میلیون تومان است.
+                      </p>
+                    </div>
+                    <div className="bg-card rounded-xl border p-5">
+                      <h3 className="font-bold text-foreground mb-2 text-persian">
+                        ۸. تعرفه گوشی زیر ۶۰۰ یورو چقدر است؟
+                      </h3>
+                      <p className="text-muted-foreground text-persian">
+                        حقوق ورودی گوشی‌های موبایل با ارزش کمتر از ۶۰۰ یورو، ۱۲ درصد است و هزینه رجیستری 
+                        ۹۰۰ هزار تومان به آن اضافه می‌شود.
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Internal Links Section */}
+                <section className="bg-muted/30 rounded-2xl p-6 border mb-8">
+                  <h3 className="font-bold text-lg text-foreground mb-4 text-persian">مقالات مرتبط با ترخیص کالا</h3>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <Link to="/blog/bandar-abbas-comprehensive-guide" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-persian text-sm p-3 bg-background rounded-lg border">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      راهنمای ترخیص کالا از بندرعباس
+                    </Link>
+                    <Link to="/blog/incoterms-guide" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-persian text-sm p-3 bg-background rounded-lg border">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      اینکوترمز چیست؟ راهنمای کامل
+                    </Link>
+                    <Link to="/blog/manifest-guide" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-persian text-sm p-3 bg-background rounded-lg border">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      مانیفست در گمرک چیست؟
+                    </Link>
+                    <Link to="/blog/hs-code-guide" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-persian text-sm p-3 bg-background rounded-lg border">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      کد HS کالا و نحوه استعلام
+                    </Link>
+                    <Link to="/blog/customs-clearance-company-guide" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-persian text-sm p-3 bg-background rounded-lg border">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      شرکت ترخیص کالا چیست؟
+                    </Link>
+                    <Link to="/blog/dubai-to-abbas-import-guide" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-persian text-sm p-3 bg-background rounded-lg border">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      واردات از دبی به بندرعباس
+                    </Link>
                   </div>
                 </section>
 
@@ -706,7 +889,7 @@ const CustomsTariff2025Guide = () => {
                 <section className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 border">
                   <h2 className="text-2xl font-bold text-foreground mb-4 text-persian">جمع‌بندی</h2>
                   <p className="text-muted-foreground mb-6 text-persian leading-relaxed">
-                    لایحه بودجه ۱۴۰۵ با تعیین نرخ تسعیر ارز ۹۴,۳۰۰ تومانی و حفظ تعرفه‌های تشویقی 
+                    لایحه بودجه ۱۴۰۵ با تعیین نرخ تسعیر ارز ۹۴,۳۰۰ تومانی (افزایش ۳۸ درصدی نسبت به سال ۱۴۰۴) و حفظ تعرفه‌های تشویقی 
                     برای خودروهای برقی و هیبریدی، سیاست حمایت از واردات خودروهای پاک را ادامه می‌دهد. 
                     واردکنندگان با آگاهی از این تعرفه‌ها می‌توانند برنامه‌ریزی دقیق‌تری برای واردات داشته باشند.
                   </p>

@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-// نرخ ارز گمرکی ۱۴۰۵
-const CUSTOMS_EXCHANGE_RATE = 94300; // تومان به ازای هر دلار
+// نرخ ارز گمرکی ۱۴۰۵ (براساس لایحه بودجه: ۱۰۳,۰۰۰ تومان به ازای هر یورو)
+const CUSTOMS_EXCHANGE_RATE_EUR = 103000; // تومان به ازای هر یورو
+const CUSTOMS_EXCHANGE_RATE = 95370; // تومان به ازای هر دلار (تقریبی)
 const EURO_TO_DOLLAR = 1.08; // نرخ تبدیل یورو به دلار
 
 // تعرفه‌های خودرو

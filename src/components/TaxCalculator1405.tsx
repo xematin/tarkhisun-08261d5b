@@ -6,14 +6,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Calculator, TrendingUp, Percent, BadgePercent, CircleDollarSign } from "lucide-react";
 
-// Tax brackets for 1405 (in million Tomans - annual)
-const TAX_EXEMPTION_ANNUAL = 48; // 48 million Tomans annual exemption
+// Tax brackets for 1405 (in million Tomans - annual, based on taxable income after exemption)
+const TAX_EXEMPTION_ANNUAL = 48; // 48 million Tomans annual exemption (480 million Rials)
 const TAX_BRACKETS = [
-  { min: 0, max: 180, rate: 10 },
-  { min: 180, max: 360, rate: 15 },
-  { min: 360, max: 540, rate: 20 },
-  { min: 540, max: 900, rate: 25 },
-  { min: 900, max: Infinity, rate: 30 },
+  { min: 0, max: 48, rate: 10 },      // 0 تا 48 میلیون تومان مازاد بر معافیت
+  { min: 48, max: 96, rate: 15 },     // 48 تا 96 میلیون تومان مازاد
+  { min: 96, max: 192, rate: 20 },    // 96 تا 192 میلیون تومان مازاد
+  { min: 192, max: 312, rate: 25 },   // 192 تا 312 میلیون تومان مازاد
+  { min: 312, max: Infinity, rate: 30 }, // بیش از 312 میلیون تومان مازاد
 ];
 
 const formatNumber = (num: number): string => {

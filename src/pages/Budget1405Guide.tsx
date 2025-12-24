@@ -1001,7 +1001,7 @@ const Budget1405Guide = () => {
                   <div className="flex flex-wrap gap-3">
                     <a href="tel:09176406154" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
                       <Calculator className="w-5 h-5" />
-                      تماس با کارشناسان: ۰۹۱۷۶۴۰۶۱۵۴
+                      تماس با کارشناسان: 09177380080
                     </a>
                     <Link to="/blog/customs-tariff-2025-guide" className="inline-flex items-center gap-2 bg-card border text-foreground px-6 py-3 rounded-xl font-medium hover:bg-muted transition-colors">
                       <ArrowLeft className="w-5 h-5" />

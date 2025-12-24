@@ -7,217 +7,156 @@ import ArticleImage from "@/components/ArticleImage";
 import RelatedArticles from "@/components/RelatedArticles";
 import TaxCalculator1405 from "@/components/TaxCalculator1405";
 import { Link } from "react-router-dom";
-import { 
-  FileText, 
-  Calculator, 
-  DollarSign,
-  Users,
-  Building2,
-  Car,
-  Smartphone,
-  Briefcase,
-  TrendingUp,
-  TrendingDown,
-  Wallet,
-  Percent,
-  BadgePercent,
-  Receipt,
-  Landmark,
-  BarChart3,
-  PiggyBank,
-  Fuel,
-  Banknote,
-  Scale,
-  CheckCircle2,
-  ArrowLeft,
-  Download
-} from "lucide-react";
+import { FileText, Calculator, DollarSign, Users, Building2, Car, Smartphone, Briefcase, TrendingUp, TrendingDown, Wallet, Percent, BadgePercent, Receipt, Landmark, BarChart3, PiggyBank, Fuel, Banknote, Scale, CheckCircle2, ArrowLeft, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 const Budget1405Guide = () => {
   useEffect(() => {
     document.documentElement.dir = "rtl";
     document.documentElement.lang = "fa";
     window.scrollTo(0, 0);
   }, []);
-
   const structuredData = {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Article",
-        "@id": "https://tarkhisun.com/blog/budget-1405-guide#article",
-        headline: "لایحه بودجه ۱۴۰۵ | راهنمای کامل بودجه کل کشور با جداول و ارقام",
-        description: "تحلیل جامع لایحه بودجه سال ۱۴۰۵: ارقام کلان ۱۴,۴۴۱ هزار میلیارد ریال، تعرفه گمرکی خودرو و گوشی، مالیات، یارانه‌ها، حقوق کارکنان و بازنشستگان",
-        image: "https://tarkhisun.com/images/blog/tariff-documents.webp",
-        datePublished: "2025-01-20T10:00:00+03:30",
-        dateModified: "2025-01-20T10:00:00+03:30",
-        author: {
-          "@type": "Organization",
-          name: "تیم ترخیصان",
-          url: "https://tarkhisun.com"
-        },
-        publisher: {
-          "@type": "Organization",
-          name: "ترخیصان",
-          logo: {
-            "@type": "ImageObject",
-            url: "https://tarkhisun.com/logo.png"
-          }
-        },
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": "https://tarkhisun.com/blog/budget-1405-guide"
-        },
-        keywords: "لایحه بودجه ۱۴۰۵، بودجه ۱۴۰۵، بودجه کل کشور ۱۴۰۵، تعرفه گمرکی ۱۴۰۵، مالیات ۱۴۰۵، یارانه ۱۴۰۵، حقوق کارکنان ۱۴۰۵"
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://tarkhisun.com/blog/budget-1405-guide#breadcrumb",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "خانه",
-            item: "https://tarkhisun.com"
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "بلاگ",
-            item: "https://tarkhisun.com/blog"
-          },
-          {
-            "@type": "ListItem",
-            position: 3,
-            name: "لایحه بودجه ۱۴۰۵",
-            item: "https://tarkhisun.com/blog/budget-1405-guide"
-          }
-        ]
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://tarkhisun.com/blog/budget-1405-guide#faq",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "کل بودجه کشور در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "کل بودجه کشور در لایحه بودجه ۱۴۰۵ مبلغ ۱۴,۴۴۱ هزار میلیارد ریال (حدود ۱,۴۴۴ هزار میلیارد تومان) تعیین شده است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "سقف معافیت مالیاتی در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "سقف معافیت مالیاتی سالانه در لایحه بودجه ۱۴۰۵ مبلغ ۴۸۰ میلیون ریال (۴۸ میلیون تومان) تعیین شده است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "نرخ ارز گمرکی در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "نرخ تسعیر ارز برای محاسبه حقوق ورودی گمرکی در لایحه بودجه ۱۴۰۵ مبلغ ۱۰۳,۰۰۰ تومان به ازای هر یورو تعیین شده است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "افزایش حقوق کارکنان دولت در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "حداقل حقوق کارکنان دولت در سال ۱۴۰۵ مبلغ ۱۵,۶۰۰,۰۰۰ ریال (۱,۵۶۰,۰۰۰ تومان) تعیین شده که افزایش ۲۰ درصدی نسبت به سال قبل دارد."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "تعرفه واردات خودرو برقی در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "حقوق ورودی خودروهای برقی در لایحه بودجه ۱۴۰۵ مبلغ ۴ درصد تعیین شده که کمترین تعرفه در بین انواع خودروها است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "تعرفه واردات گوشی موبایل در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "حقوق ورودی گوشی موبایل با ارزش بیش از ۶۰۰ یورو، ۱۵ درصد تعیین شده است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "حداقل حقوق بازنشستگان در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "حداقل حقوق بازنشستگان در سال ۱۴۰۵ مبلغ ۱۴,۰۴۰,۰۰۰ ریال (۱,۴۰۴,۰۰۰ تومان) تعیین شده است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "درآمدهای مالیاتی دولت در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "درآمدهای مالیاتی دولت در لایحه بودجه ۱۴۰۵ مبلغ ۲,۹۶۱ هزار میلیارد ریال پیش‌بینی شده است."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "تفاوت لایحه بودجه و قانون بودجه چیست؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "لایحه بودجه پیشنهاد دولت به مجلس است که پس از بررسی و تصویب مجلس و تأیید شورای نگهبان به قانون بودجه تبدیل می‌شود. ممکن است در این فرآیند تغییراتی در ارقام ایجاد شود."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "بودجه شرکت‌های دولتی در سال ۱۴۰۵ چقدر است؟",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "بودجه شرکت‌های دولتی در لایحه بودجه ۱۴۰۵ مبلغ ۸,۸۹۶ هزار میلیارد ریال تعیین شده است."
-            }
-          }
-        ]
-      },
-      {
+    "@graph": [{
+      "@type": "Article",
+      "@id": "https://tarkhisun.com/blog/budget-1405-guide#article",
+      headline: "لایحه بودجه ۱۴۰۵ | راهنمای کامل بودجه کل کشور با جداول و ارقام",
+      description: "تحلیل جامع لایحه بودجه سال ۱۴۰۵: ارقام کلان ۱۴,۴۴۱ هزار میلیارد ریال، تعرفه گمرکی خودرو و گوشی، مالیات، یارانه‌ها، حقوق کارکنان و بازنشستگان",
+      image: "https://tarkhisun.com/images/blog/tariff-documents.webp",
+      datePublished: "2025-01-20T10:00:00+03:30",
+      dateModified: "2025-01-20T10:00:00+03:30",
+      author: {
         "@type": "Organization",
-        "@id": "https://tarkhisun.com#organization",
+        name: "تیم ترخیصان",
+        url: "https://tarkhisun.com"
+      },
+      publisher: {
+        "@type": "Organization",
         name: "ترخیصان",
-        url: "https://tarkhisun.com",
-        logo: "https://tarkhisun.com/logo.png",
-        contactPoint: {
-          "@type": "ContactPoint",
-          telephone: "+98-9176406154",
-          contactType: "customer service",
-          areaServed: "IR",
-          availableLanguage: "Persian"
+        logo: {
+          "@type": "ImageObject",
+          url: "https://tarkhisun.com/logo.png"
         }
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": "https://tarkhisun.com/blog/budget-1405-guide"
+      },
+      keywords: "لایحه بودجه ۱۴۰۵، بودجه ۱۴۰۵، بودجه کل کشور ۱۴۰۵، تعرفه گمرکی ۱۴۰۵، مالیات ۱۴۰۵، یارانه ۱۴۰۵، حقوق کارکنان ۱۴۰۵"
+    }, {
+      "@type": "BreadcrumbList",
+      "@id": "https://tarkhisun.com/blog/budget-1405-guide#breadcrumb",
+      itemListElement: [{
+        "@type": "ListItem",
+        position: 1,
+        name: "خانه",
+        item: "https://tarkhisun.com"
+      }, {
+        "@type": "ListItem",
+        position: 2,
+        name: "بلاگ",
+        item: "https://tarkhisun.com/blog"
+      }, {
+        "@type": "ListItem",
+        position: 3,
+        name: "لایحه بودجه ۱۴۰۵",
+        item: "https://tarkhisun.com/blog/budget-1405-guide"
+      }]
+    }, {
+      "@type": "FAQPage",
+      "@id": "https://tarkhisun.com/blog/budget-1405-guide#faq",
+      mainEntity: [{
+        "@type": "Question",
+        name: "کل بودجه کشور در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "کل بودجه کشور در لایحه بودجه ۱۴۰۵ مبلغ ۱۴,۴۴۱ هزار میلیارد ریال (حدود ۱,۴۴۴ هزار میلیارد تومان) تعیین شده است."
+        }
+      }, {
+        "@type": "Question",
+        name: "سقف معافیت مالیاتی در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "سقف معافیت مالیاتی سالانه در لایحه بودجه ۱۴۰۵ مبلغ ۴۸۰ میلیون ریال (۴۸ میلیون تومان) تعیین شده است."
+        }
+      }, {
+        "@type": "Question",
+        name: "نرخ ارز گمرکی در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "نرخ تسعیر ارز برای محاسبه حقوق ورودی گمرکی در لایحه بودجه ۱۴۰۵ مبلغ ۱۰۳,۰۰۰ تومان به ازای هر یورو تعیین شده است."
+        }
+      }, {
+        "@type": "Question",
+        name: "افزایش حقوق کارکنان دولت در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "حداقل حقوق کارکنان دولت در سال ۱۴۰۵ مبلغ ۱۵,۶۰۰,۰۰۰ ریال (۱,۵۶۰,۰۰۰ تومان) تعیین شده که افزایش ۲۰ درصدی نسبت به سال قبل دارد."
+        }
+      }, {
+        "@type": "Question",
+        name: "تعرفه واردات خودرو برقی در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "حقوق ورودی خودروهای برقی در لایحه بودجه ۱۴۰۵ مبلغ ۴ درصد تعیین شده که کمترین تعرفه در بین انواع خودروها است."
+        }
+      }, {
+        "@type": "Question",
+        name: "تعرفه واردات گوشی موبایل در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "حقوق ورودی گوشی موبایل با ارزش بیش از ۶۰۰ یورو، ۱۵ درصد تعیین شده است."
+        }
+      }, {
+        "@type": "Question",
+        name: "حداقل حقوق بازنشستگان در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "حداقل حقوق بازنشستگان در سال ۱۴۰۵ مبلغ ۱۴,۰۴۰,۰۰۰ ریال (۱,۴۰۴,۰۰۰ تومان) تعیین شده است."
+        }
+      }, {
+        "@type": "Question",
+        name: "درآمدهای مالیاتی دولت در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "درآمدهای مالیاتی دولت در لایحه بودجه ۱۴۰۵ مبلغ ۲,۹۶۱ هزار میلیارد ریال پیش‌بینی شده است."
+        }
+      }, {
+        "@type": "Question",
+        name: "تفاوت لایحه بودجه و قانون بودجه چیست؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "لایحه بودجه پیشنهاد دولت به مجلس است که پس از بررسی و تصویب مجلس و تأیید شورای نگهبان به قانون بودجه تبدیل می‌شود. ممکن است در این فرآیند تغییراتی در ارقام ایجاد شود."
+        }
+      }, {
+        "@type": "Question",
+        name: "بودجه شرکت‌های دولتی در سال ۱۴۰۵ چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "بودجه شرکت‌های دولتی در لایحه بودجه ۱۴۰۵ مبلغ ۸,۸۹۶ هزار میلیارد ریال تعیین شده است."
+        }
+      }]
+    }, {
+      "@type": "Organization",
+      "@id": "https://tarkhisun.com#organization",
+      name: "ترخیصان",
+      url: "https://tarkhisun.com",
+      logo: "https://tarkhisun.com/logo.png",
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+98-9176406154",
+        contactType: "customer service",
+        areaServed: "IR",
+        availableLanguage: "Persian"
       }
-    ]
+    }]
   };
-
-  return (
-    <>
+  return <>
       <Helmet>
         <title>لایحه بودجه ۱۴۰۵ | راهنمای کامل بودجه کل کشور با جداول و ارقام | ترخیصان</title>
-        <meta
-          name="description"
-          content="تحلیل جامع لایحه بودجه سال ۱۴۰۵: ارقام کلان ۱۴,۴۴۱ هزار میلیارد ریال، تعرفه گمرکی خودرو و گوشی، مالیات، یارانه‌ها، حقوق کارکنان و بازنشستگان دولت"
-        />
-        <meta
-          name="keywords"
-          content="لایحه بودجه ۱۴۰۵، بودجه ۱۴۰۵، بودجه کل کشور، لایحه بودجه سال ۱۴۰۵، درآمد دولت ۱۴۰۵، هزینه دولت ۱۴۰۵، یارانه ۱۴۰۵، حقوق کارکنان ۱۴۰۵، تعرفه گمرکی ۱۴۰۵، مالیات ۱۴۰۵، نرخ ارز گمرکی ۱۴۰۵"
-        />
+        <meta name="description" content="تحلیل جامع لایحه بودجه سال ۱۴۰۵: ارقام کلان ۱۴,۴۴۱ هزار میلیارد ریال، تعرفه گمرکی خودرو و گوشی، مالیات، یارانه‌ها، حقوق کارکنان و بازنشستگان دولت" />
+        <meta name="keywords" content="لایحه بودجه ۱۴۰۵، بودجه ۱۴۰۵، بودجه کل کشور، لایحه بودجه سال ۱۴۰۵، درآمد دولت ۱۴۰۵، هزینه دولت ۱۴۰۵، یارانه ۱۴۰۵، حقوق کارکنان ۱۴۰۵، تعرفه گمرکی ۱۴۰۵، مالیات ۱۴۰۵، نرخ ارز گمرکی ۱۴۰۵" />
         <link rel="canonical" href="https://tarkhisun.com/blog/budget-1405-guide" />
         <meta property="og:title" content="لایحه بودجه ۱۴۰۵ | راهنمای کامل بودجه کل کشور با جداول و ارقام" />
         <meta property="og:description" content="تحلیل جامع لایحه بودجه ۱۴۰۵: ارقام کلان، تعرفه‌ها، مالیات، یارانه‌ها و حقوق کارکنان" />
@@ -262,12 +201,8 @@ const Budget1405Guide = () => {
               
               {/* Download PDF Button */}
               <div className="mt-8">
-                <Button 
-                  asChild 
-                  size="lg" 
-                  className="text-persian gap-2"
-                >
-                  <a href="/files/budget-1405-bill.pdf" download="لایحه-بودجه-۱۴۰۵.pdf">
+                <Button asChild size="lg" className="text-persian gap-2">
+                  <a href="/files/budget-1405-bill.pdf" download="لایحه-بودجه-۱۴۰۵.pdf" className="text-primary-foreground bg-secondary-foreground">
                     <Download className="w-5 h-5" />
                     دانلود PDF لایحه بودجه ۱۴۰۵
                   </a>
@@ -352,12 +287,7 @@ const Budget1405Guide = () => {
                   </div>
                 </section>
 
-                <ArticleImage 
-                  src="/images/blog/tariff-documents.webp"
-                  alt="لایحه بودجه ۱۴۰۵ - سند مالی کل کشور با ارقام کلان و جداول"
-                  caption="لایحه بودجه ۱۴۰۵ - سند مالی سالانه کشور"
-                  priority={true}
-                />
+                <ArticleImage src="/images/blog/tariff-documents.webp" alt="لایحه بودجه ۱۴۰۵ - سند مالی کل کشور با ارقام کلان و جداول" caption="لایحه بودجه ۱۴۰۵ - سند مالی سالانه کشور" priority={true} />
 
                 {/* Macro Figures */}
                 <section id="macro-figures" className="scroll-mt-24">
@@ -823,10 +753,7 @@ const Budget1405Guide = () => {
                     <p className="text-muted-foreground text-persian text-sm mb-3">
                       برای اطلاعات کامل‌تر درباره تعرفه‌های گمرکی، نحوه محاسبه و مثال‌های عملی، مقاله زیر را مطالعه کنید:
                     </p>
-                    <Link 
-                      to="/blog/customs-tariff-2025-guide"
-                      className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
-                    >
+                    <Link to="/blog/customs-tariff-2025-guide" className="inline-flex items-center gap-2 text-primary hover:underline font-medium">
                       تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه | خودرو، گوشی و کالا
                       <ArrowLeft className="w-4 h-4" />
                     </Link>
@@ -1072,17 +999,11 @@ const Budget1405Guide = () => {
                     برای مشاوره تخصصی در زمینه <strong>ترخیص کالا</strong> و <strong>محاسبه هزینه‌های گمرکی</strong> با کارشناسان ترخیصان تماس بگیرید.
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    <a 
-                      href="tel:09176406154"
-                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-opacity"
-                    >
+                    <a href="tel:09176406154" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
                       <Calculator className="w-5 h-5" />
                       تماس با کارشناسان: ۰۹۱۷۶۴۰۶۱۵۴
                     </a>
-                    <Link 
-                      to="/blog/customs-tariff-2025-guide"
-                      className="inline-flex items-center gap-2 bg-card border text-foreground px-6 py-3 rounded-xl font-medium hover:bg-muted transition-colors"
-                    >
+                    <Link to="/blog/customs-tariff-2025-guide" className="inline-flex items-center gap-2 bg-card border text-foreground px-6 py-3 rounded-xl font-medium hover:bg-muted transition-colors">
                       <ArrowLeft className="w-5 h-5" />
                       مقاله تعرفه گمرکی ۱۴۰۵
                     </Link>
@@ -1099,10 +1020,7 @@ const Budget1405Guide = () => {
                   <p className="text-sm text-muted-foreground text-persian mb-4">
                     برای محاسبه دقیق هزینه ترخیص کالا و مشاوره تخصصی با کارشناسان ما تماس بگیرید.
                   </p>
-                  <a 
-                    href="tel:09176406154"
-                    className="flex items-center justify-center gap-2 bg-primary text-primary-foreground w-full py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
-                  >
+                  <a href="tel:09176406154" className="flex items-center justify-center gap-2 bg-primary text-primary-foreground w-full py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
                     <Calculator className="w-5 h-5" />
                     ۰۹۱۷۶۴۰۶۱۵۴
                   </a>
@@ -1112,31 +1030,19 @@ const Budget1405Guide = () => {
                 <div className="bg-card rounded-xl border p-6">
                   <h3 className="font-bold text-lg text-foreground mb-4 text-persian">مقالات مرتبط</h3>
                   <div className="space-y-3">
-                    <Link 
-                      to="/blog/customs-tariff-2025-guide"
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian"
-                    >
+                    <Link to="/blog/customs-tariff-2025-guide" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian">
                       <Car className="w-4 h-4" />
                       تعرفه گمرکی ۱۴۰۵ | خودرو و گوشی
                     </Link>
-                    <Link 
-                      to="/blog/customs-exchange-rate-guide"
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian"
-                    >
+                    <Link to="/blog/customs-exchange-rate-guide" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian">
                       <DollarSign className="w-4 h-4" />
                       نرخ ارز گمرکی چیست؟
                     </Link>
-                    <Link 
-                      to="/blog/customs-tariff-guide"
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian"
-                    >
+                    <Link to="/blog/customs-tariff-guide" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian">
                       <Percent className="w-4 h-4" />
                       راهنمای تعرفه گمرکی
                     </Link>
-                    <Link 
-                      to="/blog/electric-car-tariff-guide"
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian"
-                    >
+                    <Link to="/blog/electric-car-tariff-guide" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors text-persian">
                       <Car className="w-4 h-4" />
                       تعرفه خودرو برقی ۱۴۰۴
                     </Link>
@@ -1176,8 +1082,6 @@ const Budget1405Guide = () => {
       </main>
 
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default Budget1405Guide;

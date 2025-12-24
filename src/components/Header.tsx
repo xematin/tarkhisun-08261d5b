@@ -14,9 +14,6 @@ const Header = () => {
     title: "نرخ ارز",
     href: "/currencies"
   }, {
-    title: "لایحه بودجه ۱۴۰۵",
-    href: "/blog/budget-1405-guide"
-  }, {
     title: "بلاگ",
     href: "/blog"
   }, {

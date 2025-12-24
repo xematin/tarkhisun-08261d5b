@@ -7,7 +7,8 @@ import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, User, ArrowLeft, Filter } from "lucide-react";
+import { Calendar, Clock, User, ArrowLeft, Filter, Search, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -21,6 +22,7 @@ import { blogPosts as importedBlogPosts } from "@/data/blogPosts";
 const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>("همه");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const postsPerPage = 8;
 
   // Sort posts by id descending (newest first)
@@ -29,14 +31,31 @@ const Blog = () => {
   // Get unique categories
   const categories = ["همه", ...Array.from(new Set(allBlogPosts.map((post) => post.category)))];
 
-  // Filter posts by selected category
-  const blogPosts =
-    selectedCategory === "همه" ? allBlogPosts : allBlogPosts.filter((post) => post.category === selectedCategory);
+  // Filter posts by selected category and search query
+  const blogPosts = allBlogPosts.filter((post) => {
+    const matchesCategory = selectedCategory === "همه" || post.category === selectedCategory;
+    const matchesSearch = searchQuery === "" || 
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   // Handle category change
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     setCurrentPage(1); // Reset to first page when category changes
+  };
+
+  // Handle search change
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery("");
+    setCurrentPage(1);
   };
 
   // Calculate pagination
@@ -154,6 +173,36 @@ const Blog = () => {
                 </p>
               </div>
 
+              {/* Search Box */}
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Search className="w-5 h-5 text-accent" />
+                  <h3 className="text-lg font-semibold text-foreground text-persian">جستجو در مقالات</h3>
+                </div>
+                <div className="relative max-w-md">
+                  <Input
+                    type="text"
+                    placeholder="جستجو بر اساس عنوان یا محتوا..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="pl-10 pr-4 py-3 text-persian"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={clearSearch}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                {searchQuery && (
+                  <p className="text-sm text-muted-foreground mt-3 text-persian">
+                    <strong>{blogPosts.length}</strong> نتیجه برای "<strong className="text-accent">{searchQuery}</strong>"
+                  </p>
+                )}
+              </div>
+
               {/* Category Filter */}
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -182,10 +231,12 @@ const Blog = () => {
                     </Badge>
                   ))}
                 </div>
-                {selectedCategory !== "همه" && (
+                {(selectedCategory !== "همه" || searchQuery) && (
                   <p className="text-sm text-muted-foreground mt-4 text-persian">
-                    نمایش <strong>{blogPosts.length}</strong> مقاله در دسته‌بندی{" "}
-                    <strong className="text-accent">{selectedCategory}</strong>
+                    نمایش <strong>{blogPosts.length}</strong> مقاله
+                    {selectedCategory !== "همه" && (
+                      <> در دسته‌بندی <strong className="text-accent">{selectedCategory}</strong></>
+                    )}
                   </p>
                 )}
               </div>

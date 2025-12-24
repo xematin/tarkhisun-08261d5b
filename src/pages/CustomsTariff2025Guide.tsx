@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ArticleBreadcrumb from "@/components/ArticleBreadcrumb";
 import ArticleImage from "@/components/ArticleImage";
 import RelatedArticles from "@/components/RelatedArticles";
+import CustomsTariffCalculator from "@/components/CustomsTariffCalculator";
 import { Link } from "react-router-dom";
 import { 
   ArrowLeft, 
@@ -469,6 +470,11 @@ const CustomsTariff2025Guide = () => {
                         <strong className="text-green-700">نکته:</strong> همین خودرو اگر بنزینی بود با تعرفه ۱۰۰٪، هزینه ترخیص آن بیش از ۳,۶۰۰,۰۰۰,۰۰۰ تومان می‌شد!
                       </p>
                     </div>
+                  </div>
+
+                  {/* Calculator Component */}
+                  <div className="mt-8">
+                    <CustomsTariffCalculator />
                   </div>
 
                   {/* Related Link */}

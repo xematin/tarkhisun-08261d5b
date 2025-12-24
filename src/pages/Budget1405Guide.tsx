@@ -1020,9 +1020,9 @@ const Budget1405Guide = () => {
                   <p className="text-sm text-muted-foreground text-persian mb-4">
                     برای محاسبه دقیق هزینه ترخیص کالا و مشاوره تخصصی با کارشناسان ما تماس بگیرید.
                   </p>
-                  <a href="tel:09176406154" className="flex items-center justify-center gap-2 bg-primary text-primary-foreground w-full py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                  <a className="flex items-center justify-center gap-2 bg-primary text-primary-foreground w-full py-3 rounded-lg font-medium hover:opacity-90 transition-opacity" href="tel:09177380080">
                     <Calculator className="w-5 h-5" />
-                    ۰۹۱۷۶۴۰۶۱۵۴
+                    09177380080
                   </a>
                 </div>
 

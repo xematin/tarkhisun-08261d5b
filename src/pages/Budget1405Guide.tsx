@@ -29,8 +29,10 @@ import {
   Banknote,
   Scale,
   CheckCircle2,
-  ArrowLeft
+  ArrowLeft,
+  Download
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { 
   Table, 
   TableBody, 
@@ -256,6 +258,20 @@ const Budget1405Guide = () => {
                 </span>
                 <span>تیم ترخیصان</span>
                 <span>۱۴۰۴/۱۰/۳۰</span>
+              </div>
+              
+              {/* Download PDF Button */}
+              <div className="mt-8">
+                <Button 
+                  asChild 
+                  size="lg" 
+                  className="text-persian gap-2"
+                >
+                  <a href="/files/budget-1405-bill.pdf" download="لایحه-بودجه-۱۴۰۵.pdf">
+                    <Download className="w-5 h-5" />
+                    دانلود PDF لایحه بودجه ۱۴۰۵
+                  </a>
+                </Button>
               </div>
             </div>
           </div>

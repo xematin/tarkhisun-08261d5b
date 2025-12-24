@@ -23,8 +23,8 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("همه");
   const postsPerPage = 8;
 
-  // Reverse the posts to show newest first
-  const allBlogPosts = [...importedBlogPosts].reverse();
+  // Sort posts by id descending (newest first)
+  const allBlogPosts = [...importedBlogPosts].sort((a, b) => b.id - a.id);
 
   // Get unique categories
   const categories = ["همه", ...Array.from(new Set(allBlogPosts.map((post) => post.category)))];

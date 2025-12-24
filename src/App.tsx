@@ -42,6 +42,7 @@ const InternationalShippingGuide = lazy(() => import("./pages/InternationalShipp
 const TradingCompanyGuide = lazy(() => import("./pages/TradingCompanyGuide"));
 const ImportRoutesIranGuide = lazy(() => import("./pages/ImportRoutesIranGuide"));
 const ElectricCarTariffGuide = lazy(() => import("./pages/ElectricCarTariffGuide"));
+const CustomsTariff2025Guide = lazy(() => import("./pages/CustomsTariff2025Guide"));
 
 const queryClient = new QueryClient();
 
@@ -93,6 +94,7 @@ const AppContent = () => {
         <Route path="/blog/trading-company-guide" element={<TradingCompanyGuide />} />
         <Route path="/blog/import-routes-iran-guide" element={<ImportRoutesIranGuide />} />
         <Route path="/blog/electric-car-tariff-guide" element={<ElectricCarTariffGuide />} />
+        <Route path="/blog/customs-tariff-2025-guide" element={<CustomsTariff2025Guide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/currencies" element={<Currencies />} />
         <Route path="/install" element={<Install />} />

@@ -70,7 +70,7 @@ const IslamQalaGuide = () => {
           name="keywords"
           content="اسلام قلعه, گذرگاه مرزی, مرز ایران و افغانستان, گمرک اسلام قلعه, ترانزیت به افغانستان, صادرات به افغانستان, واردات از افغانستان, تجارت با افغانستان, مرز دوغارون, هرات, مشاوره گمرکی, ترخیص کالا, حمل و نقل بین المللی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/islam-qala-border-crossing-guide" />
+        
 
         {/* Open Graph Tags */}
         <meta property="og:title" content="اسلام قلعه | راهنمای کامل گذرگاه مرزی ایران و افغانستان" />

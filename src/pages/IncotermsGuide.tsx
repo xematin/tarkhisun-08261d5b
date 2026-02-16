@@ -136,7 +136,7 @@ const IncotermsGuide = () => {
           name="keywords"
           content="اینکوترمز, Incoterms, شرایط تحویل کالا, FOB, CIF, EXW, DAP, DDP, تجارت بین المللی, واردات, صادرات, حمل کالا, بیمه کالا, ترخیص کالا, گمرک"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/incoterms-guide" />
+        
         <meta property="og:title" content="اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا" />
         <meta
           property="og:description"

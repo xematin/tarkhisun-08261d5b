@@ -137,7 +137,7 @@ const CarPartsImportGuide = () => {
           name="keywords"
           content="ترخیص قطعات یدکی خودرو، واردات قطعات خودرو، گمرک بندرعباس، قطعات یدکی وارداتی، کد HS قطعات خودرو، حقوق گمرکی قطعات، استاندارد قطعات خودرو، مجوز واردات قطعات، قطعات اصلی خودرو، قطعات بدنه خودرو، تایر وارداتی، روغن موتور وارداتی، لنت ترمز وارداتی، باتری خودرو وارداتی، فیلتر خودرو وارداتی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/car-parts-import-customs-clearance-guide" />
+        
         <meta property="og:title" content="ترخیص قطعات یدکی خودرو از گمرک | راهنمای کامل واردات قطعات" />
         <meta
           property="og:description"

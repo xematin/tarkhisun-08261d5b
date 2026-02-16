@@ -43,7 +43,7 @@ const ElectricCarTariffGuide = () => {
           name="keywords"
           content="تعرفه واردات خودرو برقی, واردات خودرو هیبریدی, حقوق گمرکی خودرو برقی, تعرفه خودرو ۱۴۰۴, واردات خودرو پاک, گمرک خودرو برقی, ترخیص خودرو برقی, خودرو الکتریکی ایران"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/electric-car-tariff-guide" />
+        
 
         {/* Open Graph Tags */}
         <meta property="og:title" content="تعرفه واردات خودرو برقی و هیبریدی ۱۴۰۴ | حقوق گمرکی ۴ درصدی" />

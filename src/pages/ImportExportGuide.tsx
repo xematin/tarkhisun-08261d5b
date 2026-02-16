@@ -83,7 +83,7 @@ const ImportExportGuide = () => {
           name="keywords"
           content="صادرات و واردات, صادرات ایران, واردات کالا, تجارت خارجی, گمرک ایران, صادرات کالا, واردات محصول, مجوز صادرات, قوانین واردات, تعرفه گمرکی, بازرگانی خارجی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/import-export-guide-iran" />
+        
         <meta property="og:title" content="راهنمای کامل صادرات و واردات در ایران" />
         <meta property="og:description" content="راهنمای جامع صادرات و واردات کالا در ایران با تمام جزئیات" />
         <meta property="og:type" content="article" />

@@ -41,7 +41,7 @@ const DubaiToAbbasImportGuide = () => {
           name="keywords"
           content="واردات از دبی, واردات از امارات, بندرعباس, حمل کالا از دبی, ترخیص کالا از دبی, تجارت با امارات, واردات کالا, گمرک بندرعباس, کشتیرانی دبی, حمل دریایی, ترانزیت کالا"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/dubai-to-abbas-import-guide" />
+        
 
         {/* Open Graph Tags */}
         <meta property="og:title" content="واردات کالا از دبی به بندرعباس | راهنمای کامل حمل و ترخیص" />

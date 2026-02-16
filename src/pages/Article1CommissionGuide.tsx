@@ -64,7 +64,7 @@ const Article1CommissionGuide = () => {
         <title>کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی</title>
         <meta name="description" content="راهنمای کمیسیون ماده 1 گمرک: رسیدگی به اختلافات ارزش گمرکی، مراحل اعتراض و نکات کلیدی" />
         <meta name="keywords" content="کمیسیون ماده 1, کمیسیون ماده یک گمرک, اختلاف ارزش گمرکی, اعتراض به ارزیابی گمرک, رسیدگی به اختلافات گمرکی, ارزش گمرکی کالا, قانون امور گمرکی, حقوق واردکنندگان" />
-        <link rel="canonical" href="https://tarkhisun.com/blog/customs-article-1-commission-guide" />
+        
         <meta property="og:title" content="کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی" />
         <meta property="og:description" content="راهنمای جامع کمیسیون ماده 1 گمرک: تعریف، وظایف، نحوه رسیدگی به اختلافات ارزش گمرکی و مراحل اعتراض" />
         <meta property="og:type" content="article" />

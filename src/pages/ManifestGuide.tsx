@@ -114,7 +114,7 @@ const ManifestGuide = () => {
           name="keywords"
           content="مانیفست گمرک, مانیفست چیست, مانیفست بارنامه, مانیفست دریایی, مانیفست هوایی, مانیفست زمینی, ترخیص کالا, اسناد گمرکی, بارنامه, واردات کالا, صادرات کالا, گمرک ایران"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/manifest-guide" />
+        
         <meta property="og:title" content="مانیفست در گمرک چیست؟ راهنمای جامع مانیفست بارنامه" />
         <meta property="og:description" content="راهنمای کامل مانیفست گمرکی: تعریف، انواع، کاربرد و نکات مهم" />
         <meta property="og:type" content="article" />

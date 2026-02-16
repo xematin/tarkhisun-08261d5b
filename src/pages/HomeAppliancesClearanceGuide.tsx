@@ -58,9 +58,6 @@ const HomeAppliancesClearanceGuide = () => {
         <meta name="keywords" content={keywordsContent} />
         <meta name="author" content="تیم ترخیصان" />
 
-        {/* Canonical URL */}
-        <link rel="canonical" href="https://tarkhisun.com/blog/home-appliances-clearance-bandar-abbas-guide" />
-
         {/* Open Graph Tags */}
         <meta property="og:title" content="ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات | ترخیصان" />
         <meta property="og:description" content={description} />

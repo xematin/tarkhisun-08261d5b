@@ -178,7 +178,7 @@ const CustomsTariff2025Guide = () => {
           name="keywords"
           content="تعرفه گمرکی ۱۴۰۵، لایحه بودجه ۱۴۰۵ گمرک، حقوق ورودی خودرو ۱۴۰۵، تعرفه واردات گوشی ۱۴۰۵، نرخ ارز گمرکی ۱۴۰۵، تعرفه خودرو برقی، تعرفه خودرو هیبریدی، حقوق گمرکی خودرو بنزینی، رجیستری گوشی ۱۴۰۵"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/customs-tariff-2025-guide" />
+        
         <meta property="og:title" content="تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه | خودرو، گوشی و کالا" />
         <meta property="og:description" content="راهنمای کامل تعرفه‌های گمرکی ۱۴۰۵: حقوق ورودی خودرو برقی ۴٪، هیبریدی ۱۵٪، تعرفه گوشی ۴۰٪ و نرخ ارز ۹۴,۳۰۰ تومان" />
         <meta property="og:url" content="https://tarkhisun.com/blog/customs-tariff-2025-guide" />

@@ -84,7 +84,7 @@ const ExchangeRateGuide = () => {
           name="keywords"
           content="نرخ ارز گمرکی, نرخ ارز گمرک, محاسبه حقوق گمرکی, عوارض گمرکی, سود بازرگانی, نرخ ارز بانک مرکزی, حقوق ورودی, ترخیص کالا, واردات, گمرک ایران, بندرعباس, شهید رجایی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/customs-exchange-rate-guide" />
+        
         <meta property="og:title" content="نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی" />
         <meta
           property="og:description"

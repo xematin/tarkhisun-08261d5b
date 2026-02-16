@@ -45,7 +45,7 @@ const ImportRoutesIranGuide = () => {
           name="keywords"
           content="واردات کالا به ایران, مسیر واردات از چین, واردات از امارات, واردات از ترکیه, واردات ۱۴۰۴, بهترین مسیر واردات, هزینه واردات, حمل کالا به ایران, تجارت بین‌المللی ایران, گمرک ایران"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/import-routes-iran-guide" />
+        
 
         {/* Open Graph Tags */}
         <meta property="og:title" content="بهترین مسیرهای واردات کالا به ایران در ۱۴۰۴ | چین، امارات، ترکیه" />

@@ -111,7 +111,7 @@ const TradingCompanyGuide = () => {
           name="keywords"
           content="شرکت بازرگانی, ثبت شرکت بازرگانی, خدمات بازرگانی, واردات صادرات, کارت بازرگانی, شرکت تجاری, مجوز بازرگانی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/trading-company-guide" />
+        
         <meta property="og:title" content="شرکت بازرگانی چیست؟ راهنمای کامل ثبت و راه‌اندازی" />
         <meta
           property="og:description"

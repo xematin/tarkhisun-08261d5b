@@ -86,7 +86,7 @@ const SanaExchangeRateGuide = () => {
           name="keywords"
           content="ارز سنا, ارز نیمایی, SANA, NIMA, تفاوت ارز سنا و نیمایی, نرخ ارز گمرکی, تخصیص ارز, واردات, صادرات, گمرک, سامانه نیما, سامانه سنا"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/sana-exchange-rate-guide" />
+        
         <meta property="og:title" content="تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل" />
         <meta
           property="og:description"

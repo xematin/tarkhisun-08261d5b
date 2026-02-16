@@ -19,15 +19,6 @@ const Install = () => {
     document.documentElement.setAttribute("dir", "rtl");
     document.documentElement.setAttribute("lang", "fa");
 
-    // Set canonical URL
-    let canonicalLink = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
-    if (!canonicalLink) {
-      canonicalLink = document.createElement("link");
-      canonicalLink.setAttribute("rel", "canonical");
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.setAttribute("href", "https://tarkhisun.com/install");
-
     // Add noindex meta tag to prevent search engines from indexing this page
     const robotsMeta = document.querySelector('meta[name="robots"]') as HTMLMetaElement;
     if (!robotsMeta) {

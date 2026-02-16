@@ -111,7 +111,7 @@ const CustomsClearanceCompanyGuide = () => {
           name="keywords"
           content="شرکت ترخیص کالا, ترخیص‌کار, خدمات ترخیص کالا, شرکت ترخیص بندرعباس, ترخیص کالا از گمرک, شرکت ترخیص معتبر"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/customs-clearance-company-guide" />
+        
         <meta property="og:title" content="شرکت ترخیص کالا چیست؟ راهنمای انتخاب بهترین شرکت ترخیص‌کار" />
         <meta
           property="og:description"

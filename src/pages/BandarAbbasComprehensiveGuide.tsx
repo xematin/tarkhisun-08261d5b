@@ -81,7 +81,7 @@ const BandarAbbasComprehensiveGuide = () => {
           name="keywords"
           content="صفر تا صد ترخیص کالا, ترخیص کالا بندرعباس, گمرک شهید رجایی, مراحل ترخیص کالا, مدارک ترخیص گمرک, هزینه ترخیص بندرعباس, واردات از بندرعباس, ترخیص گمرکی, راهنمای ترخیص کالا, فرآیند ترخیص"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/bandar-abbas-comprehensive-clearance-guide" />
+        
         <meta property="og:title" content="صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک شهید رجایی" />
         <meta
           property="og:description"

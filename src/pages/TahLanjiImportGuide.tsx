@@ -73,7 +73,7 @@ const TahLanjiImportGuide = () => {
           name="keywords"
           content="واردات ته لنجی, واردات ملوانی, واردات غیررسمی, قاچاق کالا, لنج, ترخیص کالا, گمرک بندرعباس, واردات رسمی, ریسک واردات, قوانین گمرکی, جریمه قاچاق"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/tah-lanji-import-guide" />
+        
         <meta property="og:title" content="واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل" />
         <meta
           property="og:description"

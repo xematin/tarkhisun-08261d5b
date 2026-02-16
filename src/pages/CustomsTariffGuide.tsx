@@ -82,7 +82,7 @@ const CustomsTariffGuide = () => {
         <title>تعریف و اهمیت تعرفه گمرکی در واردات و صادرات | راهنمای جامع تعرفه کالا</title>
         <meta name="description" content="آشنایی کامل با تعرفه گمرکی، تعریف تعرفه کالا، انواع تعرفه واردات و صادرات، نحوه محاسبه حقوق ورودی و عوارض گمرکی، اهمیت تعرفه در تجارت بین‌المللی" />
         <meta name="keywords" content="تعرفه گمرکی, تعرفه کالا, عوارض گمرکی, تعرفه واردات, تعرفه صادرات, حقوق ورودی, مالیات واردات, تعرفه هماهنگ, گمرک ایران, محاسبه تعرفه, انواع تعرفه گمرکی" />
-        <link rel="canonical" href="https://tarkhisun.com/blog/customs-tariff-guide" />
+        
         <meta property="og:title" content="تعریف و اهمیت تعرفه گمرکی در واردات و صادرات" />
         <meta property="og:description" content="راهنمای کامل تعرفه گمرکی، انواع تعرفه کالا و نحوه محاسبه حقوق ورودی" />
         <meta property="og:type" content="article" />

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Download, Smartphone, Zap, Shield, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
@@ -97,6 +98,10 @@ const Install = () => {
   ];
 
   return (
+    <>
+      <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/install" />
+      </Helmet>
     <div className="min-h-screen flex flex-col" dir="rtl">
       <Header />
 
@@ -195,6 +200,7 @@ const Install = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

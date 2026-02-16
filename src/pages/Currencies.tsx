@@ -73,6 +73,7 @@ const Currencies = () => {
   };
   return <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/currencies" />
         <title>نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | ترخیصان</title>
         <meta name="description" content="نرخ ارز لحظه‌ای دلار، یورو، پوند و سایر ارزها. بروزرسانی مداوم قیمت‌ها برای محاسبات تجاری و گمرکی" />
         <meta name="keywords" content="نرخ ارز، قیمت ارز، دلار، یورو، پوند، نرخ ارز امروز، قیمت ارز لحظه‌ای، محاسبه ارز، گمرک، واردات، صادرات، ترخیصان" />

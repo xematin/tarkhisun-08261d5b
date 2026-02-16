@@ -213,6 +213,7 @@ const Index = () => {
     <>
       {/* Hreflang Tags only - All other SEO tags are in index.html to prevent duplicates */}
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/" />
         <link rel="alternate" hrefLang="fa" href="https://tarkhisun.com/" />
         <link rel="alternate" hrefLang="fa-IR" href="https://tarkhisun.com/" />
         <link rel="alternate" hrefLang="x-default" href="https://tarkhisun.com/" />

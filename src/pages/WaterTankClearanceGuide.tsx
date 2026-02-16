@@ -118,7 +118,7 @@ const WaterTankClearanceGuide = () => {
           name="keywords"
           content="ترخیص مخزن آب, تانکر ذخیره آب, واردات مخزن آب, گمرک بندرعباس, حقوق گمرکی مخزن آب, کد تعرفه مخزن آب, مخزن پلی اتیلن, مخزن فایبرگلاس, تانکر استیل, مجوز بهداشت مخزن آب, استاندارد مخزن آب, واردات تانکر"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/water-tank-clearance-bandar-abbas-guide" />
+        
         <meta property="og:title" content="ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل" />
         <meta
           property="og:description"

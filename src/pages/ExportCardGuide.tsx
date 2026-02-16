@@ -125,7 +125,7 @@ const ExportCardGuide = () => {
           name="keywords"
           content="کارت صادراتی, تفاوت کارت صادراتی و بازرگانی, دریافت کارت صادراتی, صادرات ایران, مجوز صادرات, کارت صادرات, شرایط کارت صادراتی, مدارک کارت صادراتی, هزینه کارت صادراتی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/export-card-complete-guide" />
+        
         <meta property="og:title" content="کارت صادراتی چیست؟ تفاوت با کارت بازرگانی + دریافت فوری ۱۴۰۴" />
         <meta
           property="og:description"

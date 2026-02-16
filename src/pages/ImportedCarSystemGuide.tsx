@@ -114,7 +114,7 @@ const ImportedCarSystemGuide = () => {
           name="keywords"
           content="سامانه خودروهای وارداتی، واردات خودرو، ترخیص خودرو، گمرک خودرو، تعرفه واردات خودرو، ثبت سفارش خودرو، شرایط واردات خودرو، خودروی وارداتی ۱۴۰۴، سامانه واردات خودرو، قیمت خودروی وارداتی، استاندارد خودرو وارداتی، مجوز واردات خودرو"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/imported-car-system-guide" />
+        
         <meta property="og:locale" content="fa_IR" />
 
         <meta property="og:title" content="سامانه خودروهای وارداتی | راهنمای کامل واردات و ترخیص خودرو ۱۴۰۴" />

@@ -76,7 +76,7 @@ const Currencies = () => {
         <title>نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان | ترخیصان</title>
         <meta name="description" content="نرخ ارز لحظه‌ای دلار، یورو، پوند و سایر ارزها. بروزرسانی مداوم قیمت‌ها برای محاسبات تجاری و گمرکی" />
         <meta name="keywords" content="نرخ ارز، قیمت ارز، دلار، یورو، پوند، نرخ ارز امروز، قیمت ارز لحظه‌ای، محاسبه ارز، گمرک، واردات، صادرات، ترخیصان" />
-        <link rel="canonical" href="https://tarkhisun.com/currencies" />
+        
         <meta property="og:title" content="نرخ ارز امروز - قیمت لحظه‌ای ارزهای جهان" />
         <meta property="og:description" content="مشاهده آخرین نرخ ارز و قیمت لحظه‌ای تمامی ارزهای جهان با بروزرسانی مداوم" />
         <meta property="og:url" content="https://tarkhisun.com/currencies" />

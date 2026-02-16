@@ -23,7 +23,7 @@ const KuwaitAfghanistanTransitGuide = () => {
           name="keywords"
           content="ترانزیت کویت افغانستان, حمل کالا به افغانستان, ترانزیت از کویت, حمل و نقل بین المللی, ترانزیت کالا, صادرات به افغانستان, بارنامه ترانزیت, مسیر کویت افغانستان, هزینه ترانزیت کویت, TIR کویت افغانستان"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/kuwait-afghanistan-transit-guide" />
+        
 
         {/* Open Graph */}
         <meta property="og:title" content="ترانزیت از کویت به افغانستان | راهنمای کامل حمل و نقل بین‌المللی کالا" />

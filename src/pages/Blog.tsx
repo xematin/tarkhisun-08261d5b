@@ -108,7 +108,7 @@ const Blog = () => {
         <title>{currentPage === 1 ? "بلاگ مشاوره امور گمرکی بندرعباس شهید رجایی | مقالات تخصصی ترخیص کالا" : `بلاگ گمرکی بندرعباس - صفحه ${currentPage} | مقالات ترخیص کالا`}</title>
         <meta name="description" content={currentPage === 1 ? "مقالات تخصصی مشاوره امور گمرکی بندرعباس شهید رجایی، راهنمای ترخیص کالا، قوانین گمرکی و آخرین اخبار تجاری ایران" : `صفحه ${currentPage} از ${totalPages} - مقالات تخصصی گمرکی بندرعباس شهید رجایی و راهنمای ترخیص کالا`} />
         <meta name="keywords" content="مشاوره امور گمرکی, بندرعباس, شهید رجایی, ترخیص کالا, واردات, صادرات, گمرک, تجارت بین المللی, قوانین گمرکی" />
-        <link rel="canonical" href={canonicalUrl} />
+        
         {currentPage > 1 && (
           <link rel="prev" href={currentPage === 2 ? baseUrl : `${baseUrl}?page=${currentPage - 1}`} />
         )}

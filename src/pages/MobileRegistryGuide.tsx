@@ -88,7 +88,7 @@ const MobileRegistryGuide = () => {
           name="keywords"
           content="ترخیص موبایل، رجیستری موبایل، رجیستری گوشی، واردات موبایل، گمرک بندرعباس، ثبت سفارش موبایل، حقوق گمرکی موبایل، رجیستری آنلاین، ترخیص تلفن همراه، مدارک رجیستری، هزینه رجیستری گوشی، رجیستری حضوری، واردات تلفن همراه"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/mobile-phone-customs-clearance-registry-guide" />
+        
 
         <meta property="og:title" content="ترخیص موبایل و رجیستری گوشی از گمرک | راهنمای کامل ۱۴۰۴" />
         <meta

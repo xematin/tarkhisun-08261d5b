@@ -65,7 +65,7 @@ const BusinessCardGuide = () => {
         <title>کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور</title>
         <meta name="description" content="راهنمای کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و هزینه صدور برای واردات و صادرات" />
         <meta name="keywords" content="کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات, اتاق بازرگانی, مدارک کارت بازرگانی, انواع کارت بازرگانی, صدور کارت بازرگانی" />
-        <link rel="canonical" href="https://tarkhisun.com/blog/business-card-complete-guide" />
+        
         <meta property="og:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
         <meta property="og:description" content="راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و نحوه درخواست" />
         <meta property="og:type" content="article" />

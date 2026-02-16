@@ -111,7 +111,7 @@ const BusinessConsultingGuide = () => {
           name="keywords"
           content="مشاوره بازرگانی, مشاوره تجارت, خدمات مشاوره بازرگانی, مشاور واردات صادرات, مشاوره تجارت بین‌المللی, راهنمای مشاوره بازرگانی"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/business-consulting-guide" />
+        
         <meta property="og:title" content="مشاوره بازرگانی چیست؟ راهنمای کامل خدمات مشاوره تجارت" />
         <meta
           property="og:description"

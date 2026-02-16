@@ -111,7 +111,7 @@ const InternationalShippingGuide = () => {
           name="keywords"
           content="حمل و نقل بین‌المللی, حمل دریایی, حمل هوایی, حمل زمینی, شرکت حمل کالا, فورواردر, ترانزیت کالا, حمل کانتینری"
         />
-        <link rel="canonical" href="https://tarkhisun.com/blog/international-shipping-guide" />
+        
         <meta property="og:title" content="حمل و نقل بین‌المللی چیست؟ راهنمای کامل روش‌های حمل کالا" />
         <meta
           property="og:description"

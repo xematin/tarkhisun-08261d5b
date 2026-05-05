@@ -14,6 +14,9 @@ const Header = () => {
     title: "نرخ ارز",
     href: "/currencies"
   }, {
+    title: "جستجوی تعرفه",
+    href: "/hscode"
+  }, {
     title: "بلاگ",
     href: "/blog"
   }, {

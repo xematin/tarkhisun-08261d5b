@@ -172,7 +172,7 @@ const HSCodeSearch = () => {
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="مثلاً: اسباب بازی یا 9503"
+                placeholder="عنوان کالا | HSCODE"
                 className="h-14 pr-12 pl-4 text-base md:text-lg rounded-2xl shadow-md text-persian focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label="جستجوی کد تعرفه"
                 inputMode="search"

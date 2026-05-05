@@ -508,7 +508,42 @@ const HSCodeSearch = () => {
             </div>
           </section>
 
-          {/* CTA */}
+          {/* Related Articles */}
+          <section className="max-w-5xl mx-auto mt-16">
+            <h2 className="text-2xl md:text-3xl font-bold text-persian mb-6 text-center">
+              مقالات مرتبط با کد تعرفه گمرکی
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { slug: "hs-code-guide", title: "کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ", desc: "تعریف، ساختار و نحوه پیدا کردن کد صحیح HS برای واردات و صادرات." },
+                { slug: "customs-tariff-guide", title: "تعرفه گمرکی چیست و چگونه محاسبه می‌شود؟", desc: "انواع تعرفه، حقوق ورودی، عوارض و استراتژی‌های کاهش هزینه گمرکی." },
+                { slug: "customs-tariff-2025-guide", title: "تعرفه گمرکی ۱۴۰۵ بر اساس لایحه بودجه", desc: "آخرین حقوق ورودی خودرو، گوشی و کالا با نرخ ارز گمرکی جدید." },
+                { slug: "customs-exchange-rate-guide", title: "نرخ ارز گمرکی و محاسبه حقوق ورودی", desc: "روش‌های تعیین نرخ ارز گمرکی و تأثیر آن بر هزینه نهایی واردات." },
+                { slug: "electric-car-tariff-guide", title: "تعرفه واردات خودرو برقی و هیبریدی ۱۴۰۴", desc: "حقوق گمرکی ۴ درصدی، شرایط واردات و مدارک لازم خودرو برقی." },
+                { slug: "ntsw-complete-guide", title: "سامانه جامع تجارت (ntsw.ir)", desc: "ثبت سفارش، صدور مجوز و پیگیری ترخیص در سامانه گمرک الکترونیک." },
+              ].map((p) => (
+                <Link
+                  key={p.slug}
+                  to={`/blog/${p.slug}`}
+                  className="group block rounded-2xl border border-border bg-card p-5 hover:border-primary/40 hover:shadow-md transition-all"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold text-persian mb-1.5 group-hover:text-primary transition-colors">
+                    {p.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground text-persian leading-6">
+                    {p.desc}
+                  </p>
+                  <span className="inline-block mt-3 text-sm text-primary font-semibold text-persian">
+                    مطالعه مقاله ←
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           <section className="max-w-3xl mx-auto mt-12">
             <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
               <CardContent className="p-6 md:p-8 text-center space-y-4">

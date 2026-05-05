@@ -1,10 +1,10 @@
 // HS Code search API client
-// Uses external API: https://api.tarkhiskala.info
+// Uses Lovable Cloud edge function `hscode-search` as a CORS-safe proxy
+// to https://api.tarkhiskala.info/api/v1/HSCodes/Search
 
-const API_BASE = "https://api.tarkhiskala.info/api/v1/HSCodes";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface HSCodeResult {
-  // Common possible field names from the API; we normalize on read
   id?: string | number;
   hsCode?: string;
   code?: string;
@@ -54,45 +54,44 @@ export async function searchHSCodes({
   signal,
 }: SearchParams): Promise<{ items: HSCodeResult[]; total: number }> {
   const cleaned = normalizePersianDigits(phrase.trim());
-  if (!cleaned) return { items: [], total: 0 };
+  if (cleaned.length < 2) return { items: [], total: 0 };
 
-  const url = new URL(`${API_BASE}/Search`);
-  url.searchParams.set("phrase", cleaned);
-  url.searchParams.set("pagination.offset", String(offset));
-  url.searchParams.set("pagination.limit", String(limit));
-  url.searchParams.set("lang", "fa");
+  const { data, error } = await supabase.functions.invoke<HSCodeSearchResponse>(
+    "hscode-search",
+    {
+      body: { phrase: cleaned, offset, limit, lang: "fa" },
+    },
+  );
 
-  const res = await fetch(url.toString(), {
-    method: "GET",
-    headers: { Accept: "application/json" },
-    signal,
-  });
-
-  if (!res.ok) {
-    throw new Error(`HSCode API error: ${res.status}`);
+  if (signal?.aborted) {
+    const err = new Error("Aborted");
+    err.name = "AbortError";
+    throw err;
   }
 
-  const data: HSCodeSearchResponse = await res.json();
+  if (error) {
+    throw new Error(error.message || "HSCode proxy error");
+  }
+
+  const payload = (data ?? {}) as HSCodeSearchResponse;
   const items =
-    (data.items as HSCodeResult[]) ||
-    (data.data as HSCodeResult[]) ||
-    (data.results as HSCodeResult[]) ||
+    (payload.items as HSCodeResult[]) ||
+    (payload.data as HSCodeResult[]) ||
+    (payload.results as HSCodeResult[]) ||
     [];
   const total =
-    data.total ??
-    data.totalCount ??
-    data.pagination?.total ??
+    payload.total ??
+    payload.totalCount ??
+    payload.pagination?.total ??
     items.length;
 
   return { items, total };
 }
 
-// Helper: get a clean HS code string from a result, regardless of API field name
 export function getHSCode(r: HSCodeResult): string {
   return String(r.hsCode || r.code || r.hs_code || r.id || "").trim();
 }
 
-// Helper: get description text
 export function getDescription(r: HSCodeResult): string {
   return String(
     r.description || r.persianName || r.title || r.desc || ""

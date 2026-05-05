@@ -342,6 +342,21 @@ const CustomsTariffGuide = () => {
 
                 </div>
 
+                {/* HS Code Search Tool CTA */}
+                <Card className="mt-12 bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+                  <CardContent className="p-6 md:p-8 text-center space-y-3">
+                    <h3 className="text-xl font-bold text-persian">
+                      جستجوی آنلاین کد تعرفه گمرکی کالای شما
+                    </h3>
+                    <p className="text-muted-foreground text-persian">
+                      با ابزار رایگان ترخیصان، کد HS، حقوق ورودی و سود بازرگانی هر کالا را در چند ثانیه پیدا کنید.
+                    </p>
+                    <Button asChild size="lg" className="text-primary-foreground">
+                      <Link to="/hscode">ورود به ابزار جستجوی تعرفه گمرکی</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+
                 {/* Related Articles */}
                 <div className="mt-16">
                   <RelatedArticles currentPostId={3} />

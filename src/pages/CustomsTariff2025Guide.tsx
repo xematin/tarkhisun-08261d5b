@@ -917,6 +917,22 @@ const CustomsTariff2025Guide = () => {
                   </div>
                 </section>
 
+                {/* HS Code Search Tool CTA */}
+                <div className="mt-12 mb-8 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/20 p-6 md:p-8 text-center">
+                  <h3 className="text-xl font-bold text-persian mb-2">
+                    کد تعرفه گمرکی کالای خود را همین حالا پیدا کنید
+                  </h3>
+                  <p className="text-muted-foreground text-persian mb-4">
+                    ابزار آنلاین و رایگان جستجوی HS Code با پایگاه‌داده به‌روز گمرک ایران.
+                  </p>
+                  <Link
+                    to="/hscode"
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    ورود به ابزار جستجوی تعرفه
+                  </Link>
+                </div>
+
                 {/* Related Articles */}
                 <RelatedArticles currentPostId={31} limit={3} />
               </div>

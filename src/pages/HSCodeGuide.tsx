@@ -399,6 +399,25 @@ const HSCodeGuide = () => {
 
                 </div>
 
+                {/* HS Code Search Tool CTA */}
+                <Card className="mt-12 bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+                  <CardContent className="p-6 md:p-8 text-center space-y-3">
+                    <Search className="w-10 h-10 text-primary mx-auto" />
+                    <h3 className="text-xl font-bold text-persian">
+                      ابزار آنلاین جستجوی کد تعرفه گمرکی (HS Code)
+                    </h3>
+                    <p className="text-muted-foreground text-persian">
+                      کد تعرفه هر کالا را به‌صورت رایگان و در چند ثانیه پیدا کنید: حقوق ورودی، سود بازرگانی، ارزش افزوده و واحد سنجش.
+                    </p>
+                    <Button asChild size="lg" className="text-primary-foreground">
+                      <Link to="/hscode">
+                        <Search className="w-4 h-4 ml-2" />
+                        ورود به ابزار جستجوی تعرفه
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+
                 {/* Related Articles */}
                 <div className="mt-16">
                   <RelatedArticles currentPostId={2} />

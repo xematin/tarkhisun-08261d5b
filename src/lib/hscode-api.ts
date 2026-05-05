@@ -11,15 +11,19 @@ export interface HSCodeResult {
   hsCode?: string;
   code?: string;
   hs_code?: string;
+  tariffCode?: string;
   description?: string;
   desc?: string;
   title?: string;
+  tariffTitle?: string;
   persianName?: string;
   englishName?: string;
   unit?: string;
   unitName?: string;
+  suq?: string;
   importDuty?: number | string;
   commercialBenefit?: number | string;
+  customsDuty?: number | string;
   vat?: number | string;
   [key: string]: unknown;
 }
@@ -28,8 +32,10 @@ export interface HSCodeSearchResponse {
   items?: HSCodeResult[];
   data?: HSCodeResult[];
   results?: HSCodeResult[];
+  elements?: HSCodeResult[];
   total?: number;
   totalCount?: number;
+  totalElements?: number;
   pagination?: { total?: number; offset?: number; limit?: number };
   [key: string]: unknown;
 }
@@ -98,10 +104,12 @@ export async function searchHSCodes({
     (payload.items as HSCodeResult[]) ||
     (payload.data as HSCodeResult[]) ||
     (payload.results as HSCodeResult[]) ||
+    (payload.elements as HSCodeResult[]) ||
     [];
   const total =
     payload.total ??
     payload.totalCount ??
+    payload.totalElements ??
     payload.pagination?.total ??
     items.length;
 
@@ -109,11 +117,11 @@ export async function searchHSCodes({
 }
 
 export function getHSCode(r: HSCodeResult): string {
-  return String(r.hsCode || r.code || r.hs_code || r.id || "").trim();
+  return String(r.hsCode || r.code || r.hs_code || r.tariffCode || r.id || "").trim();
 }
 
 export function getDescription(r: HSCodeResult): string {
   return String(
-    r.description || r.persianName || r.title || r.desc || ""
+    r.description || r.tariffTitle || r.persianName || r.title || r.desc || ""
   ).trim();
 }

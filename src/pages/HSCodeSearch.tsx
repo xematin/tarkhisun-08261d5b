@@ -278,13 +278,13 @@ const HSCodeSearch = () => {
                           )}
 
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                            {r.unit || r.unitName ? (
+                            {r.unit || r.unitName || r.suq ? (
                               <div className="bg-muted/50 rounded-lg p-2 text-center">
                                 <div className="text-muted-foreground text-persian mb-0.5">
                                   واحد
                                 </div>
                                 <div className="font-semibold text-persian">
-                                  {String(r.unit || r.unitName)}
+                                  {String(r.unit || r.unitName || r.suq)}
                                 </div>
                               </div>
                             ) : null}

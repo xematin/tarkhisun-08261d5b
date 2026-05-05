@@ -10,6 +10,7 @@ import Currencies from "./pages/Currencies";
 import NotFound from "./pages/NotFound";
 import Install from "./pages/Install";
 import ContactRedirect from "./pages/ContactRedirect";
+import HSCodeSearch from "./pages/HSCodeSearch";
 
 // Lazy load blog pages for better performance
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -99,6 +100,7 @@ const AppContent = () => {
         <Route path="/blog/budget-1405-guide" element={<Budget1405Guide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/currencies" element={<Currencies />} />
+        <Route path="/hscode" element={<HSCodeSearch />} />
         <Route path="/install" element={<Install />} />
         <Route path="/contact" element={<ContactRedirect />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

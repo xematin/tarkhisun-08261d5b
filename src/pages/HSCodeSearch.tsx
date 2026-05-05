@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Search, Copy, Loader2, FileSearch, Phone, BookOpen } from "lucide-react";
+import { Search, Copy, Loader2, FileSearch, Phone, BookOpen, CheckCircle2, Zap, Database, Target, Clock, Layers, Headphones, ShieldCheck, TrendingUp, Globe, Calculator } from "lucide-react";
+import hscodeHero from "@/assets/hscode-search-hero.jpg";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

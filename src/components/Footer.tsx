@@ -12,8 +12,13 @@ const Footer = () => {
     },
     {
       title: "نرخ ارز",
-      href: "#exchange",
-      isAnchor: true,
+      href: "/currencies",
+      isAnchor: false,
+    },
+    {
+      title: "جستجوی تعرفه گمرکی",
+      href: "/hscode",
+      isAnchor: false,
     },
     {
       title: "ترخیصان‌یار",

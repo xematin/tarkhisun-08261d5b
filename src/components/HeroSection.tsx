@@ -12,7 +12,7 @@ import hero1024Webp from "@/assets/hero-port-1024.webp";
 import hero1440Webp from "@/assets/hero-port-1440.webp";
 import hero1920Webp from "@/assets/hero-port-1920.webp";
 const HeroSection = () => {
-  const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی"];
+  const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک"];
   const [currentPortIndex, setCurrentPortIndex] = useState(0);
   
   useEffect(() => {

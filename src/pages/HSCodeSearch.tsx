@@ -351,37 +351,156 @@ const HSCodeSearch = () => {
             )}
           </section>
 
-          {/* Info / SEO Section */}
-          <section className="max-w-3xl mx-auto mt-16">
-            <h2 className="text-2xl font-bold text-persian mb-4 text-center">
+          {/* Hero image + intro */}
+          <section className="max-w-4xl mx-auto mt-16">
+            <div className="rounded-3xl overflow-hidden shadow-lg border border-border bg-card">
+              <img
+                src={hscodeHero}
+                alt="ابزار جستجوی کد تعرفه گمرکی ترخیصان"
+                width={1280}
+                height={768}
+                loading="lazy"
+                className="w-full h-auto"
+              />
+            </div>
+            <p className="text-muted-foreground text-persian leading-8 mt-6 text-justify">
+              <strong>تعرفه گمرکی</strong> کدی چندرقمی است که برای طبقه‌بندی کالاها در فرآیند
+              <strong> واردات و صادرات</strong> استفاده می‌شود. انتخاب صحیح این کد
+              (HS Code) برای هر کالا به شما کمک می‌کند تا از پرداخت هزینه‌های اضافی،
+              جریمه‌های احتمالی و تأخیرهای گمرکی جلوگیری کنید. این کد نه‌تنها میزان
+              <strong> حقوق ورودی، سود بازرگانی و مالیات بر ارزش افزوده</strong> را مشخص می‌کند،
+              بلکه برای <strong>ترخیص سریع و قانونی کالا</strong> از گمرک نیز ضروری است.
+            </p>
+          </section>
+
+          {/* About the tool */}
+          <section className="max-w-4xl mx-auto mt-14">
+            <h2 className="text-2xl md:text-3xl font-bold text-persian mb-4 text-center">
+              معرفی ابزار جستجوی تعرفه گمرکی ترخیصان
+            </h2>
+            <p className="text-muted-foreground text-persian leading-8 text-justify">
+              با ابزار جستجوی تعرفه گمرکی{" "}
+              <Link to="/" className="text-primary hover:underline font-semibold">
+                شرکت بازرگانی و ترخیص‌کاری ترخیصان
+              </Link>{" "}
+              چالش‌های تعیین دقیق تعرفه صحیح گمرکی را به‌راحتی پشت سر بگذارید! ما با ارائه
+              <strong> ابزاری سریع، دقیق و به‌روز</strong> به شما کمک می‌کنیم تا کد تعرفه صحیح
+              را در چند ثانیه پیدا کنید و با اطمینان خاطر به فعالیت‌های تجاری خود ادامه دهید.
+              این ابزار به‌طور مستقیم به پایگاه‌داده تعرفه‌های گمرک جمهوری اسلامی ایران متصل
+              است و آخرین تغییرات کتاب مقررات صادرات و واردات را پوشش می‌دهد.
+            </p>
+          </section>
+
+          {/* Features */}
+          <section className="max-w-5xl mx-auto mt-16">
+            <h2 className="text-2xl md:text-3xl font-bold text-persian mb-8 text-center">
+              ویژگی‌های ابزار جستجوی تعرفه گمرکی
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { icon: Zap, title: "جستجوی سریع و آسان", desc: "تنها با وارد کردن نام کالا یا توضیحات مختصر، کد تعرفه صحیح را در چند ثانیه پیدا کنید." },
+                { icon: Database, title: "پایگاه‌داده به‌روز", desc: "تمام تعرفه‌های گمرکی مطابق با آخرین تغییرات و مقررات گمرکی ارائه می‌شوند." },
+                { icon: Target, title: "دقت بالا در تشخیص", desc: "با الگوریتم‌های پیشرفته جستجو، دقیق‌ترین کد تعرفه را برای کالای خود پیدا کنید." },
+                { icon: Clock, title: "صرفه‌جویی در زمان و هزینه", desc: "از تأخیرهای گمرکی، جریمه‌ها و هزینه‌های اضافی جلوگیری کنید." },
+                { icon: Layers, title: "پوشش تمام دسته‌ها", desc: "کالاهای صنعتی، مواد شیمیایی، الکترونیک، پوشاک، خودرو و دیگر گروه‌های کالایی." },
+                { icon: Headphones, title: "مشاوره رایگان", desc: "در صورت نیاز به راهنمایی، تیم پشتیبانی ترخیصان آماده پاسخگویی به شماست." },
+              ].map((f, i) => (
+                <Card key={i} className="hover:shadow-md hover:border-primary/30 transition-all">
+                  <CardContent className="p-5">
+                    <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-3">
+                      <f.icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-bold text-persian mb-1.5">{f.title}</h3>
+                    <p className="text-sm text-muted-foreground text-persian leading-6">
+                      {f.desc}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Benefits */}
+          <section className="max-w-4xl mx-auto mt-16">
+            <h2 className="text-2xl md:text-3xl font-bold text-persian mb-6 text-center">
+              مزایای استفاده از ابزار جستجوی تعرفه گمرکی
+            </h2>
+            <div className="grid md:grid-cols-2 gap-3">
+              {[
+                { icon: ShieldCheck, text: "جلوگیری از جریمه و تخلفات گمرکی" },
+                { icon: Calculator, text: "محاسبه دقیق هزینه‌های واردات و صادرات" },
+                { icon: Zap, text: "تسریع فرآیند ترخیص کالا از گمرک" },
+                { icon: TrendingUp, text: "استفاده از معافیت‌ها و تخفیف‌های گمرکی" },
+                { icon: Layers, text: "مدیریت بهتر زنجیره تأمین کالا" },
+                { icon: Globe, text: "افزایش رقابت‌پذیری در بازارهای بین‌المللی" },
+                { icon: CheckCircle2, text: "پیشگیری از مشکلات در کشور مقصد" },
+                { icon: BookOpen, text: "شفافیت در امور مالی و حسابداری" },
+              ].map((b, i) => (
+                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-card border border-border">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <b.icon className="w-4 h-4" />
+                  </div>
+                  <p className="text-persian text-sm leading-7 pt-1">{b.text}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section className="max-w-4xl mx-auto mt-16">
+            <h2 className="text-2xl md:text-3xl font-bold text-persian mb-6 text-center">
+              سوالات متداول درباره جستجوی تعرفه گمرکی
+            </h2>
+            <div className="space-y-3">
+              {[
+                { q: "ابزار جستجوی تعرفه گمرکی چگونه کار می‌کند؟", a: "کافی است نام کالا، توضیحات یا مشخصات آن را وارد کنید؛ ابزار با استفاده از پایگاه‌داده به‌روز و الگوریتم‌های دقیق، کد تعرفه مناسب را به همراه حقوق ورودی، سود بازرگانی، ارزش افزوده و واحد سنجش نمایش می‌دهد." },
+                { q: "آیا استفاده از ابزار جستجوی تعرفه گمرکی هزینه‌ای دارد؟", a: "خیر، استفاده از این ابزار به‌صورت کاملاً رایگان و بدون نیاز به ثبت‌نام در اختیار همه کاربران قرار گرفته است." },
+                { q: "آیا این ابزار برای تمام کالاها قابل استفاده است؟", a: "بله، ابزار جستجوی تعرفه گمرکی ترخیصان تمامی گروه‌های کالایی مانند محصولات صنعتی، مواد شیمیایی، لوازم الکترونیکی، پوشاک، خودرو، مواد غذایی و... را پوشش می‌دهد." },
+                { q: "اگر نتوانم کد تعرفه مورد نظرم را پیدا کنم چه کنم؟", a: "می‌توانید با کارشناسان شرکت ترخیصان تماس بگیرید تا با بیش از ۲۰ سال تجربه در امور گمرکی، شما را در تعیین دقیق‌ترین کد تعرفه راهنمایی کنند." },
+                { q: "آیا تعرفه‌های گمرکی همیشه ثابت هستند؟", a: "خیر، تعرفه‌های گمرکی ممکن است با توجه به سیاست‌های تجاری و قوانین جدید تغییر کنند. به همین دلیل پایگاه‌داده ابزار جستجوی تعرفه ترخیصان به‌طور مداوم به‌روزرسانی می‌شود." },
+                { q: "آیا این ابزار برای ترخیص کالا هم مفید است؟", a: "بله، با پیدا کردن کد تعرفه صحیح، فرآیند ترخیص کالا سریع‌تر و بدون مشکل انجام می‌شود و از بروز خطاهای گمرکی و جریمه‌های احتمالی جلوگیری می‌کند." },
+                { q: "چقدر طول می‌کشد تا کد تعرفه مناسب پیدا شود؟", a: "فرآیند جستجوی کد تعرفه در ابزار ما تنها چند ثانیه طول می‌کشد. کافی است نام کالا را وارد کنید و فهرست نتایج به‌صورت آنی نمایش داده می‌شود." },
+              ].map((item, i) => (
+                <details key={i} className="group rounded-xl border border-border bg-card p-4 open:shadow-md transition-all">
+                  <summary className="cursor-pointer font-bold text-persian flex items-center justify-between gap-3 list-none">
+                    <span>{item.q}</span>
+                    <span className="text-primary text-xl group-open:rotate-45 transition-transform">+</span>
+                  </summary>
+                  <p className="text-muted-foreground text-persian leading-7 mt-3 text-sm">
+                    {item.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </section>
+
+          {/* What is HS Code (kept SEO block) */}
+          <section className="max-w-4xl mx-auto mt-16">
+            <h2 className="text-2xl md:text-3xl font-bold text-persian mb-4 text-center">
               کد تعرفه گمرکی (HS Code) چیست؟
             </h2>
-            <div className="prose prose-sm max-w-none text-persian text-muted-foreground leading-7 space-y-3">
+            <div className="prose prose-sm max-w-none text-persian text-muted-foreground leading-8 space-y-3 text-justify">
               <p>
                 <strong>کد تعرفه گمرکی</strong> یا <strong>HS Code</strong> (Harmonized System
-                Code) یک استاندارد بین‌المللی برای طبقه‌بندی کالاها در تجارت جهانی است.
-                این کد ۸ یا ۱۰ رقمی برای محاسبه <strong>حقوق ورودی</strong>، <strong>سود
-                بازرگانی</strong> و <strong>مالیات بر ارزش افزوده</strong> هنگام واردات و
-                صادرات کالا استفاده می‌شود.
+                Code) یک استاندارد بین‌المللی برای طبقه‌بندی کالاها در تجارت جهانی است که
+                توسط <strong>سازمان جهانی گمرک (WCO)</strong> تدوین شده و بیش از ۲۰۰ کشور
+                جهان از آن استفاده می‌کنند. این کد ۸ یا ۱۰ رقمی برای محاسبه
+                <strong> حقوق ورودی</strong>، <strong>سود بازرگانی</strong> و
+                <strong> مالیات بر ارزش افزوده</strong> هنگام واردات و صادرات کالا کاربرد دارد.
               </p>
               <p>
-                در ایران، گمرک جمهوری اسلامی از کد ۸ رقمی به عنوان مبنای کتاب مقررات
+                در ایران، گمرک جمهوری اسلامی از کد ۸ رقمی به‌عنوان مبنای کتاب مقررات
                 صادرات و واردات استفاده می‌کند. وارد کردن کد تعرفه صحیح در اظهارنامه
-                گمرکی تأثیر مستقیم بر هزینه نهایی ترخیص کالا دارد.
+                گمرکی تأثیر مستقیم بر هزینه نهایی ترخیص کالا، مدت‌زمان فرآیند گمرکی و
+                حتی امکان دریافت معافیت‌ها و تخفیف‌های قانونی دارد.
               </p>
               <p>
                 برای اطلاعات بیشتر، مقاله جامع ما را بخوانید:{" "}
-                <Link
-                  to="/blog/hs-code-guide"
-                  className="text-primary hover:underline font-semibold"
-                >
+                <Link to="/blog/hs-code-guide" className="text-primary hover:underline font-semibold">
                   راهنمای کامل کد تعرفه گمرکی HS Code
                 </Link>{" "}
                 یا{" "}
-                <Link
-                  to="/blog/customs-tariff-guide"
-                  className="text-primary hover:underline font-semibold"
-                >
+                <Link to="/blog/customs-tariff-guide" className="text-primary hover:underline font-semibold">
                   راهنمای محاسبه تعرفه گمرکی
                 </Link>
                 .

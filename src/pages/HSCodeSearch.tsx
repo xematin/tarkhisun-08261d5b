@@ -399,7 +399,7 @@ const HSCodeSearch = () => {
                 <p className="text-muted-foreground text-persian">
                   کارشناسان ما با بیش از ۲۰ سال تجربه آماده مشاوره رایگان هستند.
                 </p>
-                <Button asChild size="lg" className="text-persian">
+                <Button asChild size="lg" className="text-persian text-primary-foreground">
                   <a href="tel:+989177380080">
                     <Phone className="w-4 h-4 ml-2" />
                     تماس با مشاور: 09177380080

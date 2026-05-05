@@ -1,8 +1,10 @@
 // HS Code search API client
-// Uses Lovable Cloud edge function `hscode-search` as a CORS-safe proxy
-// to https://api.tarkhiskala.info/api/v1/HSCodes/Search
+// Calls the same-origin PHP proxy at /api/hscode-search.php to avoid CORS.
+// In dev/preview, falls back to the upstream API directly.
 
-import { supabase } from "@/integrations/supabase/client";
+const PROXY_PATH = "/api/hscode-search.php";
+const UPSTREAM_FALLBACK =
+  "https://api.tarkhiskala.info/api/v1/HSCodes/Search";
 
 export interface HSCodeResult {
   id?: string | number;
@@ -32,7 +34,6 @@ export interface HSCodeSearchResponse {
   [key: string]: unknown;
 }
 
-// Normalize Persian/Arabic digits to English (project rule)
 export const normalizePersianDigits = (str: string): string => {
   if (!str) return "";
   return str
@@ -47,6 +48,21 @@ export interface SearchParams {
   signal?: AbortSignal;
 }
 
+async function fetchJson(
+  url: string,
+  signal?: AbortSignal,
+): Promise<HSCodeSearchResponse> {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+    signal,
+  });
+  if (!res.ok) {
+    throw new Error(`HSCode API error: ${res.status}`);
+  }
+  return (await res.json()) as HSCodeSearchResponse;
+}
+
 export async function searchHSCodes({
   phrase,
   offset = 0,
@@ -56,24 +72,28 @@ export async function searchHSCodes({
   const cleaned = normalizePersianDigits(phrase.trim());
   if (cleaned.length < 2) return { items: [], total: 0 };
 
-  const { data, error } = await supabase.functions.invoke<HSCodeSearchResponse>(
-    "hscode-search",
-    {
-      body: { phrase: cleaned, offset, limit, lang: "fa" },
-    },
-  );
+  // 1) Same-origin PHP proxy (production on tarkhisun.com)
+  const proxy = new URL(PROXY_PATH, window.location.origin);
+  proxy.searchParams.set("phrase", cleaned);
+  proxy.searchParams.set("offset", String(offset));
+  proxy.searchParams.set("limit", String(limit));
+  proxy.searchParams.set("lang", "fa");
 
-  if (signal?.aborted) {
-    const err = new Error("Aborted");
-    err.name = "AbortError";
-    throw err;
+  let data: HSCodeSearchResponse | null = null;
+  try {
+    data = await fetchJson(proxy.toString(), signal);
+  } catch (e) {
+    if ((e as Error).name === "AbortError") throw e;
+    // 2) Fallback for dev/preview where the PHP proxy is not deployed
+    const direct = new URL(UPSTREAM_FALLBACK);
+    direct.searchParams.set("phrase", cleaned);
+    direct.searchParams.set("pagination.offset", String(offset));
+    direct.searchParams.set("pagination.limit", String(limit));
+    direct.searchParams.set("lang", "fa");
+    data = await fetchJson(direct.toString(), signal);
   }
 
-  if (error) {
-    throw new Error(error.message || "HSCode proxy error");
-  }
-
-  const payload = (data ?? {}) as HSCodeSearchResponse;
+  const payload = data ?? {};
   const items =
     (payload.items as HSCodeResult[]) ||
     (payload.data as HSCodeResult[]) ||

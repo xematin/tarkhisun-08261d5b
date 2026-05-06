@@ -103,10 +103,10 @@ const Budget1405Guide = () => {
         }
       }, {
         "@type": "Question",
-        name: "تعرفه واردات گوشی در سال ۱۴۰۵ چقدر است؟",
+        name: "تعرفه واردات گوشی موبایل در سال ۱۴۰۵ چقدر است؟",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "حقوق ورودی گوشی با ارزش بیش از ۶۰۰ یورو، ۱۵ درصد تعیین شده است."
+          text: "حقوق ورودی گوشی موبایل با ارزش بیش از ۶۰۰ یورو، ۱۵ درصد تعیین شده است."
         }
       }, {
         "@type": "Question",
@@ -632,7 +632,7 @@ const Budget1405Guide = () => {
 
                   <p className="text-muted-foreground mb-6 text-persian leading-relaxed">
                     یکی از مهم‌ترین بخش‌های لایحه بودجه ۱۴۰۵، تعیین <strong>تعرفه‌های گمرکی</strong> برای واردات کالاها است. 
-                    در این بخش تعرفه‌های <strong>خودرو</strong> و <strong>گوشی</strong> را بررسی می‌کنیم:
+                    در این بخش تعرفه‌های <strong>خودرو</strong> و <strong>گوشی موبایل</strong> را بررسی می‌کنیم:
                   </p>
 
                   {/* Car Tariffs */}
@@ -710,7 +710,7 @@ const Budget1405Guide = () => {
                     <div className="bg-purple-500/10 px-6 py-4 border-b">
                       <h3 className="font-bold text-lg text-foreground text-persian flex items-center gap-2">
                         <Smartphone className="w-5 h-5 text-purple-600" />
-                        تعرفه گوشی در ۱۴۰۵
+                        تعرفه گوشی موبایل در ۱۴۰۵
                       </h3>
                     </div>
                     <div className="overflow-x-auto">
@@ -723,7 +723,7 @@ const Budget1405Guide = () => {
                         </TableHeader>
                         <TableBody>
                           <TableRow>
-                            <TableCell className="text-persian font-medium">گوشی (بالای ۶۰۰ یورو)</TableCell>
+                            <TableCell className="text-persian font-medium">گوشی موبایل (بالای ۶۰۰ یورو)</TableCell>
                             <TableCell className="text-center">
                               <span className="bg-purple-500/20 text-purple-700 px-3 py-1 rounded-full font-bold">۱۵٪</span>
                             </TableCell>
@@ -971,9 +971,9 @@ const Budget1405Guide = () => {
                       </p>
                     </div>
                     <div className="bg-card rounded-xl border p-5">
-                      <h4 className="font-bold text-foreground text-persian mb-2">تعرفه واردات گوشی در سال ۱۴۰۵ چقدر است؟</h4>
+                      <h4 className="font-bold text-foreground text-persian mb-2">تعرفه واردات گوشی موبایل در سال ۱۴۰۵ چقدر است؟</h4>
                       <p className="text-muted-foreground text-persian text-sm">
-                        حقوق ورودی گوشی با ارزش بیش از ۶۰۰ یورو، <strong>۱۵ درصد</strong> تعیین شده است.
+                        حقوق ورودی گوشی موبایل با ارزش بیش از ۶۰۰ یورو، <strong>۱۵ درصد</strong> تعیین شده است.
                       </p>
                     </div>
                   </div>

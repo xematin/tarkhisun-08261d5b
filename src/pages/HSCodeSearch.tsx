@@ -22,7 +22,7 @@ import {
 } from "@/lib/hscode-api";
 
 const SUGGESTIONS = [
-  "گوشی موبایل",
+  "گوشی",
   "خودرو",
   "اسباب بازی",
   "لوازم خانگی",

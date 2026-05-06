@@ -46,7 +46,7 @@ const CustomsTariff2025Guide = () => {
         "@type": "Article",
         "@id": "https://tarkhisun.com/blog/customs-tariff-2025-guide#article",
         headline: "تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه | خودرو، گوشی و کالا",
-        description: "راهنمای کامل تعرفه‌های گمرکی سال ۱۴۰۵ براساس لایحه بودجه: حقوق ورودی خودرو برقی ۴٪، هیبریدی ۱۵٪، بنزینی ۳۲٪ تا ۱۳۰٪، تعرفه گوشی موبایل ۴۰٪ و نرخ تسعیر ارز ۹۴,۳۰۰ تومان",
+        description: "راهنمای کامل تعرفه‌های گمرکی سال ۱۴۰۵ براساس لایحه بودجه: حقوق ورودی خودرو برقی ۴٪، هیبریدی ۱۵٪، بنزینی ۳۲٪ تا ۱۳۰٪، تعرفه گوشی ۴۰٪ و نرخ تسعیر ارز ۹۴,۳۰۰ تومان",
         image: "https://tarkhisun.com/images/blog/customs-tariff-2025-vehicles.webp",
         datePublished: "2025-01-15T10:00:00+03:30",
         dateModified: "2025-01-15T10:00:00+03:30",
@@ -115,7 +115,7 @@ const CustomsTariff2025Guide = () => {
           },
           {
             "@type": "Question",
-            name: "تعرفه واردات گوشی موبایل بالای ۶۰۰ یورو در سال ۱۴۰۵ چقدر است؟",
+            name: "تعرفه واردات گوشی بالای ۶۰۰ یورو در سال ۱۴۰۵ چقدر است؟",
             acceptedAnswer: {
               "@type": "Answer",
               text: "حقوق ورودی گوشی‌های موبایل با ارزش بیش از ۶۰۰ یورو، ۴۰ درصد تعیین شده و هزینه رجیستری ۹۰۰ هزار تومان است."
@@ -172,7 +172,7 @@ const CustomsTariff2025Guide = () => {
         <title>تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه | خودرو، گوشی و کالا | ترخیصان</title>
         <meta
           name="description"
-          content="راهنمای کامل تعرفه‌های گمرکی سال ۱۴۰۵ براساس لایحه بودجه: حقوق ورودی خودرو برقی ۴٪، هیبریدی ۱۵٪، بنزینی ۳۲٪ تا ۱۳۰٪، تعرفه گوشی موبایل و نرخ تسعیر ارز"
+          content="راهنمای کامل تعرفه‌های گمرکی سال ۱۴۰۵ براساس لایحه بودجه: حقوق ورودی خودرو برقی ۴٪، هیبریدی ۱۵٪، بنزینی ۳۲٪ تا ۱۳۰٪، تعرفه گوشی و نرخ تسعیر ارز"
         />
         <meta
           name="keywords"
@@ -209,7 +209,7 @@ const CustomsTariff2025Guide = () => {
                 تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground text-persian leading-relaxed">
-                راهنمای کامل حقوق ورودی خودرو، گوشی موبایل و کالاها در سال ۱۴۰۵
+                راهنمای کامل حقوق ورودی خودرو، گوشی و کالاها در سال ۱۴۰۵
               </p>
               <div className="flex flex-wrap justify-center gap-4 mt-6 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
@@ -236,7 +236,7 @@ const CustomsTariff2025Guide = () => {
                   ۱. تعرفه واردات خودرو ۱۴۰۵
                 </a>
                 <a href="#mobile-tariffs" className="text-muted-foreground hover:text-primary transition-colors py-1">
-                  ۲. تعرفه گوشی موبایل و تجهیزات هوشمند
+                  ۲. تعرفه گوشی و تجهیزات هوشمند
                 </a>
                 <a href="#exchange-rate" className="text-muted-foreground hover:text-primary transition-colors py-1">
                   ۳. نرخ ارز گمرکی ۱۴۰۵
@@ -267,7 +267,7 @@ const CustomsTariff2025Guide = () => {
                   <p className="text-lg text-muted-foreground leading-relaxed">
                     لایحه بودجه سال ۱۴۰۵ کل کشور با تغییرات مهمی در حوزه <strong>تعرفه‌های گمرکی</strong> همراه است. 
                     این تغییرات شامل <strong>کاهش چشمگیر حقوق ورودی خودروهای برقی</strong> به ۴ درصد، 
-                    <strong>تعیین نرخ تسعیر ارز گمرکی</strong> ۹۴,۳۰۰ تومان و تغییرات در تعرفه گوشی موبایل می‌شود. 
+                    <strong>تعیین نرخ تسعیر ارز گمرکی</strong> ۹۴,۳۰۰ تومان و تغییرات در تعرفه گوشی می‌شود. 
                     در این مقاله، تمام جزئیات تعرفه‌های گمرکی ۱۴۰۵ را براساس لایحه بودجه بررسی می‌کنیم.
                   </p>
                 </section>
@@ -496,20 +496,20 @@ const CustomsTariff2025Guide = () => {
                       <Smartphone className="w-6 h-6 text-primary" />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-foreground text-persian">
-                      تعرفه گوشی موبایل و تجهیزات هوشمند ۱۴۰۵
+                      تعرفه گوشی و تجهیزات هوشمند ۱۴۰۵
                     </h2>
                   </div>
 
                   <ArticleImage 
                     src="/images/blog/customs-tariff-2025-mobile.webp"
-                    alt="تعرفه واردات گوشی موبایل در سال ۱۴۰۵ - هزینه رجیستری و حقوق گمرکی"
-                    caption="تعرفه واردات گوشی موبایل و تجهیزات هوشمند در لایحه بودجه ۱۴۰۵"
+                    alt="تعرفه واردات گوشی در سال ۱۴۰۵ - هزینه رجیستری و حقوق گمرکی"
+                    caption="تعرفه واردات گوشی و تجهیزات هوشمند در لایحه بودجه ۱۴۰۵"
                   />
 
                   <div className="bg-card rounded-xl border p-6 mb-6">
                     <h3 className="font-bold text-lg text-foreground mb-4 text-persian flex items-center gap-2">
                       <Phone className="w-5 h-5 text-primary" />
-                      جزئیات تعرفه گوشی موبایل
+                      جزئیات تعرفه گوشی
                     </h3>
                     <div className="space-y-4">
                       <div className="flex justify-between items-center p-4 bg-green-500/10 rounded-lg border border-green-500/20">
@@ -610,7 +610,7 @@ const CustomsTariff2025Guide = () => {
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 text-green-600" />
-                          گوشی موبایل و تجهیزات الکترونیکی
+                          گوشی و تجهیزات الکترونیکی
                         </li>
                         <li className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 text-green-600" />
@@ -805,7 +805,7 @@ const CustomsTariff2025Guide = () => {
                     </div>
                     <div className="bg-card rounded-xl border p-5">
                       <h3 className="font-bold text-foreground mb-2 text-persian">
-                        ۳. تعرفه واردات گوشی موبایل بالای ۶۰۰ یورو چقدر است؟
+                        ۳. تعرفه واردات گوشی بالای ۶۰۰ یورو چقدر است؟
                       </h3>
                       <p className="text-muted-foreground text-persian">
                         حقوق ورودی گوشی‌های موبایل با ارزش بیش از ۶۰۰ یورو، ۴۰ درصد تعیین شده 

@@ -608,7 +608,14 @@ const HSCodeSearch = () => {
 
         <Footer />
       </div>
+
+      <PhoneGateDialog
+        open={gateOpen}
+        phrase={pendingPhrase ?? ""}
+        onSuccess={handleGateSuccess}
+      />
     </>
+
   );
 };
 

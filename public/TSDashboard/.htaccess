@@ -1,0 +1,15 @@
+# Block search engines
+Header set X-Robots-Tag "noindex, nofollow"
+
+# Basic Auth — set up via cPanel "Directory Privacy" on the TSDashboard folder.
+# OR uncomment and configure manually:
+#
+# AuthType Basic
+# AuthName "TSDashboard"
+# AuthUserFile "/home/YOUR_CPANEL_USER/.htpasswds/public_html/TSDashboard/passwd"
+# Require valid-user
+
+# Prevent direct access to bootstrap helper
+<Files "_bootstrap.php">
+    Require all denied
+</Files>

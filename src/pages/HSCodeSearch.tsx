@@ -20,6 +20,8 @@ import {
   normalizePersianDigits,
   type HSCodeResult,
 } from "@/lib/hscode-api";
+import PhoneGateDialog from "@/components/PhoneGateDialog";
+import { hasValidLead } from "@/lib/lead-api";
 
 const SUGGESTIONS = [
   "گوشی",

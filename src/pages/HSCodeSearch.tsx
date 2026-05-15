@@ -592,7 +592,14 @@ const HSCodeSearch = () => {
 
         <Footer />
       </div>
+
+      <PhoneGateDialog
+        open={gateOpen}
+        onSubmit={handlePhoneSubmit}
+        onOpenChange={setGateOpen}
+      />
     </>
+
   );
 };
 

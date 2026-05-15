@@ -1,4 +1,0 @@
-# Block direct access to sensitive config files
-<FilesMatch "^(db-config\.php|db-config\.example\.php)$">
-    Require all denied
-</FilesMatch>

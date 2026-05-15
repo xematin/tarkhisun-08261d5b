@@ -20,8 +20,6 @@ import {
   normalizePersianDigits,
   type HSCodeResult,
 } from "@/lib/hscode-api";
-import PhoneGateDialog from "@/components/PhoneGateDialog";
-import { hasValidLead } from "@/lib/lead-api";
 
 const SUGGESTIONS = [
   "گوشی",
@@ -52,9 +50,6 @@ const HSCodeSearch = () => {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchCount, setSearchCount] = useState(0);
-  const [gateOpen, setGateOpen] = useState(false);
-  const [pendingPhrase, setPendingPhrase] = useState<string | null>(null);
 
   const debounced = useDebounce(query, 450);
   const trimmed = useMemo(() => normalizePersianDigits(debounced.trim()), [debounced]);
@@ -69,14 +64,6 @@ const HSCodeSearch = () => {
       setLoading(false);
       return;
     }
-
-    // Phone gate: allow first search free, then require phone (cached 30 days)
-    if (searchCount >= 1 && !hasValidLead()) {
-      setPendingPhrase(trimmed);
-      setGateOpen(true);
-      return;
-    }
-
     const ctrl = new AbortController();
     setLoading(true);
     setError(null);
@@ -85,7 +72,6 @@ const HSCodeSearch = () => {
       .then((res) => {
         setItems(res.items);
         setTotal(res.total);
-        setSearchCount((c) => c + 1);
       })
       .catch((e) => {
         if ((e as Error).name === "AbortError") return;
@@ -96,34 +82,7 @@ const HSCodeSearch = () => {
       })
       .finally(() => setLoading(false));
     return () => ctrl.abort();
-  }, [trimmed, searchCount]);
-
-  const handleGateSuccess = () => {
-    setGateOpen(false);
-    // Force the search effect to re-run by bumping searchCount back to a state that allows it.
-    // hasValidLead() now returns true, so simply re-trigger by toggling pendingPhrase.
-    if (pendingPhrase) {
-      const phrase = pendingPhrase;
-      setPendingPhrase(null);
-      // Re-run search manually
-      const ctrl = new AbortController();
-      setLoading(true);
-      setError(null);
-      setOffset(0);
-      searchHSCodes({ phrase, offset: 0, limit: PAGE_SIZE, signal: ctrl.signal })
-        .then((res) => {
-          setItems(res.items);
-          setTotal(res.total);
-        })
-        .catch((e) => {
-          if ((e as Error).name === "AbortError") return;
-          console.error(e);
-          setError("متاسفانه در دریافت اطلاعات مشکلی پیش آمد. لطفاً دوباره تلاش کنید.");
-        })
-        .finally(() => setLoading(false));
-    }
-  };
-
+  }, [trimmed]);
 
   const loadMore = async () => {
     if (loadingMore) return;
@@ -608,14 +567,7 @@ const HSCodeSearch = () => {
 
         <Footer />
       </div>
-
-      <PhoneGateDialog
-        open={gateOpen}
-        phrase={pendingPhrase ?? ""}
-        onSuccess={handleGateSuccess}
-      />
     </>
-
   );
 };
 

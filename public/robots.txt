@@ -14,6 +14,8 @@ User-agent: *
 Allow: /
 Disallow: /install
 Disallow: /contact
+Disallow: /TSDashboard
+Disallow: /api/
 
 # Sitemap location
 Sitemap: https://tarkhisun.com/sitemap.xml

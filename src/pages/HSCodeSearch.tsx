@@ -20,6 +20,8 @@ import {
   normalizePersianDigits,
   type HSCodeResult,
 } from "@/lib/hscode-api";
+import PhoneGateDialog from "@/components/PhoneGateDialog";
+import { getStoredPhone, setStoredPhone, submitLead } from "@/lib/lead-tracking";
 
 const SUGGESTIONS = [
   "گوشی",
@@ -50,6 +52,9 @@ const HSCodeSearch = () => {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [phone, setPhone] = useState<string | null>(() => getStoredPhone());
+  const [gateOpen, setGateOpen] = useState(false);
+  const [pendingPhrase, setPendingPhrase] = useState<string | null>(null);
 
   const debounced = useDebounce(query, 450);
   const trimmed = useMemo(() => normalizePersianDigits(debounced.trim()), [debounced]);
@@ -64,6 +69,13 @@ const HSCodeSearch = () => {
       setLoading(false);
       return;
     }
+    // Phone gate: if no phone yet, defer search until user submits
+    if (!phone) {
+      setPendingPhrase(trimmed);
+      setGateOpen(true);
+      setLoading(false);
+      return;
+    }
     const ctrl = new AbortController();
     setLoading(true);
     setError(null);
@@ -72,6 +84,7 @@ const HSCodeSearch = () => {
       .then((res) => {
         setItems(res.items);
         setTotal(res.total);
+        void submitLead(phone, trimmed);
       })
       .catch((e) => {
         if ((e as Error).name === "AbortError") return;
@@ -82,7 +95,19 @@ const HSCodeSearch = () => {
       })
       .finally(() => setLoading(false));
     return () => ctrl.abort();
-  }, [trimmed]);
+  }, [trimmed, phone]);
+
+  const handlePhoneSubmit = async (p: string) => {
+    setStoredPhone(p);
+    // Send the lead immediately with the pending phrase (or current trimmed)
+    const phrase = pendingPhrase || trimmed;
+    if (phrase) {
+      try { await submitLead(p, phrase); } catch { /* silent */ }
+    }
+    setPhone(p);
+    setGateOpen(false);
+    setPendingPhrase(null);
+  };
 
   const loadMore = async () => {
     if (loadingMore) return;
@@ -567,7 +592,14 @@ const HSCodeSearch = () => {
 
         <Footer />
       </div>
+
+      <PhoneGateDialog
+        open={gateOpen}
+        onSubmit={handlePhoneSubmit}
+        onOpenChange={setGateOpen}
+      />
     </>
+
   );
 };
 

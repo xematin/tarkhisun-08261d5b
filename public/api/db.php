@@ -1,0 +1,142 @@
+<?php
+/**
+ * اتصال به MySQL + helper های مشترک
+ */
+
+declare(strict_types=1);
+
+function ts_load_config(): array {
+    static $cfg = null;
+    if ($cfg !== null) return $cfg;
+    $path = __DIR__ . '/config.php';
+    if (!file_exists($path)) {
+        ts_json_error(500, 'config.php not found. Copy config.sample.php to config.php and fill DB credentials.');
+    }
+    $cfg = require $path;
+    return $cfg;
+}
+
+function ts_db(): PDO {
+    static $pdo = null;
+    if ($pdo !== null) return $pdo;
+    $c = ts_load_config()['db'];
+    $dsn = "mysql:host={$c['host']};dbname={$c['name']};charset={$c['charset']}";
+    try {
+        $pdo = new PDO($dsn, $c['user'], $c['pass'], [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]);
+    } catch (PDOException $e) {
+        ts_json_error(500, 'DB connection failed', $e->getMessage());
+    }
+    return $pdo;
+}
+
+function ts_json(int $status, $payload): void {
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+function ts_json_error(int $status, string $message, string $detail = ''): void {
+    ts_json($status, ['error' => $message] + ($detail ? ['detail' => $detail] : []));
+}
+
+function ts_normalize_digits(string $s): string {
+    $fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+    $ar = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    $en = ['0','1','2','3','4','5','6','7','8','9'];
+    return str_replace($ar, $en, str_replace($fa, $en, $s));
+}
+
+function ts_valid_phone(string $phone): bool {
+    return (bool) preg_match('/^09\d{9}$/', $phone);
+}
+
+function ts_client_ip(): string {
+    foreach (['HTTP_CF_CONNECTING_IP','HTTP_X_FORWARDED_FOR','REMOTE_ADDR'] as $k) {
+        if (!empty($_SERVER[$k])) {
+            $v = explode(',', $_SERVER[$k])[0];
+            return trim($v);
+        }
+    }
+    return '';
+}
+
+function ts_read_json_body(): array {
+    $raw = file_get_contents('php://input');
+    if (!$raw) return [];
+    $data = json_decode($raw, true);
+    return is_array($data) ? $data : [];
+}
+
+function ts_cors_same_origin(): void {
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    $host   = $_SERVER['HTTP_HOST'] ?? '';
+    if ($origin && $host && parse_url($origin, PHP_URL_HOST) === $host) {
+        header("Access-Control-Allow-Origin: $origin");
+        header('Access-Control-Allow-Credentials: true');
+        header('Vary: Origin');
+    }
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
+    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
+        http_response_code(204);
+        exit;
+    }
+}
+
+/* ============ Admin auth ============ */
+
+function ts_admin_session_cookie_name(): string { return 'ts_admin'; }
+
+function ts_admin_set_session(int $admin_id): string {
+    $token   = bin2hex(random_bytes(32));
+    $ttl     = (int)(ts_load_config()['admin_session_ttl'] ?? 604800);
+    $expires = date('Y-m-d H:i:s', time() + $ttl);
+    $stmt = ts_db()->prepare('INSERT INTO ts_admin_sessions (token, admin_id, expires_at) VALUES (?, ?, ?)');
+    $stmt->execute([$token, $admin_id, $expires]);
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    setcookie(ts_admin_session_cookie_name(), $token, [
+        'expires'  => time() + $ttl,
+        'path'     => '/',
+        'secure'   => $secure,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+    return $token;
+}
+
+function ts_admin_clear_session(): void {
+    $name  = ts_admin_session_cookie_name();
+    $token = $_COOKIE[$name] ?? '';
+    if ($token) {
+        $stmt = ts_db()->prepare('DELETE FROM ts_admin_sessions WHERE token = ?');
+        $stmt->execute([$token]);
+    }
+    setcookie($name, '', [
+        'expires' => time() - 3600, 'path' => '/',
+        'httponly' => true, 'samesite' => 'Lax',
+    ]);
+}
+
+function ts_admin_current(): ?array {
+    $token = $_COOKIE[ts_admin_session_cookie_name()] ?? '';
+    if (!$token) return null;
+    $stmt = ts_db()->prepare(
+        'SELECT a.id, a.username FROM ts_admin_sessions s
+         JOIN ts_admins a ON a.id = s.admin_id
+         WHERE s.token = ? AND s.expires_at > NOW() LIMIT 1'
+    );
+    $stmt->execute([$token]);
+    $row = $stmt->fetch();
+    return $row ?: null;
+}
+
+function ts_admin_require(): array {
+    $a = ts_admin_current();
+    if (!$a) ts_json_error(401, 'Unauthorized');
+    return $a;
+}

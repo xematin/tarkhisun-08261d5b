@@ -28,6 +28,9 @@
   # ================================================
   RewriteRule ^index\.html$ - [L]
 
+  # اجازه دسترسی مستقیم به فایل‌های PHP داخل /api/
+  RewriteRule ^api/ - [L]
+
   # Allow important static files
   RewriteRule ^(sitemap\.xml|robots\.txt|favicon\.ico|manifest\.json|rss\.xml)$ - [L]
 

@@ -1,103 +1,48 @@
-# پلن: گیت شماره تماس برای جستجو + پنل ادمین
+## مشکل
 
-## رفتار کاربر
-1. کاربر اولین سرچ را در `/hscode` انجام می‌دهد و نتایج را عادی می‌بیند.
-2. به محض اولین جستجو، شماره تماس و عبارت جستجو در بک‌اند ذخیره می‌شود (اگر شماره موجود نیست، پاپ‌آپ باز می‌شود قبل از نمایش نتایج).
-3. در سرچ بعدی (تا وقتی کوکی فعال است) پاپ‌آپ ظاهر می‌شود؛ کاربر شماره را به فرمت `09xxxxxxxxx` (۱۱ رقم، شروع با `09`) وارد می‌کند، Persian/Arabic digits نرمالایز می‌شوند، اعتبارسنجی با Zod.
-4. با زدن «ادامه»، شماره ذخیره شده و در کوکی + localStorage برای ۳۰ روز نگهداری می‌شود؛ از این پس بدون پاپ‌آپ سرچ می‌کند.
-5. هر سرچ بعدی نیز عبارت + شماره به بک‌اند ارسال می‌شود (برای جمع‌آوری «عبارت‌های جستجو شده» در پنل).
+`.htaccess` فعلی همه‌ی درخواست‌ها به‌جز چند فایل ثابت را به `index.html` می‌فرستد. در نتیجه `/api/install.php` و بقیه‌ی endpointهای PHP داخل `/api/` به React می‌رسند و 404 می‌دهند.
 
-## پنل ادمین `/TSDashboard`
-- روتِ React جدید (نه دایرکتوری) داخل `App.tsx`.
-- صفحه setup اولیه: اگر هنوز هیچ ادمینی در دیتابیس نیست، فرم «ایجاد یوزرنیم/پسورد» نمایش داده می‌شود (فقط یک‌بار قابل اجرا).
-- صفحه لاگین: یوزرنیم + پسورد → بک‌اند PHP با `password_verify`، توکن سشن HttpOnly در کوکی.
-- داشبورد:
-  - جدول لیدها: شماره، تاریخ/ساعت، تعداد سرچ، آخرین عبارت‌ها (آخرین ۵).
-  - صفحه جزئیات هر شماره: تمام عبارت‌های جستجو شده با timestamp.
-  - دکمه «خروجی CSV» (همه لیدها).
-  - دکمه «حذف رکورد» (سطری) با تأیید.
-  - جستجو/فیلتر روی شماره.
+نکته: شرط `RewriteCond %{REQUEST_FILENAME} !-f` باید فایل واقعی PHP را تشخیص بدهد، اما در بعضی cPanelها به‌خاطر ترتیب `RewriteBase /` و حذف trailing slash، مسیر `/api/...` قبل از رسیدن به این شرط به SPA می‌افتد. راه‌حل مطمئن: یک استثنای صریح برای کل پوشه‌ی `/api/` اضافه کنیم.
 
-## معماری بک‌اند (PHP روی هاست خودی)
-فایل‌ها زیر `public/api/` (deploy با dist):
+## تغییر در `.htaccess` روی هاست
 
-```text
-public/api/
-  config.sample.php        # نمونه؛ کاربر کپی می‌کند به config.php
-  db.php                   # اتصال PDO به MySQL + helper ها
-  install.php              # ایجاد جداول + ساخت اولین ادمین (یک‌بار)
-  lead-submit.php          # POST: { phone, query } → ذخیره lead + search_log
-  admin/login.php          # POST: { username, password } → ست کوکی سشن
-  admin/logout.php
-  admin/me.php             # GET: بررسی سشن
-  admin/leads.php          # GET: لیست + جستجو + صفحه‌بندی
-  admin/lead-detail.php    # GET: ?id=  جزئیات + لاگ‌ها
-  admin/lead-delete.php    # POST: حذف
-  admin/leads-export.php   # GET: خروجی CSV
-  admin/setup.php          # POST: ایجاد اولین ادمین (فقط اگر جدول خالی)
+در بخش **3. React SPA Routing**، خط `Allow important static files` را به این شکل تغییر بده (اضافه‌کردن `api/.*` به استثناها + یک استثنای جداگانه برای کل پوشه `api`):
+
+```apacheconf
+  # ================================================
+  # 3. React SPA Routing
+  # ================================================
+  RewriteRule ^index\.html$ - [L]
+
+  # اجازه دسترسی مستقیم به فایل‌های PHP داخل /api/
+  RewriteRule ^api/ - [L]
+
+  # Allow important static files
+  RewriteRule ^(sitemap\.xml|robots\.txt|favicon\.ico|manifest\.json|rss\.xml)$ - [L]
+
+  # If not a real file or folder → send to React index.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
 ```
 
-### جداول MySQL
-```sql
-CREATE TABLE ts_leads (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  phone VARCHAR(11) NOT NULL UNIQUE,
-  first_seen DATETIME NOT NULL,
-  last_seen  DATETIME NOT NULL,
-  search_count INT NOT NULL DEFAULT 0,
-  ip VARCHAR(45) NULL,
-  user_agent VARCHAR(255) NULL
-);
+خط کلیدی: `RewriteRule ^api/ - [L]` — هر چیزی که با `api/` شروع شود، مستقیم به فایل واقعی روی هاست می‌رود و SPA مداخله نمی‌کند.
 
-CREATE TABLE ts_search_logs (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  lead_id INT NOT NULL,
-  query VARCHAR(200) NOT NULL,
-  created_at DATETIME NOT NULL,
-  INDEX (lead_id),
-  FOREIGN KEY (lead_id) REFERENCES ts_leads(id) ON DELETE CASCADE
-);
+## مراحل اجرا
 
-CREATE TABLE ts_admins (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(64) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at DATETIME NOT NULL
-);
+1. فایل `.htaccess` در `public_html/` را با تغییر بالا ذخیره کن.
+2. مطمئن شو پوشه `public_html/api/` وجود دارد و فایل `install.php` داخلش هست (با FTP/File Manager چک کن).
+3. مطمئن شو `public_html/api/config.php` را با اطلاعات DB ساخته‌ای (نمونه قبلاً داده شد).
+4. به `https://tarkhisun.com/api/install.php` برو — باید پیام «نصب با موفقیت انجام شد» را ببینی.
+5. **بلافاصله `install.php` را از هاست پاک کن.**
+6. به `https://tarkhisun.com/TSDashboard` برو و ادمین اولیه را بساز.
 
-CREATE TABLE ts_admin_sessions (
-  token CHAR(64) PRIMARY KEY,
-  admin_id INT NOT NULL,
-  expires_at DATETIME NOT NULL,
-  FOREIGN KEY (admin_id) REFERENCES ts_admins(id) ON DELETE CASCADE
-);
-```
+## اگر باز 404 داد
 
-### امنیت
-- `password_hash` با `PASSWORD_DEFAULT`.
-- توکن سشن: `random_bytes(32)` → کوکی `ts_admin` با `HttpOnly; Secure; SameSite=Lax`.
-- اعتبارسنجی phone سمت سرور (regex `^09\d{9}$`).
-- تمام endpointهای admin سشن را چک می‌کنند.
-- CORS فقط روی POST عمومی `lead-submit.php` (same-origin).
+- چک کن `mod_rewrite` فعال است (در cPanel معمولاً هست).
+- چک کن فایل دقیقاً `install.php` نام دارد (نه `install.PHP` یا `install.php.txt`).
+- در File Manager روی فایل کلیک کن و permission را `644` بگذار.
 
-## فرانت‌اند
-- `src/components/PhoneGateDialog.tsx`: دیالوگ shadcn، input شماره، اعتبارسنجی Zod، نرمالایز ارقام فارسی، دکمه «ادامه».
-- `src/lib/lead-tracking.ts`: 
-  - `getStoredPhone()` از کوکی ۳۰ روزه + localStorage.
-  - `setStoredPhone(phone)`.
-  - `submitLead(phone, query)` → POST به `/api/lead-submit.php` (silent fail).
-- `src/pages/HSCodeSearch.tsx`: قبل از اجرای سرچ، اگر phone نبود، دیالوگ باز می‌شود؛ بعد از تأیید، شماره ذخیره و سرچ ادامه می‌یابد. هر سرچ موفق `submitLead` صدا می‌کند.
-- `src/pages/TSDashboard.tsx` + ساب‌کامپوننت‌ها (Login, Setup, LeadsTable, LeadDetail) — همگی client-side، با fetch به `/api/admin/*`.
-- روت در `App.tsx`: `<Route path="/TSDashboard" element={<TSDashboard />} />` (case-sensitive — تأیید کنیم تطابق دقیق روی هاست هست؛ روی Apache `.htaccess` SPA fallback از قبل وجود دارد).
-- اضافه کردن به `robots.txt`: `Disallow: /TSDashboard` و `Disallow: /api/`.
+## سوال
 
-## مراحل deploy برای کاربر (راهنما در پایان)
-1. در cPanel یک دیتابیس MySQL بساز و نام/یوزر/پسورد را یادداشت کن.
-2. `public/api/config.sample.php` را به `config.php` کپی کن و مقادیر DB را وارد کن.
-3. بیلد و آپلود dist مثل قبل.
-4. یک‌بار به `https://tarkhisun.com/api/install.php` برو تا جداول ساخته شوند.
-5. به `https://tarkhisun.com/TSDashboard` برو، یوزرنیم/پسورد ادمین را ست کن.
-6. تمام.
-
-## چیزی که تغییر نمی‌کند
-- پروکسی موجود `hscode-search.php` و منطق نمایش نتایج دست‌نخورده باقی می‌ماند؛ فقط یک گیت قبل از سرچ اضافه می‌شود.
+بعد از اعمال تغییر `.htaccess`، آیا اجازه دارم خود فایل `public/.htaccess` داخل پروژه را هم به‌روزرسانی کنم تا در بیلدهای بعدی این استثنا حفظ شود؟

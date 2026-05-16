@@ -1,4 +1,4 @@
-import { Bot, Phone, Mail, MapPin, Sparkles, ArrowUp, Send, Instagram, ShieldCheck } from "lucide-react";
+import { Bot, Phone, Mail, MapPin, Sparkles, ArrowUp, Send, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
 

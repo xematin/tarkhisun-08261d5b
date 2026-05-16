@@ -140,3 +140,58 @@ function ts_admin_require(): array {
     if (!$a) ts_json_error(401, 'Unauthorized');
     return $a;
 }
+
+/* ============ Card-user auth (separate from admin) ============ */
+
+function ts_carduser_cookie_name(): string { return 'ts_carduser'; }
+
+function ts_carduser_set_session(int $user_id): string {
+    $token   = bin2hex(random_bytes(32));
+    $ttl     = 60 * 60 * 24 * 30; // 30 days
+    $expires = date('Y-m-d H:i:s', time() + $ttl);
+    $stmt = ts_db()->prepare('INSERT INTO ts_card_user_sessions (token, card_user_id, expires_at) VALUES (?, ?, ?)');
+    $stmt->execute([$token, $user_id, $expires]);
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    setcookie(ts_carduser_cookie_name(), $token, [
+        'expires'  => time() + $ttl,
+        'path'     => '/',
+        'secure'   => $secure,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+    return $token;
+}
+
+function ts_carduser_clear_session(): void {
+    $name  = ts_carduser_cookie_name();
+    $token = $_COOKIE[$name] ?? '';
+    if ($token) {
+        $stmt = ts_db()->prepare('DELETE FROM ts_card_user_sessions WHERE token = ?');
+        $stmt->execute([$token]);
+    }
+    setcookie($name, '', [
+        'expires' => time() - 3600, 'path' => '/',
+        'httponly' => true, 'samesite' => 'Lax',
+    ]);
+}
+
+function ts_carduser_current(): ?array {
+    $token = $_COOKIE[ts_carduser_cookie_name()] ?? '';
+    if (!$token) return null;
+    $stmt = ts_db()->prepare(
+        'SELECT u.id, u.first_name, u.last_name, u.username
+         FROM ts_card_user_sessions s
+         JOIN ts_card_users u ON u.id = s.card_user_id
+         WHERE s.token = ? AND s.expires_at > NOW() LIMIT 1'
+    );
+    $stmt->execute([$token]);
+    $row = $stmt->fetch();
+    return $row ?: null;
+}
+
+function ts_carduser_require(): array {
+    $u = ts_carduser_current();
+    if (!$u) ts_json_error(401, 'Unauthorized');
+    return $u;
+}
+

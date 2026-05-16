@@ -94,7 +94,7 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="panel-fa min-h-screen" dir="rtl">
+      <div className="panel-glass panel-fa min-h-screen" dir="rtl">
         <header className="container mx-auto px-4 pt-4">
           <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">

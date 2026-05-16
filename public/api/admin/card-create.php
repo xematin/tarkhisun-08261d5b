@@ -47,13 +47,28 @@ try {
     $stmt->execute([$name, $balance, $currency, (int)$admin['id'], $now, $now]);
     $cardId = (int)$pdo->lastInsertId();
 
+    $labels = [];
     if ($users) {
+        $ids = array_keys($users);
+        $place = implode(',', array_fill(0, count($ids), '?'));
+        $q = $pdo->prepare("SELECT id, first_name, last_name, username FROM ts_card_users WHERE id IN ($place)");
+        $q->execute($ids);
+        foreach ($q->fetchAll() as $u) {
+            $labels[(int)$u['id']] = trim($u['first_name'] . ' ' . $u['last_name']) . ' (@' . $u['username'] . ')';
+        }
         $ins = $pdo->prepare('INSERT INTO ts_card_user_access (card_id, card_user_id, allocated) VALUES (?, ?, ?)');
         foreach ($users as $uid => $al) {
             $ins->execute([$cardId, $uid, $al]);
         }
     }
     $pdo->commit();
+
+    // logs (outside tx)
+    ts_card_alloc_log($cardId, null, 'card_balance', null, $balance, $currency, null, 'ساخت کارت «' . $name . '»');
+    foreach ($users as $uid => $al) {
+        ts_card_alloc_log($cardId, (int)$uid, 'create', 0.0, (float)$al, $currency, $labels[(int)$uid] ?? null, null);
+    }
+
     ts_json(200, ['ok' => true, 'id' => $cardId]);
 } catch (Throwable $e) {
     $pdo->rollBack();

@@ -2,6 +2,7 @@
 /**
  * یک‌بار اجرا کنید تا جداول ساخته شوند:
  * https://YOURDOMAIN/api/install.php
+ * (پس از موفقیت، فایل را حذف کنید.)
  */
 declare(strict_types=1);
 require __DIR__ . '/db.php';
@@ -45,6 +46,46 @@ $sql = [
         INDEX idx_expires (expires_at),
         FOREIGN KEY (admin_id) REFERENCES ts_admins(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    // ===== Cards module =====
+    "CREATE TABLE IF NOT EXISTS ts_cards (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(150) NOT NULL,
+        balance DECIMAL(18,2) NOT NULL DEFAULT 0,
+        currency ENUM('USD','EUR','IRT') NOT NULL DEFAULT 'IRT',
+        created_by INT NULL,
+        created_at DATETIME NOT NULL,
+        updated_at DATETIME NOT NULL,
+        INDEX idx_created_by (created_by)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_card_users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        first_name VARCHAR(100) NOT NULL,
+        last_name  VARCHAR(100) NOT NULL,
+        username VARCHAR(100) NOT NULL UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        created_by INT NULL,
+        created_at DATETIME NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_card_user_access (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_id INT NOT NULL,
+        card_user_id INT NOT NULL,
+        UNIQUE KEY uniq_card_user (card_id, card_user_id),
+        INDEX idx_user (card_user_id),
+        FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE,
+        FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_card_user_sessions (
+        token CHAR(64) PRIMARY KEY,
+        card_user_id INT NOT NULL,
+        expires_at DATETIME NOT NULL,
+        INDEX idx_expires (expires_at),
+        FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
 
 foreach ($sql as $q) {
@@ -53,4 +94,4 @@ foreach ($sql as $q) {
 }
 
 echo "\nنصب با موفقیت انجام شد.\n";
-echo "حالا به /TSDashboard بروید و یوزرنیم/پسورد ادمین را تنظیم کنید.\n";
+echo "این فایل را از روی هاست حذف کنید.\n";

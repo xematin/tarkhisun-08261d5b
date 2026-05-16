@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ interface CardUser {
   last_name: string;
   username: string;
   created_at?: string;
+  allocated?: number;
 }
 interface CardRow {
   id: number;
@@ -34,6 +35,8 @@ interface CardRow {
   currency: Currency;
   user_count: number;
   users?: CardUser[];
+  allocated_total?: number;
+  remaining?: number;
   updated_at?: string;
   created_at?: string;
 }
@@ -44,8 +47,8 @@ const CURRENCY_LABEL: Record<Currency, string> = {
   IRT: "تومان",
 };
 
-const fmtMoney = (v: string | number, c: Currency) => {
-  const n = typeof v === "string" ? parseFloat(v) : v;
+const fmtMoney = (v: string | number | undefined, c: Currency) => {
+  const n = typeof v === "string" ? parseFloat(v) : (v ?? 0);
   if (!isFinite(n)) return "—";
   return `${n.toLocaleString("fa-IR")} ${CURRENCY_LABEL[c]}`;
 };
@@ -91,7 +94,7 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen bg-muted/30" dir="rtl">
+      <div className="min-h-screen bg-muted/30 panel-fa" dir="rtl">
         <header className="border-b bg-background">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
@@ -196,8 +199,8 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             <TableHeader>
               <TableRow>
                 <TableHead className="text-right text-persian">نام کارت</TableHead>
-                <TableHead className="text-right text-persian">موجودی</TableHead>
-                <TableHead className="text-right text-persian">تعداد کاربر</TableHead>
+                <TableHead className="text-right text-persian">موجودی کل</TableHead>
+                <TableHead className="text-right text-persian">تخصیص / باقی‌مانده</TableHead>
                 <TableHead className="text-right text-persian">کاربران</TableHead>
                 <TableHead></TableHead>
               </TableRow>
@@ -207,9 +210,21 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                 <TableRow key={r.id}>
                   <TableCell className="text-persian">{r.name}</TableCell>
                   <TableCell className="text-persian">{fmtMoney(r.balance, r.currency)}</TableCell>
-                  <TableCell><Badge>{r.user_count}</Badge></TableCell>
-                  <TableCell className="text-persian text-xs max-w-xs truncate">
-                    {r.users?.map(u => `${u.first_name} ${u.last_name}`).join("، ") || "—"}
+                  <TableCell className="text-persian text-sm">
+                    <div>تخصیص: {fmtMoney(r.allocated_total ?? 0, r.currency)}</div>
+                    <div className="text-muted-foreground">باقی: {fmtMoney(r.remaining ?? 0, r.currency)}</div>
+                  </TableCell>
+                  <TableCell className="text-persian text-xs max-w-xs">
+                    {r.users?.length
+                      ? r.users.map(u => (
+                          <div key={u.id}>
+                            {u.first_name} {u.last_name}
+                            <span className="text-muted-foreground mr-2">
+                              ({fmtMoney(u.allocated ?? 0, r.currency)})
+                            </span>
+                          </div>
+                        ))
+                      : "—"}
                   </TableCell>
                   <TableCell className="flex gap-1">
                     <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }}>
@@ -252,7 +267,8 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
   const [currency, setCurrency] = useState<Currency>("IRT");
 
   const [users, setUsers] = useState<CardUser[]>([]);
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  // map of userId -> allocated string ("" means not selected)
+  const [alloc, setAlloc] = useState<Record<number, string>>({});
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [busy, setBusy] = useState(false);
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -263,7 +279,9 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
     setName(editing?.name ?? "");
     setBalance(editing ? String(editing.balance) : "");
     setCurrency(editing?.currency ?? "IRT");
-    setSelectedIds(new Set(editing?.users?.map(u => u.id) ?? []));
+    const initial: Record<number, string> = {};
+    editing?.users?.forEach(u => { initial[u.id] = String(u.allocated ?? 0); });
+    setAlloc(initial);
   }, [open, editing]);
 
   const loadUsers = useCallback(async () => {
@@ -278,12 +296,58 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   useEffect(() => { if (open && step === 2) void loadUsers(); }, [open, step, loadUsers]);
 
-  const toggle = (id: number) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
+  const balanceNum = parseFloat(balance) || 0;
+  const allocatedTotal = useMemo(
+    () => Object.values(alloc).reduce((s, v) => s + (parseFloat(v) || 0), 0),
+    [alloc]
+  );
+  const remaining = Math.max(0, balanceNum - allocatedTotal);
+
+  const toggle = (id: number, checked: boolean) => {
+    setAlloc(prev => {
+      const next = { ...prev };
+      if (checked) {
+        if (next[id] === undefined) next[id] = "0";
+      } else {
+        delete next[id];
+      }
       return next;
     });
+  };
+
+  const setUserAlloc = (id: number, raw: string) => {
+    // normalize digits
+    const fa = "۰۱۲۳۴۵۶۷۸۹"; const ar = "٠١٢٣٤٥٦٧٨٩";
+    let v = raw.replace(/[۰-۹٠-٩]/g, (d) => {
+      const i = fa.indexOf(d); if (i >= 0) return String(i);
+      const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
+    });
+    v = v.replace(/[^\d.]/g, "");
+    const num = parseFloat(v);
+    if (!isNaN(num)) {
+      const others = Object.entries(alloc).reduce(
+        (s, [k, val]) => s + (Number(k) === id ? 0 : (parseFloat(val) || 0)), 0
+      );
+      const maxForThis = Math.max(0, balanceNum - others);
+      if (num > maxForThis) {
+        v = String(maxForThis);
+        toast({ title: "حداکثر مجاز اعمال شد", description: `باقی‌ماندهٔ کارت ${maxForThis}`, });
+      }
+    }
+    setAlloc(prev => ({ ...prev, [id]: v }));
+  };
+
+  const splitEqually = () => {
+    const ids = Object.keys(alloc).map(Number);
+    if (ids.length === 0) return;
+    const each = Math.floor((balanceNum / ids.length) * 100) / 100;
+    const next: Record<number, string> = {};
+    ids.forEach((id, i) => {
+      next[id] = String(i === ids.length - 1
+        ? Math.max(0, balanceNum - each * (ids.length - 1))
+        : each);
+    });
+    setAlloc(next);
   };
 
   const goStep2 = () => {
@@ -293,14 +357,17 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
   };
 
   const save = async () => {
+    if (allocatedTotal - balanceNum > 0.0001) {
+      return toast({ title: "خطا", description: "مجموع تخصیص‌ها از موجودی کارت بیشتر است", variant: "destructive" });
+    }
     setBusy(true);
     try {
       const payload = {
         id: editing?.id,
         name: name.trim(),
-        balance: parseFloat(balance),
+        balance: balanceNum,
         currency,
-        user_ids: Array.from(selectedIds),
+        users: Object.entries(alloc).map(([id, v]) => ({ id: Number(id), allocated: parseFloat(v) || 0 })),
       };
       const url = editing ? "/api/admin/card-update.php" : "/api/admin/card-create.php";
       await api(url, { method: "POST", body: JSON.stringify(payload) });
@@ -313,7 +380,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-lg">
+      <DialogContent dir="rtl" className="max-w-lg panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
@@ -355,12 +422,36 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
         {step === 2 && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-persian">انتخاب کاربران دسترسی</Label>
-              <Button size="sm" variant="outline" onClick={() => setAddUserOpen(true)} className="text-persian">
-                <UserPlus className="w-4 h-4 ml-1" /> افزودن کاربر
-              </Button>
+            <div className="rounded-md border bg-muted/40 p-3 text-persian text-sm grid grid-cols-3 gap-2">
+              <div>
+                <div className="text-muted-foreground text-xs">موجودی کل</div>
+                <div className="font-bold">{fmtMoney(balanceNum, currency)}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground text-xs">تخصیص‌داده‌شده</div>
+                <div className="font-bold">{fmtMoney(allocatedTotal, currency)}</div>
+              </div>
+              <div>
+                <div className="text-muted-foreground text-xs">باقی‌مانده</div>
+                <div className={`font-bold ${remaining === 0 ? "text-primary" : ""}`}>
+                  {fmtMoney(remaining, currency)}
+                </div>
+              </div>
             </div>
+
+            <div className="flex items-center justify-between">
+              <Label className="text-persian">انتخاب کاربران و سهم هرکدام</Label>
+              <div className="flex gap-2">
+                <Button size="sm" variant="ghost" onClick={splitEqually} className="text-persian"
+                        disabled={Object.keys(alloc).length === 0}>
+                  تقسیم مساوی
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setAddUserOpen(true)} className="text-persian">
+                  <UserPlus className="w-4 h-4 ml-1" /> افزودن کاربر
+                </Button>
+              </div>
+            </div>
+
             <div className="border rounded-md max-h-72 overflow-auto">
               {loadingUsers ? (
                 <div className="py-6 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
@@ -370,22 +461,40 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
                 </p>
               ) : (
                 <ul className="divide-y">
-                  {users.map(u => (
-                    <li key={u.id} className="flex items-center gap-3 p-3">
-                      <Checkbox
-                        checked={selectedIds.has(u.id)}
-                        onCheckedChange={() => toggle(u.id)}
-                        id={`u-${u.id}`}
-                      />
-                      <label htmlFor={`u-${u.id}`} className="flex-1 cursor-pointer text-persian text-sm">
-                        {u.first_name} {u.last_name}
-                        <span className="text-muted-foreground text-xs mr-2">@{u.username}</span>
-                      </label>
-                    </li>
-                  ))}
+                  {users.map(u => {
+                    const selected = alloc[u.id] !== undefined;
+                    return (
+                      <li key={u.id} className="flex items-center gap-3 p-3">
+                        <Checkbox
+                          checked={selected}
+                          onCheckedChange={(c) => toggle(u.id, !!c)}
+                          id={`u-${u.id}`}
+                        />
+                        <label htmlFor={`u-${u.id}`} className="flex-1 cursor-pointer text-persian text-sm">
+                          {u.first_name} {u.last_name}
+                          <span className="text-muted-foreground text-xs mr-2">@{u.username}</span>
+                        </label>
+                        {selected && (
+                          <div className="flex items-center gap-1">
+                            <Input
+                              value={alloc[u.id]}
+                              onChange={(e) => setUserAlloc(u.id, e.target.value)}
+                              inputMode="decimal"
+                              className="w-28 h-9 text-left"
+                              dir="ltr"
+                            />
+                            <span className="text-xs text-muted-foreground text-persian">
+                              {CURRENCY_LABEL[currency]}
+                            </span>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setStep(1)} className="text-persian">قبلی</Button>
               <Button onClick={save} disabled={busy} className="text-persian">
@@ -398,7 +507,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
               onClose={() => setAddUserOpen(false)}
               onCreated={(u) => {
                 setUsers(prev => [u, ...prev]);
-                setSelectedIds(prev => new Set(prev).add(u.id));
+                setAlloc(prev => ({ ...prev, [u.id]: "0" }));
                 setAddUserOpen(false);
               }}
               toast={toast}
@@ -444,7 +553,7 @@ const AddUserDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-md">
+      <DialogContent dir="rtl" className="max-w-md panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">افزودن کاربر جدید</DialogTitle>
         </DialogHeader>

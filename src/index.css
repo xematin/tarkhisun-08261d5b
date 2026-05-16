@@ -233,6 +233,49 @@
     background: var(--gradient-hero);
   }
 
+  /* ===== Floating 3D Glass UI (Header / Footer) ===== */
+  .glass-card {
+    @apply bg-background/70 backdrop-blur-xl border border-white/60 rounded-3xl;
+    box-shadow:
+      0 20px 60px -20px hsl(var(--primary) / 0.25),
+      0 8px 20px -8px hsl(var(--accent) / 0.15),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.6);
+  }
+  .glass-pill {
+    @apply bg-background/70 backdrop-blur-xl border border-white/60 rounded-full;
+    box-shadow:
+      0 12px 40px -12px hsl(var(--primary) / 0.28),
+      0 6px 16px -8px hsl(var(--accent) / 0.18),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.65);
+  }
+  .pill-nav-link {
+    @apply px-4 py-2 rounded-full text-sm font-medium text-foreground/75 hover:text-primary transition-colors;
+  }
+  .pill-nav-active {
+    @apply text-primary-foreground bg-gradient-to-l from-primary to-accent shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)];
+  }
+  .pill-row {
+    @apply flex items-center justify-between gap-2 rounded-2xl bg-white/65 hover:bg-white/90 border border-white/70 px-4 py-2.5 text-sm text-foreground/80 hover:text-primary transition-all;
+    box-shadow: 0 4px 14px -8px hsl(var(--primary) / 0.18);
+  }
+  .icon-badge-gradient {
+    @apply inline-flex items-center justify-center rounded-full text-primary-foreground;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    box-shadow:
+      0 8px 22px -6px hsl(var(--accent) / 0.45),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.35);
+  }
+  .icon-badge-soft {
+    @apply inline-flex items-center justify-center rounded-full bg-white/80 border border-white/80 text-primary hover:text-accent transition-colors;
+    box-shadow: 0 6px 16px -8px hsl(var(--primary) / 0.25);
+  }
+  .footer-bg {
+    background:
+      radial-gradient(60% 80% at 15% 0%, hsl(var(--accent-lighter) / 0.55), transparent 60%),
+      radial-gradient(50% 80% at 90% 20%, hsl(var(--primary-lighter) / 0.55), transparent 60%),
+      hsl(var(--background));
+  }
+
   /* Animations */
   .fade-in-up {
     @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;

@@ -1,204 +1,191 @@
-import { Bot, Phone, Mail, MapPin } from "lucide-react";
+import { Bot, Phone, Mail, MapPin, Sparkles, ArrowUp, Send, Instagram, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
+
+const quickLinks = [
+  { title: "خدمات ترخیص", href: "/#services", isAnchor: true },
+  { title: "نرخ ارز", href: "/currencies", isAnchor: false },
+  { title: "جستجوی تعرفه گمرکی", href: "/hscode", isAnchor: false },
+  { title: "ترخیصان‌یار", href: "/#ai-assistant", isAnchor: true },
+  { title: "بلاگ", href: "/blog", isAnchor: false },
+  { title: "تماس با ما", href: "/#contact", isAnchor: true },
+];
+
+const popularArticles = [
+  { title: "راهنمای ترخیص کالا", slug: "/blog/complete-guide-customs-clearance-shahid-rajaei" },
+  { title: "کد HS چیست؟", slug: "/blog/hs-code-guide" },
+  { title: "تعرفه گمرکی", slug: "/blog/customs-tariff-guide" },
+  { title: "سامانه جامع تجارت", slug: "/blog/ntsw-complete-guide" },
+];
+
+const ColumnHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
+  <div className="flex items-center justify-between mb-4">
+    <div className="flex flex-col items-end text-right">
+      <strong className="text-base text-primary text-persian">{title}</strong>
+      <span className="text-[10px] tracking-[0.2em] text-muted-foreground">{subtitle}</span>
+    </div>
+    <span className="icon-badge-gradient w-9 h-9">
+      <Sparkles className="w-4 h-4" />
+    </span>
+  </div>
+);
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const persianYear = currentYear - 621;
-  const quickLinks = [
-    {
-      title: "خدمات ترخیص",
-      href: "#services",
-      isAnchor: true,
-    },
-    {
-      title: "نرخ ارز",
-      href: "/currencies",
-      isAnchor: false,
-    },
-    {
-      title: "جستجوی تعرفه گمرکی",
-      href: "/hscode",
-      isAnchor: false,
-    },
-    {
-      title: "ترخیصان‌یار",
-      href: "#ai-assistant",
-      isAnchor: true,
-    },
-    {
-      title: "بلاگ",
-      href: "/blog",
-      isAnchor: false,
-    },
-    {
-      title: "تماس با ما",
-      href: "#contact",
-      isAnchor: true,
-    },
-  ];
-  const popularArticles = [
-    {
-      title: "راهنمای ترخیص کالا",
-      slug: "/blog/complete-guide-customs-clearance-shahid-rajaei",
-    },
-    {
-      title: "کد HS چیست؟",
-      slug: "/blog/hs-code-guide",
-    },
-    {
-      title: "تعرفه گمرکی",
-      slug: "/blog/customs-tariff-guide",
-    },
-    {
-      title: "سامانه جامع تجارت",
-      slug: "/blog/ntsw-complete-guide",
-    },
-  ];
+  const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
   return (
-    <footer className="bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4 py-16" dir="rtl">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <img 
-                src={tarkhisunLogo} 
-                alt="لوگو ترخیصان" 
-                className="h-12 w-12 object-contain"
-              />
-              <div className="text-2xl text-persian">
-                <strong>ترخیصان</strong>
-              </div>
-            </div>
-
-            <p className="text-primary-foreground/80 leading-relaxed text-persian">
-              بیش از ۲۰ سال تجربه در ترخیص کالا و مشاوره گمرکی. ما اطمینان و سرعت را به کسب‌وکار شما هدیه می‌دهیم.
-            </p>
-
-            <div className="flex items-center gap-2 text-accent-light">
-              <Bot className="w-5 h-5" />
-              <span className="font-medium text-persian">ترخیصان‌یار - هوش مصنوعی گمرک</span>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg text-persian">
-              <strong>لینک‌های سریع</strong>
-            </h3>
-            <ul className="space-y-2">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  {link.isAnchor ? (
-                    <a
-                      href={link.href}
-                      className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian"
-                    >
-                      {link.title}
-                    </a>
-                  ) : (
-                    <Link
-                      to={link.href}
-                      className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian"
-                    >
-                      {link.title}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Popular Articles */}
-          <div className="space-y-4">
-            <h3 className="text-lg text-persian">
-              <strong>مقالات پربازدید</strong>
-            </h3>
-            <ul className="space-y-2">
-              {popularArticles.map((article, index) => (
-                <li key={index}>
-                  <Link
-                    to={article.slug}
-                    className="text-primary-foreground/80 hover:text-accent-light transition-colors text-persian"
-                  >
-                    {article.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg text-persian">
-              <strong>تماس با ما</strong>
-            </h3>
-
-            <div className="space-y-3">
-              <a
-                href="tel:+989177380080"
-                className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors"
+    <footer className="footer-bg pt-16 pb-8">
+      <div className="container mx-auto px-4" dir="rtl">
+        <div className="glass-card mx-auto max-w-6xl p-5 sm:p-8">
+          {/* Top row: socials + brand */}
+          <div className="flex items-center justify-between gap-4 pb-6 border-b border-white/60">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={scrollTop}
+                aria-label="بازگشت به بالا"
+                className="icon-badge-soft w-10 h-10"
               >
-                <Phone className="w-5 h-5" />
-                <span>09177380080</span>
+                <ArrowUp className="w-4 h-4" />
+              </button>
+              <a href="tel:+989177380080" aria-label="تماس" className="icon-badge-gradient w-10 h-10">
+                <Phone className="w-4 h-4" />
               </a>
-
+              <a
+                href="https://t.me/N8NAutoBotBot"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="تلگرام"
+                className="icon-badge-gradient w-10 h-10"
+              >
+                <Send className="w-4 h-4" />
+              </a>
               <a
                 href="mailto:info@tarkhisun.com"
-                className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent-light transition-colors"
+                aria-label="اینستاگرام"
+                className="icon-badge-gradient w-10 h-10"
               >
-                <Mail className="w-5 h-5" />
-                <span>info@tarkhisun.com</span>
+                <Instagram className="w-4 h-4" />
               </a>
+            </div>
 
-              <div className="flex items-start gap-3 text-primary-foreground/80">
-                <MapPin className="w-5 h-5 mt-0.5" />
-                <span className="text-persian">بندرعباس، چهارراه سازمان </span>
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-end leading-tight">
+                <strong className="text-lg sm:text-xl text-primary text-persian">ترخیصان</strong>
+                <span className="text-[10px] tracking-[0.25em] text-muted-foreground">
+                  TARKHISUN · CUSTOMS
+                </span>
+              </div>
+              <img
+                src={tarkhisunLogo}
+                alt="لوگو ترخیصان"
+                className="h-12 w-12 object-contain"
+                width={48}
+                height={48}
+              />
+              <span className="icon-badge-gradient w-11 h-11 hidden sm:inline-flex">
+                <Sparkles className="w-5 h-5" />
+              </span>
+            </div>
+          </div>
+
+          {/* Three columns */}
+          <div className="grid md:grid-cols-3 gap-5 py-7">
+            {/* Contact */}
+            <div>
+              <ColumnHeader title="اطلاعات تماس" subtitle="CONTACT" />
+              <div className="flex flex-col gap-2">
+                <div className="pill-row">
+                  <span className="text-persian">بندرعباس — چهارراه سازمان</span>
+                  <MapPin className="w-4 h-4 text-accent" />
+                </div>
+                <a href="tel:+989177380080" className="pill-row" dir="ltr">
+                  <span className="tabular-nums">09177380080</span>
+                  <Phone className="w-4 h-4 text-accent" />
+                </a>
+                <a href="mailto:info@tarkhisun.com" className="pill-row" dir="ltr">
+                  <span>info@tarkhisun.com</span>
+                  <Mail className="w-4 h-4 text-accent" />
+                </a>
+              </div>
+            </div>
+
+            {/* Quick links */}
+            <div>
+              <ColumnHeader title="دسترسی سریع" subtitle="QUICK LINKS" />
+              <div className="grid grid-cols-2 gap-2">
+                {quickLinks.map((l) =>
+                  l.isAnchor ? (
+                    <a key={l.title} href={l.href} className="pill-row text-persian">
+                      <span>{l.title}</span>
+                    </a>
+                  ) : (
+                    <Link key={l.title} to={l.href} className="pill-row text-persian">
+                      <span>{l.title}</span>
+                    </Link>
+                  ),
+                )}
+              </div>
+            </div>
+
+            {/* Articles */}
+            <div>
+              <ColumnHeader title="مقالات پربازدید" subtitle="ARTICLES" />
+              <div className="flex flex-col gap-2">
+                {popularArticles.map((a) => (
+                  <Link key={a.slug} to={a.slug} className="pill-row text-persian">
+                    <span>{a.title}</span>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* AI Assistant CTA */}
-        <div className="mt-12 pt-8 border-t border-primary-foreground/20">
-          <div className="bg-accent/10 rounded-xl p-6 text-center">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Bot className="w-8 h-8 text-accent-light" />
-              <h4 className="text-xl text-accent-light text-persian">
-                <strong>ترخیصان‌یار</strong>
-              </h4>
+          {/* AI Assistant CTA */}
+          <div className="rounded-3xl p-6 sm:p-7 bg-gradient-to-l from-primary to-accent text-primary-foreground shadow-[0_18px_50px_-18px_hsl(var(--primary)/0.55)] relative overflow-hidden">
+            <div className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
+            <div className="absolute -bottom-12 -right-8 w-44 h-44 rounded-full bg-white/10 blur-2xl" />
+            <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="w-12 h-12 rounded-full bg-white/15 backdrop-blur inline-flex items-center justify-center">
+                  <Bot className="w-6 h-6" />
+                </span>
+                <div>
+                  <strong className="block text-lg text-persian">ترخیصان‌یار</strong>
+                  <span className="text-sm text-primary-foreground/85 text-persian">
+                    اولین هوش مصنوعی گمرکات — کاملاً رایگان
+                  </span>
+                </div>
+              </div>
+              <a
+                href="https://t.me/N8NAutoBotBot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-primary px-6 py-3 text-sm font-semibold hover:bg-white/90 transition-colors text-persian"
+              >
+                شروع مشاوره رایگان
+                <Send className="w-4 h-4" />
+              </a>
             </div>
-
-            <p className="text-primary-foreground/90 mb-4 text-persian">اولین هوش مصنوعی گمرکات - کاملاً رایگان</p>
-
-            <button
-              onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-              className="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover:bg-accent-light transition-colors text-persian"
-            >
-              شروع مشاوره رایگان
-            </button>
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-primary-foreground/20 text-center">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-primary-foreground/60 text-sm text-persian">
-              تمامی حقوق برای تیم ترخیصان محفوظ است © {persianYear}
+          {/* Bottom bar */}
+          <div className="mt-6 pt-5 border-t border-white/60 flex flex-col md:flex-row items-center justify-between gap-3">
+            <p className="text-xs sm:text-sm text-muted-foreground text-persian text-center md:text-right">
+              © {persianYear} — تمامی حقوق برای تیم ترخیصان محفوظ است. طراحی و توسعه توسط{" "}
+              <a
+                href="https://t.me/OctanDev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-primary transition-colors"
+              >
+                OctanDev
+              </a>
             </p>
-
-            <div className="flex items-center gap-6 text-sm text-primary-foreground/60">
-              <span className="text-persian">
-                طراحی سایت و خدمات برنامه‌نویسی ©{" "}
-                <a
-                  href="https://t.me/OctanDev"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary-foreground transition-colors duration-200"
-                >
-                  OctanDev
-                </a>
-              </span>
+            <div className="inline-flex items-center gap-2 rounded-2xl bg-white/70 border border-white/70 px-3 py-2 text-[11px] text-foreground/75">
+              <ShieldCheck className="w-4 h-4 text-accent" />
+              <span className="text-persian leading-tight">نماد اعتماد الکترونیکی</span>
             </div>
           </div>
         </div>
@@ -206,4 +193,5 @@ const Footer = () => {
     </footer>
   );
 };
+
 export default Footer;

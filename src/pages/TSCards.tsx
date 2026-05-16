@@ -417,7 +417,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-lg panel-fa panel-glass">
+      <DialogContent dir="rtl" className="max-w-lg panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
@@ -612,7 +612,7 @@ const AddUserDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-md panel-fa panel-glass">
+      <DialogContent dir="rtl" className="max-w-md panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">افزودن کاربر جدید</DialogTitle>
         </DialogHeader>
@@ -696,7 +696,7 @@ const LogsDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa panel-glass">
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             تاریخچهٔ تغییرات — {card?.name}

@@ -70,7 +70,7 @@ const TSDashboard = () => {
         <title>پنل مدیریت ترخیصان</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen bg-muted/30" dir="rtl">
+      <div className="min-h-screen bg-muted/30 panel-fa" dir="rtl">
         <header className="border-b bg-background">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
             <h1 className="text-persian font-bold">پنل مدیریت ترخیصان</h1>

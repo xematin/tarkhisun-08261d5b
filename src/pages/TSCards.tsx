@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -148,6 +148,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CardRow | null>(null);
+  const [logsFor, setLogsFor] = useState<CardRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -201,41 +202,71 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                 <TableHead className="text-right text-persian">نام کارت</TableHead>
                 <TableHead className="text-right text-persian">موجودی کل</TableHead>
                 <TableHead className="text-right text-persian">تخصیص / باقی‌مانده</TableHead>
-                <TableHead className="text-right text-persian">کاربران</TableHead>
+                <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((r) => (
-                <TableRow key={r.id}>
-                  <TableCell className="text-persian">{r.name}</TableCell>
-                  <TableCell className="text-persian">{fmtMoney(r.balance, r.currency)}</TableCell>
-                  <TableCell className="text-persian text-sm">
-                    <div>تخصیص: {fmtMoney(r.allocated_total ?? 0, r.currency)}</div>
-                    <div className="text-muted-foreground">باقی: {fmtMoney(r.remaining ?? 0, r.currency)}</div>
-                  </TableCell>
-                  <TableCell className="text-persian text-xs max-w-xs">
-                    {r.users?.length
-                      ? r.users.map(u => (
-                          <div key={u.id}>
-                            {u.first_name} {u.last_name}
-                            <span className="text-muted-foreground mr-2">
-                              ({fmtMoney(u.allocated ?? 0, r.currency)})
-                            </span>
-                          </div>
-                        ))
-                      : "—"}
-                  </TableCell>
-                  <TableCell className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }}>
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)}>
-                      <Trash2 className="w-4 h-4 text-destructive" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {items.map((r) => {
+                const bal = typeof r.balance === "string" ? parseFloat(r.balance) : r.balance;
+                const alloc = r.allocated_total ?? 0;
+                const rem = r.remaining ?? Math.max(0, (bal || 0) - alloc);
+                const pct = bal > 0 ? Math.min(100, (alloc / bal) * 100) : 0;
+                const over = alloc - bal > 0.0001;
+                return (
+                  <TableRow key={r.id}>
+                    <TableCell className="text-persian font-medium align-top">{r.name}</TableCell>
+                    <TableCell className="text-persian whitespace-nowrap align-top">
+                      {fmtMoney(bal, r.currency)}
+                    </TableCell>
+                    <TableCell className="text-persian align-top min-w-[180px]">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-muted-foreground text-xs">تخصیص</span>
+                          <span className="font-bold tabular-nums">{fmtMoney(alloc, r.currency)}</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-muted-foreground text-xs">باقی‌مانده</span>
+                          <span className={`font-bold tabular-nums ${over ? "text-destructive" : rem === 0 ? "text-primary" : "text-emerald-600"}`}>
+                            {fmtMoney(rem, r.currency)}
+                          </span>
+                        </div>
+                        <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                          <div
+                            className={`h-full ${over ? "bg-destructive" : "bg-primary"}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-persian text-xs max-w-xs align-top hidden md:table-cell">
+                      {r.users?.length
+                        ? r.users.map(u => (
+                            <div key={u.id}>
+                              {u.first_name} {u.last_name}
+                              <span className="text-muted-foreground mr-2">
+                                ({fmtMoney(u.allocated ?? 0, r.currency)})
+                              </span>
+                            </div>
+                          ))
+                        : "—"}
+                    </TableCell>
+                    <TableCell className="align-top">
+                      <div className="flex gap-1 flex-wrap justify-end">
+                        <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
+                          <History className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش">
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف">
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         )}
@@ -245,6 +276,12 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
           onClose={() => setOpen(false)}
           onSaved={() => { setOpen(false); void load(); }}
           editing={editing}
+          toast={toast}
+        />
+
+        <LogsDialog
+          card={logsFor}
+          onClose={() => setLogsFor(null)}
           toast={toast}
         />
       </CardContent>
@@ -420,26 +457,47 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
           </div>
         )}
 
-        {step === 2 && (
+        {step === 2 && (() => {
+          const over = allocatedTotal - balanceNum > 0.0001;
+          const exact = !over && Math.abs(balanceNum - allocatedTotal) < 0.0001 && balanceNum > 0;
+          return (
           <div className="space-y-4">
             <div className="rounded-md border bg-muted/40 p-3 text-persian text-sm grid grid-cols-3 gap-2">
               <div>
                 <div className="text-muted-foreground text-xs">موجودی کل</div>
-                <div className="font-bold">{fmtMoney(balanceNum, currency)}</div>
+                <div className="font-bold tabular-nums">{fmtMoney(balanceNum, currency)}</div>
               </div>
               <div>
                 <div className="text-muted-foreground text-xs">تخصیص‌داده‌شده</div>
-                <div className="font-bold">{fmtMoney(allocatedTotal, currency)}</div>
+                <div className={`font-bold tabular-nums ${over ? "text-destructive" : ""}`}>
+                  {fmtMoney(allocatedTotal, currency)}
+                </div>
               </div>
               <div>
                 <div className="text-muted-foreground text-xs">باقی‌مانده</div>
-                <div className={`font-bold ${remaining === 0 ? "text-primary" : ""}`}>
-                  {fmtMoney(remaining, currency)}
+                <div className={`font-bold tabular-nums ${over ? "text-destructive" : exact ? "text-primary" : "text-emerald-600"}`}>
+                  {fmtMoney(Math.max(0, balanceNum - allocatedTotal), currency)}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div
+              className={`rounded-md border px-3 py-2 text-persian text-sm font-medium ${
+                over
+                  ? "border-destructive/40 bg-destructive/10 text-destructive"
+                  : exact
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
+              }`}
+            >
+              {over
+                ? `مجموع تخصیص‌ها ${fmtMoney(allocatedTotal - balanceNum, currency)} از موجودی کارت بیشتر است — ذخیره ممکن نیست.`
+                : exact
+                  ? "تمام موجودی کارت بین کاربران تخصیص داده شد."
+                  : `قابل تخصیص باقی‌مانده: ${fmtMoney(Math.max(0, balanceNum - allocatedTotal), currency)}`}
+            </div>
+
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <Label className="text-persian">انتخاب کاربران و سهم هرکدام</Label>
               <div className="flex gap-2">
                 <Button size="sm" variant="ghost" onClick={splitEqually} className="text-persian"
@@ -497,7 +555,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setStep(1)} className="text-persian">قبلی</Button>
-              <Button onClick={save} disabled={busy} className="text-persian">
+              <Button onClick={save} disabled={busy || over} className="text-persian">
                 {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت"}
               </Button>
             </DialogFooter>
@@ -513,7 +571,8 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
               toast={toast}
             />
           </div>
-        )}
+          );
+        })()}
       </DialogContent>
     </Dialog>
   );
@@ -582,6 +641,109 @@ const AddUserDialog = ({
           <Button onClick={submit} disabled={busy} className="text-persian">
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ساختن"}
           </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+interface LogRow {
+  id: number;
+  card_id: number;
+  card_user_id: number | null;
+  admin_username: string | null;
+  action: "create" | "update" | "delete" | "card_balance" | "card_delete";
+  before_allocated: number | null;
+  after_allocated: number | null;
+  currency: Currency | null;
+  user_label: string | null;
+  note: string | null;
+  created_at: string;
+}
+
+const ACTION_LABEL: Record<LogRow["action"], string> = {
+  create: "تخصیص جدید",
+  update: "تغییر تخصیص",
+  delete: "حذف تخصیص",
+  card_balance: "تغییر موجودی کارت",
+  card_delete: "حذف کارت",
+};
+
+const LogsDialog = ({
+  card, onClose, toast,
+}: {
+  card: CardRow | null;
+  onClose: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [rows, setRows] = useState<LogRow[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!card) return;
+    setLoading(true);
+    api<{ items: LogRow[] }>(`/api/admin/card-logs.php?card_id=${card.id}`)
+      .then((r) => setRows(r.items || []))
+      .catch((e) => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [card, toast]);
+
+  const fmtDate = (s: string) => {
+    try {
+      return new Date(s.replace(" ", "T")).toLocaleString("fa-IR");
+    } catch { return s; }
+  };
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right">
+            تاریخچهٔ تغییرات — {card?.name}
+          </DialogTitle>
+        </DialogHeader>
+        {loading ? (
+          <div className="py-10 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : rows.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">
+            هنوز تغییری ثبت نشده.
+          </p>
+        ) : (
+          <div className="max-h-[60vh] overflow-auto border rounded-md divide-y">
+            {rows.map((r) => {
+              const cur = (r.currency || card?.currency || "IRT") as Currency;
+              const change =
+                r.action === "card_delete"
+                  ? "—"
+                  : r.action === "card_balance"
+                    ? `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`
+                    : `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`;
+              const color =
+                r.action === "delete" || r.action === "card_delete" ? "text-destructive"
+                : r.action === "create" ? "text-emerald-600"
+                : "text-foreground";
+              return (
+                <div key={r.id} className="p-3 text-persian text-sm flex flex-col md:flex-row md:items-center md:justify-between gap-1">
+                  <div className="flex flex-col gap-0.5">
+                    <span className={`font-bold ${color}`}>{ACTION_LABEL[r.action]}</span>
+                    {r.user_label && (
+                      <span className="text-xs text-muted-foreground">{r.user_label}</span>
+                    )}
+                    {r.note && <span className="text-xs text-muted-foreground">{r.note}</span>}
+                  </div>
+                  <div className="flex flex-col md:items-end gap-0.5 tabular-nums">
+                    <span className="font-medium">{change}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {fmtDate(r.created_at)} — {r.admin_username || "—"}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

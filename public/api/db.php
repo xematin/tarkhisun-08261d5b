@@ -195,3 +195,41 @@ function ts_carduser_require(): array {
     return $u;
 }
 
+/* ============ Card allocation logs ============ */
+
+function ts_card_alloc_log(
+    int $card_id,
+    ?int $card_user_id,
+    string $action,
+    ?float $before,
+    ?float $after,
+    ?string $currency,
+    ?string $user_label,
+    ?string $note = null
+): void {
+    try {
+        $admin = ts_admin_current();
+        $stmt = ts_db()->prepare(
+            'INSERT INTO ts_card_alloc_logs
+             (card_id, card_user_id, admin_id, admin_username, action,
+              before_allocated, after_allocated, currency, user_label, note, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $card_id,
+            $card_user_id,
+            $admin['id'] ?? null,
+            $admin['username'] ?? null,
+            $action,
+            $before,
+            $after,
+            $currency,
+            $user_label,
+            $note,
+            date('Y-m-d H:i:s'),
+        ]);
+    } catch (Throwable $e) {
+        // logging never blocks main flow
+    }
+}
+

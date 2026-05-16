@@ -40,16 +40,16 @@ const Footer = () => {
       <div className="container mx-auto px-4" dir="rtl">
         <div className="glass-card mx-auto max-w-6xl p-5 sm:p-8">
           {/* Top row: socials + brand */}
-          <div className="flex items-center justify-between gap-4 pb-6 border-b border-white/60">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/60">
+            <div className="flex items-center gap-1.5 order-2 sm:order-1">
               <button
                 onClick={scrollTop}
                 aria-label="بازگشت به بالا"
-                className="icon-badge-soft w-10 h-10"
+                className="icon-badge-soft w-9 h-9 sm:w-10 sm:h-10"
               >
                 <ArrowUp className="w-4 h-4" />
               </button>
-              <a href="tel:+989177380080" aria-label="تماس" className="icon-badge-gradient w-10 h-10">
+              <a href="tel:+989177380080" aria-label="تماس" className="icon-badge-gradient w-9 h-9 sm:w-10 sm:h-10">
                 <Phone className="w-4 h-4" />
               </a>
               <a
@@ -57,30 +57,30 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="تلگرام"
-                className="icon-badge-gradient w-10 h-10"
+                className="icon-badge-gradient w-9 h-9 sm:w-10 sm:h-10"
               >
                 <Send className="w-4 h-4" />
               </a>
               <a
                 href="mailto:info@tarkhisun.com"
                 aria-label="اینستاگرام"
-                className="icon-badge-gradient w-10 h-10"
+                className="icon-badge-gradient w-9 h-9 sm:w-10 sm:h-10"
               >
                 <Instagram className="w-4 h-4" />
               </a>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="flex flex-col items-end leading-tight">
-                <strong className="text-lg sm:text-xl text-primary text-persian">ترخیصان</strong>
-                <span className="text-[10px] tracking-[0.25em] text-muted-foreground">
+            <div className="flex items-center gap-2 sm:gap-3 order-1 sm:order-2 min-w-0">
+              <div className="flex flex-col items-end leading-tight min-w-0">
+                <strong className="text-base sm:text-xl text-primary text-persian">ترخیصان</strong>
+                <span className="text-[9px] sm:text-[10px] tracking-[0.18em] sm:tracking-[0.25em] text-muted-foreground truncate">
                   TARKHISUN · CUSTOMS
                 </span>
               </div>
               <img
                 src={tarkhisunLogo}
                 alt="لوگو ترخیصان"
-                className="h-12 w-12 object-contain"
+                className="h-10 w-10 sm:h-12 sm:w-12 object-contain shrink-0"
                 width={48}
                 height={48}
               />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Phone, Sparkles } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
 
@@ -40,9 +40,6 @@ const Header = () => {
               <span className="text-base text-primary text-persian font-bold">ترخیصان</span>
               <span className="text-[10px] tracking-wider text-muted-foreground">TARKHISUN</span>
             </div>
-            <span className="icon-badge-gradient w-9 h-9 sm:hidden">
-              <Sparkles className="w-4 h-4" />
-            </span>
           </a>
 
           {/* Desktop nav */}
@@ -67,15 +64,25 @@ const Header = () => {
             تماس با ما
           </a>
 
-          {/* Mobile / tablet menu button */}
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen((v) => !v)}
-            className="lg:hidden icon-badge-soft w-10 h-10"
-            aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
-          >
-            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Mobile actions: contact shine + hamburger */}
+          <div className="lg:hidden flex items-center gap-2">
+            <a
+              href="/#contact"
+              aria-label="تماس با ما"
+              title="تماس با ما"
+              className="icon-badge-gradient w-10 h-10 shadow-[0_8px_22px_-6px_hsl(var(--accent)/0.55)] hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.6)] transition-shadow"
+            >
+              <Phone className="w-4 h-4" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen((v) => !v)}
+              className="icon-badge-soft w-10 h-10"
+              aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile dropdown */}

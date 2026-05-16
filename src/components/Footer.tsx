@@ -84,9 +84,6 @@ const Footer = () => {
                 width={48}
                 height={48}
               />
-              <span className="icon-badge-gradient w-11 h-11 hidden sm:inline-flex">
-                <Sparkles className="w-5 h-5" />
-              </span>
             </div>
           </div>
 
@@ -175,12 +172,12 @@ const Footer = () => {
             <p className="text-xs sm:text-sm text-muted-foreground text-persian text-center md:text-right">
               © {persianYear} — تمامی حقوق برای تیم ترخیصان محفوظ است. طراحی و توسعه توسط{" "}
               <a
-                href="https://t.me/OctanDev"
+                href="https://octanco.de"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent hover:text-primary transition-colors"
               >
-                OctanDev
+                OctanCode
               </a>
             </p>
             <div className="inline-flex items-center gap-2 rounded-2xl bg-white/70 border border-white/70 px-3 py-2 text-[11px] text-foreground/75">

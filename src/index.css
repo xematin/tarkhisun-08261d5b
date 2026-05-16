@@ -289,12 +289,10 @@
   .footer-bg .glass-card .text-muted-foreground {
     color: hsl(0 0% 100% / 0.6) !important;
   }
-  .footer-bg .glass-card .text-foreground\/75,
-  .footer-bg .glass-card .text-foreground\/80 {
+  .footer-bg .glass-card [class*="text-foreground/"] {
     color: hsl(0 0% 100% / 0.8) !important;
   }
-  .footer-bg .glass-card .border-white\/60,
-  .footer-bg .glass-card .border-white\/70 {
+  .footer-bg .glass-card [class*="border-white/"] {
     border-color: hsl(0 0% 100% / 0.12) !important;
   }
   .footer-bg .pill-row {
@@ -317,7 +315,7 @@
   .footer-bg .text-accent {
     color: hsl(var(--accent-light)) !important;
   }
-  .footer-bg .bg-white\/70 {
+  .footer-bg [class*="bg-white/"] {
     background: hsl(0 0% 100% / 0.08) !important;
     border-color: hsl(0 0% 100% / 0.12) !important;
     color: hsl(0 0% 100% / 0.8) !important;

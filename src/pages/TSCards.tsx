@@ -559,8 +559,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
                 {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت"}
               </Button>
             </DialogFooter>
-          );
-        })()}
+
             <AddUserDialog
               open={addUserOpen}
               onClose={() => setAddUserOpen(false)}
@@ -572,7 +571,8 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
               toast={toast}
             />
           </div>
-        )}
+          );
+        })()}
       </DialogContent>
     </Dialog>
   );

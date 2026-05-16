@@ -12,6 +12,8 @@ import Install from "./pages/Install";
 import ContactRedirect from "./pages/ContactRedirect";
 import HSCodeSearch from "./pages/HSCodeSearch";
 import TSDashboard from "./pages/TSDashboard";
+import TSCards from "./pages/TSCards";
+import TSCardUser from "./pages/TSCardUser";
 
 // Lazy load blog pages for better performance
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -103,6 +105,8 @@ const AppContent = () => {
         <Route path="/currencies" element={<Currencies />} />
         <Route path="/hscode" element={<HSCodeSearch />} />
         <Route path="/TSDashboard" element={<TSDashboard />} />
+        <Route path="/TSCards" element={<TSCards />} />
+        <Route path="/TSCardUser" element={<TSCardUser />} />
         <Route path="/install" element={<Install />} />
         <Route path="/contact" element={<ContactRedirect />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -321,122 +321,166 @@
     color: hsl(0 0% 100% / 0.8) !important;
   }
 
-  /* ===== Admin/User Panel Glass Theme ===== */
+  /* ===== Admin/User Panel: Light page + Blue glass cards ===== */
   .panel-glass {
     background:
-      radial-gradient(60% 80% at 15% 0%, hsl(160 84% 39% / 0.25), transparent 60%),
-      radial-gradient(50% 80% at 90% 20%, hsl(225 89% 45% / 0.35), transparent 60%),
-      #051b5c;
-    color: hsl(0 0% 100% / 0.92);
+      radial-gradient(60% 80% at 10% 0%, hsl(160 84% 39% / 0.10), transparent 60%),
+      radial-gradient(50% 80% at 95% 10%, hsl(225 89% 45% / 0.12), transparent 60%),
+      linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 13% 98%) 100%);
+    color: hsl(var(--foreground));
   }
-  /* Floating glass header bar inside panels */
+  /* Floating white glass top bar (like main site header) */
   .panel-glass .panel-topbar {
-    background: hsl(0 0% 100% / 0.08);
-    border: 1px solid hsl(0 0% 100% / 0.15);
+    background: hsl(0 0% 100% / 0.75);
+    border: 1px solid hsl(0 0% 100% / 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 9999px;
     box-shadow:
-      0 12px 40px -12px hsl(0 0% 0% / 0.45),
-      inset 0 1px 0 0 hsl(0 0% 100% / 0.12);
-    color: hsl(0 0% 100%);
+      0 12px 40px -12px hsl(var(--primary) / 0.25),
+      0 6px 16px -8px hsl(var(--accent) / 0.18),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.65);
+    color: hsl(var(--primary));
   }
-  /* Cards become floating glass panels */
+  /* Cards become floating BLUE glass panels */
   .panel-glass [class*="rounded-lg"][class*="border"][class*="bg-card"],
   .panel-glass .glass-card {
-    background: hsl(225 89% 12% / 0.55) !important;
-    border: 1px solid hsl(0 0% 100% / 0.12) !important;
+    background:
+      radial-gradient(80% 120% at 0% 0%, hsl(160 84% 39% / 0.18), transparent 60%),
+      linear-gradient(135deg, hsl(225 89% 19%) 0%, hsl(225 89% 14%) 60%, #051b5c 100%) !important;
+    border: 1px solid hsl(0 0% 100% / 0.14) !important;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 1.25rem !important;
     color: hsl(0 0% 100% / 0.92) !important;
     box-shadow:
-      0 20px 60px -20px hsl(0 0% 0% / 0.5),
+      0 20px 60px -20px hsl(225 89% 19% / 0.45),
       inset 0 1px 0 0 hsl(0 0% 100% / 0.08) !important;
   }
-  .panel-glass h1,
-  .panel-glass h2,
-  .panel-glass h3,
-  .panel-glass .text-foreground {
+
+  /* Text inside BLUE cards => light */
+  .panel-glass [class*="bg-card"] h1,
+  .panel-glass [class*="bg-card"] h2,
+  .panel-glass [class*="bg-card"] h3,
+  .panel-glass [class*="bg-card"] .text-foreground,
+  .panel-glass .glass-card h1,
+  .panel-glass .glass-card h2,
+  .panel-glass .glass-card h3,
+  .panel-glass .glass-card .text-foreground {
     color: hsl(0 0% 100%) !important;
   }
-  .panel-glass .text-muted-foreground {
-    color: hsl(0 0% 100% / 0.65) !important;
+  .panel-glass [class*="bg-card"] .text-muted-foreground,
+  .panel-glass .glass-card .text-muted-foreground {
+    color: hsl(0 0% 100% / 0.7) !important;
   }
-  /* Inputs/selects */
-  .panel-glass input,
-  .panel-glass textarea,
-  .panel-glass [role="combobox"] {
-    background: hsl(0 0% 100% / 0.08) !important;
-    border-color: hsl(0 0% 100% / 0.2) !important;
+  .panel-glass [class*="bg-card"] .text-primary,
+  .panel-glass .glass-card .text-primary {
     color: hsl(0 0% 100%) !important;
   }
-  .panel-glass input::placeholder,
-  .panel-glass textarea::placeholder {
-    color: hsl(0 0% 100% / 0.45) !important;
+  .panel-glass [class*="bg-card"] .text-destructive,
+  .panel-glass .glass-card .text-destructive {
+    color: hsl(0 84% 75%) !important;
   }
-  /* Tables */
-  .panel-glass table { color: hsl(0 0% 100% / 0.9); }
-  .panel-glass thead tr,
-  .panel-glass tbody tr,
-  .panel-glass tfoot tr {
-    border-color: hsl(0 0% 100% / 0.1) !important;
+  .panel-glass [class*="bg-card"] .text-emerald-600,
+  .panel-glass [class*="bg-card"] .text-emerald-700,
+  .panel-glass .glass-card .text-emerald-600,
+  .panel-glass .glass-card .text-emerald-700 {
+    color: hsl(var(--accent-light)) !important;
   }
-  .panel-glass tbody tr:hover {
-    background: hsl(0 0% 100% / 0.06) !important;
-  }
-  .panel-glass th { color: hsl(0 0% 100% / 0.75) !important; }
-  /* Button contrast fixes inside panel scope */
-  .panel-glass button[class*="border-input"],
-  .panel-glass .btn-outline-panel {
+
+  /* Inputs/selects inside blue cards */
+  .panel-glass [class*="bg-card"] input,
+  .panel-glass [class*="bg-card"] textarea,
+  .panel-glass [class*="bg-card"] [role="combobox"],
+  .panel-glass .glass-card input,
+  .panel-glass .glass-card textarea,
+  .panel-glass .glass-card [role="combobox"] {
     background: hsl(0 0% 100% / 0.1) !important;
-    border-color: hsl(0 0% 100% / 0.3) !important;
+    border-color: hsl(0 0% 100% / 0.25) !important;
     color: hsl(0 0% 100%) !important;
   }
-  .panel-glass button[class*="border-input"]:hover,
-  .panel-glass .btn-outline-panel:hover {
-    background: hsl(0 0% 100% / 0.2) !important;
-    color: hsl(0 0% 100%) !important;
+  .panel-glass [class*="bg-card"] input::placeholder,
+  .panel-glass [class*="bg-card"] textarea::placeholder,
+  .panel-glass .glass-card input::placeholder,
+  .panel-glass .glass-card textarea::placeholder {
+    color: hsl(0 0% 100% / 0.5) !important;
   }
-  .panel-glass button[class*="hover:bg-accent"]:not([class*="bg-primary"]):not([class*="bg-accent "]):not([class*="bg-destructive"]) {
-    color: hsl(0 0% 100% / 0.9);
-  }
-  .panel-glass button[class*="hover:bg-accent"]:not([class*="bg-primary"]):not([class*="bg-accent "]):not([class*="bg-destructive"]):hover {
-    background: hsl(0 0% 100% / 0.12) !important;
-    color: hsl(0 0% 100%) !important;
-  }
-  /* Primary buttons: keep gradient feel */
-  .panel-glass button[class*="bg-primary"] {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))) !important;
-    color: hsl(0 0% 100%) !important;
-    box-shadow: 0 8px 22px -6px hsl(var(--accent) / 0.5);
-  }
-  .panel-glass button[class*="bg-primary"]:hover {
-    filter: brightness(1.08);
-  }
-  /* Badges */
-  .panel-glass [class*="bg-secondary"] {
-    background: hsl(0 0% 100% / 0.15) !important;
-    color: hsl(0 0% 100%) !important;
-    border-color: hsl(0 0% 100% / 0.2) !important;
-  }
-  /* Links */
-  .panel-glass a:hover { color: hsl(var(--accent-light)) !important; }
-  /* Accent text fixes */
-  .panel-glass .text-emerald-600,
-  .panel-glass .text-emerald-700 { color: hsl(var(--accent-light)) !important; }
-  .panel-glass .text-primary { color: hsl(0 0% 100%) !important; }
-  .panel-glass .text-destructive { color: hsl(0 84% 70%) !important; }
-  /* Borders & misc */
-  .panel-glass [class*="border-"]:not([class*="border-white"]):not([class*="border-destructive"]):not([class*="border-primary"]):not([class*="border-input"]) {
+
+  /* Tables inside blue cards */
+  .panel-glass [class*="bg-card"] table,
+  .panel-glass .glass-card table { color: hsl(0 0% 100% / 0.92); }
+  .panel-glass [class*="bg-card"] thead tr,
+  .panel-glass [class*="bg-card"] tbody tr,
+  .panel-glass [class*="bg-card"] tfoot tr,
+  .panel-glass .glass-card thead tr,
+  .panel-glass .glass-card tbody tr,
+  .panel-glass .glass-card tfoot tr {
     border-color: hsl(0 0% 100% / 0.12) !important;
   }
-  .panel-glass [class*="bg-muted"] {
-    background: hsl(0 0% 100% / 0.06) !important;
+  .panel-glass [class*="bg-card"] tbody tr:hover,
+  .panel-glass .glass-card tbody tr:hover {
+    background: hsl(0 0% 100% / 0.08) !important;
   }
-  .panel-glass .divide-y > * + * {
-    border-color: hsl(0 0% 100% / 0.1) !important;
+  .panel-glass [class*="bg-card"] th,
+  .panel-glass .glass-card th { color: hsl(0 0% 100% / 0.8) !important; }
+
+  /* Outline/ghost buttons inside blue cards */
+  .panel-glass [class*="bg-card"] button[class*="border-input"],
+  .panel-glass .glass-card button[class*="border-input"] {
+    background: hsl(0 0% 100% / 0.12) !important;
+    border-color: hsl(0 0% 100% / 0.35) !important;
+    color: hsl(0 0% 100%) !important;
   }
+  .panel-glass [class*="bg-card"] button[class*="border-input"]:hover,
+  .panel-glass .glass-card button[class*="border-input"]:hover {
+    background: hsl(0 0% 100% / 0.22) !important;
+    color: hsl(0 0% 100%) !important;
+  }
+  /* Ghost buttons inside blue cards (edit / history / delete / back) */
+  .panel-glass [class*="bg-card"] button[class*="hover:bg-accent"]:not([class*="bg-primary"]):not([class*="bg-destructive"]):not([class*="border-input"]),
+  .panel-glass .glass-card button[class*="hover:bg-accent"]:not([class*="bg-primary"]):not([class*="bg-destructive"]):not([class*="border-input"]) {
+    color: hsl(0 0% 100%) !important;
+  }
+  .panel-glass [class*="bg-card"] button[class*="hover:bg-accent"]:not([class*="bg-primary"]):not([class*="bg-destructive"]):not([class*="border-input"]):hover,
+  .panel-glass .glass-card button[class*="hover:bg-accent"]:not([class*="bg-primary"]):not([class*="bg-destructive"]):not([class*="border-input"]):hover {
+    background: hsl(0 0% 100% / 0.15) !important;
+    color: hsl(0 0% 100%) !important;
+  }
+  /* Primary buttons inside blue cards: light pill */
+  .panel-glass [class*="bg-card"] button[class*="bg-primary"],
+  .panel-glass .glass-card button[class*="bg-primary"] {
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light))) !important;
+    color: hsl(0 0% 100%) !important;
+    box-shadow: 0 8px 22px -6px hsl(var(--accent) / 0.55);
+  }
+  .panel-glass [class*="bg-card"] button[class*="bg-primary"]:hover,
+  .panel-glass .glass-card button[class*="bg-primary"]:hover {
+    filter: brightness(1.08);
+  }
+  /* Badges inside blue cards */
+  .panel-glass [class*="bg-card"] [class*="bg-secondary"],
+  .panel-glass .glass-card [class*="bg-secondary"] {
+    background: hsl(0 0% 100% / 0.18) !important;
+    color: hsl(0 0% 100%) !important;
+    border-color: hsl(0 0% 100% / 0.22) !important;
+  }
+  /* Links inside blue cards */
+  .panel-glass [class*="bg-card"] a:hover,
+  .panel-glass .glass-card a:hover { color: hsl(var(--accent-light)) !important; }
+  /* Generic borders inside blue cards */
+  .panel-glass [class*="bg-card"] [class*="border-"]:not([class*="border-white"]):not([class*="border-destructive"]):not([class*="border-primary"]):not([class*="border-input"]),
+  .panel-glass .glass-card [class*="border-"]:not([class*="border-white"]):not([class*="border-destructive"]):not([class*="border-primary"]):not([class*="border-input"]) {
+    border-color: hsl(0 0% 100% / 0.14) !important;
+  }
+  .panel-glass [class*="bg-card"] [class*="bg-muted"],
+  .panel-glass .glass-card [class*="bg-muted"] {
+    background: hsl(0 0% 100% / 0.08) !important;
+  }
+  .panel-glass [class*="bg-card"] .divide-y > * + *,
+  .panel-glass .glass-card .divide-y > * + * {
+    border-color: hsl(0 0% 100% / 0.12) !important;
+  }
+
 
   /* Animations */
   .fade-in-up {

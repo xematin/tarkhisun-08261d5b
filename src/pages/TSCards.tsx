@@ -94,16 +94,16 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen bg-muted/30 panel-fa" dir="rtl">
-        <header className="border-b bg-background">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="panel-glass panel-fa" dir="rtl">
+        <header className="container mx-auto px-4 pt-4">
+          <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
               <CreditCard className="w-5 h-5" /> مدیریت کارت‌ها
             </h1>
             {state === "auth" && (
               <div className="flex items-center gap-3 text-sm text-persian">
-                <a href="/TSDashboard" className="text-muted-foreground hover:text-foreground">پنل اصلی</a>
-                <span className="text-muted-foreground">{username}</span>
+                <a href="/TSDashboard" className="opacity-80 hover:opacity-100">پنل اصلی</a>
+                <span className="opacity-80">{username}</span>
                 <Button
                   variant="ghost" size="sm"
                   onClick={async () => {

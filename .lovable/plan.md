@@ -1,94 +1,77 @@
-## بخش کارت‌ها (Cards) برای پنل مدیریت
+# پلن: تخصیص موجودی به هر کاربر + بزرگ‌تر کردن فونت پنل‌ها
 
-ساخت یک ماژول مستقل از لیدها برای مدیریت «کارت‌ها» و «کاربران کارت»، با یک پنل ادمین در `/TSCards` و یک پنل جداگانه برای کاربرهای کارت در `/TSCardUser`.
+## ۱) منطق تخصیص موجودی به زیرمجموعه‌ها
 
----
+به‌جای دسترسی صرفِ on/off، برای هر کاربرِ متصل به کارت یک **سهمیه (allocation)** ذخیره می‌کنیم. مجموع سهمیه‌ها نباید از موجودیِ کل کارت بیشتر شود؛ هنگام افزودن کاربر بعدی، فقط «باقی‌ماندهٔ کارت» قابل تخصیص است.
 
-### ۱) ساختار دیتابیس (MySQL — همان دیتابیس فعلی)
+### تغییر دیتابیس
+به جدول `ts_card_user_access` ستون جدید اضافه می‌شود:
+- `allocated DECIMAL(18,2) NOT NULL DEFAULT 0`
 
-سه جدول جدید:
+(فایل `install.php` آپدیت می‌شود و یک بلاک `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` برای کسانی که قبلاً نصب کرده‌اند اجرا می‌شود.)
 
-**`ts_cards`** — اطلاعات هر کارت
-- `id` (PK, AI)
-- `name` VARCHAR(150) — اسم کارت
-- `balance` DECIMAL(18,2) — مبلغ موجودی
-- `currency` ENUM('USD','EUR','IRT') — واحد پول (دلار / یورو / تومان)
-- `created_by` INT — ادمین سازنده (FK به admin_users)
-- `created_at`, `updated_at`
+### قواعد محاسبه (سرور)
+- `remaining = card.balance - SUM(allocated of other users on this card)`
+- هنگام ایجاد/ویرایش کارت یا افزودن کاربر:
+  - برای هر کاربر `allocated >= 0`
+  - `SUM(allocated) <= card.balance` (در غیر این صورت 400 با پیام «مجموع تخصیص‌ها از موجودی کارت بیشتر است»)
+- وقتی موجودی کارت کاهش پیدا کرد و کمتر از مجموع تخصیص‌ها شد، API خطا می‌دهد و کاربر باید ابتدا تخصیص‌ها را اصلاح کند.
 
-**`ts_card_users`** — کاربران مرتبط با کارت (جدا از ادمین)
-- `id` (PK, AI)
-- `first_name`, `last_name` VARCHAR(100)
-- `username` VARCHAR(100) UNIQUE
-- `password_hash` VARCHAR(255) — `password_hash(PASSWORD_BCRYPT)`
-- `created_by` INT
-- `created_at`
+### تغییر APIها
+- `cards-list.php`: برای هر کاربرِ متصل، `allocated` هم برگردانده می‌شود و در سطح کارت `allocated_total` و `remaining` اضافه می‌گردد.
+- `card-create.php` و `card-update.php`: ورودی `user_ids` به فرمت زیر تغییر می‌کند:
+  ```json
+  "users": [{ "id": 12, "allocated": 60 }, { "id": 13, "allocated": 20 }]
+  ```
+  اعتبارسنجی مجموع سمت سرور انجام می‌شود.
+- `cards/my-cards.php`: به جای `balance` کارت، برای کاربرِ کارت **`allocated`** خودش به‌عنوان موجودی قابل‌مشاهده برگردانده می‌شود (کاربر نباید موجودی کل کارت یا سهم بقیه را ببیند).
 
-**`ts_card_user_access`** — جدول واسط (دسترسی چند به چند)
-- `id` (PK)
-- `card_id` (FK → ts_cards)
-- `card_user_id` (FK → ts_card_users)
-- UNIQUE(`card_id`, `card_user_id`)
+### تغییر UI پنل مدیریت کارت‌ها (`TSCards.tsx`)
+- مرحلهٔ ۲ دیالوگ کارت بازطراحی می‌شود:
+  - بالای لیست: نمایش `موجودی کل`, `تخصیص داده‌شده`, `باقی‌مانده` (به‌روزرسانی زنده با تغییر مقادیر).
+  - برای هر کاربر انتخاب‌شده یک Input عددی «سهم این کاربر» با واحد ارز کارت.
+  - `max` هر Input = باقی‌ماندهٔ زنده + مقدار فعلی همان کاربر؛ تجاوز از باقی‌مانده مسدود و پیام داده می‌شود.
+  - دکمهٔ «تقسیم مساوی بین انتخاب‌شده‌ها» به‌عنوان کمک اختیاری.
+- ستون جدید در جدول کارت‌ها: «تخصیص/باقی‌مانده» (مثلاً `80 / 100 USD — باقی: 20`).
 
-نصب از طریق به‌روزرسانی `public/api/install.php` (idempotent با `CREATE TABLE IF NOT EXISTS`).
+### تغییر UI پنل کاربر کارت (`TSCardUser.tsx`)
+- نمایش «موجودی شما از این کارت» = `allocated` (نه balance کل).
 
----
+## ۲) بزرگ‌تر کردن فونت فارسی پنل‌ها
 
-### ۲) Endpointهای PHP
-
-زیر `public/api/admin/` (نیاز به سشن ادمین):
-
-- `cards-list.php` — GET، لیست کارت‌ها + تعداد کاربران هر کارت
-- `card-create.php` — POST، ساخت کارت (name, balance, currency, user_ids[])
-- `card-update.php` — POST، ویرایش کارت یا تغییر زیرمجموعه‌ها
-- `card-delete.php` — POST
-- `card-users-list.php` — GET، لیست کل کاربران کارت برای انتخاب
-- `card-user-create.php` — POST، ساخت کاربر جدید (first_name, last_name, username, password)
-- `card-user-delete.php` — POST
-
-زیر `public/api/cards/` (سشن جداگانه برای کاربر کارت):
-
-- `login.php` — ورود کاربر کارت با username/password، کوکی `ts_carduser` ۳۰ روزه
-- `logout.php`
-- `me.php`
-- `my-cards.php` — لیست فقط کارت‌هایی که کاربر به آن‌ها دسترسی دارد
-
-سشن کاربر کارت کاملاً از سشن ادمین جداست (کوکی متفاوت، فایل سشن متفاوت)، پس کاربر کارت هرگز به سایر بخش‌های پنل ادمین دسترسی ندارد.
-
----
-
-### ۳) صفحات React
-
-**`/TSCards`** — `src/pages/TSCards.tsx` (محافظت‌شده با `/api/admin/me.php`)
-- لیست کارت‌ها در جدول: نام، موجودی + واحد، تعداد کاربران، تاریخ، عملیات (ویرایش/حذف)
-- دکمه «افزودن کارت» → Dialog چندمرحله‌ای:
-  1. **مرحله ۱:** اسم کارت + مبلغ موجودی + Select واحد (USD/EUR/IRT)
-  2. **مرحله ۲:** انتخاب زیرمجموعه‌ها از لیست کاربران موجود (multi-select با چک‌باکس)
-     - دکمه «افزودن کاربر جدید» → Dialog تو در تو: نام، نام خانوادگی، یوزرنیم، رمز
-     - پس از ساخت، کاربر در لیست ظاهر و انتخاب می‌شود
-  3. ثبت نهایی
-
-**`/TSCardUser`** — `src/pages/TSCardUser.tsx` (پنل جداگانه برای کاربران کارت)
-- فرم ورود (username/password)
-- پس از ورود: نمایش فقط کارت‌های مجاز با نام، موجودی، واحد
-- دکمه خروج
-
-افزودن هر دو مسیر در `src/App.tsx` (قبل از catch-all)، و افزودن `Disallow: /TSCards` و `Disallow: /TSCardUser` در `public/robots.txt`.
-
----
-
-### جزئیات فنی
-
-```text
-Admin session cookie:    ts_admin     (موجود)
-Card-user session cookie: ts_carduser (جدید، مسیر /، 30 روز)
+کلاس مشترک `.text-persian` در `src/index.css` به این صورت تغییر می‌کند:
+```css
+.text-persian {
+  font-family: 'Noto Sans Arabic', sans-serif;
+  line-height: 1.9;
+  font-size: 1.05rem;        /* پیش‌فرض کمی بزرگ‌تر */
+  letter-spacing: 0;
+}
 ```
+چون این کلاس در سایت اصلی هم استفاده می‌شود، برای بزرگ‌تر کردن «فقط» پنل‌ها یک کلاس کمکی جدید اضافه می‌کنیم و در ریشهٔ سه صفحهٔ پنل اعمالش می‌کنیم:
+```css
+.panel-fa { font-size: 15px; }
+.panel-fa .text-persian { font-size: 15.5px; line-height: 1.95; }
+.panel-fa h1, .panel-fa .panel-title { font-size: 1.25rem; }
+.panel-fa table { font-size: 15px; }
+.panel-fa .text-xs { font-size: 13px; }
+.panel-fa .text-sm { font-size: 14.5px; }
+```
+سپس در `TSDashboard.tsx`, `TSCards.tsx`, `TSCardUser.tsx` به `<div ... dir="rtl">` ریشه کلاس `panel-fa` اضافه می‌شود. سایت اصلی دست‌نخورده می‌ماند.
 
-- اعتبارسنجی ورودی با zod در فرانت و چک سرور‌سمت (طول، نوع، یکتایی username).
-- رمز کاربر کارت با `password_hash` ذخیره و با `password_verify` چک می‌شود.
-- پاسخ JSON یکدست `{ ok: true, data }` یا `{ error, detail }`.
-- ارز پیش‌فرض IRT، نمایش موجودی با `Intl.NumberFormat` و علامت مناسب.
+## ۳) فایل‌هایی که تغییر می‌کنند
+- `public/api/install.php` (افزودن ستون `allocated` + ALTER برای نصب‌های قبلی)
+- `public/api/admin/cards-list.php` (برگرداندن allocated و خلاصه)
+- `public/api/admin/card-create.php` و `card-update.php` (پذیرش users[].allocated + اعتبارسنجی مجموع)
+- `public/api/cards/my-cards.php` (نمایش allocated به‌جای balance)
+- `src/pages/TSCards.tsx` (UI سهمیه + باقی‌مانده زنده)
+- `src/pages/TSCardUser.tsx` (نمایش allocated)
+- `src/pages/TSDashboard.tsx` (افزودن کلاس panel-fa)
+- `src/index.css` (کلاس کمکی `panel-fa`)
 
----
+## ۴) مراحل استقرار
+1. آپلود بیلد جدید + فایل‌های PHP.
+2. یک‌بار اجرای `/api/install.php` برای افزودن ستون `allocated` (سپس حذفش).
+3. کارت‌های موجود `allocated=0` خواهند داشت؛ ادمین می‌تواند با ویرایش هر کارت سهمیه‌ها را وارد کند.
 
-پس از تأیید این مرحله، ساختار آماده می‌شود تا در مرحله بعد منطق تراکنش / مصرف موجودی / گزارش‌ها را روی همین بخش بسازیم.
+پس از تأیید این پلن، پیاده‌سازی انجام می‌شود.

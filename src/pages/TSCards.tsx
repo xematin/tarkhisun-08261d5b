@@ -457,26 +457,47 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
           </div>
         )}
 
-        {step === 2 && (
+        {step === 2 && (() => {
+          const over = allocatedTotal - balanceNum > 0.0001;
+          const exact = !over && Math.abs(balanceNum - allocatedTotal) < 0.0001 && balanceNum > 0;
+          return (
           <div className="space-y-4">
             <div className="rounded-md border bg-muted/40 p-3 text-persian text-sm grid grid-cols-3 gap-2">
               <div>
                 <div className="text-muted-foreground text-xs">موجودی کل</div>
-                <div className="font-bold">{fmtMoney(balanceNum, currency)}</div>
+                <div className="font-bold tabular-nums">{fmtMoney(balanceNum, currency)}</div>
               </div>
               <div>
                 <div className="text-muted-foreground text-xs">تخصیص‌داده‌شده</div>
-                <div className="font-bold">{fmtMoney(allocatedTotal, currency)}</div>
+                <div className={`font-bold tabular-nums ${over ? "text-destructive" : ""}`}>
+                  {fmtMoney(allocatedTotal, currency)}
+                </div>
               </div>
               <div>
                 <div className="text-muted-foreground text-xs">باقی‌مانده</div>
-                <div className={`font-bold ${remaining === 0 ? "text-primary" : ""}`}>
-                  {fmtMoney(remaining, currency)}
+                <div className={`font-bold tabular-nums ${over ? "text-destructive" : exact ? "text-primary" : "text-emerald-600"}`}>
+                  {fmtMoney(Math.max(0, balanceNum - allocatedTotal), currency)}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div
+              className={`rounded-md border px-3 py-2 text-persian text-sm font-medium ${
+                over
+                  ? "border-destructive/40 bg-destructive/10 text-destructive"
+                  : exact
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
+              }`}
+            >
+              {over
+                ? `مجموع تخصیص‌ها ${fmtMoney(allocatedTotal - balanceNum, currency)} از موجودی کارت بیشتر است — ذخیره ممکن نیست.`
+                : exact
+                  ? "تمام موجودی کارت بین کاربران تخصیص داده شد."
+                  : `قابل تخصیص باقی‌مانده: ${fmtMoney(Math.max(0, balanceNum - allocatedTotal), currency)}`}
+            </div>
+
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <Label className="text-persian">انتخاب کاربران و سهم هرکدام</Label>
               <div className="flex gap-2">
                 <Button size="sm" variant="ghost" onClick={splitEqually} className="text-persian"
@@ -534,11 +555,12 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setStep(1)} className="text-persian">قبلی</Button>
-              <Button onClick={save} disabled={busy} className="text-persian">
+              <Button onClick={save} disabled={busy || over} className="text-persian">
                 {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت"}
               </Button>
             </DialogFooter>
-
+          );
+        })()}
             <AddUserDialog
               open={addUserOpen}
               onClose={() => setAddUserOpen(false)}

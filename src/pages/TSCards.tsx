@@ -94,7 +94,7 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="panel-glass panel-fa min-h-screen" dir="rtl">
+      <div className="panel-fa min-h-screen" dir="rtl">
         <header className="container mx-auto px-4 pt-4">
           <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
@@ -417,7 +417,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-lg panel-fa panel-glass">
+      <DialogContent dir="rtl" className="max-w-lg panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
@@ -612,7 +612,7 @@ const AddUserDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-md panel-fa panel-glass">
+      <DialogContent dir="rtl" className="max-w-md panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">افزودن کاربر جدید</DialogTitle>
         </DialogHeader>
@@ -696,7 +696,7 @@ const LogsDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa panel-glass">
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             تاریخچهٔ تغییرات — {card?.name}

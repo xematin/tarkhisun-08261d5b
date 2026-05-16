@@ -63,10 +63,10 @@ const Footer = () => {
               </a>
               <a
                 href="mailto:info@tarkhisun.com"
-                aria-label="اینستاگرام"
+                aria-label="ایمیل"
                 className="icon-badge-gradient w-9 h-9 sm:w-10 sm:h-10"
               >
-                <Instagram className="w-4 h-4" />
+                <Mail className="w-4 h-4" />
               </a>
             </div>
 

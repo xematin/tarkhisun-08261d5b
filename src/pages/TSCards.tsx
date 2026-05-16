@@ -94,16 +94,16 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen bg-muted/30 panel-fa" dir="rtl">
-        <header className="border-b bg-background">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="panel-glass panel-fa min-h-screen" dir="rtl">
+        <header className="container mx-auto px-4 pt-4">
+          <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
               <CreditCard className="w-5 h-5" /> مدیریت کارت‌ها
             </h1>
             {state === "auth" && (
               <div className="flex items-center gap-3 text-sm text-persian">
-                <a href="/TSDashboard" className="text-muted-foreground hover:text-foreground">پنل اصلی</a>
-                <span className="text-muted-foreground">{username}</span>
+                <a href="/TSDashboard" className="opacity-80 hover:opacity-100">پنل اصلی</a>
+                <span className="opacity-80">{username}</span>
                 <Button
                   variant="ghost" size="sm"
                   onClick={async () => {
@@ -417,7 +417,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-lg panel-fa">
+      <DialogContent dir="rtl" className="max-w-lg panel-fa panel-glass">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
@@ -612,7 +612,7 @@ const AddUserDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-md panel-fa">
+      <DialogContent dir="rtl" className="max-w-md panel-fa panel-glass">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">افزودن کاربر جدید</DialogTitle>
         </DialogHeader>
@@ -696,7 +696,7 @@ const LogsDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa panel-glass">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             تاریخچهٔ تغییرات — {card?.name}

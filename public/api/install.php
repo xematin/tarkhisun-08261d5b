@@ -87,6 +87,23 @@ $sql = [
         INDEX idx_expires (expires_at),
         FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_card_alloc_logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_id INT NOT NULL,
+        card_user_id INT NULL,
+        admin_id INT NULL,
+        admin_username VARCHAR(64) NULL,
+        action ENUM('create','update','delete','card_balance','card_delete') NOT NULL,
+        before_allocated DECIMAL(18,2) NULL,
+        after_allocated DECIMAL(18,2) NULL,
+        currency ENUM('USD','EUR','IRT') NULL,
+        user_label VARCHAR(255) NULL,
+        note VARCHAR(255) NULL,
+        created_at DATETIME NOT NULL,
+        INDEX idx_card (card_id),
+        INDEX idx_created (created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
 
 foreach ($sql as $q) {

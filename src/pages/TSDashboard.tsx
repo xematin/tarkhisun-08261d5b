@@ -363,4 +363,27 @@ const LeadDetail = ({ lead, onBack }: { lead: LeadRow; onBack: () => void }) => 
   );
 };
 
+const CardsEntry = () => (
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-persian flex items-center gap-2">
+        <CreditCard className="w-5 h-5" /> مدیریت کارت‌های بازرگانی
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <p className="text-persian text-sm leading-relaxed opacity-90">
+          از این بخش می‌توانید به پنل مدیریت کارت‌های بازرگانی وارد شوید؛
+          افزودن کارت جدید، تخصیص کاربر، مشاهده تاریخچه و سایر عملیات.
+        </p>
+        <Link to="/TSCards">
+          <Button className="text-persian whitespace-nowrap">
+            <CreditCard className="w-4 h-4 ml-2" /> ورود به پنل کارت‌ها
+          </Button>
+        </Link>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export default TSDashboard;

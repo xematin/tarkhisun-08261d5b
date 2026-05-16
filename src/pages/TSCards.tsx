@@ -148,6 +148,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CardRow | null>(null);
+  const [logsFor, setLogsFor] = useState<CardRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -201,41 +202,71 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                 <TableHead className="text-right text-persian">نام کارت</TableHead>
                 <TableHead className="text-right text-persian">موجودی کل</TableHead>
                 <TableHead className="text-right text-persian">تخصیص / باقی‌مانده</TableHead>
-                <TableHead className="text-right text-persian">کاربران</TableHead>
+                <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((r) => (
-                <TableRow key={r.id}>
-                  <TableCell className="text-persian">{r.name}</TableCell>
-                  <TableCell className="text-persian">{fmtMoney(r.balance, r.currency)}</TableCell>
-                  <TableCell className="text-persian text-sm">
-                    <div>تخصیص: {fmtMoney(r.allocated_total ?? 0, r.currency)}</div>
-                    <div className="text-muted-foreground">باقی: {fmtMoney(r.remaining ?? 0, r.currency)}</div>
-                  </TableCell>
-                  <TableCell className="text-persian text-xs max-w-xs">
-                    {r.users?.length
-                      ? r.users.map(u => (
-                          <div key={u.id}>
-                            {u.first_name} {u.last_name}
-                            <span className="text-muted-foreground mr-2">
-                              ({fmtMoney(u.allocated ?? 0, r.currency)})
-                            </span>
-                          </div>
-                        ))
-                      : "—"}
-                  </TableCell>
-                  <TableCell className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }}>
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)}>
-                      <Trash2 className="w-4 h-4 text-destructive" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {items.map((r) => {
+                const bal = typeof r.balance === "string" ? parseFloat(r.balance) : r.balance;
+                const alloc = r.allocated_total ?? 0;
+                const rem = r.remaining ?? Math.max(0, (bal || 0) - alloc);
+                const pct = bal > 0 ? Math.min(100, (alloc / bal) * 100) : 0;
+                const over = alloc - bal > 0.0001;
+                return (
+                  <TableRow key={r.id}>
+                    <TableCell className="text-persian font-medium align-top">{r.name}</TableCell>
+                    <TableCell className="text-persian whitespace-nowrap align-top">
+                      {fmtMoney(bal, r.currency)}
+                    </TableCell>
+                    <TableCell className="text-persian align-top min-w-[180px]">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-muted-foreground text-xs">تخصیص</span>
+                          <span className="font-bold tabular-nums">{fmtMoney(alloc, r.currency)}</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-muted-foreground text-xs">باقی‌مانده</span>
+                          <span className={`font-bold tabular-nums ${over ? "text-destructive" : rem === 0 ? "text-primary" : "text-emerald-600"}`}>
+                            {fmtMoney(rem, r.currency)}
+                          </span>
+                        </div>
+                        <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                          <div
+                            className={`h-full ${over ? "bg-destructive" : "bg-primary"}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-persian text-xs max-w-xs align-top hidden md:table-cell">
+                      {r.users?.length
+                        ? r.users.map(u => (
+                            <div key={u.id}>
+                              {u.first_name} {u.last_name}
+                              <span className="text-muted-foreground mr-2">
+                                ({fmtMoney(u.allocated ?? 0, r.currency)})
+                              </span>
+                            </div>
+                          ))
+                        : "—"}
+                    </TableCell>
+                    <TableCell className="align-top">
+                      <div className="flex gap-1 flex-wrap justify-end">
+                        <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
+                          <History className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش">
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف">
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         )}
@@ -245,6 +276,12 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
           onClose={() => setOpen(false)}
           onSaved={() => { setOpen(false); void load(); }}
           editing={editing}
+          toast={toast}
+        />
+
+        <LogsDialog
+          card={logsFor}
+          onClose={() => setLogsFor(null)}
           toast={toast}
         />
       </CardContent>

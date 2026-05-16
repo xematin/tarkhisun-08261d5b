@@ -647,4 +647,107 @@ const AddUserDialog = ({
   );
 };
 
+interface LogRow {
+  id: number;
+  card_id: number;
+  card_user_id: number | null;
+  admin_username: string | null;
+  action: "create" | "update" | "delete" | "card_balance" | "card_delete";
+  before_allocated: number | null;
+  after_allocated: number | null;
+  currency: Currency | null;
+  user_label: string | null;
+  note: string | null;
+  created_at: string;
+}
+
+const ACTION_LABEL: Record<LogRow["action"], string> = {
+  create: "تخصیص جدید",
+  update: "تغییر تخصیص",
+  delete: "حذف تخصیص",
+  card_balance: "تغییر موجودی کارت",
+  card_delete: "حذف کارت",
+};
+
+const LogsDialog = ({
+  card, onClose, toast,
+}: {
+  card: CardRow | null;
+  onClose: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [rows, setRows] = useState<LogRow[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!card) return;
+    setLoading(true);
+    api<{ items: LogRow[] }>(`/api/admin/card-logs.php?card_id=${card.id}`)
+      .then((r) => setRows(r.items || []))
+      .catch((e) => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [card, toast]);
+
+  const fmtDate = (s: string) => {
+    try {
+      return new Date(s.replace(" ", "T")).toLocaleString("fa-IR");
+    } catch { return s; }
+  };
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right">
+            تاریخچهٔ تغییرات — {card?.name}
+          </DialogTitle>
+        </DialogHeader>
+        {loading ? (
+          <div className="py-10 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : rows.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">
+            هنوز تغییری ثبت نشده.
+          </p>
+        ) : (
+          <div className="max-h-[60vh] overflow-auto border rounded-md divide-y">
+            {rows.map((r) => {
+              const cur = (r.currency || card?.currency || "IRT") as Currency;
+              const change =
+                r.action === "card_delete"
+                  ? "—"
+                  : r.action === "card_balance"
+                    ? `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`
+                    : `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`;
+              const color =
+                r.action === "delete" || r.action === "card_delete" ? "text-destructive"
+                : r.action === "create" ? "text-emerald-600"
+                : "text-foreground";
+              return (
+                <div key={r.id} className="p-3 text-persian text-sm flex flex-col md:flex-row md:items-center md:justify-between gap-1">
+                  <div className="flex flex-col gap-0.5">
+                    <span className={`font-bold ${color}`}>{ACTION_LABEL[r.action]}</span>
+                    {r.user_label && (
+                      <span className="text-xs text-muted-foreground">{r.user_label}</span>
+                    )}
+                    {r.note && <span className="text-xs text-muted-foreground">{r.note}</span>}
+                  </div>
+                  <div className="flex flex-col md:items-end gap-0.5 tabular-nums">
+                    <span className="font-medium">{change}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {fmtDate(r.created_at)} — {r.admin_username || "—"}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default TSCards;

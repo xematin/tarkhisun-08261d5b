@@ -37,7 +37,7 @@ const HeroSection = () => {
       }, 300);
     }
   }, []);
-  return <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+  return <section id="home" className="relative min-h-screen flex items-center overflow-hidden -mt-[68px] pt-[68px]">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <div id="hero-react-image" style={{ position: 'absolute', inset: 0, opacity: 0 }}>

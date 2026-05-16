@@ -100,7 +100,12 @@ const TSDashboard = () => {
           )}
           {state === "setup" && <SetupForm onDone={refreshAuth} />}
           {state === "login" && <LoginForm onDone={refreshAuth} />}
-          {state === "auth" && <LeadsPanel />}
+          {state === "auth" && (
+            <div className="space-y-6">
+              <LeadsPanel />
+              <CardsEntry />
+            </div>
+          )}
         </main>
       </div>
     </>

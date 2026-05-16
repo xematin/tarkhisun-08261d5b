@@ -1,91 +1,111 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Sparkles } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
+
+const navItems = [
+  { title: "خانه", href: "/" },
+  { title: "خدمات", href: "/#services" },
+  { title: "نرخ ارز", href: "/currencies" },
+  { title: "جستجوی تعرفه", href: "/hscode" },
+  { title: "بلاگ", href: "/blog" },
+  { title: "ترخیصان‌یار", href: "/#ai-assistant" },
+  { title: "تماس", href: "/#contact" },
+];
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navItems = [{
-    title: "خانه",
-    href: "/"
-  }, {
-    title: "خدمات",
-    href: "#services"
-  }, {
-    title: "نرخ ارز",
-    href: "/currencies"
-  }, {
-    title: "جستجوی تعرفه",
-    href: "/hscode"
-  }, {
-    title: "بلاگ",
-    href: "/blog"
-  }, {
-    title: "ترخیصان‌یار",
-    href: "#ai-assistant"
-  }, {
-    title: "تماس",
-    href: "#contact"
-  }];
-  return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4" dir="rtl">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center space-x-3 space-x-reverse">
-            <img 
-              src={tarkhisunLogo} 
-              alt="لوگو ترخیصان" 
-              className="h-10 w-10 object-contain"
-            />
-            <div className="flex flex-col">
-              <div className="text-xl text-primary text-persian font-bold">ترخیصان</div>
-              <span className="text-xs text-muted-foreground">TARKHISUN</span>
-            </div>
-          </div>
+  const { pathname } = useLocation();
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 space-x-reverse">
-            {navItems.map(item => <a key={item.title} href={item.href} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors text-persian">
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (href.startsWith("/#")) return false;
+    return pathname === href || pathname.startsWith(href + "/");
+  };
+
+  return (
+    <header className="sticky top-3 z-50 w-full">
+      <div className="container mx-auto px-3 sm:px-4" dir="rtl">
+        <div className="glass-pill mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 pl-2 pr-3 sm:pl-3 sm:pr-4">
+          {/* Brand */}
+          <a href="/" className="flex items-center gap-2 shrink-0">
+            <img
+              src={tarkhisunLogo}
+              alt="لوگو ترخیصان"
+              className="h-9 w-9 object-contain"
+              width={36}
+              height={36}
+            />
+            <div className="hidden sm:flex flex-col leading-tight text-right">
+              <span className="text-base text-primary text-persian font-bold">ترخیصان</span>
+              <span className="text-[10px] tracking-wider text-muted-foreground">TARKHISUN</span>
+            </div>
+            <span className="icon-badge-gradient w-9 h-9 sm:hidden">
+              <Sparkles className="w-4 h-4" />
+            </span>
+          </a>
+
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+            {navItems.map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                className={`pill-nav-link text-persian ${isActive(item.href) ? "pill-nav-active" : ""}`}
+              >
                 {item.title}
-              </a>)}
+              </a>
+            ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4 space-x-reverse">
-            <Button variant="outline" size="sm" className="text-persian" asChild>
-              <a href="#contact">
-                <Phone className="ml-2 h-4 w-4" />
-                تماس با ما
-              </a>
-            </Button>
-          </div>
+          {/* Desktop CTA */}
+          <a
+            href="/#contact"
+            className="hidden lg:inline-flex items-center gap-2 rounded-full bg-gradient-to-l from-accent to-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-[0_8px_22px_-6px_hsl(var(--accent)/0.55)] hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.6)] transition-shadow text-persian"
+          >
+            <Phone className="w-4 h-4" />
+            تماس با ما
+          </a>
 
-          {/* Mobile Menu Button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="md:hidden" 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          {/* Mobile / tablet menu button */}
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((v) => !v)}
+            className="lg:hidden icon-badge-soft w-10 h-10"
             aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
           >
-            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </Button>
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 border-t border-border/40">
-              {navItems.map(item => <a key={item.title} href={item.href} className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary transition-colors text-persian" onClick={() => setIsMenuOpen(false)}>
-                  {item.title}
-                </a>)}
-              <Button variant="outline" size="sm" className="w-full mt-4 text-persian" asChild>
-                <a href="#contact">
-                  <Phone className="ml-2 h-4 w-4" />
-                  تماس با ما
+        {/* Mobile dropdown */}
+        {isMenuOpen && (
+          <div className="lg:hidden mx-auto max-w-6xl mt-2 glass-card p-3 animate-fade-in">
+            <nav className="flex flex-col gap-1">
+              {navItems.map((item) => (
+                <a
+                  key={item.title}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`pill-row text-persian ${isActive(item.href) ? "!bg-gradient-to-l !from-primary !to-accent !text-primary-foreground !border-transparent" : ""}`}
+                >
+                  <span>{item.title}</span>
                 </a>
-              </Button>
-            </div>
-          </div>}
+              ))}
+              <a
+                href="/#contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-accent to-primary px-4 py-3 text-sm font-semibold text-primary-foreground text-persian"
+              >
+                <Phone className="w-4 h-4" />
+                تماس با ما
+              </a>
+            </nav>
+          </div>
+        )}
       </div>
-    </header>;
+    </header>
+  );
 };
+
 export default Header;

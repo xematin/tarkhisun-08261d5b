@@ -271,9 +271,54 @@
   }
   .footer-bg {
     background:
-      radial-gradient(60% 80% at 15% 0%, hsl(var(--accent-lighter) / 0.55), transparent 60%),
-      radial-gradient(50% 80% at 90% 20%, hsl(var(--primary-lighter) / 0.55), transparent 60%),
-      hsl(var(--background));
+      radial-gradient(60% 80% at 15% 0%, hsl(160 84% 39% / 0.25), transparent 60%),
+      radial-gradient(50% 80% at 90% 20%, hsl(225 89% 45% / 0.35), transparent 60%),
+      #051b5c;
+  }
+  .footer-bg .glass-card {
+    background: hsl(225 89% 12% / 0.55);
+    border-color: hsl(0 0% 100% / 0.12);
+    box-shadow:
+      0 20px 60px -20px hsl(0 0% 0% / 0.45),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.08);
+  }
+  .footer-bg .glass-card strong,
+  .footer-bg .glass-card .text-primary {
+    color: hsl(0 0% 100%) !important;
+  }
+  .footer-bg .glass-card .text-muted-foreground {
+    color: hsl(0 0% 100% / 0.6) !important;
+  }
+  .footer-bg .glass-card [class*="text-foreground/"] {
+    color: hsl(0 0% 100% / 0.8) !important;
+  }
+  .footer-bg .glass-card [class*="border-white/"] {
+    border-color: hsl(0 0% 100% / 0.12) !important;
+  }
+  .footer-bg .pill-row {
+    background: hsl(0 0% 100% / 0.06);
+    border-color: hsl(0 0% 100% / 0.1);
+    color: hsl(0 0% 100% / 0.85);
+  }
+  .footer-bg .pill-row:hover {
+    background: hsl(0 0% 100% / 0.12);
+    color: hsl(0 0% 100%);
+  }
+  .footer-bg .icon-badge-soft {
+    background: hsl(0 0% 100% / 0.1);
+    border-color: hsl(0 0% 100% / 0.15);
+    color: hsl(0 0% 100%);
+  }
+  .footer-bg .icon-badge-soft:hover {
+    color: hsl(var(--accent-light));
+  }
+  .footer-bg .text-accent {
+    color: hsl(var(--accent-light)) !important;
+  }
+  .footer-bg [class*="bg-white/"] {
+    background: hsl(0 0% 100% / 0.08) !important;
+    border-color: hsl(0 0% 100% / 0.12) !important;
+    color: hsl(0 0% 100% / 0.8) !important;
   }
 
   /* Animations */

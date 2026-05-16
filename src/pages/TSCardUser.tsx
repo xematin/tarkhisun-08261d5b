@@ -54,15 +54,15 @@ const TSCardUser = () => {
         <title>پنل کاربر کارت</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="min-h-screen bg-muted/30 panel-fa" dir="rtl">
-        <header className="border-b bg-background">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="panel-glass panel-fa" dir="rtl">
+        <header className="container mx-auto px-4 pt-4">
+          <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
               <CreditCard className="w-5 h-5" /> پنل کارت
             </h1>
             {state === "auth" && me && (
               <div className="flex items-center gap-3 text-sm text-persian">
-                <span className="text-muted-foreground">{me.first_name} {me.last_name}</span>
+                <span className="opacity-80">{me.first_name} {me.last_name}</span>
                 <Button
                   variant="ghost" size="sm"
                   onClick={async () => {

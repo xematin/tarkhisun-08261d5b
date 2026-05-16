@@ -267,6 +267,17 @@
     line-height: 1.8;
   }
 
+  /* Larger Persian font scoped to admin/cards/user panels only */
+  .panel-fa { font-size: 15px; }
+  .panel-fa .text-persian { font-size: 15.5px; line-height: 1.95; }
+  .panel-fa h1 { font-size: 1.3rem; }
+  .panel-fa h2 { font-size: 1.15rem; }
+  .panel-fa table { font-size: 15px; }
+  .panel-fa .text-xs { font-size: 13px; }
+  .panel-fa .text-sm { font-size: 14.5px; }
+  .panel-fa label { font-size: 14.5px; }
+  .panel-fa input, .panel-fa button, .panel-fa select { font-size: 15px; }
+
   /* CSS Containment برای بهبود Performance */
   .contain-layout {
     contain: layout;

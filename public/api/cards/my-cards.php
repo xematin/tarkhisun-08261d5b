@@ -5,7 +5,7 @@ ts_cors_same_origin();
 $u = ts_carduser_require();
 
 $stmt = ts_db()->prepare(
-    "SELECT c.id, c.name, c.balance, c.currency, c.updated_at
+    "SELECT c.id, c.name, a.allocated AS balance, c.currency, c.updated_at
      FROM ts_cards c
      JOIN ts_card_user_access a ON a.card_id = c.id
      WHERE a.card_user_id = ?

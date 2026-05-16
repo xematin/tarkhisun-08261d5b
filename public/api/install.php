@@ -73,6 +73,7 @@ $sql = [
         id INT AUTO_INCREMENT PRIMARY KEY,
         card_id INT NOT NULL,
         card_user_id INT NOT NULL,
+        allocated DECIMAL(18,2) NOT NULL DEFAULT 0,
         UNIQUE KEY uniq_card_user (card_id, card_user_id),
         INDEX idx_user (card_user_id),
         FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE,
@@ -91,6 +92,19 @@ $sql = [
 foreach ($sql as $q) {
     $pdo->exec($q);
     echo "OK: " . substr($q, 0, 60) . "...\n";
+}
+
+// ===== migrations for existing installs =====
+try {
+    $col = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'allocated'")->fetch();
+    if (!$col) {
+        $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN allocated DECIMAL(18,2) NOT NULL DEFAULT 0");
+        echo "OK: added ts_card_user_access.allocated\n";
+    } else {
+        echo "OK: ts_card_user_access.allocated already exists\n";
+    }
+} catch (Throwable $e) {
+    echo "WARN: " . $e->getMessage() . "\n";
 }
 
 echo "\nنصب با موفقیت انجام شد.\n";

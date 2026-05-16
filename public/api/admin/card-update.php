@@ -41,6 +41,39 @@ if ($sum - $balance > 0.0001) {
 }
 
 $pdo = ts_db();
+
+// snapshot before changes (for log)
+$prevCard = $pdo->prepare('SELECT balance, currency, name FROM ts_cards WHERE id=?');
+$prevCard->execute([$id]);
+$prev = $prevCard->fetch();
+$prevBalance  = $prev ? (float)$prev['balance'] : null;
+$prevCurrency = $prev['currency'] ?? $currency;
+
+$prevAllocStmt = $pdo->prepare(
+    'SELECT a.card_user_id, a.allocated, u.first_name, u.last_name, u.username
+     FROM ts_card_user_access a JOIN ts_card_users u ON u.id=a.card_user_id
+     WHERE a.card_id=?'
+);
+$prevAllocStmt->execute([$id]);
+$prevAlloc = [];
+$labels = [];
+foreach ($prevAllocStmt->fetchAll() as $r) {
+    $uid = (int)$r['card_user_id'];
+    $prevAlloc[$uid] = (float)$r['allocated'];
+    $labels[$uid] = trim($r['first_name'] . ' ' . $r['last_name']) . ' (@' . $r['username'] . ')';
+}
+
+// load labels for newly added users not present before
+$newOnly = array_diff(array_keys($users), array_keys($prevAlloc));
+if ($newOnly) {
+    $place = implode(',', array_fill(0, count($newOnly), '?'));
+    $q = $pdo->prepare("SELECT id, first_name, last_name, username FROM ts_card_users WHERE id IN ($place)");
+    $q->execute(array_values($newOnly));
+    foreach ($q->fetchAll() as $u) {
+        $labels[(int)$u['id']] = trim($u['first_name'] . ' ' . $u['last_name']) . ' (@' . $u['username'] . ')';
+    }
+}
+
 $pdo->beginTransaction();
 try {
     $stmt = $pdo->prepare('UPDATE ts_cards SET name=?, balance=?, currency=?, updated_at=? WHERE id=?');
@@ -54,6 +87,24 @@ try {
         }
     }
     $pdo->commit();
+
+    // logs after commit
+    if ($prevBalance !== null && abs($prevBalance - $balance) > 0.0001) {
+        ts_card_alloc_log($id, null, 'card_balance', $prevBalance, $balance, $currency, null, null);
+    }
+    $allUids = array_unique(array_merge(array_keys($prevAlloc), array_keys($users)));
+    foreach ($allUids as $uid) {
+        $before = $prevAlloc[$uid] ?? null;
+        $after  = $users[$uid] ?? null;
+        if ($before === null && $after !== null) {
+            ts_card_alloc_log($id, (int)$uid, 'create', 0.0, (float)$after, $currency, $labels[$uid] ?? null, null);
+        } elseif ($before !== null && $after === null) {
+            ts_card_alloc_log($id, (int)$uid, 'delete', (float)$before, 0.0, $currency, $labels[$uid] ?? null, null);
+        } elseif ($before !== null && $after !== null && abs($before - $after) > 0.0001) {
+            ts_card_alloc_log($id, (int)$uid, 'update', (float)$before, (float)$after, $currency, $labels[$uid] ?? null, null);
+        }
+    }
+
     ts_json(200, ['ok' => true]);
 } catch (Throwable $e) {
     $pdo->rollBack();

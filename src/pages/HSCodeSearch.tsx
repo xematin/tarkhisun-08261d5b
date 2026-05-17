@@ -64,7 +64,10 @@ const HSCodeSearch = () => {
       toast({ title: "حداقل ۲ کاراکتر وارد کنید", variant: "destructive" });
       return;
     }
-    if (!currentPhone) {
+    // Count past searches; require phone only from the 2nd search onward
+    let count = 0;
+    try { count = parseInt(localStorage.getItem("ts_hs_search_count") || "0", 10) || 0; } catch { /* ignore */ }
+    if (count >= 1 && !currentPhone) {
       setPendingPhrase(phrase);
       setGateOpen(true);
       return;
@@ -76,7 +79,8 @@ const HSCodeSearch = () => {
       .then((res) => {
         setItems(res.items);
         setTotal(res.total);
-        void submitLead(currentPhone, phrase);
+        try { localStorage.setItem("ts_hs_search_count", String(count + 1)); } catch { /* ignore */ }
+        if (currentPhone) void submitLead(currentPhone, phrase);
       })
       .catch((e) => {
         console.error(e);

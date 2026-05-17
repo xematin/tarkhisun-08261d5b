@@ -119,6 +119,33 @@ $sql = [
         INDEX idx_card (card_id),
         INDEX idx_created (created_at)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    // ===== Kotaj (customs declaration) =====
+    "CREATE TABLE IF NOT EXISTS ts_kotaj (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_user_id INT NOT NULL,
+        card_id INT NOT NULL,
+        entry_id INT NOT NULL,
+        kotaj_number VARCHAR(50) NOT NULL,
+        kotaj_date_jalali VARCHAR(10) NOT NULL,
+        total_value_usd DECIMAL(18,2) NOT NULL DEFAULT 0,
+        created_at DATETIME NOT NULL,
+        INDEX idx_card (card_id),
+        INDEX idx_user (card_user_id),
+        INDEX idx_entry (entry_id),
+        FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE,
+        FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_kotaj_items (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        kotaj_id INT NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        value_usd DECIMAL(18,2) NOT NULL DEFAULT 0,
+        unit_price_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+        INDEX idx_kotaj (kotaj_id),
+        FOREIGN KEY (kotaj_id) REFERENCES ts_kotaj(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
 
 foreach ($sql as $q) {
@@ -163,6 +190,12 @@ try {
                 echo "WARN: could not drop $key: " . $e->getMessage() . "\n";
             }
         }
+    }
+    // custom unit price per (card_user, entry)
+    $col3 = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'custom_unit_price_irt'")->fetch();
+    if (!$col3) {
+        $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN custom_unit_price_irt DECIMAL(18,2) NULL");
+        echo "OK: added ts_card_user_access.custom_unit_price_irt\n";
     }
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";

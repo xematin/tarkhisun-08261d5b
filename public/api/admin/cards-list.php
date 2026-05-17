@@ -42,7 +42,7 @@ if ($rows) {
 
     // user access (per entry)
     $aStmt = $pdo->prepare(
-        "SELECT a.card_id, a.entry_id, a.card_user_id, a.allocated,
+        "SELECT a.id AS access_id, a.card_id, a.entry_id, a.card_user_id, a.allocated, a.custom_unit_price_irt,
                 u.first_name, u.last_name, u.username
          FROM ts_card_user_access a
          JOIN ts_card_users u ON u.id = a.card_user_id
@@ -54,11 +54,13 @@ if ($rows) {
         $cid = (int)$a['card_id'];
         $eid = $a['entry_id'] !== null ? (int)$a['entry_id'] : null;
         $payload = [
+            'access_id' => (int)$a['access_id'],
             'id' => (int)$a['card_user_id'],
             'first_name' => $a['first_name'],
             'last_name'  => $a['last_name'],
             'username'   => $a['username'],
             'allocated'  => (float)$a['allocated'],
+            'custom_unit_price_irt' => $a['custom_unit_price_irt'] !== null ? (float)$a['custom_unit_price_irt'] : null,
         ];
         if ($eid !== null && isset($entryMap[$eid])) {
             $loc = $entryMap[$eid];

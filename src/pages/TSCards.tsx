@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,10 +30,12 @@ interface CardUser {
 }
 interface EntryUser {
   id: number;
+  access_id?: number;
   first_name: string;
   last_name: string;
   username: string;
   allocated: number;
+  custom_unit_price_irt?: number | null;
 }
 interface CardEntry {
   id: number;
@@ -177,6 +179,8 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CardRow | null>(null);
   const [logsFor, setLogsFor] = useState<CardRow | null>(null);
+  const [pricesFor, setPricesFor] = useState<CardRow | null>(null);
+  const [reportFor, setReportFor] = useState<CardRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -287,6 +291,12 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                     </TableCell>
                     <TableCell className="align-top">
                       <div className="flex gap-1 flex-wrap justify-end">
+                        <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها">
+                          <FileText className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setPricesFor(r)} title="قیمت دلار کاربران">
+                          <DollarSign className="w-4 h-4" />
+                        </Button>
                         <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
                           <History className="w-4 h-4" />
                         </Button>
@@ -316,6 +326,19 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         <LogsDialog
           card={logsFor}
           onClose={() => setLogsFor(null)}
+          toast={toast}
+        />
+
+        <UserPricesDialog
+          card={pricesFor}
+          onClose={() => setPricesFor(null)}
+          onSaved={() => void load()}
+          toast={toast}
+        />
+
+        <KotajReportDialog
+          card={reportFor}
+          onClose={() => setReportFor(null)}
           toast={toast}
         />
       </CardContent>
@@ -858,6 +881,215 @@ const LogsDialog = ({
                 </div>
               );
             })}
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const UserPricesDialog = ({
+  card, onClose, onSaved, toast,
+}: {
+  card: CardRow | null;
+  onClose: () => void;
+  onSaved: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [drafts, setDrafts] = useState<Record<number, string>>({});
+  const [busy, setBusy] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!card) return;
+    const d: Record<number, string> = {};
+    (card.entries || []).forEach(e => {
+      e.users.forEach(u => {
+        if (u.access_id !== undefined) {
+          d[u.access_id] = u.custom_unit_price_irt != null ? String(u.custom_unit_price_irt) : "";
+        }
+      });
+    });
+    setDrafts(d);
+  }, [card]);
+
+  if (!card) return null;
+
+  const save = async (accessId: number) => {
+    setBusy(accessId);
+    try {
+      const v = normDigits(drafts[accessId] ?? "");
+      await api("/api/admin/card-user-price-update.php", {
+        method: "POST",
+        body: JSON.stringify({ access_id: accessId, custom_unit_price_irt: v === "" ? null : Number(v) }),
+      });
+      toast({ title: "ذخیره شد" });
+      onSaved();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusy(null); }
+  };
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right">قیمت دلار سفارشی کاربران — {card.name}</DialogTitle>
+        </DialogHeader>
+        <p className="text-xs text-muted-foreground text-persian">
+          قیمتی که در اینجا برای هر کاربر ثبت می‌کنید، فقط برای همان کاربر نمایش داده می‌شود. خالی بگذارید تا قیمت پیش‌فرض سکشن استفاده شود.
+        </p>
+        <div className="space-y-3">
+          {(card.entries || []).filter(e => e.users.length > 0 && e.currency !== "IRT").map(e => (
+            <div key={e.id} className="border rounded-md p-3 bg-muted/30">
+              <div className="text-persian font-bold mb-2">
+                {e.title} <span className="text-xs text-muted-foreground font-normal">(پیش‌فرض: {e.unit_price_irt.toLocaleString("fa-IR")} ت/{CURRENCY_LABEL[e.currency]})</span>
+              </div>
+              <ul className="divide-y">
+                {e.users.map(u => (
+                  <li key={u.access_id} className="flex items-center gap-3 py-2 flex-wrap">
+                    <div className="flex-1 text-persian text-sm min-w-[160px]">
+                      {u.first_name} {u.last_name}
+                      <span className="text-muted-foreground text-xs mr-2">({u.allocated.toLocaleString("fa-IR")} {CURRENCY_LABEL[e.currency]})</span>
+                    </div>
+                    <Input
+                      value={u.access_id !== undefined ? (drafts[u.access_id] ?? "") : ""}
+                      onChange={(ev) => u.access_id !== undefined && setDrafts(prev => ({ ...prev, [u.access_id!]: normDigits(ev.target.value) }))}
+                      placeholder={`قیمت هر ${CURRENCY_LABEL[e.currency]}`}
+                      className="w-40 h-9" dir="ltr" inputMode="decimal"
+                    />
+                    <Button
+                      size="sm"
+                      disabled={busy === u.access_id}
+                      onClick={() => u.access_id !== undefined && save(u.access_id)}
+                      className="text-persian"
+                    >
+                      {busy === u.access_id ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {(card.entries || []).every(e => e.users.length === 0 || e.currency === "IRT") && (
+            <p className="text-center text-muted-foreground text-persian text-sm py-6">
+              هیچ کاربری به سکشن‌های ارزی این کارت تخصیص داده نشده.
+            </p>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+interface ReportKotaj {
+  id: number;
+  entry_id: number;
+  entry_title: string | null;
+  kotaj_number: string;
+  kotaj_date_jalali: string;
+  total_value_usd: number;
+  created_at: string;
+  items: { name: string; value_usd: number; unit_price_irt: number; }[];
+}
+interface ReportUser {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  total_usd: number;
+  kotajs: ReportKotaj[];
+}
+
+const KotajReportDialog = ({
+  card, onClose, toast,
+}: {
+  card: CardRow | null;
+  onClose: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [users, setUsers] = useState<ReportUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [openId, setOpenId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!card) return;
+    setLoading(true);
+    api<{ users: ReportUser[] }>(`/api/admin/card-kotaj-report.php?card_id=${card.id}`)
+      .then(r => setUsers(r.users || []))
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [card, toast]);
+
+  if (!card) return null;
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right">گزارش کوتاژها — {card.name}</DialogTitle>
+        </DialogHeader>
+        {loading ? (
+          <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : users.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">هنوز کوتاژی برای این کارت ثبت نشده.</p>
+        ) : (
+          <div className="space-y-4">
+            {users.map(u => (
+              <div key={u.id} className="border rounded-md p-3">
+                <div className="flex justify-between items-center mb-2 flex-wrap gap-2">
+                  <div className="text-persian font-bold">
+                    {u.first_name} {u.last_name}
+                    <span className="text-xs text-muted-foreground font-normal mr-2">@{u.username}</span>
+                  </div>
+                  <div className="text-persian text-sm">
+                    جمع کل: <span className="font-bold tabular-nums text-primary">{u.total_usd.toLocaleString("fa-IR")} دلار</span>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  {u.kotajs.map(k => (
+                    <div key={k.id} className="border rounded-md">
+                      <button
+                        className="w-full p-2.5 flex items-center justify-between text-right hover:bg-muted/30 gap-2"
+                        onClick={() => setOpenId(openId === k.id ? null : k.id)}
+                      >
+                        <div className="flex-1 text-persian text-sm">
+                          <span className="font-bold">#{k.kotaj_number}</span>
+                          <span className="text-xs text-muted-foreground mr-2">
+                            {k.kotaj_date_jalali} — {k.entry_title || "—"}
+                          </span>
+                        </div>
+                        <div className="text-persian font-bold tabular-nums">
+                          {k.total_value_usd.toLocaleString("fa-IR")} دلار
+                        </div>
+                        {openId === k.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      </button>
+                      {openId === k.id && (
+                        <div className="border-t p-2 space-y-1 bg-muted/20">
+                          {k.items.map((it, i) => (
+                            <div key={i} className="flex justify-between text-persian text-sm">
+                              <span>{it.name}</span>
+                              <span className="tabular-nums">
+                                {it.value_usd.toLocaleString("fa-IR")} دلار
+                                {it.unit_price_irt > 0 && (
+                                  <span className="text-xs text-muted-foreground mr-2">
+                                    ({it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار)
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
         <DialogFooter>

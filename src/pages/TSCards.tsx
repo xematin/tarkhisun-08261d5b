@@ -328,6 +328,19 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
           onClose={() => setLogsFor(null)}
           toast={toast}
         />
+
+        <UserPricesDialog
+          card={pricesFor}
+          onClose={() => setPricesFor(null)}
+          onSaved={() => void load()}
+          toast={toast}
+        />
+
+        <KotajReportDialog
+          card={reportFor}
+          onClose={() => setReportFor(null)}
+          toast={toast}
+        />
       </CardContent>
     </Card>
   );

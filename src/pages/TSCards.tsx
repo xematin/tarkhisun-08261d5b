@@ -291,6 +291,12 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                     </TableCell>
                     <TableCell className="align-top">
                       <div className="flex gap-1 flex-wrap justify-end">
+                        <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها">
+                          <FileText className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setPricesFor(r)} title="قیمت دلار کاربران">
+                          <DollarSign className="w-4 h-4" />
+                        </Button>
                         <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
                           <History className="w-4 h-4" />
                         </Button>

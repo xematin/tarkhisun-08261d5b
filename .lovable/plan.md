@@ -1,44 +1,96 @@
-## هدف
-بازگشت پس‌زمینه‌ی پنل‌ها به سفید/روشن، اعمال تم آبی فقط روی کارت‌ها، رفع تداخل رنگ متن/دکمه در دیالوگ‌ها (ادیت، تاریخچه لاگ و …) و افزودن یک سکشن مجزا در `/TSDashboard` برای ورود به `/TSCards`.
+# برنامه افزودن «سکشن‌های مبلغ» به کارت‌ها
 
-## تغییرات
+## مفهوم
 
-### 1) `src/index.css` — بازطراحی اسکوپ `.panel-glass`
-- پس‌زمینه‌ی `.panel-glass` از گرادیان تیره `#051b5c` به پس‌زمینه‌ی روشن تغییر کند:
-  - یک گرادیان نرم سفید/خاکستری روشن با هاله‌ی ملایم آبی/سبز در گوشه‌ها (مثل `--gradient-subtle` + شعاع‌های کم‌شفافیت primary/accent).
-  - رنگ متن پیش‌فرض پنل: `hsl(var(--foreground))` (نَوی تیره) به‌جای سفید.
-- `.panel-glass .panel-topbar`: شیشه‌ی سفید (`bg-white/70`)، بوردر `white/60`، متن تیره — مشابه هدر اصلی سایت.
-- **کارت‌ها همچنان آبی شیشه‌ای**:
-  - `.panel-glass .glass-card` و `.panel-glass [bg-card]` با پس‌زمینه‌ی گرادیان آبی (نَوی `#051b5c` با لایه‌های accent/primary) و متن سفید نگه داشته می‌شود.
-  - تیترها، آیکن‌ها و متن داخل کارت‌ها سفید/روشن.
-- ورودی‌ها/سلکت‌ها/جداول داخل کارت‌های آبی: همان استایل روشن روی پس‌زمینه‌ی آبی (متن سفید، بوردر `white/20`).
-- خارج از کارت‌ها (مثل تاپ‌بار و فاصله‌ها): متن تیره روی سفید.
+هر کارت می‌تواند چندین «سکشن مبلغ» داشته باشد. هر سکشن:
 
-### 2) رفع تداخل رنگ دکمه‌ها و دیالوگ‌ها
-- `DialogContent` با کلاس `panel-glass`: به‌جای پس‌زمینه‌ی تیره، از کارت آبی استفاده کند (همان استایل `.glass-card` آبی) تا متن سفید روی آبی واضح باشد.  
-  یا گزینه‌ی ساده‌تر: دیالوگ سفید با متن تیره + دکمه‌های پیش‌فرض shadcn (بدون اوررایدِ panel-glass داخل دیالوگ).  
-  **انتخاب پیشنهادی**: دیالوگ‌ها سفید با متن تیره (حذف کلاس `panel-glass` از DialogContent در `TSCards.tsx` و `TSCardUser.tsx`) تا فرم‌های ادیت/افزودن/تاریخچه کاملاً خوانا باشد.
-- دکمه‌های `variant="outline"` و `ghost` (ادیت، حذف، تاریخچه، خروج) داخل کارت‌های آبی:
-  - افزودن قانون CSS مخصوص: `border-white/40`, `bg-white/10`, `text-white`, hover روشن‌تر.
-- دکمه‌های `outline`/`ghost` در ناحیه‌های سفید (بیرون کارت): استایل پیش‌فرض shadcn (متن تیره).
-- دکمه‌های آیکنی (Trash، Edit، History): رنگ آیکن متناسب با پس‌زمینه‌ (سفید داخل کارت آبی، تیره داخل دیالوگ سفید).
-- بَج‌ها (`Badge variant=secondary` و …): کنتراست مناسب با پس‌زمینه (سفید/شفاف روی آبی، خاکستری روشن روی سفید).
+- `title` — عنوان (مثلاً «تره بار»)
+- `amount` — مبلغ موجودی
+- `currency` — `USD` / `EUR` / `IRT`
+- `unit_price_irt` — قیمت هر واحد ارز به تومان (برای IRT فعال نیست؛ خودکار = ۱)
+  - placeholder بسته به انتخاب کاربر: «به ازای هر دلار / یورو / تومان»
+- `total_irt` (محاسباتی) = `amount * unit_price_irt`
 
-### 3) `src/pages/TSDashboard.tsx` — افزودن سکشن ورود به `/TSCards`
-- زیر کارت «لیست لیدها»، یک `Card` جدید با عنوان «مدیریت کارت‌های بازرگانی» اضافه شود شامل:
-  - توضیح کوتاه دو خطی.
-  - دکمه‌ی CTA «ورود به پنل کارت‌ها» با `Link to="/TSCards"`.
-  - آیکن مرتبط (مثلاً `CreditCard` از lucide-react).
-- استایل کارت همان `glass-card` آبی پنل.
+موجودی کل کارت = جمع `total_irt` همه سکشن‌ها.
+
+تخصیص به کاربران **به‌ازای هر سکشن جداگانه** انجام می‌شود (در مرحله ۲).
+
+---
+
+## مرحله ۱ — تغییرات دیتابیس
+
+به `public/api/install.php` دو جدول جدید اضافه می‌شود + بلوک migration برای نصب‌های موجود:
+
+```sql
+CREATE TABLE ts_card_entries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  card_id INT NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  amount DECIMAL(18,2) NOT NULL DEFAULT 0,
+  currency ENUM('USD','EUR','IRT') NOT NULL DEFAULT 'IRT',
+  unit_price_irt DECIMAL(18,2) NOT NULL DEFAULT 1,
+  total_irt DECIMAL(20,2) NOT NULL DEFAULT 0,
+  sort_order INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE
+);
+
+ALTER TABLE ts_card_user_access ADD COLUMN entry_id INT NULL AFTER card_id;
+ALTER TABLE ts_card_user_access ADD INDEX idx_entry (entry_id);
+```
+
+(جدول قبلی `ts_cards.balance` و `ts_cards.currency` نگه داشته می‌شود اما برای کارت‌های جدید فقط متادیتا است؛ موجودی واقعی از مجموع سکشن‌ها می‌آید.)
+
+---
+
+## مرحله ۲ — APIهای پشت
+
+- `card-create.php` و `card-update.php`: ورودی جدید `entries: [{title, amount, currency, unit_price_irt}]` و `users: [{id, entry_id, allocated}]`. سرور `total_irt` را محاسبه می‌کند، `ts_cards.balance` را روی مجموع `total_irt` می‌گذارد (currency = IRT). تخصیص‌ها در `ts_card_user_access` با `entry_id` ثبت می‌شوند. اعتبارسنجی: مجموع تخصیص هر سکشن ≤ مقدار آن سکشن.
+- `cards-list.php`: همراه هر کارت لیست `entries` و در دل هر entry لیست `users` (با allocated) برمی‌گردد.
+- `card-logs.php`: بدون تغییر ساختاری (لاگ‌ها همان `ts_card_alloc_logs` با `note` توصیفی برای ساخت/حذف سکشن).
+- `cards/my-cards.php`: نمایش به کاربر نهایی بر اساس entryهایی که در آن سهم دارد.
+
+---
+
+## مرحله ۳ — UI در `src/pages/TSCards.tsx`
+
+**Dialog مرحله ۱**:
+
+- فیلد «نام کارت» (بدون تغییر).
+- لیست داینامیک سکشن‌ها — هر ردیف:
+  - عنوان | مبلغ موجودی | دراپ‌داون ارز | فیلد «قیمت هر [ارز] به تومان» (placeholder پویا؛ برای IRT فقط‌خواندنی = ۱) | نمایش «مبلغ کل تومانی» محاسبه‌شده.
+  - دکمه حذف ردیف.
+- دکمه «+ افزودن سکشن جدید».
+- باکس خلاصه پایین: «موجودی کل کارت = جمع همه سکشن‌ها (تومان)».
+
+**Dialog مرحله ۲**:
+
+- برای هر سکشن یک پنل جدا با عنوان سکشن، مبلغ سکشن، و لیست کاربران با چک‌باکس + ورودی تخصیص (مثل الان اما scoped به همان سکشن).
+- اعتبارسنجی مجموع تخصیص هر سکشن.
+
+**جدول لیست کارت‌ها**:
+
+- ستون «موجودی کل» = جمع `total_irt` به تومان.
+- نمایش تعداد سکشن‌ها و قابلیت expand برای دیدن جزییات.
+
+---
+
+## مرحله ۴ — UI در `src/pages/TSCardUser.tsx`
+
+کاربر نهایی به جای موجودی کلی، لیست سکشن‌هایی که در آن سهم دارد را می‌بیند (عنوان، ارز، سهم خود به ارز، معادل تومان).
+
+---
 
 ## فایل‌های تغییرکننده
-- `src/index.css` — بازنویسی اسکوپ `.panel-glass` (پس‌زمینه روشن + کارت آبی + اوررایدهای دکمه/دیالوگ).
-- `src/pages/TSDashboard.tsx` — افزودن سکشن CTA به `/TSCards`.
-- `src/pages/TSCards.tsx` — حذف `panel-glass` از `DialogContent`ها.
-- `src/pages/TSCardUser.tsx` — حذف `panel-glass` از `DialogContent`.
 
-## یادداشت فنی
-- منطق business / API دست‌نخورده می‌ماند؛ فقط CSS و markup ارائه‌ای.
-- توکن‌های HSL در `index.css` رعایت می‌شود؛ بدون رنگ خام در کامپوننت‌ها.
+- `public/api/install.php` (schema + migration)
+- `public/api/admin/card-create.php`
+- `public/api/admin/card-update.php`
+- `public/api/admin/cards-list.php`
+- `public/api/cards/my-cards.php`
+- `src/pages/TSCards.tsx`
+- `src/pages/TSCardUser.tsx`
 
-تأیید می‌کنی پیش برم؟
+## نکات
+
+- پس از deploy، یک‌بار `install.php` باید اجرا شود تا migration بخورد.
+- داده‌های موجود (کارت‌های قدیمی بدون سکشن) همچنان کار می‌کنند؛ در UI به صورت یک سکشن پیش‌فرض با مقدار موجودی فعلی نمایش داده می‌شوند تا ادمین در ویرایش بعدی به سکشن‌های واقعی تبدیل کند.

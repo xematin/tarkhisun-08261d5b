@@ -10,7 +10,21 @@ import { useToast } from "@/hooks/use-toast";
 type Currency = "USD" | "EUR" | "IRT";
 const CURRENCY_LABEL: Record<Currency, string> = { USD: "دلار", EUR: "یورو", IRT: "تومان" };
 
-interface MyCard { id: number; name: string; balance: string | number; currency: Currency; updated_at?: string; }
+interface MyEntry {
+  entry_id: number | null;
+  title: string;
+  currency: Currency;
+  unit_price_irt: number;
+  allocated: number;
+  total_irt: number;
+}
+interface MyCard {
+  id: number;
+  name: string;
+  updated_at?: string;
+  entries: MyEntry[];
+  total_irt: number;
+}
 interface MeUser { id: number; first_name: string; last_name: string; username: string; }
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
@@ -24,11 +38,11 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   return data as T;
 }
 
-const fmtMoney = (v: string | number, c: Currency) => {
-  const n = typeof v === "string" ? parseFloat(v) : v;
-  if (!isFinite(n)) return "—";
-  return `${n.toLocaleString("fa-IR")} ${CURRENCY_LABEL[c]}`;
+const fmtMoney = (v: number, c: Currency) => {
+  if (!isFinite(v)) return "—";
+  return `${v.toLocaleString("fa-IR")} ${CURRENCY_LABEL[c]}`;
 };
+const fmtToman = (v: number) => `${(isFinite(v) ? v : 0).toLocaleString("fa-IR")} تومان`;
 
 type State = "loading" | "login" | "auth";
 
@@ -159,9 +173,27 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
               <CreditCard className="w-4 h-4" /> {c.name}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-persian text-sm text-muted-foreground">موجودی</div>
-            <div className="text-persian text-2xl font-bold mt-1">{fmtMoney(c.balance, c.currency)}</div>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between text-persian">
+              <span className="text-sm text-muted-foreground">سهم کل (تومان)</span>
+              <span className="text-xl font-bold tabular-nums">{fmtToman(c.total_irt)}</span>
+            </div>
+            <div className="border-t pt-3 space-y-2">
+              {c.entries.map((e, idx) => (
+                <div key={e.entry_id ?? idx} className="text-persian text-sm">
+                  <div className="flex justify-between font-medium">
+                    <span>{e.title}</span>
+                    <span className="tabular-nums">{fmtMoney(e.allocated, e.currency)}</span>
+                  </div>
+                  {e.currency !== "IRT" && (
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>قیمت هر {CURRENCY_LABEL[e.currency]}: {e.unit_price_irt.toLocaleString("fa-IR")} تومان</span>
+                      <span className="tabular-nums">{fmtToman(e.total_irt)}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       ))}

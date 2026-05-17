@@ -69,13 +69,28 @@ $sql = [
         created_at DATETIME NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 
+    "CREATE TABLE IF NOT EXISTS ts_card_entries (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_id INT NOT NULL,
+        title VARCHAR(150) NOT NULL,
+        amount DECIMAL(18,2) NOT NULL DEFAULT 0,
+        currency ENUM('USD','EUR','IRT') NOT NULL DEFAULT 'IRT',
+        unit_price_irt DECIMAL(18,2) NOT NULL DEFAULT 1,
+        total_irt DECIMAL(20,2) NOT NULL DEFAULT 0,
+        sort_order INT NOT NULL DEFAULT 0,
+        INDEX idx_card (card_id),
+        FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
     "CREATE TABLE IF NOT EXISTS ts_card_user_access (
         id INT AUTO_INCREMENT PRIMARY KEY,
         card_id INT NOT NULL,
+        entry_id INT NULL,
         card_user_id INT NOT NULL,
         allocated DECIMAL(18,2) NOT NULL DEFAULT 0,
-        UNIQUE KEY uniq_card_user (card_id, card_user_id),
+        INDEX idx_card_user (card_id, card_user_id),
         INDEX idx_user (card_user_id),
+        INDEX idx_entry (entry_id),
         FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE,
         FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
@@ -117,8 +132,14 @@ try {
     if (!$col) {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN allocated DECIMAL(18,2) NOT NULL DEFAULT 0");
         echo "OK: added ts_card_user_access.allocated\n";
-    } else {
-        echo "OK: ts_card_user_access.allocated already exists\n";
+    }
+    $col2 = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'entry_id'")->fetch();
+    if (!$col2) {
+        $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN entry_id INT NULL AFTER card_id");
+        $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_entry (entry_id)");
+        // drop old uniqueness that prevents multi-entry allocations to same user
+        try { $pdo->exec("ALTER TABLE ts_card_user_access DROP INDEX uniq_card_user"); } catch (Throwable $e) {}
+        echo "OK: added ts_card_user_access.entry_id\n";
     }
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";

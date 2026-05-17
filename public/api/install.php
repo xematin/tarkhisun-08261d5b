@@ -139,6 +139,9 @@ try {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_entry (entry_id)");
         echo "OK: added ts_card_user_access.entry_id\n";
     }
+    // Ensure non-unique replacement indexes exist so FKs can switch off uniq_card_user
+    try { $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_cua_card (card_id)"); } catch (Throwable $e) {}
+    try { $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_cua_user (card_user_id)"); } catch (Throwable $e) {}
     // Drop the well-known legacy unique index by name (multi-entry allocations fix)
     try {
         $pdo->exec("ALTER TABLE ts_card_user_access DROP INDEX uniq_card_user");

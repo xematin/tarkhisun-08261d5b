@@ -30,10 +30,12 @@ interface CardUser {
 }
 interface EntryUser {
   id: number;
+  access_id?: number;
   first_name: string;
   last_name: string;
   username: string;
   allocated: number;
+  custom_unit_price_irt?: number | null;
 }
 interface CardEntry {
   id: number;

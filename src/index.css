@@ -582,4 +582,23 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Readability safeguard: any primary/accent/destructive button keeps white text */
+  button.bg-primary,
+  button.bg-accent,
+  button.bg-destructive,
+  a.bg-primary,
+  a.bg-accent,
+  a.bg-destructive,
+  .btn-hero,
+  .btn-ai {
+    color: hsl(0 0% 100%) !important;
+  }
+  button.bg-primary *,
+  button.bg-accent *,
+  button.bg-destructive *,
+  .btn-hero *,
+  .btn-ai * {
+    color: inherit;
+  }
 }

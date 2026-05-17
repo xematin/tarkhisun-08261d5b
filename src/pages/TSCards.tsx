@@ -228,6 +228,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             <TableHeader>
               <TableRow>
                 <TableHead className="text-right text-persian">نام کارت</TableHead>
+                <TableHead className="text-right text-persian">موجودی کل (دلار)</TableHead>
                 <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
                 <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
                 <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
@@ -237,18 +238,24 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             <TableBody>
               {items.map((r) => {
                 const bal = typeof r.balance === "string" ? parseFloat(r.balance) : (r.balance as number);
+                const usdTotal = (r.entries || [])
+                  .filter(e => e.currency === "USD")
+                  .reduce((s, e) => s + (Number(e.amount) || 0), 0);
                 return (
                   <TableRow key={r.id}>
                     <TableCell className="text-persian font-medium align-top">{r.name}</TableCell>
                     <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
+                      {usdTotal > 0 ? `${usdTotal.toLocaleString("fa-IR")} دلار` : "—"}
+                    </TableCell>
+                    <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                       {fmtToman(bal || 0)}
                     </TableCell>
-                    <TableCell className="text-persian align-top min-w-[220px]">
+                    <TableCell className="text-persian align-top min-w-[240px]">
                       {r.entries && r.entries.length > 0 ? (
-                        <div className="flex flex-col gap-1 text-xs">
+                        <div className="flex flex-col gap-1.5 text-sm">
                           {r.entries.map((e) => (
-                            <div key={e.id} className="flex justify-between gap-2">
-                              <span>{e.title}</span>
+                            <div key={e.id} className="flex justify-between gap-3">
+                              <span className="font-medium">{e.title}</span>
                               <span className="tabular-nums text-muted-foreground">
                                 {fmtMoney(e.amount, e.currency)}
                                 {e.currency !== "IRT" && (
@@ -258,17 +265,21 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                           ))}
                         </div>
-                      ) : <span className="text-muted-foreground text-xs">—</span>}
+                      ) : <span className="text-muted-foreground text-sm">—</span>}
                     </TableCell>
-                    <TableCell className="text-persian text-xs max-w-xs align-top hidden md:table-cell">
+                    <TableCell className="text-persian text-sm max-w-sm align-top hidden md:table-cell">
                       {r.entries && r.entries.length > 0 && r.entries.some(e => e.users.length > 0) ? (
-                        <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col gap-2">
                           {r.entries.filter(e => e.users.length > 0).map(e => (
                             <div key={e.id}>
                               <div className="font-bold">{e.title}:</div>
-                              <div className="text-muted-foreground">
-                                {e.users.map(u => `${u.first_name} ${u.last_name} (${u.allocated.toLocaleString("fa-IR")})`).join("، ")}
-                              </div>
+                              <ul className="text-muted-foreground space-y-0.5 mt-0.5">
+                                {e.users.map(u => (
+                                  <li key={u.id} className="tabular-nums">
+                                    {u.first_name} {u.last_name} ({u.allocated.toLocaleString("fa-IR")} {CURRENCY_LABEL[e.currency]})
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
                           ))}
                         </div>

@@ -603,7 +603,10 @@ const HSCodeSearch = () => {
       <PhoneGateDialog
         open={gateOpen}
         onSubmit={handlePhoneSubmit}
-        onOpenChange={setGateOpen}
+        onOpenChange={(o) => {
+          setGateOpen(o);
+          if (!o) setPendingPhrase(null);
+        }}
       />
     </>
 

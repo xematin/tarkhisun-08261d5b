@@ -191,6 +191,12 @@ try {
             }
         }
     }
+    // custom unit price per (card_user, entry)
+    $col3 = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'custom_unit_price_irt'")->fetch();
+    if (!$col3) {
+        $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN custom_unit_price_irt DECIMAL(18,2) NULL");
+        echo "OK: added ts_card_user_access.custom_unit_price_irt\n";
+    }
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";
 }

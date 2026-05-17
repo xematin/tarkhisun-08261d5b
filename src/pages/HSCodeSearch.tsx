@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Search, Copy, Loader2, FileSearch, Phone, BookOpen, CheckCircle2, Zap, Database, Target, Clock, Layers, Headphones, ShieldCheck, TrendingUp, Globe, Calculator } from "lucide-react";
 import hscodeHero from "@/assets/hscode-search-hero.jpg";
@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageBreadcrumb from "@/components/PageBreadcrumb";
-import { useDebounce } from "@/hooks/useDebounce";
+
 import {
   searchHSCodes,
   getHSCode,

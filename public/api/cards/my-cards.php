@@ -8,7 +8,7 @@ $pdo = ts_db();
 $stmt = $pdo->prepare(
     "SELECT c.id AS card_id, c.name AS card_name, c.updated_at,
             a.id AS access_id, a.entry_id, a.allocated,
-            COALESCE(a.custom_unit_price_irt, e.unit_price_irt) AS unit_price_irt,
+            a.custom_unit_price_irt AS unit_price_irt,
             e.title AS entry_title, e.currency AS entry_currency
      FROM ts_card_user_access a
      JOIN ts_cards c ON c.id = a.card_id
@@ -42,17 +42,19 @@ foreach ($accessRows as $r) {
         ];
     }
     $alloc = (float)$r['allocated'];
-    $unit  = $r['unit_price_irt'] !== null ? (float)$r['unit_price_irt'] : 1.0;
+    $hasCustom = $r['unit_price_irt'] !== null;
+    $unit  = $hasCustom ? (float)$r['unit_price_irt'] : 0.0;
     $cur   = $r['entry_currency'] ?? 'IRT';
     $eid   = $r['entry_id'] !== null ? (int)$r['entry_id'] : null;
     $used  = $eid !== null ? ($usedByEntry[$eid] ?? 0.0) : 0.0;
     $remain = max(0, $alloc - $used);
-    $totalIrt = round($alloc * $unit, 2);
+    $totalIrt = $hasCustom ? round($alloc * $unit, 2) : 0.0;
     $cards[$cid]['entries'][] = [
         'entry_id' => $eid,
         'title' => $r['entry_title'] ?? '—',
         'currency' => $cur,
         'unit_price_irt' => $unit,
+        'has_custom_price' => $hasCustom,
         'allocated' => $alloc,
         'used_usd' => $used,
         'remaining' => $remain,

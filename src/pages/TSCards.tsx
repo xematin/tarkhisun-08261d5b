@@ -252,7 +252,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               <span className="tabular-nums text-muted-foreground">
                                 {fmtMoney(e.amount, e.currency)}
                                 {e.currency !== "IRT" && (
-                                  <span className="mx-1">→ {fmtToman(e.total_irt)}</span>
+                                  <span className="mx-1">← {fmtToman(e.total_irt)}</span>
                                 )}
                               </span>
                             </div>
@@ -261,11 +261,18 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                       ) : <span className="text-muted-foreground text-xs">—</span>}
                     </TableCell>
                     <TableCell className="text-persian text-xs max-w-xs align-top hidden md:table-cell">
-                      {r.users?.length
-                        ? r.users.map(u => (
-                            <div key={u.id}>{u.first_name} {u.last_name}</div>
-                          ))
-                        : "—"}
+                      {r.entries && r.entries.length > 0 && r.entries.some(e => e.users.length > 0) ? (
+                        <div className="flex flex-col gap-1.5">
+                          {r.entries.filter(e => e.users.length > 0).map(e => (
+                            <div key={e.id}>
+                              <div className="font-bold">{e.title}:</div>
+                              <div className="text-muted-foreground">
+                                {e.users.map(u => `${u.first_name} ${u.last_name} (${u.allocated.toLocaleString("fa-IR")})`).join("، ")}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : "—"}
                     </TableCell>
                     <TableCell className="align-top">
                       <div className="flex gap-1 flex-wrap justify-end">
@@ -467,9 +474,23 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
         {step === 1 && (
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-persian">نام کارت</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} className="text-persian" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="space-y-2">
+                <Label className="text-persian">نام کارت</Label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} className="text-persian" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-persian text-xs">موجودی کل (دلار)</Label>
+                <div className="h-10 px-3 flex items-center rounded-md border bg-muted/40 font-bold tabular-nums text-persian">
+                  {entries.filter(e => e.currency === "USD").reduce((s, e) => s + (parseFloat(e.amount) || 0), 0).toLocaleString("fa-IR")} دلار
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-persian text-xs">موجودی کل (تومان)</Label>
+                <div className="h-10 px-3 flex items-center rounded-md border bg-primary/5 font-bold tabular-nums text-persian">
+                  {fmtToman(grandTotal)}
+                </div>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -638,9 +659,17 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setStep(1)} className="text-persian">قبلی</Button>
-              <Button onClick={save} disabled={busy} className="text-persian">
-                {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت"}
-              </Button>
+              {(() => {
+                const anyOver = entries.some((e, i) => {
+                  const sum = Object.values(allocs[i] || {}).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+                  return sum - (parseFloat(e.amount) || 0) > 0.0001;
+                });
+                return (
+                  <Button onClick={save} disabled={busy || anyOver} className="text-persian">
+                    {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت"}
+                  </Button>
+                );
+              })()}
             </DialogFooter>
 
             <AddUserDialog
@@ -795,7 +824,7 @@ const LogsDialog = ({
               const change =
                 r.action === "card_delete"
                   ? "—"
-                  : `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`;
+                  : `${fmtMoney(r.before_allocated ?? 0, cur)} ← ${fmtMoney(r.after_allocated ?? 0, cur)}`;
               const color =
                 r.action === "delete" || r.action === "card_delete" ? "text-destructive"
                 : r.action === "create" ? "text-emerald-600"

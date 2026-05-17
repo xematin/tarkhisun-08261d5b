@@ -42,17 +42,19 @@ foreach ($accessRows as $r) {
         ];
     }
     $alloc = (float)$r['allocated'];
-    $unit  = $r['unit_price_irt'] !== null ? (float)$r['unit_price_irt'] : 1.0;
+    $hasCustom = $r['unit_price_irt'] !== null;
+    $unit  = $hasCustom ? (float)$r['unit_price_irt'] : 0.0;
     $cur   = $r['entry_currency'] ?? 'IRT';
     $eid   = $r['entry_id'] !== null ? (int)$r['entry_id'] : null;
     $used  = $eid !== null ? ($usedByEntry[$eid] ?? 0.0) : 0.0;
     $remain = max(0, $alloc - $used);
-    $totalIrt = round($alloc * $unit, 2);
+    $totalIrt = $hasCustom ? round($alloc * $unit, 2) : 0.0;
     $cards[$cid]['entries'][] = [
         'entry_id' => $eid,
         'title' => $r['entry_title'] ?? '—',
         'currency' => $cur,
         'unit_price_irt' => $unit,
+        'has_custom_price' => $hasCustom,
         'allocated' => $alloc,
         'used_usd' => $used,
         'remaining' => $remain,

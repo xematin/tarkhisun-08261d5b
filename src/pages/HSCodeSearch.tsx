@@ -189,19 +189,30 @@ const HSCodeSearch = () => {
               ببینید؛ سریع، رایگان و بدون نیاز به ثبت‌نام.
             </p>
 
-            <div className="relative">
-              <Search className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="عنوان کالا | HSCODE"
-                className="h-14 pr-12 pl-4 text-base md:text-lg rounded-2xl shadow-md text-persian focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label="جستجوی کد تعرفه"
-                inputMode="search"
-              />
-              {loading && (
-                <Loader2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary animate-spin" />
-              )}
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(); } }}
+                  placeholder="عنوان کالا | HSCODE"
+                  className="h-14 pr-12 pl-4 text-base md:text-lg rounded-2xl shadow-md text-persian focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="جستجوی کد تعرفه"
+                  inputMode="search"
+                />
+                {loading && (
+                  <Loader2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary animate-spin" />
+                )}
+              </div>
+              <Button
+                onClick={handleSubmit}
+                disabled={loading || query.trim().length < 2}
+                className="h-14 px-6 rounded-2xl text-persian text-base shadow-md"
+              >
+                <Search className="w-5 h-5 ml-1" />
+                جستجو
+              </Button>
             </div>
 
             {showSuggestions && (
@@ -213,7 +224,7 @@ const HSCodeSearch = () => {
                   {SUGGESTIONS.map((s) => (
                     <button
                       key={s}
-                      onClick={() => setQuery(s)}
+                      onClick={() => { setQuery(s); setSubmittedQuery(s); runSearch(normalizePersianDigits(s), phone); }}
                       className="px-4 py-1.5 rounded-full border border-border bg-background hover:bg-primary/5 hover:border-primary/40 text-sm text-persian transition-colors"
                     >
                       {s}

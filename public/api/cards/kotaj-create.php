@@ -7,7 +7,7 @@ $u = ts_carduser_require();
 $body = ts_read_json_body();
 $entry_id     = (int)($body['entry_id'] ?? 0);
 $kotaj_number = preg_replace('/\D+/', '', ts_normalize_digits((string)($body['kotaj_number'] ?? '')));
-$kotaj_date   = trim((string)($body['kotaj_date_jalali'] ?? ''));
+$kotaj_date   = trim(ts_normalize_digits((string)($body['kotaj_date_jalali'] ?? '')));
 $itemsRaw     = isset($body['items']) && is_array($body['items']) ? $body['items'] : [];
 
 if ($entry_id <= 0) ts_json_error(400, 'سکشن کارت معتبر نیست');

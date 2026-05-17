@@ -28,13 +28,31 @@ interface CardUser {
   created_at?: string;
   allocated?: number;
 }
+interface EntryUser {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  allocated: number;
+}
+interface CardEntry {
+  id: number;
+  title: string;
+  amount: number;
+  currency: Currency;
+  unit_price_irt: number;
+  total_irt: number;
+  sort_order: number;
+  users: EntryUser[];
+}
 interface CardRow {
   id: number;
   name: string;
   balance: string | number;
   currency: Currency;
   user_count: number;
-  users?: CardUser[];
+  users?: EntryUser[];
+  entries?: CardEntry[];
   allocated_total?: number;
   remaining?: number;
   updated_at?: string;
@@ -51,6 +69,16 @@ const fmtMoney = (v: string | number | undefined, c: Currency) => {
   const n = typeof v === "string" ? parseFloat(v) : (v ?? 0);
   if (!isFinite(n)) return "—";
   return `${n.toLocaleString("fa-IR")} ${CURRENCY_LABEL[c]}`;
+};
+const fmtToman = (v: number) =>
+  `${(isFinite(v) ? v : 0).toLocaleString("fa-IR")} تومان`;
+
+const normDigits = (raw: string) => {
+  const fa = "۰۱۲۳۴۵۶۷۸۹"; const ar = "٠١٢٣٤٥٦٧٨٩";
+  return raw.replace(/[۰-۹٠-٩]/g, (d) => {
+    const i = fa.indexOf(d); if (i >= 0) return String(i);
+    const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
+  }).replace(/[^\d.]/g, "");
 };
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
@@ -200,54 +228,42 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             <TableHeader>
               <TableRow>
                 <TableHead className="text-right text-persian">نام کارت</TableHead>
-                <TableHead className="text-right text-persian">موجودی کل</TableHead>
-                <TableHead className="text-right text-persian">تخصیص / باقی‌مانده</TableHead>
+                <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
+                <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
                 <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {items.map((r) => {
-                const bal = typeof r.balance === "string" ? parseFloat(r.balance) : r.balance;
-                const alloc = r.allocated_total ?? 0;
-                const rem = r.remaining ?? Math.max(0, (bal || 0) - alloc);
-                const pct = bal > 0 ? Math.min(100, (alloc / bal) * 100) : 0;
-                const over = alloc - bal > 0.0001;
+                const bal = typeof r.balance === "string" ? parseFloat(r.balance) : (r.balance as number);
                 return (
                   <TableRow key={r.id}>
                     <TableCell className="text-persian font-medium align-top">{r.name}</TableCell>
-                    <TableCell className="text-persian whitespace-nowrap align-top">
-                      {fmtMoney(bal, r.currency)}
+                    <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
+                      {fmtToman(bal || 0)}
                     </TableCell>
-                    <TableCell className="text-persian align-top min-w-[180px]">
-                      <div className="flex flex-col gap-1.5">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-muted-foreground text-xs">تخصیص</span>
-                          <span className="font-bold tabular-nums">{fmtMoney(alloc, r.currency)}</span>
+                    <TableCell className="text-persian align-top min-w-[220px]">
+                      {r.entries && r.entries.length > 0 ? (
+                        <div className="flex flex-col gap-1 text-xs">
+                          {r.entries.map((e) => (
+                            <div key={e.id} className="flex justify-between gap-2">
+                              <span>{e.title}</span>
+                              <span className="tabular-nums text-muted-foreground">
+                                {fmtMoney(e.amount, e.currency)}
+                                {e.currency !== "IRT" && (
+                                  <span className="mx-1">→ {fmtToman(e.total_irt)}</span>
+                                )}
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="text-muted-foreground text-xs">باقی‌مانده</span>
-                          <span className={`font-bold tabular-nums ${over ? "text-destructive" : rem === 0 ? "text-primary" : "text-emerald-600"}`}>
-                            {fmtMoney(rem, r.currency)}
-                          </span>
-                        </div>
-                        <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                          <div
-                            className={`h-full ${over ? "bg-destructive" : "bg-primary"}`}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                      </div>
+                      ) : <span className="text-muted-foreground text-xs">—</span>}
                     </TableCell>
                     <TableCell className="text-persian text-xs max-w-xs align-top hidden md:table-cell">
                       {r.users?.length
                         ? r.users.map(u => (
-                            <div key={u.id}>
-                              {u.first_name} {u.last_name}
-                              <span className="text-muted-foreground mr-2">
-                                ({fmtMoney(u.allocated ?? 0, r.currency)})
-                              </span>
-                            </div>
+                            <div key={u.id}>{u.first_name} {u.last_name}</div>
                           ))
                         : "—"}
                     </TableCell>
@@ -297,15 +313,26 @@ interface DialogProps {
   toast: ReturnType<typeof useToast>["toast"];
 }
 
+interface EntryDraft {
+  title: string;
+  amount: string;
+  currency: Currency;
+  unit_price_irt: string;
+}
+// per-entry allocations: array index = entry index, value = map userId -> allocated string
+type AllocMap = Record<number, string>;
+
+const emptyEntry = (): EntryDraft => ({
+  title: "", amount: "", currency: "USD", unit_price_irt: "",
+});
+
 const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => {
   const [step, setStep] = useState<1 | 2>(1);
   const [name, setName] = useState("");
-  const [balance, setBalance] = useState("");
-  const [currency, setCurrency] = useState<Currency>("IRT");
+  const [entries, setEntries] = useState<EntryDraft[]>([emptyEntry()]);
+  const [allocs, setAllocs] = useState<AllocMap[]>([{}]);
 
   const [users, setUsers] = useState<CardUser[]>([]);
-  // map of userId -> allocated string ("" means not selected)
-  const [alloc, setAlloc] = useState<Record<number, string>>({});
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [busy, setBusy] = useState(false);
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -314,11 +341,22 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
     if (!open) return;
     setStep(1);
     setName(editing?.name ?? "");
-    setBalance(editing ? String(editing.balance) : "");
-    setCurrency(editing?.currency ?? "IRT");
-    const initial: Record<number, string> = {};
-    editing?.users?.forEach(u => { initial[u.id] = String(u.allocated ?? 0); });
-    setAlloc(initial);
+    if (editing?.entries && editing.entries.length > 0) {
+      setEntries(editing.entries.map(e => ({
+        title: e.title,
+        amount: String(e.amount),
+        currency: e.currency,
+        unit_price_irt: e.currency === "IRT" ? "" : String(e.unit_price_irt),
+      })));
+      setAllocs(editing.entries.map(e => {
+        const m: AllocMap = {};
+        e.users.forEach(u => { m[u.id] = String(u.allocated); });
+        return m;
+      }));
+    } else {
+      setEntries([emptyEntry()]);
+      setAllocs([{}]);
+    }
   }, [open, editing]);
 
   const loadUsers = useCallback(async () => {
@@ -333,78 +371,81 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   useEffect(() => { if (open && step === 2) void loadUsers(); }, [open, step, loadUsers]);
 
-  const balanceNum = parseFloat(balance) || 0;
-  const allocatedTotal = useMemo(
-    () => Object.values(alloc).reduce((s, v) => s + (parseFloat(v) || 0), 0),
-    [alloc]
-  );
-  const remaining = Math.max(0, balanceNum - allocatedTotal);
+  const entryTotals = useMemo(() => entries.map(e => {
+    const a = parseFloat(e.amount) || 0;
+    const u = e.currency === "IRT" ? 1 : (parseFloat(e.unit_price_irt) || 0);
+    return Math.round(a * u * 100) / 100;
+  }), [entries]);
+  const grandTotal = entryTotals.reduce((s, v) => s + v, 0);
 
-  const toggle = (id: number, checked: boolean) => {
-    setAlloc(prev => {
-      const next = { ...prev };
-      if (checked) {
-        if (next[id] === undefined) next[id] = "0";
-      } else {
-        delete next[id];
-      }
-      return next;
-    });
+  const updateEntry = (i: number, patch: Partial<EntryDraft>) => {
+    setEntries(prev => prev.map((e, idx) => idx === i ? { ...e, ...patch } : e));
   };
-
-  const setUserAlloc = (id: number, raw: string) => {
-    // normalize digits
-    const fa = "۰۱۲۳۴۵۶۷۸۹"; const ar = "٠١٢٣٤٥٦٧٨٩";
-    let v = raw.replace(/[۰-۹٠-٩]/g, (d) => {
-      const i = fa.indexOf(d); if (i >= 0) return String(i);
-      const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
-    });
-    v = v.replace(/[^\d.]/g, "");
-    const num = parseFloat(v);
-    if (!isNaN(num)) {
-      const others = Object.entries(alloc).reduce(
-        (s, [k, val]) => s + (Number(k) === id ? 0 : (parseFloat(val) || 0)), 0
-      );
-      const maxForThis = Math.max(0, balanceNum - others);
-      if (num > maxForThis) {
-        v = String(maxForThis);
-        toast({ title: "حداکثر مجاز اعمال شد", description: `باقی‌ماندهٔ کارت ${maxForThis}`, });
-      }
-    }
-    setAlloc(prev => ({ ...prev, [id]: v }));
+  const addEntry = () => {
+    setEntries(prev => [...prev, emptyEntry()]);
+    setAllocs(prev => [...prev, {}]);
   };
-
-  const splitEqually = () => {
-    const ids = Object.keys(alloc).map(Number);
-    if (ids.length === 0) return;
-    const each = Math.floor((balanceNum / ids.length) * 100) / 100;
-    const next: Record<number, string> = {};
-    ids.forEach((id, i) => {
-      next[id] = String(i === ids.length - 1
-        ? Math.max(0, balanceNum - each * (ids.length - 1))
-        : each);
-    });
-    setAlloc(next);
+  const removeEntry = (i: number) => {
+    if (entries.length <= 1) return;
+    setEntries(prev => prev.filter((_, idx) => idx !== i));
+    setAllocs(prev => prev.filter((_, idx) => idx !== i));
   };
 
   const goStep2 = () => {
     if (!name.trim()) return toast({ title: "نام کارت را وارد کنید", variant: "destructive" });
-    if (balance === "" || isNaN(parseFloat(balance))) return toast({ title: "موجودی معتبر نیست", variant: "destructive" });
+    for (let i = 0; i < entries.length; i++) {
+      const e = entries[i];
+      if (!e.title.trim()) return toast({ title: `عنوان سکشن ${i + 1} را وارد کنید`, variant: "destructive" });
+      if (e.amount === "" || isNaN(parseFloat(e.amount))) return toast({ title: `مبلغ سکشن «${e.title}» معتبر نیست`, variant: "destructive" });
+      if (e.currency !== "IRT" && (e.unit_price_irt === "" || isNaN(parseFloat(e.unit_price_irt)))) {
+        return toast({ title: `قیمت هر ${CURRENCY_LABEL[e.currency]} برای «${e.title}» را وارد کنید`, variant: "destructive" });
+      }
+    }
     setStep(2);
   };
 
+  const toggleAlloc = (entryIdx: number, userId: number, checked: boolean) => {
+    setAllocs(prev => prev.map((m, i) => {
+      if (i !== entryIdx) return m;
+      const next = { ...m };
+      if (checked) { if (next[userId] === undefined) next[userId] = "0"; }
+      else { delete next[userId]; }
+      return next;
+    }));
+  };
+
+  const setAllocVal = (entryIdx: number, userId: number, raw: string) => {
+    const v = normDigits(raw);
+    setAllocs(prev => prev.map((m, i) => i === entryIdx ? { ...m, [userId]: v } : m));
+  };
+
   const save = async () => {
-    if (allocatedTotal - balanceNum > 0.0001) {
-      return toast({ title: "خطا", description: "مجموع تخصیص‌ها از موجودی کارت بیشتر است", variant: "destructive" });
+    // Validate per-entry sums
+    for (let i = 0; i < entries.length; i++) {
+      const sum = Object.values(allocs[i] || {}).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+      const amt = parseFloat(entries[i].amount) || 0;
+      if (sum - amt > 0.0001) {
+        return toast({ title: "خطا", description: `مجموع تخصیص‌های سکشن «${entries[i].title}» از مبلغ آن بیشتر است`, variant: "destructive" });
+      }
     }
     setBusy(true);
     try {
       const payload = {
         id: editing?.id,
         name: name.trim(),
-        balance: balanceNum,
-        currency,
-        users: Object.entries(alloc).map(([id, v]) => ({ id: Number(id), allocated: parseFloat(v) || 0 })),
+        entries: entries.map(e => ({
+          title: e.title.trim(),
+          amount: parseFloat(e.amount) || 0,
+          currency: e.currency,
+          unit_price_irt: e.currency === "IRT" ? 1 : (parseFloat(e.unit_price_irt) || 0),
+        })),
+        users: allocs.flatMap((m, idx) =>
+          Object.entries(m).map(([uid, v]) => ({
+            entry_index: idx,
+            id: Number(uid),
+            allocated: parseFloat(v) || 0,
+          }))
+        ),
       };
       const url = editing ? "/api/admin/card-update.php" : "/api/admin/card-create.php";
       await api(url, { method: "POST", body: JSON.stringify(payload) });
@@ -417,7 +458,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-lg panel-fa">
+      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
@@ -430,26 +471,83 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
               <Label className="text-persian">نام کارت</Label>
               <Input value={name} onChange={(e) => setName(e.target.value)} className="text-persian" />
             </div>
-            <div className="space-y-2">
-              <Label className="text-persian">مبلغ موجودی</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={balance}
-                  onChange={(e) => setBalance(e.target.value)}
-                  inputMode="decimal"
-                  placeholder="0"
-                  className="flex-1"
-                />
-                <Select value={currency} onValueChange={(v) => setCurrency(v as Currency)}>
-                  <SelectTrigger className="w-32 text-persian"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="IRT" className="text-persian">تومان</SelectItem>
-                    <SelectItem value="USD" className="text-persian">دلار</SelectItem>
-                    <SelectItem value="EUR" className="text-persian">یورو</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+
+            <div className="space-y-3">
+              <Label className="text-persian">سکشن‌های مبلغ</Label>
+              {entries.map((e, i) => {
+                const unitLabel = CURRENCY_LABEL[e.currency];
+                return (
+                  <div key={i} className="border rounded-md p-3 space-y-3 bg-muted/30">
+                    <div className="flex items-center justify-between">
+                      <span className="text-persian text-sm font-bold">سکشن {i + 1}</span>
+                      {entries.length > 1 && (
+                        <Button size="sm" variant="ghost" onClick={() => removeEntry(i)} className="text-destructive">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-persian text-xs">عنوان مبلغ</Label>
+                        <Input value={e.title} onChange={(ev) => updateEntry(i, { title: ev.target.value })} className="text-persian" placeholder="مثلاً تره بار" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-persian text-xs">مبلغ موجودی</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            value={e.amount}
+                            onChange={(ev) => updateEntry(i, { amount: normDigits(ev.target.value) })}
+                            inputMode="decimal"
+                            placeholder="0"
+                            className="flex-1"
+                            dir="ltr"
+                          />
+                          <Select
+                            value={e.currency}
+                            onValueChange={(v) => updateEntry(i, { currency: v as Currency, unit_price_irt: v === "IRT" ? "" : e.unit_price_irt })}
+                          >
+                            <SelectTrigger className="w-28 text-persian"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="USD" className="text-persian">دلار</SelectItem>
+                              <SelectItem value="EUR" className="text-persian">یورو</SelectItem>
+                              <SelectItem value="IRT" className="text-persian">تومان</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-persian text-xs">
+                          قیمت هر {unitLabel} (تومان)
+                        </Label>
+                        <Input
+                          value={e.currency === "IRT" ? "1" : e.unit_price_irt}
+                          onChange={(ev) => updateEntry(i, { unit_price_irt: normDigits(ev.target.value) })}
+                          inputMode="decimal"
+                          placeholder={`به ازای هر ${unitLabel}`}
+                          disabled={e.currency === "IRT"}
+                          dir="ltr"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-persian text-xs">مبلغ کل (تومان)</Label>
+                        <div className="h-10 px-3 flex items-center rounded-md border bg-background font-bold tabular-nums text-persian">
+                          {fmtToman(entryTotals[i] || 0)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              <Button variant="outline" size="sm" onClick={addEntry} className="text-persian w-full">
+                <Plus className="w-4 h-4 ml-1" /> افزودن سکشن جدید
+              </Button>
             </div>
+
+            <div className="rounded-md border p-3 bg-primary/5 text-persian flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">موجودی کل کارت</span>
+              <span className="font-bold text-lg tabular-nums">{fmtToman(grandTotal)}</span>
+            </div>
+
             <DialogFooter>
               <Button variant="outline" onClick={onClose} className="text-persian">انصراف</Button>
               <Button onClick={goStep2} className="text-persian">بعدی</Button>
@@ -457,105 +555,90 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
           </div>
         )}
 
-        {step === 2 && (() => {
-          const over = allocatedTotal - balanceNum > 0.0001;
-          const exact = !over && Math.abs(balanceNum - allocatedTotal) < 0.0001 && balanceNum > 0;
-          return (
+        {step === 2 && (
           <div className="space-y-4">
-            <div className="rounded-md border bg-muted/40 p-3 text-persian text-sm grid grid-cols-3 gap-2">
-              <div>
-                <div className="text-muted-foreground text-xs">موجودی کل</div>
-                <div className="font-bold tabular-nums">{fmtMoney(balanceNum, currency)}</div>
-              </div>
-              <div>
-                <div className="text-muted-foreground text-xs">تخصیص‌داده‌شده</div>
-                <div className={`font-bold tabular-nums ${over ? "text-destructive" : ""}`}>
-                  {fmtMoney(allocatedTotal, currency)}
-                </div>
-              </div>
-              <div>
-                <div className="text-muted-foreground text-xs">باقی‌مانده</div>
-                <div className={`font-bold tabular-nums ${over ? "text-destructive" : exact ? "text-primary" : "text-emerald-600"}`}>
-                  {fmtMoney(Math.max(0, balanceNum - allocatedTotal), currency)}
-                </div>
-              </div>
+            <div className="rounded-md border bg-muted/40 p-3 text-persian text-sm flex items-center justify-between">
+              <span className="text-muted-foreground">موجودی کل کارت</span>
+              <span className="font-bold tabular-nums">{fmtToman(grandTotal)}</span>
             </div>
 
-            <div
-              className={`rounded-md border px-3 py-2 text-persian text-sm font-medium ${
-                over
-                  ? "border-destructive/40 bg-destructive/10 text-destructive"
-                  : exact
-                    ? "border-primary/40 bg-primary/10 text-primary"
-                    : "border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
-              }`}
-            >
-              {over
-                ? `مجموع تخصیص‌ها ${fmtMoney(allocatedTotal - balanceNum, currency)} از موجودی کارت بیشتر است — ذخیره ممکن نیست.`
-                : exact
-                  ? "تمام موجودی کارت بین کاربران تخصیص داده شد."
-                  : `قابل تخصیص باقی‌مانده: ${fmtMoney(Math.max(0, balanceNum - allocatedTotal), currency)}`}
+            <div className="flex items-center justify-between">
+              <Label className="text-persian">تخصیص کاربران به هر سکشن</Label>
+              <Button size="sm" variant="outline" onClick={() => setAddUserOpen(true)} className="text-persian">
+                <UserPlus className="w-4 h-4 ml-1" /> افزودن کاربر
+              </Button>
             </div>
 
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <Label className="text-persian">انتخاب کاربران و سهم هرکدام</Label>
-              <div className="flex gap-2">
-                <Button size="sm" variant="ghost" onClick={splitEqually} className="text-persian"
-                        disabled={Object.keys(alloc).length === 0}>
-                  تقسیم مساوی
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => setAddUserOpen(true)} className="text-persian">
-                  <UserPlus className="w-4 h-4 ml-1" /> افزودن کاربر
-                </Button>
+            {loadingUsers ? (
+              <div className="py-6 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+            ) : users.length === 0 ? (
+              <p className="py-6 text-center text-muted-foreground text-persian text-sm">
+                هنوز کاربری ساخته نشده. روی «افزودن کاربر» بزنید.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {entries.map((e, i) => {
+                  const m = allocs[i] || {};
+                  const sum = Object.values(m).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+                  const amt = parseFloat(e.amount) || 0;
+                  const over = sum - amt > 0.0001;
+                  const remain = Math.max(0, amt - sum);
+                  return (
+                    <div key={i} className="border rounded-md p-3 space-y-2 bg-muted/20">
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <div className="text-persian text-sm font-bold">
+                          {e.title || `سکشن ${i + 1}`}
+                          <span className="text-muted-foreground font-normal mr-2 text-xs">
+                            ({fmtMoney(amt, e.currency)})
+                          </span>
+                        </div>
+                        <div className={`text-xs font-medium ${over ? "text-destructive" : "text-emerald-600"}`}>
+                          {over
+                            ? `${fmtMoney(sum - amt, e.currency)} بیشتر از مبلغ سکشن`
+                            : `باقی‌مانده: ${fmtMoney(remain, e.currency)}`}
+                        </div>
+                      </div>
+                      <ul className="divide-y">
+                        {users.map(u => {
+                          const selected = m[u.id] !== undefined;
+                          return (
+                            <li key={u.id} className="flex items-center gap-3 py-2">
+                              <Checkbox
+                                checked={selected}
+                                onCheckedChange={(c) => toggleAlloc(i, u.id, !!c)}
+                                id={`u-${i}-${u.id}`}
+                              />
+                              <label htmlFor={`u-${i}-${u.id}`} className="flex-1 cursor-pointer text-persian text-sm">
+                                {u.first_name} {u.last_name}
+                                <span className="text-muted-foreground text-xs mr-2">@{u.username}</span>
+                              </label>
+                              {selected && (
+                                <div className="flex items-center gap-1">
+                                  <Input
+                                    value={m[u.id]}
+                                    onChange={(ev) => setAllocVal(i, u.id, ev.target.value)}
+                                    inputMode="decimal"
+                                    className="w-28 h-9 text-left"
+                                    dir="ltr"
+                                  />
+                                  <span className="text-xs text-muted-foreground text-persian">
+                                    {CURRENCY_LABEL[e.currency]}
+                                  </span>
+                                </div>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
-
-            <div className="border rounded-md max-h-72 overflow-auto">
-              {loadingUsers ? (
-                <div className="py-6 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
-              ) : users.length === 0 ? (
-                <p className="py-6 text-center text-muted-foreground text-persian text-sm">
-                  هنوز کاربری ساخته نشده. روی «افزودن کاربر» بزنید.
-                </p>
-              ) : (
-                <ul className="divide-y">
-                  {users.map(u => {
-                    const selected = alloc[u.id] !== undefined;
-                    return (
-                      <li key={u.id} className="flex items-center gap-3 p-3">
-                        <Checkbox
-                          checked={selected}
-                          onCheckedChange={(c) => toggle(u.id, !!c)}
-                          id={`u-${u.id}`}
-                        />
-                        <label htmlFor={`u-${u.id}`} className="flex-1 cursor-pointer text-persian text-sm">
-                          {u.first_name} {u.last_name}
-                          <span className="text-muted-foreground text-xs mr-2">@{u.username}</span>
-                        </label>
-                        {selected && (
-                          <div className="flex items-center gap-1">
-                            <Input
-                              value={alloc[u.id]}
-                              onChange={(e) => setUserAlloc(u.id, e.target.value)}
-                              inputMode="decimal"
-                              className="w-28 h-9 text-left"
-                              dir="ltr"
-                            />
-                            <span className="text-xs text-muted-foreground text-persian">
-                              {CURRENCY_LABEL[currency]}
-                            </span>
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
+            )}
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setStep(1)} className="text-persian">قبلی</Button>
-              <Button onClick={save} disabled={busy || over} className="text-persian">
+              <Button onClick={save} disabled={busy} className="text-persian">
                 {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت"}
               </Button>
             </DialogFooter>
@@ -565,14 +648,12 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
               onClose={() => setAddUserOpen(false)}
               onCreated={(u) => {
                 setUsers(prev => [u, ...prev]);
-                setAlloc(prev => ({ ...prev, [u.id]: "0" }));
                 setAddUserOpen(false);
               }}
               toast={toast}
             />
           </div>
-          );
-        })()}
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -689,9 +770,8 @@ const LogsDialog = ({
   }, [card, toast]);
 
   const fmtDate = (s: string) => {
-    try {
-      return new Date(s.replace(" ", "T")).toLocaleString("fa-IR");
-    } catch { return s; }
+    try { return new Date(s.replace(" ", "T")).toLocaleString("fa-IR"); }
+    catch { return s; }
   };
 
   return (
@@ -711,13 +791,11 @@ const LogsDialog = ({
         ) : (
           <div className="max-h-[60vh] overflow-auto border rounded-md divide-y">
             {rows.map((r) => {
-              const cur = (r.currency || card?.currency || "IRT") as Currency;
+              const cur = (r.currency || "IRT") as Currency;
               const change =
                 r.action === "card_delete"
                   ? "—"
-                  : r.action === "card_balance"
-                    ? `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`
-                    : `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`;
+                  : `${fmtMoney(r.before_allocated ?? 0, cur)} → ${fmtMoney(r.after_allocated ?? 0, cur)}`;
               const color =
                 r.action === "delete" || r.action === "card_delete" ? "text-destructive"
                 : r.action === "create" ? "text-emerald-600"

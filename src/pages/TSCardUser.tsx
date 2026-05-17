@@ -204,7 +204,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map(c => {
           const tomanTotal = c.entries
-            .filter(e => e.currency === "USD")
+            .filter(e => e.currency === "USD" && e.has_custom_price)
             .reduce((s, e) => s + e.allocated * e.unit_price_irt, 0);
           return (
             <Card key={c.id}>
@@ -220,9 +220,11 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                     <div className="text-3xl font-extrabold tabular-nums text-primary">
                       {fmtUSD(c.total_usd)}
                     </div>
-                    <div className="text-xs text-muted-foreground tabular-nums text-persian mt-1">
-                      معادل {fmtToman(tomanTotal)}
-                    </div>
+                    {tomanTotal > 0 && (
+                      <div className="text-xs text-muted-foreground tabular-nums text-persian mt-1">
+                        معادل {fmtToman(tomanTotal)}
+                      </div>
+                    )}
                     {c.remaining_usd !== c.total_usd && (
                       <div className="text-xs text-emerald-600 tabular-nums text-persian mt-1">
                         مانده: {fmtUSD(c.remaining_usd)}
@@ -248,7 +250,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                           <span className="tabular-nums">{fmtUSD(e.remaining)}</span>
                         </div>
                       )}
-                      {e.currency !== "IRT" && (
+                      {e.currency !== "IRT" && e.has_custom_price && (
                         <div className="text-xs text-muted-foreground tabular-nums">
                           قیمت هر {CURRENCY_LABEL[e.currency]}: {e.unit_price_irt.toLocaleString("fa-IR")} تومان
                         </div>

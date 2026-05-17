@@ -344,6 +344,8 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         />
       </CardContent>
     </Card>
+    <ReportsSection toast={toast} />
+    </div>
   );
 };
 

@@ -109,8 +109,8 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
 
         $pdo->commit();
     } catch (Throwable $e) {
-        $pdo->rollBack();
-        ts_json_error(500, 'ذخیره با خطا مواجه شد', $e->getMessage());
+        if ($pdo->inTransaction()) $pdo->rollBack();
+        ts_json_error(500, 'ذخیره با خطا مواجه شد: ' . $e->getMessage(), $e->getMessage());
     }
 
     // Light-weight log entry

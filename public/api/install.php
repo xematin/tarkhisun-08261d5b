@@ -137,9 +137,21 @@ try {
     if (!$col2) {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN entry_id INT NULL AFTER card_id");
         $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_entry (entry_id)");
-        // drop old uniqueness that prevents multi-entry allocations to same user
-        try { $pdo->exec("ALTER TABLE ts_card_user_access DROP INDEX uniq_card_user"); } catch (Throwable $e) {}
         echo "OK: added ts_card_user_access.entry_id\n";
+    }
+    // Always try to drop legacy unique indexes that prevent multi-entry allocations
+    $idxRows = $pdo->query("SHOW INDEX FROM ts_card_user_access")->fetchAll();
+    $seen = [];
+    foreach ($idxRows as $ir) {
+        $key = $ir['Key_name'];
+        if ($key === 'PRIMARY' || isset($seen[$key])) continue;
+        $seen[$key] = true;
+        if ((int)$ir['Non_unique'] === 0) {
+            try {
+                $pdo->exec("ALTER TABLE ts_card_user_access DROP INDEX `$key`");
+                echo "OK: dropped legacy unique index $key\n";
+            } catch (Throwable $e) {}
+        }
     }
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";

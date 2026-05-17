@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Search, Copy, Loader2, FileSearch, Phone, BookOpen, CheckCircle2, Zap, Database, Target, Clock, Layers, Headphones, ShieldCheck, TrendingUp, Globe, Calculator } from "lucide-react";
 import hscodeHero from "@/assets/hscode-search-hero.jpg";
@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PageBreadcrumb from "@/components/PageBreadcrumb";
-import { useDebounce } from "@/hooks/useDebounce";
+
 import {
   searchHSCodes,
   getHSCode,
@@ -46,6 +46,7 @@ const formatNum = (v: unknown): string => {
 const HSCodeSearch = () => {
   const { toast } = useToast();
   const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
   const [items, setItems] = useState<HSCodeResult[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -56,57 +57,52 @@ const HSCodeSearch = () => {
   const [gateOpen, setGateOpen] = useState(false);
   const [pendingPhrase, setPendingPhrase] = useState<string | null>(null);
 
-  const debounced = useDebounce(query, 450);
-  const trimmed = useMemo(() => normalizePersianDigits(debounced.trim()), [debounced]);
+  const trimmed = useMemo(() => normalizePersianDigits(submittedQuery.trim()), [submittedQuery]);
 
-  // Initial / new search
-  useEffect(() => {
-    if (trimmed.length < 2) {
-      setItems([]);
-      setTotal(0);
-      setOffset(0);
-      setError(null);
-      setLoading(false);
+  const runSearch = (phrase: string, currentPhone: string | null) => {
+    if (phrase.length < 2) {
+      toast({ title: "حداقل ۲ کاراکتر وارد کنید", variant: "destructive" });
       return;
     }
-    // Phone gate: if no phone yet, defer search until user submits
-    if (!phone) {
-      setPendingPhrase(trimmed);
+    if (!currentPhone) {
+      setPendingPhrase(phrase);
       setGateOpen(true);
-      setLoading(false);
       return;
     }
-    const ctrl = new AbortController();
     setLoading(true);
     setError(null);
     setOffset(0);
-    searchHSCodes({ phrase: trimmed, offset: 0, limit: PAGE_SIZE, signal: ctrl.signal })
+    searchHSCodes({ phrase, offset: 0, limit: PAGE_SIZE })
       .then((res) => {
         setItems(res.items);
         setTotal(res.total);
-        void submitLead(phone, trimmed);
+        void submitLead(currentPhone, phrase);
       })
       .catch((e) => {
-        if ((e as Error).name === "AbortError") return;
         console.error(e);
         setError("متاسفانه در دریافت اطلاعات مشکلی پیش آمد. لطفاً دوباره تلاش کنید.");
         setItems([]);
         setTotal(0);
       })
       .finally(() => setLoading(false));
-    return () => ctrl.abort();
-  }, [trimmed, phone]);
+  };
+
+  const handleSubmit = () => {
+    const phrase = normalizePersianDigits(query.trim());
+    setSubmittedQuery(query);
+    runSearch(phrase, phone);
+  };
 
   const handlePhoneSubmit = async (p: string) => {
     setStoredPhone(p);
-    // Send the lead immediately with the pending phrase (or current trimmed)
-    const phrase = pendingPhrase || trimmed;
-    if (phrase) {
-      try { await submitLead(p, phrase); } catch { /* silent */ }
-    }
     setPhone(p);
     setGateOpen(false);
+    const phrase = pendingPhrase || normalizePersianDigits(query.trim());
     setPendingPhrase(null);
+    if (phrase) {
+      setSubmittedQuery(phrase);
+      runSearch(phrase, p);
+    }
   };
 
   const loadMore = async () => {
@@ -193,19 +189,30 @@ const HSCodeSearch = () => {
               ببینید؛ سریع، رایگان و بدون نیاز به ثبت‌نام.
             </p>
 
-            <div className="relative">
-              <Search className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="عنوان کالا | HSCODE"
-                className="h-14 pr-12 pl-4 text-base md:text-lg rounded-2xl shadow-md text-persian focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label="جستجوی کد تعرفه"
-                inputMode="search"
-              />
-              {loading && (
-                <Loader2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary animate-spin" />
-              )}
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(); } }}
+                  placeholder="عنوان کالا | HSCODE"
+                  className="h-14 pr-12 pl-4 text-base md:text-lg rounded-2xl shadow-md text-persian focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="جستجوی کد تعرفه"
+                  inputMode="search"
+                />
+                {loading && (
+                  <Loader2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary animate-spin" />
+                )}
+              </div>
+              <Button
+                onClick={handleSubmit}
+                disabled={loading || query.trim().length < 2}
+                className="h-14 px-6 rounded-2xl text-persian text-base shadow-md"
+              >
+                <Search className="w-5 h-5 ml-1" />
+                جستجو
+              </Button>
             </div>
 
             {showSuggestions && (
@@ -217,7 +224,7 @@ const HSCodeSearch = () => {
                   {SUGGESTIONS.map((s) => (
                     <button
                       key={s}
-                      onClick={() => setQuery(s)}
+                      onClick={() => { setQuery(s); setSubmittedQuery(s); runSearch(normalizePersianDigits(s), phone); }}
                       className="px-4 py-1.5 rounded-full border border-border bg-background hover:bg-primary/5 hover:border-primary/40 text-sm text-persian transition-colors"
                     >
                       {s}

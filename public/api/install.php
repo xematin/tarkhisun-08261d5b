@@ -139,18 +139,26 @@ try {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_entry (entry_id)");
         echo "OK: added ts_card_user_access.entry_id\n";
     }
-    // Always try to drop legacy unique indexes that prevent multi-entry allocations
+    // Drop the well-known legacy unique index by name (multi-entry allocations fix)
+    try {
+        $pdo->exec("ALTER TABLE ts_card_user_access DROP INDEX uniq_card_user");
+        echo "OK: dropped legacy unique index uniq_card_user\n";
+    } catch (Throwable $e) {}
+    // Sweep any remaining unique indexes on this table (we never want uniques here)
     $idxRows = $pdo->query("SHOW INDEX FROM ts_card_user_access")->fetchAll();
-    $seen = [];
+    $byKey = [];
     foreach ($idxRows as $ir) {
-        $key = $ir['Key_name'];
-        if ($key === 'PRIMARY' || isset($seen[$key])) continue;
-        $seen[$key] = true;
-        if ((int)$ir['Non_unique'] === 0) {
+        $byKey[$ir['Key_name']][] = $ir;
+    }
+    foreach ($byKey as $key => $rows) {
+        if ($key === 'PRIMARY') continue;
+        if ((int)$rows[0]['Non_unique'] === 0) {
             try {
                 $pdo->exec("ALTER TABLE ts_card_user_access DROP INDEX `$key`");
                 echo "OK: dropped legacy unique index $key\n";
-            } catch (Throwable $e) {}
+            } catch (Throwable $e) {
+                echo "WARN: could not drop $key: " . $e->getMessage() . "\n";
+            }
         }
     }
 } catch (Throwable $e) {

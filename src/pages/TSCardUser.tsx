@@ -24,6 +24,7 @@ interface MyEntry {
   title: string;
   currency: Currency;
   unit_price_irt: number;
+  has_custom_price?: boolean;
   allocated: number;
   used_usd: number;
   remaining: number;

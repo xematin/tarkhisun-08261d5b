@@ -1122,4 +1122,142 @@ const KotajReportDialog = ({
   );
 };
 
+interface ReportsData {
+  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; remaining_usd: number; kotaj_count: number; };
+  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
+  top_users: { id: number; first_name: string; last_name: string; username: string; used_usd: number; kotaj_count: number; }[];
+  recent: { id: number; kotaj_number: string; kotaj_date_jalali: string; total_value_usd: number; created_at: string; card_name: string; user_name: string; entry_title: string | null; }[];
+}
+
+const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
+  const [data, setData] = useState<ReportsData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await api<ReportsData>("/api/admin/reports-summary.php");
+      setData(r);
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setLoading(false); }
+  }, [toast]);
+  useEffect(() => { void load(); }, [load]);
+
+  const fa = (n: number) => (isFinite(n) ? n : 0).toLocaleString("fa-IR");
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <CardTitle className="text-persian flex items-center gap-2">
+            <FileText className="w-5 h-5" /> گزارش‌گیری
+          </CardTitle>
+          <Button size="sm" variant="outline" onClick={() => load()}>
+            <RefreshCw className="w-4 h-4" />
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {loading || !data ? (
+          <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
+                { label: "موجودی کل کارت‌ها (دلار)", value: fa(data.totals.card_usd) },
+                { label: "تخصیص یافته (دلار)", value: fa(data.totals.allocated_usd) },
+                { label: "مصرف‌شده با کوتاژ (دلار)", value: fa(data.totals.used_usd) },
+                { label: "مانده تخصیصی (دلار)", value: fa(data.totals.remaining_usd) },
+                { label: "تعداد کوتاژها", value: fa(data.totals.kotaj_count) },
+              ].map((s) => (
+                <div key={s.label} className="border rounded-md p-3 bg-muted/30">
+                  <div className="text-xs text-muted-foreground text-persian">{s.label}</div>
+                  <div className="text-lg font-bold tabular-nums text-persian mt-1">{s.value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <h3 className="text-persian font-bold mb-2">وضعیت هر کارت</h3>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-right text-persian">کارت</TableHead>
+                      <TableHead className="text-right text-persian">موجودی</TableHead>
+                      <TableHead className="text-right text-persian">تخصیص</TableHead>
+                      <TableHead className="text-right text-persian">مصرف</TableHead>
+                      <TableHead className="text-right text-persian">مانده</TableHead>
+                      <TableHead className="text-right text-persian">کوتاژ</TableHead>
+                      <TableHead className="text-right text-persian">کاربران</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.cards.map(c => (
+                      <TableRow key={c.id}>
+                        <TableCell className="text-persian font-medium">{c.name}</TableCell>
+                        <TableCell className="tabular-nums">{fa(c.card_usd)}</TableCell>
+                        <TableCell className="tabular-nums">{fa(c.allocated_usd)}</TableCell>
+                        <TableCell className="tabular-nums">{fa(c.used_usd)}</TableCell>
+                        <TableCell className="tabular-nums text-emerald-600">{fa(c.remaining_usd)}</TableCell>
+                        <TableCell className="tabular-nums">{fa(c.kotaj_count)}</TableCell>
+                        <TableCell className="tabular-nums">{fa(c.user_count)}</TableCell>
+                      </TableRow>
+                    ))}
+                    {data.cards.length === 0 && (
+                      <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-persian font-bold mb-2">پرمصرف‌ترین کاربران</h3>
+                {data.top_users.length === 0 ? (
+                  <p className="text-muted-foreground text-persian text-sm">کوتاژی ثبت نشده.</p>
+                ) : (
+                  <div className="border rounded-md divide-y">
+                    {data.top_users.map(u => (
+                      <div key={u.id} className="flex justify-between items-center p-2.5 text-persian text-sm">
+                        <div>
+                          <div className="font-medium">{u.first_name} {u.last_name}</div>
+                          <div className="text-xs text-muted-foreground">@{u.username} — {fa(u.kotaj_count)} کوتاژ</div>
+                        </div>
+                        <div className="tabular-nums font-bold text-primary">{fa(u.used_usd)} دلار</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
+                <h3 className="text-persian font-bold mb-2">کوتاژهای اخیر</h3>
+                {data.recent.length === 0 ? (
+                  <p className="text-muted-foreground text-persian text-sm">کوتاژی ثبت نشده.</p>
+                ) : (
+                  <div className="border rounded-md divide-y">
+                    {data.recent.map(k => (
+                      <div key={k.id} className="p-2.5 text-persian text-sm">
+                        <div className="flex justify-between gap-2 flex-wrap">
+                          <span className="font-bold">#{k.kotaj_number}</span>
+                          <span className="tabular-nums font-bold">{fa(k.total_value_usd)} دلار</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {k.user_name} — {k.card_name}{k.entry_title ? ` / ${k.entry_title}` : ""} — {k.kotaj_date_jalali}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 export default TSCards;

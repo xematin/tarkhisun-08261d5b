@@ -46,6 +46,7 @@ const formatNum = (v: unknown): string => {
 const HSCodeSearch = () => {
   const { toast } = useToast();
   const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
   const [items, setItems] = useState<HSCodeResult[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -56,57 +57,52 @@ const HSCodeSearch = () => {
   const [gateOpen, setGateOpen] = useState(false);
   const [pendingPhrase, setPendingPhrase] = useState<string | null>(null);
 
-  const debounced = useDebounce(query, 450);
-  const trimmed = useMemo(() => normalizePersianDigits(debounced.trim()), [debounced]);
+  const trimmed = useMemo(() => normalizePersianDigits(submittedQuery.trim()), [submittedQuery]);
 
-  // Initial / new search
-  useEffect(() => {
-    if (trimmed.length < 2) {
-      setItems([]);
-      setTotal(0);
-      setOffset(0);
-      setError(null);
-      setLoading(false);
+  const runSearch = (phrase: string, currentPhone: string | null) => {
+    if (phrase.length < 2) {
+      toast({ title: "حداقل ۲ کاراکتر وارد کنید", variant: "destructive" });
       return;
     }
-    // Phone gate: if no phone yet, defer search until user submits
-    if (!phone) {
-      setPendingPhrase(trimmed);
+    if (!currentPhone) {
+      setPendingPhrase(phrase);
       setGateOpen(true);
-      setLoading(false);
       return;
     }
-    const ctrl = new AbortController();
     setLoading(true);
     setError(null);
     setOffset(0);
-    searchHSCodes({ phrase: trimmed, offset: 0, limit: PAGE_SIZE, signal: ctrl.signal })
+    searchHSCodes({ phrase, offset: 0, limit: PAGE_SIZE })
       .then((res) => {
         setItems(res.items);
         setTotal(res.total);
-        void submitLead(phone, trimmed);
+        void submitLead(currentPhone, phrase);
       })
       .catch((e) => {
-        if ((e as Error).name === "AbortError") return;
         console.error(e);
         setError("متاسفانه در دریافت اطلاعات مشکلی پیش آمد. لطفاً دوباره تلاش کنید.");
         setItems([]);
         setTotal(0);
       })
       .finally(() => setLoading(false));
-    return () => ctrl.abort();
-  }, [trimmed, phone]);
+  };
+
+  const handleSubmit = () => {
+    const phrase = normalizePersianDigits(query.trim());
+    setSubmittedQuery(query);
+    runSearch(phrase, phone);
+  };
 
   const handlePhoneSubmit = async (p: string) => {
     setStoredPhone(p);
-    // Send the lead immediately with the pending phrase (or current trimmed)
-    const phrase = pendingPhrase || trimmed;
-    if (phrase) {
-      try { await submitLead(p, phrase); } catch { /* silent */ }
-    }
     setPhone(p);
     setGateOpen(false);
+    const phrase = pendingPhrase || normalizePersianDigits(query.trim());
     setPendingPhrase(null);
+    if (phrase) {
+      setSubmittedQuery(phrase);
+      runSearch(phrase, p);
+    }
   };
 
   const loadMore = async () => {

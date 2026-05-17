@@ -8,7 +8,7 @@ $pdo = ts_db();
 $stmt = $pdo->prepare(
     "SELECT c.id AS card_id, c.name AS card_name, c.updated_at,
             a.id AS access_id, a.entry_id, a.allocated,
-            COALESCE(a.custom_unit_price_irt, e.unit_price_irt) AS unit_price_irt,
+            a.custom_unit_price_irt AS unit_price_irt,
             e.title AS entry_title, e.currency AS entry_currency
      FROM ts_card_user_access a
      JOIN ts_cards c ON c.id = a.card_id

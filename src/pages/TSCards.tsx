@@ -901,6 +901,7 @@ const UserPricesDialog = ({
 }) => {
   const [drafts, setDrafts] = useState<Record<number, string>>({});
   const [busy, setBusy] = useState<number | null>(null);
+  const [search, setSearch] = useState<Record<number, string>>({});
 
   useEffect(() => {
     if (!card) return;
@@ -913,6 +914,7 @@ const UserPricesDialog = ({
       });
     });
     setDrafts(d);
+    setSearch({});
   }, [card]);
 
   if (!card) return null;
@@ -939,40 +941,57 @@ const UserPricesDialog = ({
           <DialogTitle className="text-persian text-right">قیمت دلار سفارشی کاربران — {card.name}</DialogTitle>
         </DialogHeader>
         <p className="text-xs text-muted-foreground text-persian">
-          قیمتی که در اینجا برای هر کاربر ثبت می‌کنید، فقط برای همان کاربر نمایش داده می‌شود. خالی بگذارید تا قیمت پیش‌فرض سکشن استفاده شود.
+          قیمتی که در اینجا برای هر کاربر ثبت می‌کنید، فقط برای همان کاربر نمایش داده می‌شود. تا زمانی که قیمتی وارد نکنید، کاربر هیچ قیمتی را نمی‌بیند.
         </p>
         <div className="space-y-3">
-          {(card.entries || []).filter(e => e.users.length > 0 && e.currency !== "IRT").map(e => (
-            <div key={e.id} className="border rounded-md p-3 bg-muted/30">
-              <div className="text-persian font-bold mb-2">
-                {e.title} <span className="text-xs text-muted-foreground font-normal">(پیش‌فرض: {e.unit_price_irt.toLocaleString("fa-IR")} ت/{CURRENCY_LABEL[e.currency]})</span>
+          {(card.entries || []).filter(e => e.users.length > 0 && e.currency !== "IRT").map(e => {
+            const q = (search[e.id] || "").trim().toLowerCase();
+            const filtered = q
+              ? e.users.filter(u =>
+                  `${u.first_name} ${u.last_name} ${u.username}`.toLowerCase().includes(q))
+              : e.users;
+            return (
+              <div key={e.id} className="border rounded-md p-3 bg-muted/30">
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                  <div className="text-persian font-bold">{e.title}</div>
+                  <Input
+                    value={search[e.id] || ""}
+                    onChange={(ev) => setSearch(prev => ({ ...prev, [e.id]: ev.target.value }))}
+                    placeholder="جستجوی نام کاربر…"
+                    className="h-9 w-full sm:w-64 text-persian"
+                  />
+                </div>
+                {filtered.length === 0 ? (
+                  <p className="text-center text-muted-foreground text-persian text-sm py-3">کاربری مطابق جستجو پیدا نشد.</p>
+                ) : (
+                  <ul className="divide-y">
+                    {filtered.map(u => (
+                      <li key={u.access_id} className="flex items-center gap-3 py-2 flex-wrap">
+                        <div className="flex-1 text-persian text-sm min-w-[160px]">
+                          {u.first_name} {u.last_name}
+                          <span className="text-muted-foreground text-xs mr-2">({u.allocated.toLocaleString("fa-IR")} {CURRENCY_LABEL[e.currency]})</span>
+                        </div>
+                        <Input
+                          value={u.access_id !== undefined ? (drafts[u.access_id] ?? "") : ""}
+                          onChange={(ev) => u.access_id !== undefined && setDrafts(prev => ({ ...prev, [u.access_id!]: normDigits(ev.target.value) }))}
+                          placeholder={`قیمت هر ${CURRENCY_LABEL[e.currency]}`}
+                          className="w-40 h-9" dir="ltr" inputMode="decimal"
+                        />
+                        <Button
+                          size="sm"
+                          disabled={busy === u.access_id}
+                          onClick={() => u.access_id !== undefined && save(u.access_id)}
+                          className="text-persian"
+                        >
+                          {busy === u.access_id ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              <ul className="divide-y">
-                {e.users.map(u => (
-                  <li key={u.access_id} className="flex items-center gap-3 py-2 flex-wrap">
-                    <div className="flex-1 text-persian text-sm min-w-[160px]">
-                      {u.first_name} {u.last_name}
-                      <span className="text-muted-foreground text-xs mr-2">({u.allocated.toLocaleString("fa-IR")} {CURRENCY_LABEL[e.currency]})</span>
-                    </div>
-                    <Input
-                      value={u.access_id !== undefined ? (drafts[u.access_id] ?? "") : ""}
-                      onChange={(ev) => u.access_id !== undefined && setDrafts(prev => ({ ...prev, [u.access_id!]: normDigits(ev.target.value) }))}
-                      placeholder={`قیمت هر ${CURRENCY_LABEL[e.currency]}`}
-                      className="w-40 h-9" dir="ltr" inputMode="decimal"
-                    />
-                    <Button
-                      size="sm"
-                      disabled={busy === u.access_id}
-                      onClick={() => u.access_id !== undefined && save(u.access_id)}
-                      className="text-persian"
-                    >
-                      {busy === u.access_id ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            );
+          })}
           {(card.entries || []).every(e => e.users.length === 0 || e.currency === "IRT") && (
             <p className="text-center text-muted-foreground text-persian text-sm py-6">
               هیچ کاربری به سکشن‌های ارزی این کارت تخصیص داده نشده.

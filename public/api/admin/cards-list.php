@@ -75,14 +75,36 @@ if ($rows) {
         ];
     }
 
+    // kotaj toman totals per card & per entry
+    $kStmt = $pdo->prepare(
+        "SELECT k.card_id, k.entry_id, COALESCE(SUM(i.value_usd * i.unit_price_irt),0) AS toman
+         FROM ts_kotaj k
+         JOIN ts_kotaj_items i ON i.kotaj_id = k.id
+         WHERE k.card_id IN ($place)
+         GROUP BY k.card_id, k.entry_id"
+    );
+    $kStmt->execute($ids);
+    $kotajByCard = [];
+    $kotajByEntry = [];
+    foreach ($kStmt->fetchAll() as $kr) {
+        $cid = (int)$kr['card_id']; $eid = (int)$kr['entry_id']; $t = (float)$kr['toman'];
+        $kotajByCard[$cid] = ($kotajByCard[$cid] ?? 0) + $t;
+        $kotajByEntry[$eid] = $t;
+    }
+
     foreach ($rows as &$r) {
         $cid = (int)$r['id'];
         $r['entries'] = $entriesByCard[$cid] ?? [];
+        foreach ($r['entries'] as &$ent) {
+            $ent['kotaj_toman_total'] = $kotajByEntry[(int)$ent['id']] ?? 0.0;
+        }
+        unset($ent);
         $r['users']   = array_values($usersByCard[$cid] ?? []);
         $r['user_count'] = count($r['users']);
         $r['allocated_total'] = 0.0;
         foreach ($r['users'] as $u) $r['allocated_total'] += $u['allocated'];
         $r['remaining'] = max(0, (float)$r['balance'] - (float)$r['allocated_total']);
+        $r['kotaj_toman_total'] = $kotajByCard[$cid] ?? 0.0;
     }
 }
 

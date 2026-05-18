@@ -1031,8 +1031,9 @@ interface ReportKotaj {
   kotaj_number: string;
   kotaj_date_jalali: string;
   total_value_usd: number;
+  toman_total?: number;
   created_at: string;
-  items: { name: string; value_usd: number; unit_price_irt: number; }[];
+  items: { name: string; value_usd: number; unit_price_irt: number; toman?: number }[];
 }
 interface ReportUser {
   id: number;
@@ -1040,6 +1041,9 @@ interface ReportUser {
   last_name: string;
   username: string;
   total_usd: number;
+  total_toman?: number;
+  payments_toman?: number;
+  debt_toman?: number;
   kotajs: ReportKotaj[];
 }
 
@@ -1053,10 +1057,15 @@ const KotajReportDialog = ({
   const [users, setUsers] = useState<ReportUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [q, setQ] = useState("");
+  const [entryFilter, setEntryFilter] = useState<string>("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   useEffect(() => {
     if (!card) return;
     setLoading(true);
+    setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo("");
     api<{ users: ReportUser[] }>(`/api/admin/card-kotaj-report.php?card_id=${card.id}`)
       .then(r => setUsers(r.users || []))
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
@@ -1064,69 +1073,175 @@ const KotajReportDialog = ({
   }, [card, toast]);
 
   if (!card) return null;
+
+  const qN = normDigits(q).trim();
+  const fromN = normDigits(dateFrom).trim();
+  const toN = normDigits(dateTo).trim();
+  const allEntries = Array.from(new Map(
+    users.flatMap(u => u.kotajs).map(k => [k.entry_id, k.entry_title || "—"])
+  ).entries());
+
+  const filteredUsers = users.map(u => ({
+    ...u,
+    kotajs: u.kotajs.filter(k => {
+      if (qN && !normDigits(k.kotaj_number).includes(qN)) return false;
+      if (entryFilter !== "all" && String(k.entry_id) !== entryFilter) return false;
+      const d = normDigits(k.kotaj_date_jalali);
+      if (fromN && d < fromN) return false;
+      if (toN && d > toN) return false;
+      return true;
+    }),
+  })).filter(u => u.kotajs.length > 0);
+
+  const grandUsd = filteredUsers.reduce((s, u) => s + u.kotajs.reduce((a, k) => a + k.total_value_usd, 0), 0);
+  const grandToman = filteredUsers.reduce((s, u) => s + u.kotajs.reduce((a, k) => a + (k.toman_total || 0), 0), 0);
+  const hasFilter = !!(q || entryFilter !== "all" || dateFrom || dateTo);
+
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent dir="rtl" className="max-w-4xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">گزارش کوتاژها — {card.name}</DialogTitle>
         </DialogHeader>
+
+        {users.length > 0 && (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
+              <div className="rounded-md border p-3 bg-muted/30">
+                <div className="text-xs text-muted-foreground text-persian">جمع دلاری</div>
+                <div className="text-lg font-bold tabular-nums">{grandUsd.toLocaleString("fa-IR")} دلار</div>
+              </div>
+              <div className="rounded-md border p-3 bg-muted/30">
+                <div className="text-xs text-muted-foreground text-persian">جمع تومانی</div>
+                <div className="text-lg font-bold tabular-nums text-primary">{fmtToman(grandToman)}</div>
+              </div>
+              <div className="rounded-md border p-3 bg-muted/30">
+                <div className="text-xs text-muted-foreground text-persian">تعداد کاربر</div>
+                <div className="text-lg font-bold tabular-nums">{filteredUsers.length.toLocaleString("fa-IR")}</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+              <div className="relative">
+                <Search className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="جستجوی شماره کوتاژ" className="text-persian pr-8" dir="ltr" />
+              </div>
+              <Select value={entryFilter} onValueChange={setEntryFilter}>
+                <SelectTrigger className="text-persian"><SelectValue placeholder="همه سکشن‌ها" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all" className="text-persian">همه سکشن‌ها</SelectItem>
+                  {allEntries.map(([id, title]) => (
+                    <SelectItem key={id} value={String(id)} className="text-persian">{title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} placeholder="از تاریخ (1405/01/01)" className="text-persian" dir="ltr" />
+              <Input value={dateTo} onChange={(e) => setDateTo(e.target.value)} placeholder="تا تاریخ (1405/12/29)" className="text-persian" dir="ltr" />
+              {hasFilter && (
+                <div className="md:col-span-2 flex justify-end">
+                  <Button size="sm" variant="ghost" onClick={() => { setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo(""); }} className="text-persian">
+                    پاک کردن فیلتر
+                  </Button>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
         {loading ? (
           <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
         ) : users.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">هنوز کوتاژی برای این کارت ثبت نشده.</p>
+        ) : filteredUsers.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">موردی با فیلتر مطابقت ندارد.</p>
         ) : (
           <div className="space-y-4">
-            {users.map(u => (
+            {filteredUsers.map(u => {
+              const userToman = u.kotajs.reduce((a, k) => a + (k.toman_total || 0), 0);
+              const userUsd = u.kotajs.reduce((a, k) => a + k.total_value_usd, 0);
+              const debt = u.debt_toman ?? Math.max(0, userToman - (u.payments_toman || 0));
+              return (
               <div key={u.id} className="border rounded-md p-3">
-                <div className="flex justify-between items-center mb-2 flex-wrap gap-2">
-                  <div className="text-persian font-bold">
-                    {u.first_name} {u.last_name}
-                    <span className="text-xs text-muted-foreground font-normal mr-2">@{u.username}</span>
+                <div className="flex justify-between items-start mb-3 flex-wrap gap-2 border-b pb-2">
+                  <div className="text-persian">
+                    <div className="font-bold">
+                      {u.first_name} {u.last_name}
+                      <span className="text-xs text-muted-foreground font-normal mr-2">@{u.username}</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">{u.kotajs.length.toLocaleString("fa-IR")} کوتاژ</div>
                   </div>
-                  <div className="text-persian text-sm">
-                    جمع کل: <span className="font-bold tabular-nums text-primary">{u.total_usd.toLocaleString("fa-IR")} دلار</span>
+                  <div className="text-persian text-sm text-left space-y-0.5">
+                    <div>جمع دلار: <span className="font-bold tabular-nums text-primary">{userUsd.toLocaleString("fa-IR")} دلار</span></div>
+                    <div>جمع تومان: <span className="font-bold tabular-nums">{fmtToman(userToman)}</span></div>
+                    {(u.payments_toman || 0) > 0 && (
+                      <div className="text-emerald-600">پرداختی: <span className="font-bold tabular-nums">{fmtToman(u.payments_toman || 0)}</span></div>
+                    )}
+                    {debt > 0 ? (
+                      <div className="text-destructive">بدهی: <span className="font-bold tabular-nums">{fmtToman(debt)}</span></div>
+                    ) : (u.payments_toman || 0) > 0 && (
+                      <div className="text-emerald-600 font-bold">تسویه ✓</div>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-1.5">
                   {u.kotajs.map(k => (
                     <div key={k.id} className="border rounded-md">
-                      <button
-                        className="w-full p-2.5 flex items-center justify-between text-right hover:bg-muted/30 gap-2"
-                        onClick={() => setOpenId(openId === k.id ? null : k.id)}
-                      >
-                        <div className="flex-1 text-persian text-sm">
-                          <span className="font-bold">#{k.kotaj_number}</span>
-                          <span className="text-xs text-muted-foreground mr-2">
-                            {k.kotaj_date_jalali} — {k.entry_title || "—"}
-                          </span>
-                        </div>
-                        <div className="text-persian font-bold tabular-nums">
-                          {k.total_value_usd.toLocaleString("fa-IR")} دلار
-                        </div>
-                        {openId === k.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                      </button>
+                      <div className="w-full flex items-center justify-between text-right hover:bg-muted/30 gap-2 p-1">
+                        <button className="flex-1 flex items-center justify-between p-2" onClick={() => setOpenId(openId === k.id ? null : k.id)}>
+                          <div className="flex-1 text-persian text-sm text-right">
+                            <span className="font-bold">#{k.kotaj_number}</span>
+                            <span className="text-xs text-muted-foreground mr-2">{k.kotaj_date_jalali} — {k.entry_title || "—"}</span>
+                          </div>
+                          <div className="text-persian font-bold tabular-nums text-left">
+                            <div>{k.total_value_usd.toLocaleString("fa-IR")} دلار</div>
+                            {(k.toman_total || 0) > 0 && (
+                              <div className="text-xs text-muted-foreground">{fmtToman(k.toman_total || 0)}</div>
+                            )}
+                          </div>
+                          {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
+                        </button>
+                        <Button size="sm" variant="ghost" title="دانلود PDF" onClick={() => downloadKotajPdf({
+                          id: k.id,
+                          kotaj_number: k.kotaj_number,
+                          kotaj_date_jalali: k.kotaj_date_jalali,
+                          entry_title: k.entry_title,
+                          total_value_usd: k.total_value_usd,
+                          toman_total: k.toman_total,
+                          items: k.items.map(it => ({ ...it, toman: it.toman ?? it.value_usd * it.unit_price_irt })),
+                        }, `${card.name} — ${u.first_name} ${u.last_name}`)}>
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
                       {openId === k.id && (
                         <div className="border-t p-2 space-y-1 bg-muted/20">
-                          {k.items.map((it, i) => (
-                            <div key={i} className="flex justify-between text-persian text-sm">
-                              <span>{it.name}</span>
-                              <span className="tabular-nums">
-                                {it.value_usd.toLocaleString("fa-IR")} دلار
+                          {k.items.map((it, i) => {
+                            const t = it.toman ?? it.value_usd * it.unit_price_irt;
+                            return (
+                            <div key={i} className="flex justify-between text-persian text-sm gap-2">
+                              <span className="flex-1">{it.name}</span>
+                              <span className="tabular-nums text-left">
+                                <span>{it.value_usd.toLocaleString("fa-IR")} دلار</span>
                                 {it.unit_price_irt > 0 && (
-                                  <span className="text-xs text-muted-foreground mr-2">
-                                    ({it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار)
+                                  <span className="text-xs text-muted-foreground block">
+                                    {it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار = <strong className="text-primary">{fmtToman(t)}</strong>
                                   </span>
                                 )}
                               </span>
                             </div>
-                          ))}
+                          );})}
+                          {(k.toman_total || 0) > 0 && (
+                            <div className="border-t pt-2 mt-2 flex justify-between text-persian text-sm">
+                              <span className="font-bold">مجموع تومانی</span>
+                              <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total || 0)}</span>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         )}
         <DialogFooter>
@@ -1136,6 +1251,7 @@ const KotajReportDialog = ({
     </Dialog>
   );
 };
+
 
 interface ReportsData {
   totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; remaining_usd: number; kotaj_count: number; };

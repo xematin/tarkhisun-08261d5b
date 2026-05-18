@@ -281,13 +281,21 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
 
       <KotajDialog
         card={kotajFor}
-        onClose={() => setKotajFor(null)}
-        onSaved={() => { setKotajFor(null); void load(); }}
+        editing={editing}
+        onClose={() => { setKotajFor(null); setEditing(null); }}
+        onSaved={() => { setKotajFor(null); setEditing(null); void load(); }}
         toast={toast}
       />
       <KotajListDialog
         card={listFor}
         onClose={() => setListFor(null)}
+        onEdit={(k) => {
+          const c = items.find(x => x.id === k.card_id) || null;
+          setListFor(null);
+          setKotajFor(c);
+          setEditing(k);
+        }}
+        onChanged={() => void load()}
         toast={toast}
       />
     </>

@@ -21,18 +21,35 @@ $rows = $st->fetchAll();
 
 $ids = array_map(fn($r) => (int)$r['id'], $rows);
 $itemsByK = [];
+$tomanByK = [];
 if ($ids) {
     $place = implode(',', array_fill(0, count($ids), '?'));
     $it = $pdo->prepare("SELECT * FROM ts_kotaj_items WHERE kotaj_id IN ($place) ORDER BY id");
     $it->execute($ids);
     foreach ($it->fetchAll() as $r) {
-        $itemsByK[(int)$r['kotaj_id']][] = [
+        $kid = (int)$r['kotaj_id'];
+        $v = (float)$r['value_usd']; $p = (float)$r['unit_price_irt']; $t = $v * $p;
+        $itemsByK[$kid][] = [
             'name' => $r['name'],
-            'value_usd' => (float)$r['value_usd'],
-            'unit_price_irt' => (float)$r['unit_price_irt'],
+            'value_usd' => $v,
+            'unit_price_irt' => $p,
+            'toman' => $t,
         ];
+        $tomanByK[$kid] = ($tomanByK[$kid] ?? 0) + $t;
     }
 }
+
+// Payments per user for this card
+$payByUser = [];
+try {
+    $ps = $pdo->prepare(
+        "SELECT card_user_id, COALESCE(SUM(amount_irt),0) AS s
+         FROM ts_card_payments WHERE card_id=? AND status='confirmed'
+         GROUP BY card_user_id"
+    );
+    $ps->execute([$card_id]);
+    foreach ($ps->fetchAll() as $r) $payByUser[(int)$r['card_user_id']] = (float)$r['s'];
+} catch (Throwable $e) {}
 
 $users = [];
 foreach ($rows as $r) {
@@ -44,10 +61,13 @@ foreach ($rows as $r) {
             'last_name' => $r['last_name'],
             'username' => $r['username'],
             'total_usd' => 0.0,
+            'total_toman' => 0.0,
+            'payments_toman' => $payByUser[$uid] ?? 0.0,
             'kotajs' => [],
         ];
     }
     $kid = (int)$r['id'];
+    $kt = $tomanByK[$kid] ?? 0.0;
     $users[$uid]['kotajs'][] = [
         'id' => $kid,
         'entry_id' => (int)$r['entry_id'],
@@ -55,10 +75,17 @@ foreach ($rows as $r) {
         'kotaj_number' => $r['kotaj_number'],
         'kotaj_date_jalali' => $r['kotaj_date_jalali'],
         'total_value_usd' => (float)$r['total_value_usd'],
+        'toman_total' => $kt,
         'created_at' => $r['created_at'],
         'items' => $itemsByK[$kid] ?? [],
     ];
     $users[$uid]['total_usd'] += (float)$r['total_value_usd'];
+    $users[$uid]['total_toman'] += $kt;
 }
+
+foreach ($users as &$uu) {
+    $uu['debt_toman'] = max(0, $uu['total_toman'] - $uu['payments_toman']);
+}
+unset($uu);
 
 ts_json(200, ['users' => array_values($users)]);

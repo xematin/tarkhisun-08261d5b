@@ -129,7 +129,7 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="panel-glass panel-fa min-h-screen" dir="rtl">
+      <div className="panel-glass panel-fa min-h-screen">
         <header className="container mx-auto px-4 pt-4">
           <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
@@ -251,11 +251,11 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-right text-persian">نام کارت</TableHead>
-                    <TableHead className="text-right text-persian">موجودی کل (دلار)</TableHead>
-                    <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
-                    <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
-                    <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
+                    <TableHead className="text-persian">نام کارت</TableHead>
+                    <TableHead className="text-persian">موجودی کل (دلار)</TableHead>
+                    <TableHead className="text-persian">موجودی کل (تومان)</TableHead>
+                    <TableHead className="text-persian">سکشن‌ها</TableHead>
+                    <TableHead className="text-persian hidden md:table-cell">کاربران</TableHead>
                     <TableHead></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -566,9 +566,9 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">
+          <DialogTitle className="text-persian">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
           </DialogTitle>
         </DialogHeader>
@@ -823,9 +823,9 @@ const AddUserDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-md panel-fa">
+      <DialogContent className="max-w-md panel-fa">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">افزودن کاربر جدید</DialogTitle>
+          <DialogTitle className="text-persian">افزودن کاربر جدید</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -906,9 +906,9 @@ const LogsDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+      <DialogContent className="max-w-2xl panel-fa">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">
+          <DialogTitle className="text-persian">
             تاریخچهٔ تغییرات — {card?.name}
           </DialogTitle>
         </DialogHeader>
@@ -1003,9 +1003,9 @@ const UserPricesDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">قیمت دلار سفارشی کاربران — {card.name}</DialogTitle>
+          <DialogTitle className="text-persian">قیمت دلار سفارشی کاربران — {card.name}</DialogTitle>
         </DialogHeader>
         <p className="text-xs text-muted-foreground text-persian">
           قیمتی که در اینجا برای هر کاربر ثبت می‌کنید، فقط برای همان کاربر نمایش داده می‌شود. تا زمانی که قیمتی وارد نکنید، کاربر هیچ قیمتی را نمی‌بیند.
@@ -1172,9 +1172,9 @@ const KotajReportDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-4xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">گزارش کارت — {card.name}</DialogTitle>
+          <DialogTitle className="text-persian">گزارش کارت — {card.name}</DialogTitle>
         </DialogHeader>
 
         {users.length > 0 && (
@@ -1328,9 +1328,9 @@ const KotajReportDialog = ({
       />
 
       <Dialog open={!!deleteKotaj} onOpenChange={(v) => { if (!v) setDeleteKotaj(null); }}>
-        <DialogContent dir="rtl" className="max-w-md panel-fa">
+        <DialogContent className="max-w-md panel-fa">
           <DialogHeader>
-            <DialogTitle className="text-persian text-right">حذف کوتاژ</DialogTitle>
+            <DialogTitle className="text-persian">حذف کوتاژ</DialogTitle>
           </DialogHeader>
           <p className="text-persian text-sm">
             آیا از حذف کوتاژ <strong className="tabular-nums">#{deleteKotaj?.kotaj_number}</strong> مطمئن هستید؟ این عملیات قابل بازگشت نیست.
@@ -1424,9 +1424,9 @@ const AdminKotajEditDialog = ({
 
   return (
     <Dialog open={!!kotaj} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">ویرایش کوتاژ — #{kotaj.kotaj_number}</DialogTitle>
+          <DialogTitle className="text-persian">ویرایش کوتاژ — #{kotaj.kotaj_number}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1773,13 +1773,13 @@ const AllPaymentsPanel = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-right text-persian">کارت</TableHead>
-                  <TableHead className="text-right text-persian">کاربر</TableHead>
-                  <TableHead className="text-right text-persian">مبلغ (تومان)</TableHead>
-                  <TableHead className="text-right text-persian">تاریخ (شمسی)</TableHead>
-                  <TableHead className="text-right text-persian">وضعیت</TableHead>
-                  <TableHead className="text-right text-persian">فیش</TableHead>
-                  <TableHead className="text-right text-persian">توضیح</TableHead>
+                  <TableHead className="text-persian">کارت</TableHead>
+                  <TableHead className="text-persian">کاربر</TableHead>
+                  <TableHead className="text-persian">مبلغ (تومان)</TableHead>
+                  <TableHead className="text-persian">تاریخ (شمسی)</TableHead>
+                  <TableHead className="text-persian">وضعیت</TableHead>
+                  <TableHead className="text-persian">فیش</TableHead>
+                  <TableHead className="text-persian">توضیح</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1819,9 +1819,9 @@ const AllPaymentsPanel = ({
         )}
 
         <Dialog open={!!preview} onOpenChange={(v) => { if (!v) setPreview(null); }}>
-          <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+          <DialogContent className="max-w-2xl panel-fa">
             <DialogHeader>
-              <DialogTitle className="text-persian text-right">تصویر فیش واریزی</DialogTitle>
+              <DialogTitle className="text-persian">تصویر فیش واریزی</DialogTitle>
             </DialogHeader>
             {preview && <img src={preview} alt="فیش واریزی" className="w-full h-auto rounded-md" />}
             <DialogFooter>
@@ -1901,13 +1901,13 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="text-right text-persian">کارت</TableHead>
-                      <TableHead className="text-right text-persian">موجودی</TableHead>
-                      <TableHead className="text-right text-persian">تخصیص</TableHead>
-                      <TableHead className="text-right text-persian">مصرف</TableHead>
-                      <TableHead className="text-right text-persian">مانده</TableHead>
-                      <TableHead className="text-right text-persian">کوتاژ</TableHead>
-                      <TableHead className="text-right text-persian">کاربران</TableHead>
+                      <TableHead className="text-persian">کارت</TableHead>
+                      <TableHead className="text-persian">موجودی</TableHead>
+                      <TableHead className="text-persian">تخصیص</TableHead>
+                      <TableHead className="text-persian">مصرف</TableHead>
+                      <TableHead className="text-persian">مانده</TableHead>
+                      <TableHead className="text-persian">کوتاژ</TableHead>
+                      <TableHead className="text-persian">کاربران</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

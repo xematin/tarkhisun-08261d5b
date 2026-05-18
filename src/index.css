@@ -329,6 +329,22 @@
       linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 13% 98%) 100%);
     color: hsl(var(--foreground));
   }
+
+  /* ===== Centralized RTL for panel + portaled dialogs =====
+     Any element with .panel-fa (root wrapper OR DialogContent) is RTL by default.
+     Table headers/cells right-align automatically.
+     To opt out for a specific element (e.g. latin/numeric input), use dir="ltr" inline. */
+  .panel-fa {
+    direction: rtl;
+    text-align: right;
+  }
+  .panel-fa table th,
+  .panel-fa table td {
+    text-align: right;
+  }
+  .panel-fa [dir="ltr"] {
+    text-align: left;
+  }
   /* Floating white glass top bar (like main site header) */
   .panel-glass .panel-topbar {
     background: hsl(0 0% 100% / 0.75);

@@ -212,14 +212,14 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
 
   return (
     <Tabs defaultValue="cards" className="space-y-6">
-      <TabsList className="panel-3d-tabs h-14 w-full justify-between rounded-full bg-[hsl(35_40%_94%)] p-1.5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)]">
-        <TabsTrigger value="cards" className="flex-1 h-full rounded-full text-persian text-sm data-[state=active]:bg-background data-[state=active]:shadow-[0_2px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] data-[state=active]:font-bold transition-all">
+      <TabsList className="panel-3d-tabs h-14 w-full justify-between rounded-full bg-secondary p-1.5 border border-border shadow-[inset_0_2px_6px_hsl(var(--primary)/0.12),0_2px_4px_hsl(var(--primary)/0.06)]">
+        <TabsTrigger value="cards" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_4px_12px_hsl(var(--primary)/0.35),0_1px_2px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold transition-all">
           کارت‌ها
         </TabsTrigger>
-        <TabsTrigger value="payments" className="flex-1 h-full rounded-full text-persian text-sm data-[state=active]:bg-background data-[state=active]:shadow-[0_2px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] data-[state=active]:font-bold transition-all">
+        <TabsTrigger value="payments" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_4px_12px_hsl(var(--primary)/0.35),0_1px_2px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold transition-all">
           پرداخت‌های کاربران
         </TabsTrigger>
-        <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-sm data-[state=active]:bg-background data-[state=active]:shadow-[0_2px_8px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] data-[state=active]:font-bold transition-all">
+        <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_4px_12px_hsl(var(--primary)/0.35),0_1px_2px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold transition-all">
           گزارش‌گیری
         </TabsTrigger>
       </TabsList>

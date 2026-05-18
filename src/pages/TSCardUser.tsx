@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search } from "lucide-react";
+import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,7 +44,11 @@ interface MyCard {
   total_irt: number;
   total_usd: number;
   remaining_usd: number;
+  kotaj_toman_total?: number;
+  payments_toman_total?: number;
+  debt_toman?: number;
 }
+
 interface MeUser { id: number; first_name: string; last_name: string; username: string; }
 
 interface KotajItem { name: string; value_usd: number; unit_price_irt: number; toman?: number; }

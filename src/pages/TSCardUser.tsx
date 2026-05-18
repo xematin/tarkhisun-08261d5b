@@ -193,6 +193,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
   const [kotajFor, setKotajFor] = useState<MyCard | null>(null);
   const [editing, setEditing] = useState<Kotaj | null>(null);
   const [listFor, setListFor] = useState<MyCard | null>(null);
+  const [payFor, setPayFor] = useState<MyCard | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -218,8 +219,29 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
           const tomanTotal = c.entries
             .filter(e => e.currency === "USD" && e.has_custom_price)
             .reduce((s, e) => s + e.allocated * e.unit_price_irt, 0);
+          const kotajToman = c.kotaj_toman_total ?? 0;
+          const debt = c.debt_toman ?? Math.max(0, kotajToman - (c.payments_toman_total ?? 0));
+          const paid = c.payments_toman_total ?? 0;
           return (
-            <Card key={c.id}>
+            <Card key={c.id} className="relative overflow-hidden">
+              {/* Top-left debt badge */}
+              {kotajToman > 0 && (
+                <div className="absolute top-2 left-2 z-10">
+                  {debt > 0 ? (
+                    <div className="rounded-md bg-destructive/10 border border-destructive/30 px-2 py-1 text-right">
+                      <div className="text-[10px] text-destructive/80 text-persian leading-tight">بدهی کوتاژ</div>
+                      <div className="text-xs font-bold tabular-nums text-destructive leading-tight">
+                        {fmtToman(debt)}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-md bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-xs font-bold text-emerald-700 text-persian">تسویه</span>
+                    </div>
+                  )}
+                </div>
+              )}
               <CardHeader>
                 <CardTitle className="text-persian text-base flex items-center gap-2">
                   <CreditCard className="w-4 h-4" /> {c.name}
@@ -270,6 +292,20 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                     </div>
                   ))}
                 </div>
+                {kotajToman > 0 && (
+                  <div className="border-t pt-3 text-persian text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">مجموع هزینه کوتاژها</span>
+                      <span className="tabular-nums font-bold">{fmtToman(kotajToman)}</span>
+                    </div>
+                    {paid > 0 && (
+                      <div className="flex justify-between text-emerald-600">
+                        <span>پرداختی</span>
+                        <span className="tabular-nums font-bold">{fmtToman(paid)}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div className="flex gap-2 pt-2">
                   <Button size="sm" className="flex-1 text-persian" onClick={() => setKotajFor(c)}>
                     <Plus className="w-4 h-4 ml-1" /> افزودن کوتاژ
@@ -278,6 +314,15 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                     <FileText className="w-4 h-4 ml-1" /> کوتاژها
                   </Button>
                 </div>
+                <Button
+                  size="sm"
+                  variant={debt > 0 ? "default" : "outline"}
+                  className={`w-full text-persian ${debt > 0 ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}`}
+                  onClick={() => setPayFor(c)}
+                >
+                  <Wallet className="w-4 h-4 ml-1" /> پرداخت
+                  {debt > 0 && <span className="mr-2 text-xs opacity-90">({fmtToman(debt)})</span>}
+                </Button>
               </CardContent>
             </Card>
           );
@@ -303,9 +348,16 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
         onChanged={() => void load()}
         toast={toast}
       />
+      <PaymentDialog
+        card={payFor}
+        onClose={() => setPayFor(null)}
+        onSaved={() => { setPayFor(null); void load(); }}
+        toast={toast}
+      />
     </>
   );
 };
+
 
 interface ItemDraft { name: string; value_usd: string; unit_price_irt: string; }
 const emptyItem = (): ItemDraft => ({ name: "", value_usd: "", unit_price_irt: "" });

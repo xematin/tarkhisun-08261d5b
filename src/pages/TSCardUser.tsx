@@ -306,9 +306,10 @@ interface ItemDraft { name: string; value_usd: string; unit_price_irt: string; }
 const emptyItem = (): ItemDraft => ({ name: "", value_usd: "", unit_price_irt: "" });
 
 const KotajDialog = ({
-  card, onClose, onSaved, toast,
+  card, editing, onClose, onSaved, toast,
 }: {
   card: MyCard | null;
+  editing?: Kotaj | null;
   onClose: () => void;
   onSaved: () => void;
   toast: ReturnType<typeof useToast>["toast"];
@@ -318,22 +319,43 @@ const KotajDialog = ({
   const [date, setDate] = useState<string>("");
   const [items, setItems] = useState<ItemDraft[]>([emptyItem()]);
   const [busy, setBusy] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (card) {
       const usdEntries = card.entries.filter(e => e.currency === "USD" && e.entry_id !== null);
-      setEntryId(usdEntries[0]?.entry_id ? String(usdEntries[0].entry_id) : "");
-      setNum(""); setDate("");
-      setItems([emptyItem()]);
+      if (editing) {
+        setEntryId(String(editing.entry_id));
+        setNum(editing.kotaj_number);
+        setDate(editing.kotaj_date_jalali);
+        setItems(editing.items.length
+          ? editing.items.map(it => ({
+              name: it.name,
+              value_usd: String(it.value_usd),
+              unit_price_irt: String(it.unit_price_irt),
+            }))
+          : [emptyItem()]);
+      } else {
+        setEntryId(usdEntries[0]?.entry_id ? String(usdEntries[0].entry_id) : "");
+        setNum(""); setDate("");
+        setItems([emptyItem()]);
+      }
     }
-  }, [card]);
+  }, [card, editing]);
 
   if (!card) return null;
   const usdEntries = card.entries.filter(e => e.currency === "USD" && e.entry_id !== null);
   const selected = usdEntries.find(e => String(e.entry_id) === entryId);
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
-  const remain = selected ? selected.remaining : 0;
+  // when editing, that kotaj's own usd should not count against remain
+  const editingOwn = editing && selected && editing.entry_id === selected.entry_id ? editing.total_value_usd : 0;
+  const remain = selected ? selected.remaining + editingOwn : 0;
   const over = selected ? totalUsd - remain > 0.0001 : false;
+  const totalToman = items.reduce((s, it) => {
+    const v = parseFloat(normDigits(it.value_usd)) || 0;
+    const p = parseFloat(normDigits(it.unit_price_irt)) || 0;
+    return s + v * p;
+  }, 0);
   const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
   const customs = lookupCustoms(num);
   const customsCode = customs?.code || "";

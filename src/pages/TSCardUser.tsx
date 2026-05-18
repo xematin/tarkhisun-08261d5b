@@ -220,24 +220,44 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
             .filter(e => e.currency === "USD" && e.has_custom_price)
             .reduce((s, e) => s + e.allocated * e.unit_price_irt, 0);
           const kotajToman = c.kotaj_toman_total ?? 0;
-          const debt = c.debt_toman ?? Math.max(0, kotajToman - (c.payments_toman_total ?? 0));
           const paid = c.payments_toman_total ?? 0;
+          const balance = paid - kotajToman; // >0 بستانکار، <0 بدهکار، 0 تسویه
+          const debt = balance < 0 ? -balance : 0;
+          const credit = balance > 0 ? balance : 0;
+          const hasActivity = kotajToman > 0 || paid > 0;
+
+          let badgeStatus: "debt" | "credit" | "settled" | null = null;
+          if (hasActivity) {
+            if (balance < 0) badgeStatus = "debt";
+            else if (balance > 0) badgeStatus = "credit";
+            else badgeStatus = "settled";
+          }
+
           return (
             <Card key={c.id} className="relative overflow-hidden">
-              {/* Top-left debt badge */}
-              {kotajToman > 0 && (
+              {/* Top-left dynamic status badge */}
+              {badgeStatus && (
                 <div className="absolute top-2 left-2 z-10">
-                  {debt > 0 ? (
+                  {badgeStatus === "debt" && (
                     <div className="rounded-md bg-destructive/10 border border-destructive/30 px-2 py-1 text-right">
-                      <div className="text-[10px] text-destructive/80 text-persian leading-tight">بدهی کوتاژ</div>
+                      <div className="text-[10px] text-destructive/80 text-persian leading-tight">بدهکار</div>
                       <div className="text-xs font-bold tabular-nums text-destructive leading-tight">
                         {fmtToman(debt)}
                       </div>
                     </div>
-                  ) : (
-                    <div className="rounded-md bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-xs font-bold text-emerald-700 text-persian">تسویه</span>
+                  )}
+                  {badgeStatus === "credit" && (
+                    <div className="rounded-md bg-emerald-500/10 border border-emerald-500/40 px-2 py-1 text-right">
+                      <div className="text-[10px] text-emerald-700 text-persian leading-tight">بستانکار</div>
+                      <div className="text-xs font-bold tabular-nums text-emerald-700 leading-tight">
+                        {fmtToman(credit)}
+                      </div>
+                    </div>
+                  )}
+                  {badgeStatus === "settled" && (
+                    <div className="rounded-md bg-sky-100 border border-sky-300 px-2 py-1 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
+                      <span className="text-xs font-bold text-sky-700 text-persian">تسویه</span>
                     </div>
                   )}
                 </div>

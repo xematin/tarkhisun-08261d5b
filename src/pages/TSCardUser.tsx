@@ -891,7 +891,7 @@ const PaymentDialog = ({
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
     if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
-    if (file.size > 5 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۵ مگابایت است", variant: "destructive" }); return; }
+    if (file.size > 10 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۱۰ مگابایت است", variant: "destructive" }); return; }
     setBusy(true);
     try {
       const fd = new FormData();

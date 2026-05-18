@@ -1535,8 +1535,8 @@ const AllPaymentsPanel = ({
             </SelectContent>
           </Select>
           <div className="grid grid-cols-2 gap-2 md:col-span-1">
-            <Input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="text-persian" />
-            <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="text-persian" />
+            <Input value={dateFrom} onChange={(e) => setDateFrom(normDigits(e.target.value))} placeholder="از تاریخ (1405/01/01)" className="text-persian" dir="ltr" />
+            <Input value={dateTo} onChange={(e) => setDateTo(normDigits(e.target.value))} placeholder="تا تاریخ (1405/12/29)" className="text-persian" dir="ltr" />
           </div>
           {hasFilter && (
             <div className="md:col-span-3 flex justify-end">

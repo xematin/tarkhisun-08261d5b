@@ -1,0 +1,7 @@
+# Prevent PHP execution in upload dir
+<FilesMatch "\.(php|phtml|phar|pl|py|jsp|asp|sh|cgi)$">
+  Require all denied
+</FilesMatch>
+Options -ExecCGI
+RemoveHandler .php .phtml .phar
+RemoveType .php .phtml .phar

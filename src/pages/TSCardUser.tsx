@@ -573,17 +573,21 @@ const KotajDialog = ({
 };
 
 const KotajListDialog = ({
-  card, onClose, toast,
+  card, onClose, onEdit, onChanged, toast,
 }: {
   card: MyCard | null;
   onClose: () => void;
+  onEdit: (k: Kotaj) => void;
+  onChanged: () => void;
   toast: ReturnType<typeof useToast>["toast"];
 }) => {
   const [items, setItems] = useState<Kotaj[]>([]);
   const [loading, setLoading] = useState(false);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [busyDel, setBusyDel] = useState(false);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (!card) return;
     setLoading(true);
     api<{ items: Kotaj[] }>(`/api/cards/kotaj-list.php?card_id=${card.id}`)
@@ -591,6 +595,25 @@ const KotajListDialog = ({
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [card, toast]);
+
+  useEffect(() => { reload(); }, [reload]);
+
+  const doDelete = async () => {
+    if (deleteId == null) return;
+    setBusyDel(true);
+    try {
+      await api("/api/cards/kotaj-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: deleteId }),
+      });
+      toast({ title: "کوتاژ حذف شد" });
+      setDeleteId(null);
+      reload();
+      onChanged();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusyDel(false); }
+  };
 
   if (!card) return null;
   return (
@@ -607,36 +630,57 @@ const KotajListDialog = ({
           <div className="space-y-2">
             {items.map(k => (
               <div key={k.id} className="border rounded-md">
-                <button
-                  className="w-full p-3 flex items-center justify-between text-right hover:bg-muted/30"
-                  onClick={() => setOpenId(openId === k.id ? null : k.id)}
-                >
-                  <div className="flex-1 text-persian text-sm space-y-1">
-                    <div className="font-bold">کوتاژ #{k.kotaj_number}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
+                <div className="w-full p-3 flex items-center justify-between gap-2">
+                  <button
+                    className="flex-1 flex items-center justify-between text-right hover:bg-muted/30 rounded-md p-2 -m-2"
+                    onClick={() => setOpenId(openId === k.id ? null : k.id)}
+                  >
+                    <div className="flex-1 text-persian text-sm space-y-1">
+                      <div className="font-bold">کوتاژ #{k.kotaj_number}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
+                      </div>
                     </div>
+                    <div className="text-persian font-bold tabular-nums text-left">
+                      <div className="text-primary">{fmtUSD(k.total_value_usd)}</div>
+                      {(k.toman_total ?? 0) > 0 && (
+                        <div className="text-xs text-muted-foreground">{fmtToman(k.toman_total ?? 0)}</div>
+                      )}
+                    </div>
+                    {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
+                  </button>
+                  <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" onClick={() => onEdit(k)} title="ویرایش">
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => setDeleteId(k.id)} title="حذف" className="text-destructive">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <div className="text-persian font-bold tabular-nums text-primary">
-                    {fmtUSD(k.total_value_usd)}
-                  </div>
-                  {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
-                </button>
+                </div>
                 {openId === k.id && (
                   <div className="border-t p-3 space-y-2 bg-muted/20">
-                    {k.items.map((it, i) => (
-                      <div key={i} className="flex justify-between text-persian text-sm">
-                        <span>{it.name}</span>
-                        <span className="tabular-nums">
-                          {fmtUSD(it.value_usd)}
+                    {k.items.map((it, i) => {
+                      const itToman = (it.toman ?? it.value_usd * it.unit_price_irt);
+                      return (
+                      <div key={i} className="flex justify-between text-persian text-sm gap-2">
+                        <span className="flex-1">{it.name}</span>
+                        <span className="tabular-nums text-left">
+                          <span>{fmtUSD(it.value_usd)}</span>
                           {it.unit_price_irt > 0 && (
-                            <span className="text-xs text-muted-foreground mr-2">
-                              ({it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار)
+                            <span className="text-xs text-muted-foreground block">
+                              {it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار = <strong className="text-primary">{fmtToman(itToman)}</strong>
                             </span>
                           )}
                         </span>
                       </div>
-                    ))}
+                    );})}
+                    {(k.toman_total ?? 0) > 0 && (
+                      <div className="border-t pt-2 mt-2 flex justify-between text-persian text-sm">
+                        <span className="font-bold">مجموع تومانی</span>
+                        <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total ?? 0)}</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -644,6 +688,22 @@ const KotajListDialog = ({
           </div>
         )}
       </DialogContent>
+      <AlertDialog open={deleteId != null} onOpenChange={(v) => { if (!v) setDeleteId(null); }}>
+        <AlertDialogContent dir="rtl" className="panel-fa">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-persian text-right">حذف کوتاژ</AlertDialogTitle>
+            <AlertDialogDescription className="text-persian text-right">
+              آیا از حذف این کوتاژ مطمئن هستید؟ این عمل غیرقابل بازگشت است.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-persian">انصراف</AlertDialogCancel>
+            <AlertDialogAction onClick={doDelete} disabled={busyDel} className="text-persian">
+              {busyDel ? <Loader2 className="w-4 h-4 animate-spin" /> : "حذف"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 };

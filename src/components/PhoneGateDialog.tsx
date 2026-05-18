@@ -56,20 +56,15 @@ const PhoneGateDialog = ({ open, onSubmit, onOpenChange }: Props) => {
     >
       <DialogContent
         dir="rtl"
-        className="sm:max-w-md p-0 overflow-hidden border-0 bg-transparent shadow-none [&>button]:z-30 [&>button]:text-white/80 [&>button:hover]:text-white"
+        className="sm:max-w-lg p-0 overflow-hidden border-0 bg-transparent shadow-none [&>button]:z-30 [&>button]:text-white/80 [&>button:hover]:text-white"
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
-        {/* 3D Card with layered depth */}
-        <div
-          className="relative rounded-2xl"
-          style={{
-            transform: "perspective(1200px) rotateX(2deg)",
-            transformStyle: "preserve-3d",
-          }}
-        >
+        {/* Layered depth card (no 3D tilt — desktop friendly) */}
+        <div className="relative rounded-2xl">
           {/* Glow halo */}
           <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/40 via-accent/20 to-primary/30 blur-2xl opacity-70 -z-10" />
+
 
           {/* Main card */}
           <div

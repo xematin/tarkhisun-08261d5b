@@ -1105,13 +1105,6 @@ const KotajReportDialog = ({
           <DialogTitle className="text-persian text-right">گزارش کارت — {card.name}</DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="kotaj" className="w-full">
-          <TabsList className="w-full grid grid-cols-2">
-            <TabsTrigger value="kotaj" className="text-persian">گزارش کوتاژها</TabsTrigger>
-            <TabsTrigger value="payments" className="text-persian">پرداخت‌های کاربران</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="kotaj">
         {users.length > 0 && (
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
@@ -1167,7 +1160,6 @@ const KotajReportDialog = ({
             {filteredUsers.map(u => {
               const userToman = u.kotajs.reduce((a, k) => a + (k.toman_total || 0), 0);
               const userUsd = u.kotajs.reduce((a, k) => a + k.total_value_usd, 0);
-              const debt = u.debt_toman ?? Math.max(0, userToman - (u.payments_toman || 0));
               return (
               <div key={u.id} className="border rounded-md p-3">
                 <div className="flex justify-between items-start mb-3 flex-wrap gap-2 border-b pb-2">
@@ -1181,14 +1173,6 @@ const KotajReportDialog = ({
                   <div className="text-persian text-sm text-left space-y-0.5">
                     <div>جمع دلار: <span className="font-bold tabular-nums text-primary">{userUsd.toLocaleString("fa-IR")} دلار</span></div>
                     <div>جمع تومان: <span className="font-bold tabular-nums">{fmtToman(userToman)}</span></div>
-                    {(u.payments_toman || 0) > 0 && (
-                      <div className="text-emerald-600">پرداختی: <span className="font-bold tabular-nums">{fmtToman(u.payments_toman || 0)}</span></div>
-                    )}
-                    {debt > 0 ? (
-                      <div className="text-destructive">بدهی: <span className="font-bold tabular-nums">{fmtToman(debt)}</span></div>
-                    ) : (u.payments_toman || 0) > 0 && (
-                      <div className="text-emerald-600 font-bold">تسویه ✓</div>
-                    )}
                   </div>
                 </div>
                 <div className="space-y-1.5">
@@ -1252,12 +1236,6 @@ const KotajReportDialog = ({
             );})}
           </div>
         )}
-          </TabsContent>
-
-          <TabsContent value="payments">
-            <CardPaymentsTab cardId={card.id} toast={toast} />
-          </TabsContent>
-        </Tabs>
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>

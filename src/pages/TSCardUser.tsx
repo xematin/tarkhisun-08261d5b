@@ -485,6 +485,8 @@ const KotajDialog = ({
             </div>
             {items.map((it, i) => {
               const priceNum = parseFloat(normDigits(it.unit_price_irt)) || 0;
+              const valNum = parseFloat(normDigits(it.value_usd)) || 0;
+              const itemToman = valNum * priceNum;
               let priceClass = "";
               if (refPrice && priceNum > 0) {
                 if (priceNum < refPrice) priceClass = "text-destructive font-bold";
@@ -494,11 +496,18 @@ const KotajDialog = ({
               <div key={i} className="border rounded-md p-3 space-y-3 bg-muted/30">
                 <div className="flex items-center justify-between">
                   <span className="text-persian text-sm font-bold">قلم {i + 1}</span>
-                  {items.length > 1 && (
-                    <Button size="sm" variant="ghost" onClick={() => remove(i)} className="text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    {itemToman > 0 && (
+                      <span className="text-persian text-xs tabular-nums text-primary font-bold">
+                        {fmtToman(itemToman)}
+                      </span>
+                    )}
+                    {items.length > 1 && (
+                      <Button size="sm" variant="ghost" onClick={() => remove(i)} className="text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="space-y-1">
@@ -524,19 +533,41 @@ const KotajDialog = ({
             </Button>
           </div>
 
-          <div className="rounded-md border p-3 bg-primary/5 text-persian flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">ارزش کل سند کوتاژ</span>
-            <span className="font-bold text-lg tabular-nums">{fmtUSD(totalUsd)}</span>
+          <div className="rounded-md border p-3 bg-primary/5 text-persian space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">ارزش کل سند کوتاژ</span>
+              <span className="font-bold text-lg tabular-nums">{fmtUSD(totalUsd)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">هزینهٔ کل (تومان)</span>
+              <span className="font-bold text-lg tabular-nums text-primary">{fmtToman(totalToman)}</span>
+            </div>
           </div>
         </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">انصراف</Button>
-          <Button onClick={submit} disabled={busy || over} className="text-persian">
-            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت کوتاژ"}
+          <Button onClick={onSubmitClick} disabled={busy || over} className="text-persian">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : (editing ? "ذخیره ویرایش" : "ثبت کوتاژ")}
           </Button>
         </DialogFooter>
       </DialogContent>
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent dir="rtl" className="panel-fa">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-persian text-right">تأیید ثبت کوتاژ</AlertDialogTitle>
+            <AlertDialogDescription className="text-persian text-right space-y-1">
+              <span className="block">ارزش کل: <strong className="tabular-nums">{fmtUSD(totalUsd)}</strong></span>
+              <span className="block">هزینهٔ کل این کوتاژ برای شما: <strong className="tabular-nums text-primary">{fmtToman(totalToman)}</strong></span>
+              <span className="block text-xs text-muted-foreground mt-2">آیا تأیید می‌کنید؟</span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-persian">انصراف</AlertDialogCancel>
+            <AlertDialogAction onClick={doSave} className="text-persian">تأیید و ثبت</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 };

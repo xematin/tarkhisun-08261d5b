@@ -326,6 +326,9 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
                               <History className="w-4 h-4" />
                             </Button>
+                            <Button size="sm" variant="ghost" onClick={() => setKotajCostFor(r)} title="هزینه کوتاژها">
+                              <Wallet className="w-4 h-4 text-accent" />
+                            </Button>
                             <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش">
                               <Pencil className="w-4 h-4" />
                             </Button>

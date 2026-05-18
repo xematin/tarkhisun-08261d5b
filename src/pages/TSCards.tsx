@@ -1319,6 +1319,30 @@ const KotajReportDialog = ({
           <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
         </DialogFooter>
       </DialogContent>
+
+      <AdminKotajEditDialog
+        kotaj={editKotaj}
+        onClose={() => setEditKotaj(null)}
+        onSaved={() => { setEditKotaj(null); reload(); }}
+        toast={toast}
+      />
+
+      <Dialog open={!!deleteKotaj} onOpenChange={(v) => { if (!v) setDeleteKotaj(null); }}>
+        <DialogContent dir="ltr" className="max-w-md panel-fa">
+          <DialogHeader>
+            <DialogTitle className="text-persian text-left">حذف کوتاژ</DialogTitle>
+          </DialogHeader>
+          <p className="text-persian text-sm">
+            آیا از حذف کوتاژ <strong className="tabular-nums">#{deleteKotaj?.kotaj_number}</strong> مطمئن هستید؟ این عملیات قابل بازگشت نیست.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteKotaj(null)} className="text-persian" disabled={busyDel}>انصراف</Button>
+            <Button variant="destructive" onClick={doDelete} disabled={busyDel} className="text-persian">
+              {busyDel ? <Loader2 className="w-4 h-4 animate-spin" /> : "حذف"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 };

@@ -129,7 +129,7 @@ const TSCards = () => {
         <title>مدیریت کارت‌ها</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="panel-glass panel-fa min-h-screen" dir="rtl">
+      <div className="panel-glass panel-fa min-h-screen" dir="ltr">
         <header className="container mx-auto px-4 pt-4">
           <div className="panel-topbar h-14 px-5 flex items-center justify-between">
             <h1 className="text-persian font-bold flex items-center gap-2">
@@ -251,11 +251,11 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-right text-persian">نام کارت</TableHead>
-                    <TableHead className="text-right text-persian">موجودی کل (دلار)</TableHead>
-                    <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
-                    <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
-                    <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
+                    <TableHead className="text-left text-persian">نام کارت</TableHead>
+                    <TableHead className="text-left text-persian">موجودی کل (دلار)</TableHead>
+                    <TableHead className="text-left text-persian">موجودی کل (تومان)</TableHead>
+                    <TableHead className="text-left text-persian">سکشن‌ها</TableHead>
+                    <TableHead className="text-left text-persian hidden md:table-cell">کاربران</TableHead>
                     <TableHead></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -566,9 +566,9 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent dir="ltr" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">
+          <DialogTitle className="text-persian text-left">
             {editing ? "ویرایش کارت" : "افزودن کارت جدید"} — مرحله {step} از ۲
           </DialogTitle>
         </DialogHeader>
@@ -823,9 +823,9 @@ const AddUserDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-md panel-fa">
+      <DialogContent dir="ltr" className="max-w-md panel-fa">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">افزودن کاربر جدید</DialogTitle>
+          <DialogTitle className="text-persian text-left">افزودن کاربر جدید</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -906,9 +906,9 @@ const LogsDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+      <DialogContent dir="ltr" className="max-w-2xl panel-fa">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">
+          <DialogTitle className="text-persian text-left">
             تاریخچهٔ تغییرات — {card?.name}
           </DialogTitle>
         </DialogHeader>
@@ -1003,9 +1003,9 @@ const UserPricesDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent dir="ltr" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">قیمت دلار سفارشی کاربران — {card.name}</DialogTitle>
+          <DialogTitle className="text-persian text-left">قیمت دلار سفارشی کاربران — {card.name}</DialogTitle>
         </DialogHeader>
         <p className="text-xs text-muted-foreground text-persian">
           قیمتی که در اینجا برای هر کاربر ثبت می‌کنید، فقط برای همان کاربر نمایش داده می‌شود. تا زمانی که قیمتی وارد نکنید، کاربر هیچ قیمتی را نمی‌بیند.
@@ -1110,16 +1110,40 @@ const KotajReportDialog = ({
   const [entryFilter, setEntryFilter] = useState<string>("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [editKotaj, setEditKotaj] = useState<ReportKotaj | null>(null);
+  const [deleteKotaj, setDeleteKotaj] = useState<ReportKotaj | null>(null);
+  const [busyDel, setBusyDel] = useState(false);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (!card) return;
     setLoading(true);
-    setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo("");
     api<{ users: ReportUser[] }>(`/api/admin/card-kotaj-report.php?card_id=${card.id}`)
       .then(r => setUsers(r.users || []))
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [card, toast]);
+
+  useEffect(() => {
+    if (!card) return;
+    setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo("");
+    reload();
+  }, [card, reload]);
+
+  const doDelete = async () => {
+    if (!deleteKotaj) return;
+    setBusyDel(true);
+    try {
+      await api("/api/admin/kotaj-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: deleteKotaj.id }),
+      });
+      toast({ title: "کوتاژ حذف شد" });
+      setDeleteKotaj(null);
+      reload();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusyDel(false); }
+  };
 
   if (!card) return null;
 
@@ -1148,9 +1172,9 @@ const KotajReportDialog = ({
 
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-4xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent dir="ltr" className="max-w-4xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">گزارش کارت — {card.name}</DialogTitle>
+          <DialogTitle className="text-persian text-left">گزارش کارت — {card.name}</DialogTitle>
         </DialogHeader>
 
         {users.length > 0 && (
@@ -1226,9 +1250,9 @@ const KotajReportDialog = ({
                 <div className="space-y-1.5">
                   {u.kotajs.map(k => (
                     <div key={k.id} className="border rounded-md">
-                      <div className="w-full flex items-center justify-between text-right hover:bg-muted/30 gap-2 p-1">
+                      <div className="w-full flex items-center justify-between text-left hover:bg-muted/30 gap-2 p-1">
                         <button className="flex-1 flex items-center justify-between p-2" onClick={() => setOpenId(openId === k.id ? null : k.id)}>
-                          <div className="flex-1 text-persian text-sm text-right">
+                          <div className="flex-1 text-persian text-sm text-left">
                             <span className="font-bold">#{k.kotaj_number}</span>
                             <span className="text-xs text-muted-foreground mr-2">{k.kotaj_date_jalali} — {k.entry_title || "—"}</span>
                           </div>
@@ -1250,6 +1274,12 @@ const KotajReportDialog = ({
                           items: k.items.map(it => ({ ...it, toman: it.toman ?? it.value_usd * it.unit_price_irt })),
                         }, `${card.name} — ${u.first_name} ${u.last_name}`)}>
                           <Download className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" title="ویرایش کوتاژ" onClick={() => setEditKotaj(k)}>
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" title="حذف کوتاژ" onClick={() => setDeleteKotaj(k)} className="text-destructive hover:text-destructive">
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
                       {openId === k.id && (
@@ -1287,6 +1317,182 @@ const KotajReportDialog = ({
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+
+      <AdminKotajEditDialog
+        kotaj={editKotaj}
+        onClose={() => setEditKotaj(null)}
+        onSaved={() => { setEditKotaj(null); reload(); }}
+        toast={toast}
+      />
+
+      <Dialog open={!!deleteKotaj} onOpenChange={(v) => { if (!v) setDeleteKotaj(null); }}>
+        <DialogContent dir="ltr" className="max-w-md panel-fa">
+          <DialogHeader>
+            <DialogTitle className="text-persian text-left">حذف کوتاژ</DialogTitle>
+          </DialogHeader>
+          <p className="text-persian text-sm">
+            آیا از حذف کوتاژ <strong className="tabular-nums">#{deleteKotaj?.kotaj_number}</strong> مطمئن هستید؟ این عملیات قابل بازگشت نیست.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteKotaj(null)} className="text-persian" disabled={busyDel}>انصراف</Button>
+            <Button variant="destructive" onClick={doDelete} disabled={busyDel} className="text-persian">
+              {busyDel ? <Loader2 className="w-4 h-4 animate-spin" /> : "حذف"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </Dialog>
+  );
+};
+
+interface KotajEditItem { name: string; value_usd: string; unit_price_irt: string; }
+
+const AdminKotajEditDialog = ({
+  kotaj, onClose, onSaved, toast,
+}: {
+  kotaj: ReportKotaj | null;
+  onClose: () => void;
+  onSaved: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [num, setNum] = useState("");
+  const [date, setDate] = useState("");
+  const [items, setItems] = useState<KotajEditItem[]>([{ name: "", value_usd: "", unit_price_irt: "" }]);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (kotaj) {
+      setNum(kotaj.kotaj_number);
+      setDate(kotaj.kotaj_date_jalali);
+      setItems(kotaj.items.length
+        ? kotaj.items.map(it => ({
+            name: it.name,
+            value_usd: String(it.value_usd),
+            unit_price_irt: String(it.unit_price_irt),
+          }))
+        : [{ name: "", value_usd: "", unit_price_irt: "" }]);
+    }
+  }, [kotaj]);
+
+  if (!kotaj) return null;
+
+  const update = (i: number, patch: Partial<KotajEditItem>) =>
+    setItems(prev => prev.map((it, idx) => idx === i ? { ...it, ...patch } : it));
+  const add = () => setItems(prev => [...prev, { name: "", value_usd: "", unit_price_irt: "" }]);
+  const remove = (i: number) => setItems(prev => prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev);
+
+  const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
+  const totalToman = items.reduce((s, it) => {
+    const v = parseFloat(normDigits(it.value_usd)) || 0;
+    const p = parseFloat(normDigits(it.unit_price_irt)) || 0;
+    return s + v * p;
+  }, 0);
+
+  const save = async () => {
+    const numClean = normDigits(num).replace(/\D/g, "");
+    if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return; }
+    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(normDigits(date))) { toast({ title: "تاریخ کوتاژ معتبر نیست (1405/01/01)", variant: "destructive" }); return; }
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return; }
+      const v = parseFloat(normDigits(it.value_usd)) || 0;
+      if (v <= 0) { toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" }); return; }
+    }
+    setBusy(true);
+    try {
+      await api("/api/admin/kotaj-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: kotaj.id,
+          kotaj_number: numClean,
+          kotaj_date_jalali: normDigits(date),
+          items: items.map(it => ({
+            name: it.name.trim(),
+            value_usd: parseFloat(normDigits(it.value_usd)) || 0,
+            unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
+          })),
+        }),
+      });
+      toast({ title: "کوتاژ ویرایش شد" });
+      onSaved();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!kotaj} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="ltr" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-left">ویرایش کوتاژ — #{kotaj.kotaj_number}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label className="text-persian">شماره کوتاژ</Label>
+              <Input value={num} onChange={(e) => setNum(normDigits(e.target.value))} dir="ltr" inputMode="numeric" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-persian">تاریخ کوتاژ (شمسی)</Label>
+              <Input value={date} onChange={(e) => setDate(normDigits(e.target.value))} dir="ltr" placeholder="1405/02/31" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-persian">قلم‌های کوتاژ</Label>
+              <div className="text-sm font-bold tabular-nums text-persian">جمع: {totalUsd.toLocaleString("fa-IR")} دلار</div>
+            </div>
+            {items.map((it, i) => (
+              <div key={i} className="border rounded-md p-3 space-y-3 bg-muted/30">
+                <div className="flex items-center justify-between">
+                  <span className="text-persian text-sm font-bold">قلم {i + 1}</span>
+                  {items.length > 1 && (
+                    <Button size="sm" variant="ghost" onClick={() => remove(i)} className="text-destructive">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-persian text-xs">نام کالا</Label>
+                    <Input value={it.name} onChange={(e) => update(i, { name: e.target.value })} className="text-persian" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-persian text-xs">ارزش (دلار)</Label>
+                    <Input value={it.value_usd} onChange={(e) => update(i, { value_usd: normDigits(e.target.value) })} dir="ltr" inputMode="decimal" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-persian text-xs">قیمت هر دلار (تومان)</Label>
+                    <Input value={it.unit_price_irt} onChange={(e) => update(i, { unit_price_irt: normDigits(e.target.value) })} dir="ltr" inputMode="decimal" />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Button variant="outline" size="sm" onClick={add} className="text-persian w-full">
+              <Plus className="w-4 h-4 ml-1" /> افزودن قلم
+            </Button>
+          </div>
+
+          <div className="rounded-md border p-3 bg-primary/5 text-persian space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">ارزش کل</span>
+              <span className="font-bold text-lg tabular-nums">{totalUsd.toLocaleString("fa-IR")} دلار</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">هزینهٔ کل (تومان)</span>
+              <span className="font-bold text-lg tabular-nums text-primary">{fmtToman(totalToman)}</span>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian" disabled={busy}>انصراف</Button>
+          <Button onClick={save} disabled={busy} className="text-persian">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره ویرایش"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -1357,16 +1563,27 @@ const AllPaymentsPanel = ({
   useEffect(() => { load(); }, [load]);
 
   const qN = normDigits(q).trim().toLowerCase();
-  const fromTs = dateFrom ? new Date(dateFrom).getTime() : null;
-  const toTs = dateTo ? new Date(dateTo).getTime() + 86399000 : null;
+  const fromJ = normDigits(dateFrom).trim().replace(/-/g, "/");
+  const toJ = normDigits(dateTo).trim().replace(/-/g, "/");
+
+  const toJalaliDate = (iso: string): string => {
+    if (!iso) return "";
+    const d = new Date(iso.replace(" ", "T"));
+    if (isNaN(d.getTime())) return "";
+    try {
+      return new Intl.DateTimeFormat("fa-IR-u-ca-persian-nu-latn", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+      }).format(d).replace(/-/g, "/");
+    } catch { return ""; }
+  };
 
   const filtered = items.filter(p => {
     if (cardFilter !== "all" && String(p.card_id) !== cardFilter) return false;
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
-    if (fromTs || toTs) {
-      const t = new Date(p.created_at.replace(" ", "T")).getTime();
-      if (fromTs && t < fromTs) return false;
-      if (toTs && t > toTs) return false;
+    if (fromJ || toJ) {
+      const dj = toJalaliDate(p.created_at);
+      if (fromJ && dj < fromJ) return false;
+      if (toJ && dj > toJ) return false;
     }
     if (!qN) return true;
     const full = `${p.first_name} ${p.last_name} @${p.username} ${p.card_name}`.toLowerCase();
@@ -1535,8 +1752,8 @@ const AllPaymentsPanel = ({
             </SelectContent>
           </Select>
           <div className="grid grid-cols-2 gap-2 md:col-span-1">
-            <Input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="text-persian" />
-            <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="text-persian" />
+            <Input value={dateFrom} onChange={(e) => setDateFrom(normDigits(e.target.value))} placeholder="از تاریخ (1405/01/01)" className="text-persian" dir="ltr" />
+            <Input value={dateTo} onChange={(e) => setDateTo(normDigits(e.target.value))} placeholder="تا تاریخ (1405/12/29)" className="text-persian" dir="ltr" />
           </div>
           {hasFilter && (
             <div className="md:col-span-3 flex justify-end">
@@ -1556,13 +1773,13 @@ const AllPaymentsPanel = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-right text-persian">کارت</TableHead>
-                  <TableHead className="text-right text-persian">کاربر</TableHead>
-                  <TableHead className="text-right text-persian">مبلغ (تومان)</TableHead>
-                  <TableHead className="text-right text-persian">تاریخ (شمسی)</TableHead>
-                  <TableHead className="text-right text-persian">وضعیت</TableHead>
-                  <TableHead className="text-right text-persian">فیش</TableHead>
-                  <TableHead className="text-right text-persian">توضیح</TableHead>
+                  <TableHead className="text-left text-persian">کارت</TableHead>
+                  <TableHead className="text-left text-persian">کاربر</TableHead>
+                  <TableHead className="text-left text-persian">مبلغ (تومان)</TableHead>
+                  <TableHead className="text-left text-persian">تاریخ (شمسی)</TableHead>
+                  <TableHead className="text-left text-persian">وضعیت</TableHead>
+                  <TableHead className="text-left text-persian">فیش</TableHead>
+                  <TableHead className="text-left text-persian">توضیح</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1602,9 +1819,9 @@ const AllPaymentsPanel = ({
         )}
 
         <Dialog open={!!preview} onOpenChange={(v) => { if (!v) setPreview(null); }}>
-          <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+          <DialogContent dir="ltr" className="max-w-2xl panel-fa">
             <DialogHeader>
-              <DialogTitle className="text-persian text-right">تصویر فیش واریزی</DialogTitle>
+              <DialogTitle className="text-persian text-left">تصویر فیش واریزی</DialogTitle>
             </DialogHeader>
             {preview && <img src={preview} alt="فیش واریزی" className="w-full h-auto rounded-md" />}
             <DialogFooter>
@@ -1684,13 +1901,13 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="text-right text-persian">کارت</TableHead>
-                      <TableHead className="text-right text-persian">موجودی</TableHead>
-                      <TableHead className="text-right text-persian">تخصیص</TableHead>
-                      <TableHead className="text-right text-persian">مصرف</TableHead>
-                      <TableHead className="text-right text-persian">مانده</TableHead>
-                      <TableHead className="text-right text-persian">کوتاژ</TableHead>
-                      <TableHead className="text-right text-persian">کاربران</TableHead>
+                      <TableHead className="text-left text-persian">کارت</TableHead>
+                      <TableHead className="text-left text-persian">موجودی</TableHead>
+                      <TableHead className="text-left text-persian">تخصیص</TableHead>
+                      <TableHead className="text-left text-persian">مصرف</TableHead>
+                      <TableHead className="text-left text-persian">مانده</TableHead>
+                      <TableHead className="text-left text-persian">کوتاژ</TableHead>
+                      <TableHead className="text-left text-persian">کاربران</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

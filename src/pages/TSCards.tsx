@@ -1110,6 +1110,9 @@ const KotajReportDialog = ({
   const [entryFilter, setEntryFilter] = useState<string>("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [editKotaj, setEditKotaj] = useState<ReportKotaj | null>(null);
+  const [deleteKotaj, setDeleteKotaj] = useState<ReportKotaj | null>(null);
+  const [busyDel, setBusyDel] = useState(false);
 
   useEffect(() => {
     if (!card) return;

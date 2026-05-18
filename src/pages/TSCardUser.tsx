@@ -714,6 +714,9 @@ const KotajListDialog = ({
                     {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
                   </button>
                   <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" onClick={() => downloadKotajPdf(k, card.name)} title="دانلود PDF">
+                      <Download className="w-4 h-4" />
+                    </Button>
                     <Button size="sm" variant="ghost" onClick={() => onEdit(k)} title="ویرایش">
                       <Pencil className="w-4 h-4" />
                     </Button>

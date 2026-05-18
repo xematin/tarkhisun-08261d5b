@@ -587,6 +587,10 @@ const KotajListDialog = ({
   const [openId, setOpenId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [busyDel, setBusyDel] = useState(false);
+  const [q, setQ] = useState("");
+  const [entryFilter, setEntryFilter] = useState<string>("all");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
 
   const reload = useCallback(() => {
     if (!card) return;

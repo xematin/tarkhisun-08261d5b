@@ -1357,16 +1357,27 @@ const AllPaymentsPanel = ({
   useEffect(() => { load(); }, [load]);
 
   const qN = normDigits(q).trim().toLowerCase();
-  const fromTs = dateFrom ? new Date(dateFrom).getTime() : null;
-  const toTs = dateTo ? new Date(dateTo).getTime() + 86399000 : null;
+  const fromJ = normDigits(dateFrom).trim().replace(/-/g, "/");
+  const toJ = normDigits(dateTo).trim().replace(/-/g, "/");
+
+  const toJalaliDate = (iso: string): string => {
+    if (!iso) return "";
+    const d = new Date(iso.replace(" ", "T"));
+    if (isNaN(d.getTime())) return "";
+    try {
+      return new Intl.DateTimeFormat("fa-IR-u-ca-persian-nu-latn", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+      }).format(d).replace(/-/g, "/");
+    } catch { return ""; }
+  };
 
   const filtered = items.filter(p => {
     if (cardFilter !== "all" && String(p.card_id) !== cardFilter) return false;
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
-    if (fromTs || toTs) {
-      const t = new Date(p.created_at.replace(" ", "T")).getTime();
-      if (fromTs && t < fromTs) return false;
-      if (toTs && t > toTs) return false;
+    if (fromJ || toJ) {
+      const dj = toJalaliDate(p.created_at);
+      if (fromJ && dj < fromJ) return false;
+      if (toJ && dj > toJ) return false;
     }
     if (!qN) return true;
     const full = `${p.first_name} ${p.last_name} @${p.username} ${p.card_name}`.toLowerCase();

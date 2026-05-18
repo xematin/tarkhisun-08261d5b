@@ -1114,15 +1114,36 @@ const KotajReportDialog = ({
   const [deleteKotaj, setDeleteKotaj] = useState<ReportKotaj | null>(null);
   const [busyDel, setBusyDel] = useState(false);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (!card) return;
     setLoading(true);
-    setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo("");
     api<{ users: ReportUser[] }>(`/api/admin/card-kotaj-report.php?card_id=${card.id}`)
       .then(r => setUsers(r.users || []))
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [card, toast]);
+
+  useEffect(() => {
+    if (!card) return;
+    setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo("");
+    reload();
+  }, [card, reload]);
+
+  const doDelete = async () => {
+    if (!deleteKotaj) return;
+    setBusyDel(true);
+    try {
+      await api("/api/admin/kotaj-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: deleteKotaj.id }),
+      });
+      toast({ title: "کوتاژ حذف شد" });
+      setDeleteKotaj(null);
+      reload();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusyDel(false); }
+  };
 
   if (!card) return null;
 

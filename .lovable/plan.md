@@ -1,52 +1,64 @@
-## تغییرات کوتاژ‌ها — ویرایش، حذف، نمایش تومانی
+# تغییرات درخواستی
 
-### ۱) بک‌اند (PHP)
+## ۱) رفع مشکل دیالوگ تماس روی دسکتاپ
+در `src/components/PhoneGateDialog.tsx`:
+- حذف `transform: perspective(1200px) rotateX(2deg)` که در دسکتاپ باعث کج‌شدن کارت و ناهماهنگی دکمه بستن (X) با کارت آبی می‌شود. تأثیر سه‌بعدی فقط با سایه و گرادیان حفظ می‌شود (در موبایل هم تمیزتر می‌ماند).
+- `sm:max-w-md` → `sm:max-w-lg` تا روی دسکتاپ کارت کوچک به‌نظر نرسد.
+- اطمینان از اینکه آیکن شناور و خال سبز در همان موقعیت دیداری بمانند بدون چرخش 3D.
 
-**`public/api/cards/kotaj-update.php` (جدید)**
-- ورودی: `id`, `kotaj_number`, `kotaj_date_jalali`, `customs_code`, `customs_name`, `items[]`
-- بررسی اینکه کوتاژ متعلق به همان کاربر است.
-- محاسبهٔ مانده با احتساب کوتاژهای دیگر (به‌جز این کوتاژ) و رد اگر بیشتر باشد.
-- پاک کردن `ts_kotaj_items` این کوتاژ و درج مجدد، به‌روزرسانی `total_value_usd` و فیلدها.
+## ۲) کامل‌کردن «گزارش کوتاژها» در پنل مدیریت کارت‌ها
+`KotajReportDialog` در `src/pages/TSCards.tsx` و endpoint `public/api/admin/card-kotaj-report.php` ارتقا می‌یابند تا تجربه مشابه پنل کاربر داشته باشند:
 
-**`public/api/cards/kotaj-delete.php` (جدید)**
-- حذف کامل کوتاژ متعلق به کاربر جاری (و آیتم‌هایش با cascade یا حذف دستی).
+اطلاعات بازگشتی API (به ازای هر کوتاژ):
+- `entry_id`, `entry_title`, `kotaj_number`, `kotaj_date_jalali`
+- `total_value_usd`, `toman_total` (مجموع `value_usd * unit_price_irt` اقلام)
+- آرایه `items` با `name`, `value_usd`, `unit_price_irt`, `toman`
+- جمع توماني هر کاربر (`total_toman`) علاوه بر `total_usd`
 
-**`public/api/cards/kotaj-list.php`**
-- اضافه شدن `toman_total` و در هر آیتم `toman` (`value_usd * unit_price_irt`).
+ویژگی‌های UI جدید:
+- نمایش هزینه تومانی کنار دلاری برای هر کوتاژ و هر قلم.
+- جستجو بر اساس شماره کوتاژ + فیلتر سکشن + بازه تاریخ شمسی (مشابه پنل کاربر).
+- دکمه «دانلود PDF» برای هر کوتاژ با استفاده از همان `downloadKotajPdf` موجود.
+- در هدر هر کاربر علاوه بر جمع دلاری، نمایش «جمع تومان» و تعداد کوتاژ.
+- جمع کل (دلار/تومان) همه کوتاژهای کارت در بالای دیالوگ.
 
-**`public/api/admin/cards-list.php`**
-- محاسبهٔ مجموع تومانی کوتاژهای ثبت‌شده هر کارت (روی همهٔ کاربران): `SUM(value_usd * unit_price_irt)` از `ts_kotaj_items` join `ts_kotaj` per card → افزودن `kotaj_toman_total` به هر کارت و `kotaj_toman_total` به هر entry (سکشن).
+## ۳) نمایشگر «هزینه کوتاژها» روی هر کارت کاربر + دکمه پرداخت
+در `src/pages/TSCardUser.tsx` (کارت‌های کاربر):
 
-### ۲) فرانت — `src/pages/TSCardUser.tsx`
+- بالا/چپ هر کارت یک بَج نمایش داده شود:
+  - «بدهی فعلی: X تومان» = مجموع تومانی همه کوتاژهای آن کارت − مجموع پرداخت‌های تأییدشده.
+  - وقتی صفر یا منفی شد به‌صورت «تسویه ✓» با رنگ سبز.
+- زیر دکمه‌های «افزودن کوتاژ» و «کوتاژها» یک دکمه سوم «پرداخت» اضافه می‌شود.
 
-**دیالوگ افزودن/ویرایش کوتاژ (`KotajDialog`)**
-- پشتیبانی از حالت `edit`: prop جدید `editing?: Kotaj | null`. مقداردهی اولیه فرم از آن.
-- در هر قلم، رو‌به‌روی آن مبلغ تومانی (`value_usd × unit_price_irt`) به‌صورت زنده نمایش داده شود.
-- بخش پایانی: «ارزش کل دلاری» + «مجموع کل تومانی» نمایش داده شود.
-- دکمهٔ ثبت → باز شدن یک `AlertDialog` تأیید با متن «هزینهٔ کل این کوتاژ: X تومان — تأیید می‌کنید؟»، سپس ارسال به `kotaj-create.php` یا `kotaj-update.php`.
+دیالوگ پرداخت:
+- فیلد «مبلغ پرداخت (تومان)» با نرمالایز ارقام فارسی.
+- آپلود «عکس فیش واریزی» (JPG/PNG/PDF تا ۵ مگابایت).
+- پیش‌نمایش تصویر/نام فایل قبل از ثبت.
+- پس از ثبت موفق: بدهی روی کارت به‌روزرسانی (refetch `my-cards`).
 
-**دیالوگ لیست کوتاژها (`KotajListDialog`)**
-- در هر آیتم باز‌شده: کنار هر قلم، مبلغ تومانی محاسبه‌شده. در فوتر هر کوتاژ: مجموع تومانی کل کوتاژ.
-- دو دکمه روی هر کوتاژ: «ویرایش» (باز کردن `KotajDialog` با حالت edit) و «حذف» (با AlertDialog تأیید → `kotaj-delete.php`).
-- پس از ویرایش/حذف: refresh لیست و فراخوانی onChanged برای رفرش کارت‌ها (مانده).
+## ۴) دیتابیس و API
+ساخت جدول جدید `ts_card_payments`:
+- `id`, `card_id`, `card_user_id`, `amount_irt`, `receipt_path`, `note`, `status` (در این مرحله فقط `confirmed`)، `created_at`.
 
-### ۳) فرانت — `src/pages/TSCards.tsx` (پنل ادمین کارت‌ها)
+Endpointهای جدید (PHP، در `public/api/cards/`):
+- `payment-create.php` — multipart upload؛ فایل فیش در `public/uploads/payments/{user_id}/{uuid}.{ext}` ذخیره و رکورد ایجاد می‌شود.
+- `payments-list.php` — لیست پرداخت‌های کاربر برای کارت.
 
-- خواندن `kotaj_toman_total` از API و نمایش در بالا‌سمت‌چپ کارت به‌صورت چیپ/بَج «هزینهٔ کوتاژها: X تومان».
-- در هر سکشن (entry) در همان کارت، خط جداگانه: «هزینهٔ کوتاژهای این سکشن: X تومان».
+تغییر `public/api/cards/my-cards.php`:
+- محاسبه `kotaj_toman_total` به ازای هر کارت (با join روی `ts_kotaj_items`).
+- محاسبه `payments_toman_total` از `ts_card_payments`.
+- خروجی فیلد `debt_toman = kotaj_toman_total − payments_toman_total` (حداقل صفر) و خود مقادیر برای نمایش.
 
-### نکات
+تغییر `public/api/admin/card-kotaj-report.php`:
+- جوین با `ts_kotaj_items` و محاسبه `toman_total` هر کوتاژ و `total_toman` هر کاربر.
 
-- فرمت نمایش با `toLocaleString("fa-IR")` و واحد «تومان».
-- ارقام فارسی/عربی همچنان با `ts_normalize_digits` نرمال‌سازی می‌شوند.
-- بدون تغییر در schema دیتابیس (همه چیز با کوئری روی جداول موجود).
-- AlertDialog از `@/components/ui/alert-dialog` (موجود) استفاده می‌شود.
-
-### فایل‌های تغییر/افزوده
-
-- `public/api/cards/kotaj-update.php` (جدید)
-- `public/api/cards/kotaj-delete.php` (جدید)
-- `public/api/cards/kotaj-list.php` (به‌روزرسانی)
-- `public/api/admin/cards-list.php` (به‌روزرسانی)
-- `src/pages/TSCardUser.tsx` (دیالوگ‌ها، تأیید، ویرایش، حذف، تومانی)
-- `src/pages/TSCards.tsx` (نمایش هزینه تومانی کل کارت و per-section)
+## فایل‌های جدید/تغییر یافته
+- `src/components/PhoneGateDialog.tsx` (حذف چرخش 3D، عرض دسکتاپ)
+- `src/pages/TSCardUser.tsx` (بدج بدهی + دکمه پرداخت + PaymentDialog)
+- `src/pages/TSCards.tsx` (بازنویسی KotajReportDialog با تومان/جستجو/PDF)
+- `public/api/cards/payment-create.php` (جدید)
+- `public/api/cards/payments-list.php` (جدید)
+- `public/api/cards/my-cards.php` (افزودن کوتاژ/پرداخت/بدهی)
+- `public/api/admin/card-kotaj-report.php` (افزودن تومان)
+- مهاجرت SQL برای جدول `ts_card_payments` (فایل `public/api/install.php` به‌روزرسانی می‌شود)
+- دایرکتوری `public/uploads/payments/` با `.htaccess` مناسب

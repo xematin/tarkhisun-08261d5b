@@ -368,7 +368,7 @@ const KotajDialog = ({
           <DialogTitle className="text-persian text-right">افزودن کوتاژ — {card.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label className="text-persian">سکشن کارت</Label>
               <Select value={entryId} onValueChange={setEntryId}>
@@ -386,8 +386,11 @@ const KotajDialog = ({
               <Label className="text-persian">شماره کوتاژ</Label>
               <Input
                 value={num}
-                onChange={(e) => setNum(normDigits(e.target.value).replace(/\D/g, ""))}
-                inputMode="numeric" dir="ltr" placeholder="2020202"
+                onChange={(e) => {
+                  const cleaned = normDigits(e.target.value).replace(/[^\d-]/g, "");
+                  setNum(cleaned);
+                }}
+                inputMode="numeric" dir="ltr" placeholder="50100-1234567"
               />
             </div>
             <div className="space-y-2">
@@ -402,6 +405,16 @@ const KotajDialog = ({
                 placeholder="1405/02/31"
               />
             </div>
+            <div className="space-y-2">
+              <Label className="text-persian">گمرک خروجی</Label>
+              <Input
+                value={customsName || (customsCode ? "کد گمرک نامعتبر" : "")}
+                readOnly
+                tabIndex={-1}
+                className="text-persian bg-muted/50 cursor-not-allowed"
+                placeholder="با وارد کردن شماره کوتاژ پر می‌شود"
+              />
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -411,7 +424,14 @@ const KotajDialog = ({
                 جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remain)}`}
               </div>
             </div>
-            {items.map((it, i) => (
+            {items.map((it, i) => {
+              const priceNum = parseFloat(normDigits(it.unit_price_irt)) || 0;
+              let priceClass = "";
+              if (refPrice && priceNum > 0) {
+                if (priceNum < refPrice) priceClass = "text-destructive font-bold";
+                else if (priceNum > refPrice) priceClass = "text-emerald-600 font-bold";
+              }
+              return (
               <div key={i} className="border rounded-md p-3 space-y-3 bg-muted/30">
                 <div className="flex items-center justify-between">
                   <span className="text-persian text-sm font-bold">قلم {i + 1}</span>
@@ -424,19 +444,22 @@ const KotajDialog = ({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="space-y-1">
                     <Label className="text-persian text-xs">نام کالا</Label>
-                    <Input value={it.name} onChange={(e) => update(i, { name: e.target.value })} className="text-persian" placeholder="مثلاً خیار سبز" />
+                    <Input value={it.name} onChange={(e) => update(i, { name: e.target.value })} className="text-persian" placeholder="سنگ" />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-persian text-xs">ارزش کالا (دلار)</Label>
                     <Input value={it.value_usd} onChange={(e) => update(i, { value_usd: normDigits(e.target.value) })} inputMode="decimal" dir="ltr" placeholder="200" />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-persian text-xs">قیمت هر دلار (تومان)</Label>
-                    <Input value={it.unit_price_irt} onChange={(e) => update(i, { unit_price_irt: normDigits(e.target.value) })} inputMode="decimal" dir="ltr" placeholder="5200" />
+                    <Label className="text-persian text-xs">
+                      قیمت هر دلار (تومان)
+                      {refPrice ? <span className="text-muted-foreground"> — مرجع: {refPrice.toLocaleString("fa-IR")}</span> : null}
+                    </Label>
+                    <Input value={it.unit_price_irt} onChange={(e) => update(i, { unit_price_irt: normDigits(e.target.value) })} inputMode="decimal" dir="ltr" placeholder="5200" className={priceClass} />
                   </div>
                 </div>
               </div>
-            ))}
+            );})}
             <Button variant="outline" size="sm" onClick={add} className="text-persian w-full">
               <Plus className="w-4 h-4 ml-1" /> افزودن قلم
             </Button>

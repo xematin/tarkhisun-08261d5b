@@ -274,30 +274,26 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {fmtToman(bal || 0)}
                         </TableCell>
-                        <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums text-accent">
-                          {fmtToman(r.kotaj_toman_total || 0)}
-                        </TableCell>
                         <TableCell className="text-persian align-top min-w-[240px]">
                           {r.entries && r.entries.length > 0 ? (
                             <div className="flex flex-col gap-1.5 text-sm">
-                              {r.entries.map((e) => (
-                                <div key={e.id} className="flex justify-between gap-3">
-                                  <div className="flex flex-col">
+                              {r.entries.map((e) => {
+                                const amt = Number(e.amount) || 0;
+                                const perUnit = e.currency !== "IRT" && amt > 0
+                                  ? (Number(e.unit_price_irt) || (Number(e.total_irt) / amt))
+                                  : 0;
+                                return (
+                                  <div key={e.id} className="flex justify-between gap-3">
                                     <span className="font-medium">{e.title}</span>
-                                    {(e.kotaj_toman_total || 0) > 0 && (
-                                      <span className="text-xs text-accent tabular-nums">
-                                        کوتاژ: {fmtToman(e.kotaj_toman_total || 0)}
-                                      </span>
-                                    )}
+                                    <span className="tabular-nums text-muted-foreground">
+                                      {fmtMoney(e.amount, e.currency)}
+                                      {e.currency !== "IRT" && perUnit > 0 && (
+                                        <span className="mx-1">← هر ۱ {CURRENCY_LABEL[e.currency]} = {fmtToman(Math.round(perUnit))}</span>
+                                      )}
+                                    </span>
                                   </div>
-                                  <span className="tabular-nums text-muted-foreground">
-                                    {fmtMoney(e.amount, e.currency)}
-                                    {e.currency !== "IRT" && (
-                                      <span className="mx-1">← {fmtToman(e.total_irt)}</span>
-                                    )}
-                                  </span>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
                           ) : <span className="text-muted-foreground text-sm">—</span>}
                         </TableCell>

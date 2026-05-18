@@ -367,36 +367,53 @@ const KotajDialog = ({
   const add = () => setItems(prev => [...prev, emptyItem()]);
   const remove = (i: number) => setItems(prev => prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev);
 
-  const submit = async () => {
-    if (!entryId) return toast({ title: "سکشن را انتخاب کنید", variant: "destructive" });
+  const validate = (): boolean => {
+    if (!entryId) { toast({ title: "سکشن را انتخاب کنید", variant: "destructive" }); return false; }
     const numClean = normDigits(num).replace(/\D/g, "");
-    if (!numClean) return toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" });
-    if (!date) return toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" });
+    if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return false; }
+    if (!date) { toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" }); return false; }
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
-      if (!it.name.trim()) return toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" });
+      if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return false; }
       const v = parseFloat(normDigits(it.value_usd)) || 0;
-      if (v <= 0) return toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" });
+      if (v <= 0) { toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" }); return false; }
     }
-    if (over) return toast({ title: "ارزش کل کوتاژ از مانده سکشن بیشتر است", variant: "destructive" });
+    if (over) { toast({ title: "ارزش کل کوتاژ از مانده سکشن بیشتر است", variant: "destructive" }); return false; }
+    return true;
+  };
+
+  const onSubmitClick = () => { if (validate()) setConfirmOpen(true); };
+
+  const doSave = async () => {
+    setConfirmOpen(false);
     setBusy(true);
     try {
-      await api("/api/cards/kotaj-create.php", {
-        method: "POST",
-        body: JSON.stringify({
-          entry_id: Number(entryId),
-          kotaj_number: numClean,
-          kotaj_date_jalali: date,
-          customs_code: customsCode,
-          customs_name: customsName,
-          items: items.map(it => ({
-            name: it.name.trim(),
-            value_usd: parseFloat(normDigits(it.value_usd)) || 0,
-            unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
-          })),
-        }),
-      });
-      toast({ title: "کوتاژ ثبت شد" });
+      const numClean = normDigits(num).replace(/\D/g, "");
+      const payload = {
+        entry_id: Number(entryId),
+        kotaj_number: numClean,
+        kotaj_date_jalali: date,
+        customs_code: customsCode,
+        customs_name: customsName,
+        items: items.map(it => ({
+          name: it.name.trim(),
+          value_usd: parseFloat(normDigits(it.value_usd)) || 0,
+          unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
+        })),
+      };
+      if (editing) {
+        await api("/api/cards/kotaj-update.php", {
+          method: "POST",
+          body: JSON.stringify({ id: editing.id, ...payload }),
+        });
+        toast({ title: "کوتاژ ویرایش شد" });
+      } else {
+        await api("/api/cards/kotaj-create.php", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        toast({ title: "کوتاژ ثبت شد" });
+      }
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });

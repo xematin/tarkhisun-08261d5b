@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -42,7 +46,7 @@ interface MyCard {
 }
 interface MeUser { id: number; first_name: string; last_name: string; username: string; }
 
-interface KotajItem { name: string; value_usd: number; unit_price_irt: number; }
+interface KotajItem { name: string; value_usd: number; unit_price_irt: number; toman?: number; }
 interface Kotaj {
   id: number;
   card_id: number;
@@ -51,6 +55,7 @@ interface Kotaj {
   kotaj_number: string;
   kotaj_date_jalali: string;
   total_value_usd: number;
+  toman_total?: number;
   created_at: string;
   items: KotajItem[];
 }
@@ -181,6 +186,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
   const [items, setItems] = useState<MyCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [kotajFor, setKotajFor] = useState<MyCard | null>(null);
+  const [editing, setEditing] = useState<Kotaj | null>(null);
   const [listFor, setListFor] = useState<MyCard | null>(null);
 
   const load = useCallback(async () => {
@@ -275,13 +281,21 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
 
       <KotajDialog
         card={kotajFor}
-        onClose={() => setKotajFor(null)}
-        onSaved={() => { setKotajFor(null); void load(); }}
+        editing={editing}
+        onClose={() => { setKotajFor(null); setEditing(null); }}
+        onSaved={() => { setKotajFor(null); setEditing(null); void load(); }}
         toast={toast}
       />
       <KotajListDialog
         card={listFor}
         onClose={() => setListFor(null)}
+        onEdit={(k) => {
+          const c = items.find(x => x.id === k.card_id) || null;
+          setListFor(null);
+          setKotajFor(c);
+          setEditing(k);
+        }}
+        onChanged={() => void load()}
         toast={toast}
       />
     </>
@@ -292,9 +306,10 @@ interface ItemDraft { name: string; value_usd: string; unit_price_irt: string; }
 const emptyItem = (): ItemDraft => ({ name: "", value_usd: "", unit_price_irt: "" });
 
 const KotajDialog = ({
-  card, onClose, onSaved, toast,
+  card, editing, onClose, onSaved, toast,
 }: {
   card: MyCard | null;
+  editing?: Kotaj | null;
   onClose: () => void;
   onSaved: () => void;
   toast: ReturnType<typeof useToast>["toast"];
@@ -304,22 +319,43 @@ const KotajDialog = ({
   const [date, setDate] = useState<string>("");
   const [items, setItems] = useState<ItemDraft[]>([emptyItem()]);
   const [busy, setBusy] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (card) {
       const usdEntries = card.entries.filter(e => e.currency === "USD" && e.entry_id !== null);
-      setEntryId(usdEntries[0]?.entry_id ? String(usdEntries[0].entry_id) : "");
-      setNum(""); setDate("");
-      setItems([emptyItem()]);
+      if (editing) {
+        setEntryId(String(editing.entry_id));
+        setNum(editing.kotaj_number);
+        setDate(editing.kotaj_date_jalali);
+        setItems(editing.items.length
+          ? editing.items.map(it => ({
+              name: it.name,
+              value_usd: String(it.value_usd),
+              unit_price_irt: String(it.unit_price_irt),
+            }))
+          : [emptyItem()]);
+      } else {
+        setEntryId(usdEntries[0]?.entry_id ? String(usdEntries[0].entry_id) : "");
+        setNum(""); setDate("");
+        setItems([emptyItem()]);
+      }
     }
-  }, [card]);
+  }, [card, editing]);
 
   if (!card) return null;
   const usdEntries = card.entries.filter(e => e.currency === "USD" && e.entry_id !== null);
   const selected = usdEntries.find(e => String(e.entry_id) === entryId);
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
-  const remain = selected ? selected.remaining : 0;
+  // when editing, that kotaj's own usd should not count against remain
+  const editingOwn = editing && selected && editing.entry_id === selected.entry_id ? editing.total_value_usd : 0;
+  const remain = selected ? selected.remaining + editingOwn : 0;
   const over = selected ? totalUsd - remain > 0.0001 : false;
+  const totalToman = items.reduce((s, it) => {
+    const v = parseFloat(normDigits(it.value_usd)) || 0;
+    const p = parseFloat(normDigits(it.unit_price_irt)) || 0;
+    return s + v * p;
+  }, 0);
   const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
   const customs = lookupCustoms(num);
   const customsCode = customs?.code || "";
@@ -331,36 +367,53 @@ const KotajDialog = ({
   const add = () => setItems(prev => [...prev, emptyItem()]);
   const remove = (i: number) => setItems(prev => prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev);
 
-  const submit = async () => {
-    if (!entryId) return toast({ title: "سکشن را انتخاب کنید", variant: "destructive" });
+  const validate = (): boolean => {
+    if (!entryId) { toast({ title: "سکشن را انتخاب کنید", variant: "destructive" }); return false; }
     const numClean = normDigits(num).replace(/\D/g, "");
-    if (!numClean) return toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" });
-    if (!date) return toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" });
+    if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return false; }
+    if (!date) { toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" }); return false; }
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
-      if (!it.name.trim()) return toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" });
+      if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return false; }
       const v = parseFloat(normDigits(it.value_usd)) || 0;
-      if (v <= 0) return toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" });
+      if (v <= 0) { toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" }); return false; }
     }
-    if (over) return toast({ title: "ارزش کل کوتاژ از مانده سکشن بیشتر است", variant: "destructive" });
+    if (over) { toast({ title: "ارزش کل کوتاژ از مانده سکشن بیشتر است", variant: "destructive" }); return false; }
+    return true;
+  };
+
+  const onSubmitClick = () => { if (validate()) setConfirmOpen(true); };
+
+  const doSave = async () => {
+    setConfirmOpen(false);
     setBusy(true);
     try {
-      await api("/api/cards/kotaj-create.php", {
-        method: "POST",
-        body: JSON.stringify({
-          entry_id: Number(entryId),
-          kotaj_number: numClean,
-          kotaj_date_jalali: date,
-          customs_code: customsCode,
-          customs_name: customsName,
-          items: items.map(it => ({
-            name: it.name.trim(),
-            value_usd: parseFloat(normDigits(it.value_usd)) || 0,
-            unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
-          })),
-        }),
-      });
-      toast({ title: "کوتاژ ثبت شد" });
+      const numClean = normDigits(num).replace(/\D/g, "");
+      const payload = {
+        entry_id: Number(entryId),
+        kotaj_number: numClean,
+        kotaj_date_jalali: date,
+        customs_code: customsCode,
+        customs_name: customsName,
+        items: items.map(it => ({
+          name: it.name.trim(),
+          value_usd: parseFloat(normDigits(it.value_usd)) || 0,
+          unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
+        })),
+      };
+      if (editing) {
+        await api("/api/cards/kotaj-update.php", {
+          method: "POST",
+          body: JSON.stringify({ id: editing.id, ...payload }),
+        });
+        toast({ title: "کوتاژ ویرایش شد" });
+      } else {
+        await api("/api/cards/kotaj-create.php", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        toast({ title: "کوتاژ ثبت شد" });
+      }
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
@@ -432,6 +485,8 @@ const KotajDialog = ({
             </div>
             {items.map((it, i) => {
               const priceNum = parseFloat(normDigits(it.unit_price_irt)) || 0;
+              const valNum = parseFloat(normDigits(it.value_usd)) || 0;
+              const itemToman = valNum * priceNum;
               let priceClass = "";
               if (refPrice && priceNum > 0) {
                 if (priceNum < refPrice) priceClass = "text-destructive font-bold";
@@ -441,11 +496,18 @@ const KotajDialog = ({
               <div key={i} className="border rounded-md p-3 space-y-3 bg-muted/30">
                 <div className="flex items-center justify-between">
                   <span className="text-persian text-sm font-bold">قلم {i + 1}</span>
-                  {items.length > 1 && (
-                    <Button size="sm" variant="ghost" onClick={() => remove(i)} className="text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    {itemToman > 0 && (
+                      <span className="text-persian text-xs tabular-nums text-primary font-bold">
+                        {fmtToman(itemToman)}
+                      </span>
+                    )}
+                    {items.length > 1 && (
+                      <Button size="sm" variant="ghost" onClick={() => remove(i)} className="text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="space-y-1">
@@ -471,35 +533,61 @@ const KotajDialog = ({
             </Button>
           </div>
 
-          <div className="rounded-md border p-3 bg-primary/5 text-persian flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">ارزش کل سند کوتاژ</span>
-            <span className="font-bold text-lg tabular-nums">{fmtUSD(totalUsd)}</span>
+          <div className="rounded-md border p-3 bg-primary/5 text-persian space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">ارزش کل سند کوتاژ</span>
+              <span className="font-bold text-lg tabular-nums">{fmtUSD(totalUsd)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">هزینهٔ کل (تومان)</span>
+              <span className="font-bold text-lg tabular-nums text-primary">{fmtToman(totalToman)}</span>
+            </div>
           </div>
         </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">انصراف</Button>
-          <Button onClick={submit} disabled={busy || over} className="text-persian">
-            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت کوتاژ"}
+          <Button onClick={onSubmitClick} disabled={busy || over} className="text-persian">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : (editing ? "ذخیره ویرایش" : "ثبت کوتاژ")}
           </Button>
         </DialogFooter>
       </DialogContent>
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent dir="rtl" className="panel-fa">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-persian text-right">تأیید ثبت کوتاژ</AlertDialogTitle>
+            <AlertDialogDescription className="text-persian text-right space-y-1">
+              <span className="block">ارزش کل: <strong className="tabular-nums">{fmtUSD(totalUsd)}</strong></span>
+              <span className="block">هزینهٔ کل این کوتاژ برای شما: <strong className="tabular-nums text-primary">{fmtToman(totalToman)}</strong></span>
+              <span className="block text-xs text-muted-foreground mt-2">آیا تأیید می‌کنید؟</span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-persian">انصراف</AlertDialogCancel>
+            <AlertDialogAction onClick={doSave} className="text-persian">تأیید و ثبت</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 };
 
 const KotajListDialog = ({
-  card, onClose, toast,
+  card, onClose, onEdit, onChanged, toast,
 }: {
   card: MyCard | null;
   onClose: () => void;
+  onEdit: (k: Kotaj) => void;
+  onChanged: () => void;
   toast: ReturnType<typeof useToast>["toast"];
 }) => {
   const [items, setItems] = useState<Kotaj[]>([]);
   const [loading, setLoading] = useState(false);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [busyDel, setBusyDel] = useState(false);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (!card) return;
     setLoading(true);
     api<{ items: Kotaj[] }>(`/api/cards/kotaj-list.php?card_id=${card.id}`)
@@ -507,6 +595,25 @@ const KotajListDialog = ({
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [card, toast]);
+
+  useEffect(() => { reload(); }, [reload]);
+
+  const doDelete = async () => {
+    if (deleteId == null) return;
+    setBusyDel(true);
+    try {
+      await api("/api/cards/kotaj-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: deleteId }),
+      });
+      toast({ title: "کوتاژ حذف شد" });
+      setDeleteId(null);
+      reload();
+      onChanged();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusyDel(false); }
+  };
 
   if (!card) return null;
   return (
@@ -523,36 +630,57 @@ const KotajListDialog = ({
           <div className="space-y-2">
             {items.map(k => (
               <div key={k.id} className="border rounded-md">
-                <button
-                  className="w-full p-3 flex items-center justify-between text-right hover:bg-muted/30"
-                  onClick={() => setOpenId(openId === k.id ? null : k.id)}
-                >
-                  <div className="flex-1 text-persian text-sm space-y-1">
-                    <div className="font-bold">کوتاژ #{k.kotaj_number}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
+                <div className="w-full p-3 flex items-center justify-between gap-2">
+                  <button
+                    className="flex-1 flex items-center justify-between text-right hover:bg-muted/30 rounded-md p-2 -m-2"
+                    onClick={() => setOpenId(openId === k.id ? null : k.id)}
+                  >
+                    <div className="flex-1 text-persian text-sm space-y-1">
+                      <div className="font-bold">کوتاژ #{k.kotaj_number}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
+                      </div>
                     </div>
+                    <div className="text-persian font-bold tabular-nums text-left">
+                      <div className="text-primary">{fmtUSD(k.total_value_usd)}</div>
+                      {(k.toman_total ?? 0) > 0 && (
+                        <div className="text-xs text-muted-foreground">{fmtToman(k.toman_total ?? 0)}</div>
+                      )}
+                    </div>
+                    {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
+                  </button>
+                  <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" onClick={() => onEdit(k)} title="ویرایش">
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => setDeleteId(k.id)} title="حذف" className="text-destructive">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <div className="text-persian font-bold tabular-nums text-primary">
-                    {fmtUSD(k.total_value_usd)}
-                  </div>
-                  {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
-                </button>
+                </div>
                 {openId === k.id && (
                   <div className="border-t p-3 space-y-2 bg-muted/20">
-                    {k.items.map((it, i) => (
-                      <div key={i} className="flex justify-between text-persian text-sm">
-                        <span>{it.name}</span>
-                        <span className="tabular-nums">
-                          {fmtUSD(it.value_usd)}
+                    {k.items.map((it, i) => {
+                      const itToman = (it.toman ?? it.value_usd * it.unit_price_irt);
+                      return (
+                      <div key={i} className="flex justify-between text-persian text-sm gap-2">
+                        <span className="flex-1">{it.name}</span>
+                        <span className="tabular-nums text-left">
+                          <span>{fmtUSD(it.value_usd)}</span>
                           {it.unit_price_irt > 0 && (
-                            <span className="text-xs text-muted-foreground mr-2">
-                              ({it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار)
+                            <span className="text-xs text-muted-foreground block">
+                              {it.unit_price_irt.toLocaleString("fa-IR")} ت/دلار = <strong className="text-primary">{fmtToman(itToman)}</strong>
                             </span>
                           )}
                         </span>
                       </div>
-                    ))}
+                    );})}
+                    {(k.toman_total ?? 0) > 0 && (
+                      <div className="border-t pt-2 mt-2 flex justify-between text-persian text-sm">
+                        <span className="font-bold">مجموع تومانی</span>
+                        <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total ?? 0)}</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -560,6 +688,22 @@ const KotajListDialog = ({
           </div>
         )}
       </DialogContent>
+      <AlertDialog open={deleteId != null} onOpenChange={(v) => { if (!v) setDeleteId(null); }}>
+        <AlertDialogContent dir="rtl" className="panel-fa">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-persian text-right">حذف کوتاژ</AlertDialogTitle>
+            <AlertDialogDescription className="text-persian text-right">
+              آیا از حذف این کوتاژ مطمئن هستید؟ این عمل غیرقابل بازگشت است.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="text-persian">انصراف</AlertDialogCancel>
+            <AlertDialogAction onClick={doDelete} disabled={busyDel} className="text-persian">
+              {busyDel ? <Loader2 className="w-4 h-4 animate-spin" /> : "حذف"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 };

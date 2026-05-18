@@ -46,6 +46,7 @@ interface CardEntry {
   total_irt: number;
   sort_order: number;
   users: EntryUser[];
+  kotaj_toman_total?: number;
 }
 interface CardRow {
   id: number;
@@ -59,6 +60,7 @@ interface CardRow {
   remaining?: number;
   updated_at?: string;
   created_at?: string;
+  kotaj_toman_total?: number;
 }
 
 const CURRENCY_LABEL: Record<Currency, string> = {
@@ -235,6 +237,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                 <TableHead className="text-right text-persian">نام کارت</TableHead>
                 <TableHead className="text-right text-persian">موجودی کل (دلار)</TableHead>
                 <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
+                <TableHead className="text-right text-persian">هزینه کوتاژها (تومان)</TableHead>
                 <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
                 <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
                 <TableHead></TableHead>
@@ -255,12 +258,22 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                     <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                       {fmtToman(bal || 0)}
                     </TableCell>
+                    <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums text-accent">
+                      {fmtToman(r.kotaj_toman_total || 0)}
+                    </TableCell>
                     <TableCell className="text-persian align-top min-w-[240px]">
                       {r.entries && r.entries.length > 0 ? (
                         <div className="flex flex-col gap-1.5 text-sm">
                           {r.entries.map((e) => (
                             <div key={e.id} className="flex justify-between gap-3">
-                              <span className="font-medium">{e.title}</span>
+                              <div className="flex flex-col">
+                                <span className="font-medium">{e.title}</span>
+                                {(e.kotaj_toman_total || 0) > 0 && (
+                                  <span className="text-xs text-accent tabular-nums">
+                                    کوتاژ: {fmtToman(e.kotaj_toman_total || 0)}
+                                  </span>
+                                )}
+                              </div>
                               <span className="tabular-nums text-muted-foreground">
                                 {fmtMoney(e.amount, e.currency)}
                                 {e.currency !== "IRT" && (

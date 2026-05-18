@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import { lookupCustoms } from "@/data/customsCodes";
 
 type Currency = "USD" | "EUR" | "IRT";
 const CURRENCY_LABEL: Record<Currency, string> = { USD: "دلار", EUR: "یورو", IRT: "تومان" };

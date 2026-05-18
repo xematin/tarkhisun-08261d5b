@@ -219,6 +219,22 @@ const HSCodeSearch = () => {
               </Button>
             </div>
 
+            {submittedQuery && (
+              <div className="mt-4 flex items-center justify-center gap-2 flex-wrap rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-persian text-sm md:text-base">
+                <span className="text-foreground/80">
+                  در صورت نیاز به راهنمایی بیشتر با تیم ترخیصان در تماس باشید
+                </span>
+                <a
+                  href="tel:09177380080"
+                  dir="ltr"
+                  className="font-bold text-primary hover:underline"
+                >
+                  09177380080
+                </a>
+              </div>
+            )}
+
+
             {showSuggestions && (
               <div className="mt-6">
                 <p className="text-sm text-muted-foreground text-persian mb-3">

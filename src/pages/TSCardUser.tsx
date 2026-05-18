@@ -834,4 +834,150 @@ const KotajListDialog = ({
   );
 };
 
+const PaymentDialog = ({
+  card, onClose, onSaved, toast,
+}: {
+  card: MyCard | null;
+  onClose: () => void;
+  onSaved: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [amount, setAmount] = useState("");
+  const [note, setNote] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (card) {
+      const debt = card.debt_toman ?? 0;
+      setAmount(debt > 0 ? String(Math.round(debt)) : "");
+      setNote(""); setFile(null); setPreview(null);
+    }
+  }, [card]);
+
+  useEffect(() => {
+    if (!file) { setPreview(null); return; }
+    if (!file.type.startsWith("image/")) { setPreview(null); return; }
+    const u = URL.createObjectURL(file);
+    setPreview(u);
+    return () => URL.revokeObjectURL(u);
+  }, [file]);
+
+  if (!card) return null;
+  const debt = card.debt_toman ?? 0;
+  const amtNum = parseFloat(normDigits(amount)) || 0;
+
+  const submit = async () => {
+    if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
+    if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
+    if (file.size > 5 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۵ مگابایت است", variant: "destructive" }); return; }
+    setBusy(true);
+    try {
+      const fd = new FormData();
+      fd.append("card_id", String(card.id));
+      fd.append("amount_irt", String(amtNum));
+      if (note.trim()) fd.append("note", note.trim());
+      fd.append("receipt", file);
+      const res = await fetch("/api/cards/payment-create.php", {
+        method: "POST",
+        credentials: "same-origin",
+        body: fd,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      toast({ title: "پرداخت ثبت شد", description: "از مجموع بدهی شما کسر شد." });
+      onSaved();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v && !busy) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-md panel-fa">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right flex items-center gap-2">
+            <Wallet className="w-5 h-5" /> ثبت پرداخت — {card.name}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="rounded-md border bg-muted/30 p-3 text-persian text-sm space-y-1">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">مجموع هزینه کوتاژها</span>
+              <span className="tabular-nums font-bold">{fmtToman(card.kotaj_toman_total ?? 0)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">پرداختی تاکنون</span>
+              <span className="tabular-nums font-bold text-emerald-600">{fmtToman(card.payments_toman_total ?? 0)}</span>
+            </div>
+            <div className="flex justify-between border-t pt-1 mt-1">
+              <span>بدهی فعلی</span>
+              <span className={`tabular-nums font-bold ${debt > 0 ? "text-destructive" : "text-emerald-600"}`}>
+                {fmtToman(debt)}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">مبلغ پرداخت (تومان)</Label>
+            <Input
+              value={amount}
+              onChange={(e) => setAmount(normDigits(e.target.value).replace(/[^\d]/g, ""))}
+              inputMode="decimal" dir="ltr" placeholder="1000000"
+              className="text-lg font-bold tabular-nums"
+            />
+            {amtNum > 0 && (
+              <div className="text-xs text-muted-foreground text-persian tabular-nums">
+                {amtNum.toLocaleString("fa-IR")} تومان
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">عکس فیش واریزی</Label>
+            <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-4 cursor-pointer hover:bg-muted/30 transition">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,application/pdf"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
+              {file ? (
+                <>
+                  {preview ? (
+                    <img src={preview} alt="پیش‌نمایش فیش" className="max-h-40 rounded-md" />
+                  ) : (
+                    <FileText className="w-10 h-10 text-primary" />
+                  )}
+                  <div className="text-xs text-persian text-muted-foreground">{file.name}</div>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-8 h-8 text-muted-foreground" />
+                  <div className="text-sm text-persian text-muted-foreground">
+                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۵MB)
+                  </div>
+                </>
+              )}
+            </label>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">توضیح (اختیاری)</Label>
+            <Input value={note} onChange={(e) => setNote(e.target.value)} className="text-persian" placeholder="شماره پیگیری، توضیح..." />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} disabled={busy} className="text-persian">انصراف</Button>
+          <Button onClick={submit} disabled={busy} className="text-persian bg-emerald-600 hover:bg-emerald-700 text-white">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت پرداخت"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default TSCardUser;
+

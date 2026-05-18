@@ -23,7 +23,7 @@ $receiptPath = null;
 if (!empty($_FILES['receipt']) && is_array($_FILES['receipt']) && (int)$_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
     $f = $_FILES['receipt'];
     $size = (int)$f['size'];
-    if ($size <= 0 || $size > 5 * 1024 * 1024) ts_json_error(400, 'حجم فیش بیش از حد مجاز (۵ مگابایت) است');
+    if ($size <= 0 || $size > 10 * 1024 * 1024) ts_json_error(400, 'حجم فیش بیش از حد مجاز (۱۰ مگابایت) است');
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime = $finfo->file($f['tmp_name']) ?: '';

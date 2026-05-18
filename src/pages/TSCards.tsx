@@ -46,6 +46,7 @@ interface CardEntry {
   total_irt: number;
   sort_order: number;
   users: EntryUser[];
+  kotaj_toman_total?: number;
 }
 interface CardRow {
   id: number;
@@ -59,6 +60,7 @@ interface CardRow {
   remaining?: number;
   updated_at?: string;
   created_at?: string;
+  kotaj_toman_total?: number;
 }
 
 const CURRENCY_LABEL: Record<Currency, string> = {

@@ -351,6 +351,8 @@ const KotajDialog = ({
           entry_id: Number(entryId),
           kotaj_number: numClean,
           kotaj_date_jalali: date,
+          customs_code: customsCode,
+          customs_name: customsName,
           items: items.map(it => ({
             name: it.name.trim(),
             value_usd: parseFloat(normDigits(it.value_usd)) || 0,

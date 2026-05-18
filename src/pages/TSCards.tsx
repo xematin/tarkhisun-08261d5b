@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 
 import { Button } from "@/components/ui/button";
@@ -186,6 +186,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [logsFor, setLogsFor] = useState<CardRow | null>(null);
   const [pricesFor, setPricesFor] = useState<CardRow | null>(null);
   const [reportFor, setReportFor] = useState<CardRow | null>(null);
+  const [kotajCostFor, setKotajCostFor] = useState<CardRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -213,13 +214,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   return (
     <Tabs defaultValue="cards" className="space-y-6">
       <TabsList className="panel-3d-tabs h-14 w-full justify-between rounded-full bg-secondary p-1.5 border border-border shadow-[inset_0_2px_6px_hsl(var(--primary)/0.12),0_2px_4px_hsl(var(--primary)/0.06)]">
-        <TabsTrigger value="cards" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_4px_12px_hsl(var(--primary)/0.35),0_1px_2px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold transition-all">
+        <TabsTrigger value="cards" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           کارت‌ها
         </TabsTrigger>
-        <TabsTrigger value="payments" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_4px_12px_hsl(var(--primary)/0.35),0_1px_2px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold transition-all">
+        <TabsTrigger value="payments" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           پرداخت‌های کاربران
         </TabsTrigger>
-        <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_4px_12px_hsl(var(--primary)/0.35),0_1px_2px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold transition-all">
+        <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           گزارش‌گیری
         </TabsTrigger>
       </TabsList>
@@ -253,7 +254,6 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                     <TableHead className="text-right text-persian">نام کارت</TableHead>
                     <TableHead className="text-right text-persian">موجودی کل (دلار)</TableHead>
                     <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
-                    <TableHead className="text-right text-persian">هزینه کوتاژها (تومان)</TableHead>
                     <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
                     <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
                     <TableHead></TableHead>
@@ -274,30 +274,26 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {fmtToman(bal || 0)}
                         </TableCell>
-                        <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums text-accent">
-                          {fmtToman(r.kotaj_toman_total || 0)}
-                        </TableCell>
                         <TableCell className="text-persian align-top min-w-[240px]">
                           {r.entries && r.entries.length > 0 ? (
                             <div className="flex flex-col gap-1.5 text-sm">
-                              {r.entries.map((e) => (
-                                <div key={e.id} className="flex justify-between gap-3">
-                                  <div className="flex flex-col">
+                              {r.entries.map((e) => {
+                                const amt = Number(e.amount) || 0;
+                                const perUnit = e.currency !== "IRT" && amt > 0
+                                  ? (Number(e.unit_price_irt) || (Number(e.total_irt) / amt))
+                                  : 0;
+                                return (
+                                  <div key={e.id} className="flex justify-between gap-3">
                                     <span className="font-medium">{e.title}</span>
-                                    {(e.kotaj_toman_total || 0) > 0 && (
-                                      <span className="text-xs text-accent tabular-nums">
-                                        کوتاژ: {fmtToman(e.kotaj_toman_total || 0)}
-                                      </span>
-                                    )}
+                                    <span className="tabular-nums text-muted-foreground">
+                                      {fmtMoney(e.amount, e.currency)}
+                                      {e.currency !== "IRT" && perUnit > 0 && (
+                                        <span className="mx-1">← هر ۱ {CURRENCY_LABEL[e.currency]} = {fmtToman(Math.round(perUnit))}</span>
+                                      )}
+                                    </span>
                                   </div>
-                                  <span className="tabular-nums text-muted-foreground">
-                                    {fmtMoney(e.amount, e.currency)}
-                                    {e.currency !== "IRT" && (
-                                      <span className="mx-1">← {fmtToman(e.total_irt)}</span>
-                                    )}
-                                  </span>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
                           ) : <span className="text-muted-foreground text-sm">—</span>}
                         </TableCell>
@@ -329,6 +325,9 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
                               <History className="w-4 h-4" />
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={() => setKotajCostFor(r)} title="هزینه کوتاژها">
+                              <Wallet className="w-4 h-4 text-accent" />
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش">
                               <Pencil className="w-4 h-4" />
@@ -371,6 +370,34 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               onClose={() => setReportFor(null)}
               toast={toast}
             />
+
+            <Dialog open={!!kotajCostFor} onOpenChange={(o) => !o && setKotajCostFor(null)}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-persian">هزینه کوتاژها — {kotajCostFor?.name}</DialogTitle>
+                </DialogHeader>
+                {kotajCostFor && (
+                  <div className="space-y-3 text-persian">
+                    <div className="flex justify-between items-center p-3 rounded-lg bg-accent/10 border border-accent/20">
+                      <span className="font-bold">مجموع کل:</span>
+                      <span className="font-bold tabular-nums text-accent">{fmtToman(kotajCostFor.kotaj_toman_total || 0)}</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-sm font-medium text-muted-foreground">تفکیک سکشن‌ها:</div>
+                      {(kotajCostFor.entries || []).map((e) => (
+                        <div key={e.id} className="flex justify-between items-center py-2 border-b border-border/60 last:border-0">
+                          <span>{e.title}</span>
+                          <span className="tabular-nums">{fmtToman(e.kotaj_toman_total || 0)}</span>
+                        </div>
+                      ))}
+                      {(!kotajCostFor.entries || kotajCostFor.entries.length === 0) && (
+                        <p className="text-sm text-muted-foreground text-center py-3">سکشنی ثبت نشده.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card>
       </TabsContent>

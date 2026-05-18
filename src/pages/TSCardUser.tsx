@@ -678,7 +678,7 @@ const KotajListDialog = ({
           />
           {(q || entryFilter !== "all" || dateFrom || dateTo) && (
             <div className="md:col-span-2 flex items-center justify-between text-xs text-persian text-muted-foreground">
-              <span>{fa(filtered.length)} مورد از {fa(items.length)}</span>
+              <span>{filtered.length.toLocaleString("fa-IR")} مورد از {items.length.toLocaleString("fa-IR")}</span>
               <Button size="sm" variant="ghost" onClick={() => { setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo(""); }}>
                 پاک کردن فیلتر
               </Button>

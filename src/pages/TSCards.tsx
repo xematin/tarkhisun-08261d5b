@@ -1275,6 +1275,12 @@ const KotajReportDialog = ({
                         }, `${card.name} — ${u.first_name} ${u.last_name}`)}>
                           <Download className="w-4 h-4" />
                         </Button>
+                        <Button size="sm" variant="ghost" title="ویرایش کوتاژ" onClick={() => setEditKotaj(k)}>
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" title="حذف کوتاژ" onClick={() => setDeleteKotaj(k)} className="text-destructive hover:text-destructive">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                       {openId === k.id && (
                         <div className="border-t p-2 space-y-1 bg-muted/20">

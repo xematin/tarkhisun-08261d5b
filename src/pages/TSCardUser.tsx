@@ -976,7 +976,7 @@ const PaymentDialog = ({
                 <>
                   <Upload className="w-8 h-8 text-muted-foreground" />
                   <div className="text-sm text-persian text-muted-foreground">
-                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۵MB)
+                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۱۰MB)
                   </div>
                 </>
               )}

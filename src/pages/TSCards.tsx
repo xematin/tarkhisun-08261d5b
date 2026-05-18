@@ -186,6 +186,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [logsFor, setLogsFor] = useState<CardRow | null>(null);
   const [pricesFor, setPricesFor] = useState<CardRow | null>(null);
   const [reportFor, setReportFor] = useState<CardRow | null>(null);
+  const [kotajCostFor, setKotajCostFor] = useState<CardRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);

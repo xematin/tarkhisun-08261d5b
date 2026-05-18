@@ -370,6 +370,34 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               onClose={() => setReportFor(null)}
               toast={toast}
             />
+
+            <Dialog open={!!kotajCostFor} onOpenChange={(o) => !o && setKotajCostFor(null)}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-persian">هزینه کوتاژها — {kotajCostFor?.name}</DialogTitle>
+                </DialogHeader>
+                {kotajCostFor && (
+                  <div className="space-y-3 text-persian">
+                    <div className="flex justify-between items-center p-3 rounded-lg bg-accent/10 border border-accent/20">
+                      <span className="font-bold">مجموع کل:</span>
+                      <span className="font-bold tabular-nums text-accent">{fmtToman(kotajCostFor.kotaj_toman_total || 0)}</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-sm font-medium text-muted-foreground">تفکیک سکشن‌ها:</div>
+                      {(kotajCostFor.entries || []).map((e) => (
+                        <div key={e.id} className="flex justify-between items-center py-2 border-b border-border/60 last:border-0">
+                          <span>{e.title}</span>
+                          <span className="tabular-nums">{fmtToman(e.kotaj_toman_total || 0)}</span>
+                        </div>
+                      ))}
+                      {(!kotajCostFor.entries || kotajCostFor.entries.length === 0) && (
+                        <p className="text-sm text-muted-foreground text-center py-3">سکشنی ثبت نشده.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card>
       </TabsContent>

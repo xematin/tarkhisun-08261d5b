@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil } from "lucide-react";
+import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search } from "lucide-react";
+import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -586,6 +587,10 @@ const KotajListDialog = ({
   const [openId, setOpenId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [busyDel, setBusyDel] = useState(false);
+  const [q, setQ] = useState("");
+  const [entryFilter, setEntryFilter] = useState<string>("all");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
 
   const reload = useCallback(() => {
     if (!card) return;
@@ -616,19 +621,78 @@ const KotajListDialog = ({
   };
 
   if (!card) return null;
+
+  const entryOptions = Array.from(new Map(items.map(i => [i.entry_id, i.entry_title || "—"])).entries());
+  const qNorm = normDigits(q).trim();
+  const fromNorm = normDigits(dateFrom).trim();
+  const toNorm = normDigits(dateTo).trim();
+  const filtered = items.filter(k => {
+    if (qNorm && !normDigits(k.kotaj_number).includes(qNorm)) return false;
+    if (entryFilter !== "all" && String(k.entry_id) !== entryFilter) return false;
+    const d = normDigits(k.kotaj_date_jalali);
+    if (fromNorm && d < fromNorm) return false;
+    if (toNorm && d > toNorm) return false;
+    return true;
+  });
+
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogContent dir="rtl" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-persian text-right">کوتاژهای ثبت‌شده — {card.name}</DialogTitle>
         </DialogHeader>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+          <div className="relative">
+            <Search className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="جستجوی شماره کوتاژ"
+              className="text-persian pr-8"
+              dir="ltr"
+            />
+          </div>
+          <Select value={entryFilter} onValueChange={setEntryFilter}>
+            <SelectTrigger className="text-persian"><SelectValue placeholder="همه سکشن‌ها" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-persian">همه سکشن‌ها</SelectItem>
+              {entryOptions.map(([id, title]) => (
+                <SelectItem key={id} value={String(id)} className="text-persian">{title}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Input
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            placeholder="از تاریخ (1405/01/01)"
+            className="text-persian"
+            dir="ltr"
+          />
+          <Input
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            placeholder="تا تاریخ (1405/12/29)"
+            className="text-persian"
+            dir="ltr"
+          />
+          {(q || entryFilter !== "all" || dateFrom || dateTo) && (
+            <div className="md:col-span-2 flex items-center justify-between text-xs text-persian text-muted-foreground">
+              <span>{filtered.length.toLocaleString("fa-IR")} مورد از {items.length.toLocaleString("fa-IR")}</span>
+              <Button size="sm" variant="ghost" onClick={() => { setQ(""); setEntryFilter("all"); setDateFrom(""); setDateTo(""); }}>
+                پاک کردن فیلتر
+              </Button>
+            </div>
+          )}
+        </div>
+
         {loading ? (
           <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
-        ) : items.length === 0 ? (
-          <p className="py-8 text-center text-muted-foreground text-persian text-sm">هنوز کوتاژی ثبت نکرده‌اید.</p>
+        ) : filtered.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">{items.length === 0 ? "هنوز کوتاژی ثبت نکرده‌اید." : "موردی با فیلتر مطابقت ندارد."}</p>
         ) : (
           <div className="space-y-2">
-            {items.map(k => (
+            {filtered.map(k => (
               <div key={k.id} className="border rounded-md">
                 <div className="w-full p-3 flex items-center justify-between gap-2">
                   <button
@@ -650,6 +714,9 @@ const KotajListDialog = ({
                     {openId === k.id ? <ChevronUp className="w-4 h-4 mr-2" /> : <ChevronDown className="w-4 h-4 mr-2" />}
                   </button>
                   <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" onClick={() => downloadKotajPdf(k, card.name)} title="دانلود PDF">
+                      <Download className="w-4 h-4" />
+                    </Button>
                     <Button size="sm" variant="ghost" onClick={() => onEdit(k)} title="ویرایش">
                       <Pencil className="w-4 h-4" />
                     </Button>

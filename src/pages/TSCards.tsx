@@ -254,7 +254,6 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                     <TableHead className="text-right text-persian">نام کارت</TableHead>
                     <TableHead className="text-right text-persian">موجودی کل (دلار)</TableHead>
                     <TableHead className="text-right text-persian">موجودی کل (تومان)</TableHead>
-                    <TableHead className="text-right text-persian">هزینه کوتاژها (تومان)</TableHead>
                     <TableHead className="text-right text-persian">سکشن‌ها</TableHead>
                     <TableHead className="text-right text-persian hidden md:table-cell">کاربران</TableHead>
                     <TableHead></TableHead>

@@ -26,10 +26,12 @@ if ($ids) {
     $it = $pdo->prepare("SELECT * FROM ts_kotaj_items WHERE kotaj_id IN ($place) ORDER BY id");
     $it->execute($ids);
     foreach ($it->fetchAll() as $r) {
+        $v = (float)$r['value_usd']; $p = (float)$r['unit_price_irt'];
         $itemsByK[(int)$r['kotaj_id']][] = [
             'name' => $r['name'],
-            'value_usd' => (float)$r['value_usd'],
-            'unit_price_irt' => (float)$r['unit_price_irt'],
+            'value_usd' => $v,
+            'unit_price_irt' => $p,
+            'toman' => $v * $p,
         ];
     }
 }
@@ -37,6 +39,9 @@ if ($ids) {
 $out = [];
 foreach ($rows as $r) {
     $kid = (int)$r['id'];
+    $its = $itemsByK[$kid] ?? [];
+    $tomanTotal = 0.0;
+    foreach ($its as $x) $tomanTotal += (float)$x['toman'];
     $out[] = [
         'id' => $kid,
         'card_id' => (int)$r['card_id'],
@@ -45,8 +50,9 @@ foreach ($rows as $r) {
         'kotaj_number' => $r['kotaj_number'],
         'kotaj_date_jalali' => $r['kotaj_date_jalali'],
         'total_value_usd' => (float)$r['total_value_usd'],
+        'toman_total' => $tomanTotal,
         'created_at' => $r['created_at'],
-        'items' => $itemsByK[$kid] ?? [],
+        'items' => $its,
     ];
 }
 ts_json(200, ['items' => $out]);

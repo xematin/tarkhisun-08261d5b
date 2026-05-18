@@ -46,7 +46,7 @@ interface MyCard {
 }
 interface MeUser { id: number; first_name: string; last_name: string; username: string; }
 
-interface KotajItem { name: string; value_usd: number; unit_price_irt: number; }
+interface KotajItem { name: string; value_usd: number; unit_price_irt: number; toman?: number; }
 interface Kotaj {
   id: number;
   card_id: number;
@@ -55,6 +55,7 @@ interface Kotaj {
   kotaj_number: string;
   kotaj_date_jalali: string;
   total_value_usd: number;
+  toman_total?: number;
   created_at: string;
   items: KotajItem[];
 }

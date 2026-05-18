@@ -18,6 +18,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
 type Currency = "USD" | "EUR" | "IRT";
@@ -1101,9 +1102,16 @@ const KotajReportDialog = ({
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogContent dir="rtl" className="max-w-4xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-persian text-right">گزارش کوتاژها — {card.name}</DialogTitle>
+          <DialogTitle className="text-persian text-right">گزارش کارت — {card.name}</DialogTitle>
         </DialogHeader>
 
+        <Tabs defaultValue="kotaj" className="w-full">
+          <TabsList className="w-full grid grid-cols-2">
+            <TabsTrigger value="kotaj" className="text-persian">گزارش کوتاژها</TabsTrigger>
+            <TabsTrigger value="payments" className="text-persian">پرداخت‌های کاربران</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="kotaj">
         {users.length > 0 && (
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
@@ -1244,11 +1252,183 @@ const KotajReportDialog = ({
             );})}
           </div>
         )}
+          </TabsContent>
+
+          <TabsContent value="payments">
+            <CardPaymentsTab cardId={card.id} toast={toast} />
+          </TabsContent>
+        </Tabs>
+
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">بستن</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+
+interface AdminPayment {
+  id: number;
+  card_id: number;
+  card_user_id: number;
+  amount_irt: number;
+  receipt_path: string | null;
+  note: string | null;
+  status: string;
+  created_at: string;
+  first_name: string;
+  last_name: string;
+  username: string;
+}
+
+const CardPaymentsTab = ({
+  cardId, toast,
+}: {
+  cardId: number;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [items, setItems] = useState<AdminPayment[]>([]);
+  const [totals, setTotals] = useState<{ count: number; amount: number }>({ count: 0, amount: 0 });
+  const [loading, setLoading] = useState(true);
+  const [q, setQ] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [preview, setPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    api<{ items: AdminPayment[]; totals: { count: number; amount: number } }>(
+      `/api/admin/card-payments-list.php?card_id=${cardId}`
+    )
+      .then(r => { setItems(r.items || []); setTotals(r.totals || { count: 0, amount: 0 }); })
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [cardId, toast]);
+
+  const qN = normDigits(q).trim().toLowerCase();
+  const filtered = items.filter(p => {
+    if (statusFilter !== "all" && p.status !== statusFilter) return false;
+    if (!qN) return true;
+    const full = `${p.first_name} ${p.last_name} @${p.username}`.toLowerCase();
+    return full.includes(qN) || normDigits(String(p.amount_irt)).includes(qN);
+  });
+  const filteredSum = filtered.reduce((s, p) => s + p.amount_irt, 0);
+
+  const statusBadge = (s: string) => {
+    if (s === "confirmed") return <Badge className="bg-emerald-600 hover:bg-emerald-700 text-persian">تأیید شده</Badge>;
+    if (s === "pending") return <Badge variant="secondary" className="text-persian">در انتظار</Badge>;
+    if (s === "rejected") return <Badge variant="destructive" className="text-persian">رد شده</Badge>;
+    return <Badge variant="outline" className="text-persian">{s}</Badge>;
+  };
+
+  const isImage = (p?: string | null) =>
+    !!p && /\.(jpe?g|png|webp|gif)$/i.test(p);
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+        <div className="rounded-md border p-3 bg-muted/30">
+          <div className="text-xs text-muted-foreground text-persian">تعداد پرداخت‌ها</div>
+          <div className="text-lg font-bold tabular-nums">{totals.count.toLocaleString("fa-IR")}</div>
+        </div>
+        <div className="rounded-md border p-3 bg-muted/30">
+          <div className="text-xs text-muted-foreground text-persian">جمع کل (تومان)</div>
+          <div className="text-lg font-bold tabular-nums text-primary">{fmtToman(totals.amount)}</div>
+        </div>
+        <div className="rounded-md border p-3 bg-muted/30">
+          <div className="text-xs text-muted-foreground text-persian">جمع نمایش</div>
+          <div className="text-lg font-bold tabular-nums">{fmtToman(filteredSum)}</div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="relative">
+          <Search className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="جستجوی کاربر یا مبلغ" className="text-persian pr-8" />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all" className="text-persian">همه وضعیت‌ها</SelectItem>
+            <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
+            <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
+            <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {loading ? (
+        <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+      ) : filtered.length === 0 ? (
+        <p className="py-8 text-center text-muted-foreground text-persian text-sm">پرداختی برای نمایش وجود ندارد.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-right text-persian">کاربر</TableHead>
+                <TableHead className="text-right text-persian">تاریخ ثبت</TableHead>
+                <TableHead className="text-right text-persian">مبلغ (تومان)</TableHead>
+                <TableHead className="text-right text-persian">وضعیت</TableHead>
+                <TableHead className="text-right text-persian">فیش</TableHead>
+                <TableHead className="text-right text-persian">توضیح</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.map(p => (
+                <TableRow key={p.id}>
+                  <TableCell className="text-persian">
+                    <div className="font-medium">{p.first_name} {p.last_name}</div>
+                    <div className="text-xs text-muted-foreground">@{p.username}</div>
+                  </TableCell>
+                  <TableCell className="text-persian text-xs tabular-nums">{p.created_at}</TableCell>
+                  <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
+                  <TableCell>{statusBadge(p.status)}</TableCell>
+                  <TableCell>
+                    {p.receipt_path ? (
+                      isImage(p.receipt_path) ? (
+                        <button
+                          type="button"
+                          onClick={() => setPreview(p.receipt_path)}
+                          className="block"
+                          title="نمایش فیش"
+                        >
+                          <img src={p.receipt_path} alt="فیش" className="w-14 h-14 object-cover rounded border hover:opacity-80" />
+                        </button>
+                      ) : (
+                        <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary text-persian text-sm underline">
+                          مشاهده فایل
+                        </a>
+                      )
+                    ) : (
+                      <span className="text-muted-foreground text-xs text-persian">—</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>
+                    {p.note || "—"}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      <Dialog open={!!preview} onOpenChange={(v) => { if (!v) setPreview(null); }}>
+        <DialogContent dir="rtl" className="max-w-2xl panel-fa">
+          <DialogHeader>
+            <DialogTitle className="text-persian text-right">تصویر فیش واریزی</DialogTitle>
+          </DialogHeader>
+          {preview && <img src={preview} alt="فیش واریزی" className="w-full h-auto rounded-md" />}
+          <DialogFooter>
+            {preview && (
+              <a href={preview} target="_blank" rel="noreferrer" className="text-primary text-persian text-sm underline ml-auto">
+                باز کردن در تب جدید
+              </a>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

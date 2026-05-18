@@ -891,7 +891,7 @@ const PaymentDialog = ({
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
     if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
-    if (file.size > 5 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۵ مگابایت است", variant: "destructive" }); return; }
+    if (file.size > 10 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۱۰ مگابایت است", variant: "destructive" }); return; }
     setBusy(true);
     try {
       const fd = new FormData();
@@ -942,9 +942,9 @@ const PaymentDialog = ({
           <div className="space-y-2">
             <Label className="text-persian">مبلغ پرداخت (تومان)</Label>
             <Input
-              value={amount}
+              value={amount ? Number(amount).toLocaleString("en-US") : ""}
               onChange={(e) => setAmount(normDigits(e.target.value).replace(/[^\d]/g, ""))}
-              inputMode="decimal" dir="ltr" placeholder="1000000"
+              inputMode="decimal" dir="ltr" placeholder="1,000,000"
               className="text-lg font-bold tabular-nums"
             />
             {amtNum > 0 && (
@@ -976,7 +976,7 @@ const PaymentDialog = ({
                 <>
                   <Upload className="w-8 h-8 text-muted-foreground" />
                   <div className="text-sm text-persian text-muted-foreground">
-                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۵MB)
+                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۱۰MB)
                   </div>
                 </>
               )}

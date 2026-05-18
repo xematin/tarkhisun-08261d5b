@@ -447,8 +447,11 @@ const KotajDialog = ({
               <Input
                 value={num}
                 onChange={(e) => {
-                  const cleaned = normDigits(e.target.value).replace(/[^\d-]/g, "");
-                  setNum(cleaned);
+                  const digits = normDigits(e.target.value).replace(/\D/g, "");
+                  const formatted = digits.length > 5
+                    ? digits.slice(0, 5) + "-" + digits.slice(5, 12)
+                    : digits;
+                  setNum(formatted);
                 }}
                 inputMode="numeric" dir="ltr" placeholder="50100-1234567"
               />

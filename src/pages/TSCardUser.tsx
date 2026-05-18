@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search } from "lucide-react";
+import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,7 +44,11 @@ interface MyCard {
   total_irt: number;
   total_usd: number;
   remaining_usd: number;
+  kotaj_toman_total?: number;
+  payments_toman_total?: number;
+  debt_toman?: number;
 }
+
 interface MeUser { id: number; first_name: string; last_name: string; username: string; }
 
 interface KotajItem { name: string; value_usd: number; unit_price_irt: number; toman?: number; }
@@ -189,6 +193,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
   const [kotajFor, setKotajFor] = useState<MyCard | null>(null);
   const [editing, setEditing] = useState<Kotaj | null>(null);
   const [listFor, setListFor] = useState<MyCard | null>(null);
+  const [payFor, setPayFor] = useState<MyCard | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -214,8 +219,29 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
           const tomanTotal = c.entries
             .filter(e => e.currency === "USD" && e.has_custom_price)
             .reduce((s, e) => s + e.allocated * e.unit_price_irt, 0);
+          const kotajToman = c.kotaj_toman_total ?? 0;
+          const debt = c.debt_toman ?? Math.max(0, kotajToman - (c.payments_toman_total ?? 0));
+          const paid = c.payments_toman_total ?? 0;
           return (
-            <Card key={c.id}>
+            <Card key={c.id} className="relative overflow-hidden">
+              {/* Top-left debt badge */}
+              {kotajToman > 0 && (
+                <div className="absolute top-2 left-2 z-10">
+                  {debt > 0 ? (
+                    <div className="rounded-md bg-destructive/10 border border-destructive/30 px-2 py-1 text-right">
+                      <div className="text-[10px] text-destructive/80 text-persian leading-tight">بدهی کوتاژ</div>
+                      <div className="text-xs font-bold tabular-nums text-destructive leading-tight">
+                        {fmtToman(debt)}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-md bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-xs font-bold text-emerald-700 text-persian">تسویه</span>
+                    </div>
+                  )}
+                </div>
+              )}
               <CardHeader>
                 <CardTitle className="text-persian text-base flex items-center gap-2">
                   <CreditCard className="w-4 h-4" /> {c.name}
@@ -266,6 +292,20 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                     </div>
                   ))}
                 </div>
+                {kotajToman > 0 && (
+                  <div className="border-t pt-3 text-persian text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">مجموع هزینه کوتاژها</span>
+                      <span className="tabular-nums font-bold">{fmtToman(kotajToman)}</span>
+                    </div>
+                    {paid > 0 && (
+                      <div className="flex justify-between text-emerald-600">
+                        <span>پرداختی</span>
+                        <span className="tabular-nums font-bold">{fmtToman(paid)}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div className="flex gap-2 pt-2">
                   <Button size="sm" className="flex-1 text-persian" onClick={() => setKotajFor(c)}>
                     <Plus className="w-4 h-4 ml-1" /> افزودن کوتاژ
@@ -274,6 +314,15 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                     <FileText className="w-4 h-4 ml-1" /> کوتاژها
                   </Button>
                 </div>
+                <Button
+                  size="sm"
+                  variant={debt > 0 ? "default" : "outline"}
+                  className={`w-full text-persian ${debt > 0 ? "bg-emerald-600 hover:bg-emerald-700 text-white" : ""}`}
+                  onClick={() => setPayFor(c)}
+                >
+                  <Wallet className="w-4 h-4 ml-1" /> پرداخت
+                  {debt > 0 && <span className="mr-2 text-xs opacity-90">({fmtToman(debt)})</span>}
+                </Button>
               </CardContent>
             </Card>
           );
@@ -299,9 +348,16 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
         onChanged={() => void load()}
         toast={toast}
       />
+      <PaymentDialog
+        card={payFor}
+        onClose={() => setPayFor(null)}
+        onSaved={() => { setPayFor(null); void load(); }}
+        toast={toast}
+      />
     </>
   );
 };
+
 
 interface ItemDraft { name: string; value_usd: string; unit_price_irt: string; }
 const emptyItem = (): ItemDraft => ({ name: "", value_usd: "", unit_price_irt: "" });
@@ -778,4 +834,150 @@ const KotajListDialog = ({
   );
 };
 
+const PaymentDialog = ({
+  card, onClose, onSaved, toast,
+}: {
+  card: MyCard | null;
+  onClose: () => void;
+  onSaved: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [amount, setAmount] = useState("");
+  const [note, setNote] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (card) {
+      const debt = card.debt_toman ?? 0;
+      setAmount(debt > 0 ? String(Math.round(debt)) : "");
+      setNote(""); setFile(null); setPreview(null);
+    }
+  }, [card]);
+
+  useEffect(() => {
+    if (!file) { setPreview(null); return; }
+    if (!file.type.startsWith("image/")) { setPreview(null); return; }
+    const u = URL.createObjectURL(file);
+    setPreview(u);
+    return () => URL.revokeObjectURL(u);
+  }, [file]);
+
+  if (!card) return null;
+  const debt = card.debt_toman ?? 0;
+  const amtNum = parseFloat(normDigits(amount)) || 0;
+
+  const submit = async () => {
+    if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
+    if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
+    if (file.size > 5 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۵ مگابایت است", variant: "destructive" }); return; }
+    setBusy(true);
+    try {
+      const fd = new FormData();
+      fd.append("card_id", String(card.id));
+      fd.append("amount_irt", String(amtNum));
+      if (note.trim()) fd.append("note", note.trim());
+      fd.append("receipt", file);
+      const res = await fetch("/api/cards/payment-create.php", {
+        method: "POST",
+        credentials: "same-origin",
+        body: fd,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      toast({ title: "پرداخت ثبت شد", description: "از مجموع بدهی شما کسر شد." });
+      onSaved();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v && !busy) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-md panel-fa">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right flex items-center gap-2">
+            <Wallet className="w-5 h-5" /> ثبت پرداخت — {card.name}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="rounded-md border bg-muted/30 p-3 text-persian text-sm space-y-1">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">مجموع هزینه کوتاژها</span>
+              <span className="tabular-nums font-bold">{fmtToman(card.kotaj_toman_total ?? 0)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">پرداختی تاکنون</span>
+              <span className="tabular-nums font-bold text-emerald-600">{fmtToman(card.payments_toman_total ?? 0)}</span>
+            </div>
+            <div className="flex justify-between border-t pt-1 mt-1">
+              <span>بدهی فعلی</span>
+              <span className={`tabular-nums font-bold ${debt > 0 ? "text-destructive" : "text-emerald-600"}`}>
+                {fmtToman(debt)}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">مبلغ پرداخت (تومان)</Label>
+            <Input
+              value={amount}
+              onChange={(e) => setAmount(normDigits(e.target.value).replace(/[^\d]/g, ""))}
+              inputMode="decimal" dir="ltr" placeholder="1000000"
+              className="text-lg font-bold tabular-nums"
+            />
+            {amtNum > 0 && (
+              <div className="text-xs text-muted-foreground text-persian tabular-nums">
+                {amtNum.toLocaleString("fa-IR")} تومان
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">عکس فیش واریزی</Label>
+            <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-4 cursor-pointer hover:bg-muted/30 transition">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,application/pdf"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
+              {file ? (
+                <>
+                  {preview ? (
+                    <img src={preview} alt="پیش‌نمایش فیش" className="max-h-40 rounded-md" />
+                  ) : (
+                    <FileText className="w-10 h-10 text-primary" />
+                  )}
+                  <div className="text-xs text-persian text-muted-foreground">{file.name}</div>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-8 h-8 text-muted-foreground" />
+                  <div className="text-sm text-persian text-muted-foreground">
+                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۵MB)
+                  </div>
+                </>
+              )}
+            </label>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">توضیح (اختیاری)</Label>
+            <Input value={note} onChange={(e) => setNote(e.target.value)} className="text-persian" placeholder="شماره پیگیری، توضیح..." />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} disabled={busy} className="text-persian">انصراف</Button>
+          <Button onClick={submit} disabled={busy} className="text-persian bg-emerald-600 hover:bg-emerald-700 text-white">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت پرداخت"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default TSCardUser;
+

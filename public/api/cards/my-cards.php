@@ -19,12 +19,43 @@ $stmt = $pdo->prepare(
 $stmt->execute([(int)$u['id']]);
 $accessRows = $stmt->fetchAll();
 
-// Pre-compute kotaj sums per entry (deduct from allocated)
+// Per-entry USD used by kotaj
 $usedByEntry = [];
 $ks = $pdo->prepare("SELECT entry_id, SUM(total_value_usd) AS s FROM ts_kotaj WHERE card_user_id=? GROUP BY entry_id");
 $ks->execute([(int)$u['id']]);
 foreach ($ks->fetchAll() as $r) {
     $usedByEntry[(int)$r['entry_id']] = (float)$r['s'];
+}
+
+// Per-card kotaj toman totals (this user)
+$kotajTomanByCard = [];
+$kts = $pdo->prepare(
+    "SELECT k.card_id, COALESCE(SUM(i.value_usd * i.unit_price_irt),0) AS toman
+     FROM ts_kotaj k
+     JOIN ts_kotaj_items i ON i.kotaj_id = k.id
+     WHERE k.card_user_id = ?
+     GROUP BY k.card_id"
+);
+$kts->execute([(int)$u['id']]);
+foreach ($kts->fetchAll() as $r) {
+    $kotajTomanByCard[(int)$r['card_id']] = (float)$r['toman'];
+}
+
+// Per-card payments totals (this user, confirmed)
+$paymentsByCard = [];
+try {
+    $ps = $pdo->prepare(
+        "SELECT card_id, COALESCE(SUM(amount_irt),0) AS s
+         FROM ts_card_payments
+         WHERE card_user_id=? AND status='confirmed'
+         GROUP BY card_id"
+    );
+    $ps->execute([(int)$u['id']]);
+    foreach ($ps->fetchAll() as $r) {
+        $paymentsByCard[(int)$r['card_id']] = (float)$r['s'];
+    }
+} catch (Throwable $e) {
+    // table may not exist yet on old installs — ignore
 }
 
 $cards = [];
@@ -39,6 +70,9 @@ foreach ($accessRows as $r) {
             'total_irt' => 0.0,
             'total_usd' => 0.0,
             'remaining_usd' => 0.0,
+            'kotaj_toman_total' => $kotajTomanByCard[$cid] ?? 0.0,
+            'payments_toman_total' => $paymentsByCard[$cid] ?? 0.0,
+            'debt_toman' => max(0, ($kotajTomanByCard[$cid] ?? 0.0) - ($paymentsByCard[$cid] ?? 0.0)),
         ];
     }
     $alloc = (float)$r['allocated'];

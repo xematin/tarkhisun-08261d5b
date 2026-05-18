@@ -56,20 +56,15 @@ const PhoneGateDialog = ({ open, onSubmit, onOpenChange }: Props) => {
     >
       <DialogContent
         dir="rtl"
-        className="sm:max-w-md p-0 overflow-hidden border-0 bg-transparent shadow-none [&>button]:z-30 [&>button]:text-white/80 [&>button:hover]:text-white"
+        className="sm:max-w-lg p-0 overflow-hidden border-0 bg-transparent shadow-none [&>button]:z-30 [&>button]:text-white/80 [&>button:hover]:text-white"
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
-        {/* 3D Card with layered depth */}
-        <div
-          className="relative rounded-2xl"
-          style={{
-            transform: "perspective(1200px) rotateX(2deg)",
-            transformStyle: "preserve-3d",
-          }}
-        >
+        {/* Layered depth card (no 3D tilt — desktop friendly) */}
+        <div className="relative rounded-2xl">
           {/* Glow halo */}
           <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/40 via-accent/20 to-primary/30 blur-2xl opacity-70 -z-10" />
+
 
           {/* Main card */}
           <div
@@ -91,12 +86,11 @@ const PhoneGateDialog = ({ open, onSubmit, onOpenChange }: Props) => {
               <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
               <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
 
-              {/* Floating 3D icon */}
+              {/* Floating icon */}
               <div className="relative flex justify-center mb-4">
                 <div
                   className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-white to-white/80 flex items-center justify-center"
                   style={{
-                    transform: "translateZ(40px) rotateX(-8deg)",
                     boxShadow:
                       "0 20px 30px -10px hsl(0 0% 0% / 0.35), inset 0 -3px 0 hsl(0 0% 0% / 0.08), inset 0 2px 0 hsl(0 0% 100% / 0.9)",
                   }}
@@ -105,6 +99,7 @@ const PhoneGateDialog = ({ open, onSubmit, onOpenChange }: Props) => {
                   <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse" />
                 </div>
               </div>
+
 
               <DialogHeader className="text-center">
                 <DialogTitle className="text-persian text-xl md:text-2xl font-bold leading-snug">

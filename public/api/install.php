@@ -146,7 +146,24 @@ $sql = [
         INDEX idx_kotaj (kotaj_id),
         FOREIGN KEY (kotaj_id) REFERENCES ts_kotaj(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    // ===== Payments (user pays card debt) =====
+    "CREATE TABLE IF NOT EXISTS ts_card_payments (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_id INT NOT NULL,
+        card_user_id INT NOT NULL,
+        amount_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+        receipt_path VARCHAR(255) NULL,
+        note VARCHAR(255) NULL,
+        status ENUM('confirmed','pending','rejected') NOT NULL DEFAULT 'confirmed',
+        created_at DATETIME NOT NULL,
+        INDEX idx_card (card_id),
+        INDEX idx_user (card_user_id),
+        FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE,
+        FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
+
 
 foreach ($sql as $q) {
     $pdo->exec($q);

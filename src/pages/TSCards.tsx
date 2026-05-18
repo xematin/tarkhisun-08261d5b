@@ -1347,6 +1347,158 @@ const KotajReportDialog = ({
   );
 };
 
+interface KotajEditItem { name: string; value_usd: string; unit_price_irt: string; }
+
+const AdminKotajEditDialog = ({
+  kotaj, onClose, onSaved, toast,
+}: {
+  kotaj: ReportKotaj | null;
+  onClose: () => void;
+  onSaved: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [num, setNum] = useState("");
+  const [date, setDate] = useState("");
+  const [items, setItems] = useState<KotajEditItem[]>([{ name: "", value_usd: "", unit_price_irt: "" }]);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (kotaj) {
+      setNum(kotaj.kotaj_number);
+      setDate(kotaj.kotaj_date_jalali);
+      setItems(kotaj.items.length
+        ? kotaj.items.map(it => ({
+            name: it.name,
+            value_usd: String(it.value_usd),
+            unit_price_irt: String(it.unit_price_irt),
+          }))
+        : [{ name: "", value_usd: "", unit_price_irt: "" }]);
+    }
+  }, [kotaj]);
+
+  if (!kotaj) return null;
+
+  const update = (i: number, patch: Partial<KotajEditItem>) =>
+    setItems(prev => prev.map((it, idx) => idx === i ? { ...it, ...patch } : it));
+  const add = () => setItems(prev => [...prev, { name: "", value_usd: "", unit_price_irt: "" }]);
+  const remove = (i: number) => setItems(prev => prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev);
+
+  const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
+  const totalToman = items.reduce((s, it) => {
+    const v = parseFloat(normDigits(it.value_usd)) || 0;
+    const p = parseFloat(normDigits(it.unit_price_irt)) || 0;
+    return s + v * p;
+  }, 0);
+
+  const save = async () => {
+    const numClean = normDigits(num).replace(/\D/g, "");
+    if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return; }
+    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(normDigits(date))) { toast({ title: "تاریخ کوتاژ معتبر نیست (1405/01/01)", variant: "destructive" }); return; }
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return; }
+      const v = parseFloat(normDigits(it.value_usd)) || 0;
+      if (v <= 0) { toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" }); return; }
+    }
+    setBusy(true);
+    try {
+      await api("/api/admin/kotaj-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: kotaj.id,
+          kotaj_number: numClean,
+          kotaj_date_jalali: normDigits(date),
+          items: items.map(it => ({
+            name: it.name.trim(),
+            value_usd: parseFloat(normDigits(it.value_usd)) || 0,
+            unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
+          })),
+        }),
+      });
+      toast({ title: "کوتاژ ویرایش شد" });
+      onSaved();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!kotaj} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="ltr" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-left">ویرایش کوتاژ — #{kotaj.kotaj_number}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label className="text-persian">شماره کوتاژ</Label>
+              <Input value={num} onChange={(e) => setNum(normDigits(e.target.value))} dir="ltr" inputMode="numeric" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-persian">تاریخ کوتاژ (شمسی)</Label>
+              <Input value={date} onChange={(e) => setDate(normDigits(e.target.value))} dir="ltr" placeholder="1405/02/31" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-persian">قلم‌های کوتاژ</Label>
+              <div className="text-sm font-bold tabular-nums text-persian">جمع: {totalUsd.toLocaleString("fa-IR")} دلار</div>
+            </div>
+            {items.map((it, i) => (
+              <div key={i} className="border rounded-md p-3 space-y-3 bg-muted/30">
+                <div className="flex items-center justify-between">
+                  <span className="text-persian text-sm font-bold">قلم {i + 1}</span>
+                  {items.length > 1 && (
+                    <Button size="sm" variant="ghost" onClick={() => remove(i)} className="text-destructive">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-persian text-xs">نام کالا</Label>
+                    <Input value={it.name} onChange={(e) => update(i, { name: e.target.value })} className="text-persian" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-persian text-xs">ارزش (دلار)</Label>
+                    <Input value={it.value_usd} onChange={(e) => update(i, { value_usd: normDigits(e.target.value) })} dir="ltr" inputMode="decimal" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-persian text-xs">قیمت هر دلار (تومان)</Label>
+                    <Input value={it.unit_price_irt} onChange={(e) => update(i, { unit_price_irt: normDigits(e.target.value) })} dir="ltr" inputMode="decimal" />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Button variant="outline" size="sm" onClick={add} className="text-persian w-full">
+              <Plus className="w-4 h-4 ml-1" /> افزودن قلم
+            </Button>
+          </div>
+
+          <div className="rounded-md border p-3 bg-primary/5 text-persian space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">ارزش کل</span>
+              <span className="font-bold text-lg tabular-nums">{totalUsd.toLocaleString("fa-IR")} دلار</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">هزینهٔ کل (تومان)</span>
+              <span className="font-bold text-lg tabular-nums text-primary">{fmtToman(totalToman)}</span>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian" disabled={busy}>انصراف</Button>
+          <Button onClick={save} disabled={busy} className="text-persian">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره ویرایش"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 interface AdminPayment {
   id: number;
   card_id: number;

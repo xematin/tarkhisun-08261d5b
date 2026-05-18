@@ -942,9 +942,9 @@ const PaymentDialog = ({
           <div className="space-y-2">
             <Label className="text-persian">مبلغ پرداخت (تومان)</Label>
             <Input
-              value={amount}
+              value={amount ? Number(amount).toLocaleString("en-US") : ""}
               onChange={(e) => setAmount(normDigits(e.target.value).replace(/[^\d]/g, ""))}
-              inputMode="decimal" dir="ltr" placeholder="1000000"
+              inputMode="decimal" dir="ltr" placeholder="1,000,000"
               className="text-lg font-bold tabular-nums"
             />
             {amtNum > 0 && (

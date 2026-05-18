@@ -320,6 +320,10 @@ const KotajDialog = ({
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
   const remain = selected ? selected.remaining : 0;
   const over = selected ? totalUsd - remain > 0.0001 : false;
+  const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
+  const customs = lookupCustoms(num);
+  const customsCode = customs?.code || "";
+  const customsName = customs?.name || "";
 
   const update = (i: number, patch: Partial<ItemDraft>) => {
     setItems(prev => prev.map((it, idx) => idx === i ? { ...it, ...patch } : it));

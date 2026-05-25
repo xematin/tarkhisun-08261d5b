@@ -76,6 +76,7 @@ foreach ($rows as $r) {
         'entry_title' => $r['entry_title'],
         'kotaj_number' => $r['kotaj_number'],
         'kotaj_date_jalali' => $r['kotaj_date_jalali'],
+        'kotaj_date_gregorian' => $r['kotaj_date_gregorian'] ?? null,
         'total_value_usd' => (float)$r['total_value_usd'],
         'toman_total' => $kt,
         'created_at' => $r['created_at'],

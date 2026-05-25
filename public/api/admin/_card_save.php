@@ -83,6 +83,21 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
                 'UPDATE ts_cards SET name=?, balance=?, currency=?, updated_at=? WHERE id=?'
             );
             $stmt->execute([$name, $balanceIrt, 'IRT', $now, $cardId]);
+
+            // Snapshot custom_unit_price_irt by (card_user_id, entry_title) so they
+            // survive the DELETE+re-INSERT of access rows (entry_id changes after re-create).
+            $customMap = [];
+            $snap = $pdo->prepare(
+                "SELECT a.card_user_id, e.title AS entry_title, a.custom_unit_price_irt
+                 FROM ts_card_user_access a
+                 JOIN ts_card_entries e ON e.id = a.entry_id
+                 WHERE a.card_id = ? AND a.custom_unit_price_irt IS NOT NULL"
+            );
+            $snap->execute([$cardId]);
+            foreach ($snap->fetchAll() as $s) {
+                $customMap[(int)$s['card_user_id'] . '|' . $s['entry_title']] = (float)$s['custom_unit_price_irt'];
+            }
+
             $pdo->prepare('DELETE FROM ts_card_user_access WHERE card_id=?')->execute([$cardId]);
             $pdo->prepare('DELETE FROM ts_card_entries WHERE card_id=?')->execute([$cardId]);
         }

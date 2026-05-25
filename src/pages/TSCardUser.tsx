@@ -842,8 +842,13 @@ const KotajListDialog = ({
                     <div className="flex-1 text-persian text-sm space-y-1">
                       <div className="font-bold">کوتاژ #{k.kotaj_number}</div>
                       <div className="text-xs text-muted-foreground">
-                        {k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
+                        {k.kotaj_date_gregorian || k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
                       </div>
+                      {k.kotaj_date_gregorian && (
+                        <div className="text-[10px] text-muted-foreground opacity-70 tabular-nums">
+                          شمسی: {k.kotaj_date_jalali}
+                        </div>
+                      )}
                     </div>
                     <div className="text-persian font-bold tabular-nums text-left">
                       <div className="text-primary">{fmtUSD(k.total_value_usd)}</div>

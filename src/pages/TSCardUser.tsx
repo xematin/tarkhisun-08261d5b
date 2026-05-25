@@ -214,6 +214,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
   const [editing, setEditing] = useState<Kotaj | null>(null);
   const [listFor, setListFor] = useState<MyCard | null>(null);
   const [payFor, setPayFor] = useState<MyCard | null>(null);
+  const [billFor, setBillFor] = useState<MyCard | null>(null);
 
   const load = useCallback(async () => {
     try {

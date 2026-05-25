@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload } from "lucide-react";
+import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload, Receipt, Printer } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,10 +17,29 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import DatePicker from "react-multi-date-picker";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_en from "react-date-object/locales/gregorian_en";
 import { lookupCustoms } from "@/data/customsCodes";
+
+// Convert gregorian "YYYY-MM-DD" → jalali "YYYY/MM/DD"
+const gToJ = (g: string): string => {
+  if (!g) return "";
+  try {
+    const d = new DateObject({ date: g, format: "YYYY-MM-DD", calendar: gregorian, locale: gregorian_en });
+    return d.convert(persian, persian_fa).format("YYYY/MM/DD");
+  } catch { return ""; }
+};
+// Convert jalali "YYYY/MM/DD" → gregorian "YYYY-MM-DD"
+const jToG = (j: string): string => {
+  if (!j) return "";
+  try {
+    const d = new DateObject({ date: j, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa });
+    return d.convert(gregorian, gregorian_en).format("YYYY-MM-DD");
+  } catch { return ""; }
+};
 
 type Currency = "USD" | "EUR" | "IRT";
 const CURRENCY_LABEL: Record<Currency, string> = { USD: "دلار", EUR: "یورو", IRT: "تومان" };

@@ -364,6 +364,14 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                   <Wallet className="w-4 h-4 ml-1" /> پرداخت
                   {debt > 0 && <span className="mr-2 text-xs opacity-90">({fmtToman(debt)})</span>}
                 </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="w-full text-persian"
+                  onClick={() => setBillFor(c)}
+                >
+                  <Receipt className="w-4 h-4 ml-1" /> صورتحساب
+                </Button>
               </CardContent>
             </Card>
           );
@@ -393,6 +401,11 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
         card={payFor}
         onClose={() => setPayFor(null)}
         onSaved={() => { setPayFor(null); void load(); }}
+        toast={toast}
+      />
+      <BillingDialog
+        card={billFor}
+        onClose={() => setBillFor(null)}
         toast={toast}
       />
     </>

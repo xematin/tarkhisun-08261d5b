@@ -1544,6 +1544,171 @@ const STATUS_FA: Record<string, string> = {
   rejected: "رد شده",
 };
 
+const UsersManagementPanel = ({
+  toast,
+}: {
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [items, setItems] = useState<CardUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [q, setQ] = useState("");
+  const [edit, setEdit] = useState<CardUser | null>(null);
+  const [form, setForm] = useState<{ first_name: string; last_name: string; username: string; password: string }>({
+    first_name: "", last_name: "", username: "", password: "",
+  });
+  const [saving, setSaving] = useState(false);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    api<{ items: CardUser[] }>("/api/admin/card-users-list.php")
+      .then(r => setItems(r.items || []))
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [toast]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const openEdit = (u: CardUser) => {
+    setEdit(u);
+    setForm({ first_name: u.first_name, last_name: u.last_name, username: u.username, password: "" });
+  };
+
+  const save = async () => {
+    if (!edit) return;
+    setSaving(true);
+    try {
+      await api("/api/admin/card-user-update.php", {
+        method: "POST",
+        body: JSON.stringify({ id: edit.id, ...form }),
+      });
+      toast({ title: "ذخیره شد" });
+      setEdit(null);
+      load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const remove = async (u: CardUser) => {
+    if (!confirm(`حذف کاربر ${u.first_name} ${u.last_name}؟`)) return;
+    try {
+      await api("/api/admin/card-user-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: u.id }),
+      });
+      toast({ title: "حذف شد" });
+      load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
+
+  const qN = normDigits(q).trim().toLowerCase();
+  const filtered = items.filter(u =>
+    !qN || `${u.first_name} ${u.last_name} @${u.username}`.toLowerCase().includes(qN)
+  );
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <CardTitle className="text-persian flex items-center gap-2">
+            مدیریت کاربران <Badge variant="secondary">{items.length}</Badge>
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                value={q}
+                onChange={e => setQ(e.target.value)}
+                placeholder="جستجو..."
+                className="w-56 pr-8 text-persian"
+              />
+            </div>
+            <Button variant="outline" size="sm" onClick={load} disabled={loading}>
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            </Button>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-persian">نام</TableHead>
+                  <TableHead className="text-persian">نام خانوادگی</TableHead>
+                  <TableHead className="text-persian">نام کاربری</TableHead>
+                  <TableHead className="text-persian">تاریخ ساخت</TableHead>
+                  <TableHead className="text-persian text-center">عملیات</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.length === 0 ? (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">کاربری یافت نشد.</TableCell></TableRow>
+                ) : filtered.map(u => (
+                  <TableRow key={u.id}>
+                    <TableCell className="text-persian">{u.first_name}</TableCell>
+                    <TableCell className="text-persian">{u.last_name}</TableCell>
+                    <TableCell className="text-persian">@{u.username}</TableCell>
+                    <TableCell className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
+                    <TableCell>
+                      <div className="flex justify-center gap-1.5 flex-wrap">
+                        <Button variant="outline" size="sm" onClick={() => openEdit(u)}>
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="destructive" size="sm" onClick={() => remove(u)}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
+        <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">ویرایش کاربر</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div>
+                <Label className="text-persian">نام</Label>
+                <Input value={form.first_name} onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))} className="text-persian" />
+              </div>
+              <div>
+                <Label className="text-persian">نام خانوادگی</Label>
+                <Input value={form.last_name} onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))} className="text-persian" />
+              </div>
+              <div>
+                <Label className="text-persian">نام کاربری</Label>
+                <Input value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))} dir="ltr" />
+              </div>
+              <div>
+                <Label className="text-persian">رمز جدید (اختیاری)</Label>
+                <Input type="text" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} dir="ltr" placeholder="خالی = بدون تغییر" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEdit(null)} disabled={saving}>انصراف</Button>
+              <Button onClick={save} disabled={saving}>
+                {saving && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
+                ذخیره
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </CardContent>
+    </Card>
+  );
+};
+
 const AllPaymentsPanel = ({
   toast, cards,
 }: {
@@ -1935,10 +2100,6 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                     {data.cards.length === 0 && (
                       <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
                     )}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
                   </TableBody>
                 </Table>
               </div>

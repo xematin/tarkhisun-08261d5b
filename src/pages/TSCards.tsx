@@ -1746,7 +1746,7 @@ const UsersManagementPanel = ({
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
                   <div className="rounded-md border p-3 bg-muted/30">
                     <div className="text-xs text-muted-foreground text-persian">تعداد</div>
-                    <div className="text-lg font-bold tabular-nums">{fa(payData.totals.count)}</div>
+                    <div className="text-lg font-bold tabular-nums">{Number(payData.totals.count||0).toLocaleString("fa-IR")}</div>
                   </div>
                   <div className="rounded-md border p-3 bg-muted/30">
                     <div className="text-xs text-muted-foreground text-persian">جمع کل</div>
@@ -1804,11 +1804,11 @@ const UsersManagementPanel = ({
                 <div className="grid grid-cols-3 gap-2 mb-3">
                   <div className="rounded-md border p-3 bg-muted/30">
                     <div className="text-xs text-muted-foreground text-persian">تعداد کوتاژ</div>
-                    <div className="text-lg font-bold tabular-nums">{fa(kotajData.totals.count)}</div>
+                    <div className="text-lg font-bold tabular-nums">{Number(kotajData.totals.count||0).toLocaleString("fa-IR")}</div>
                   </div>
                   <div className="rounded-md border p-3 bg-muted/30">
                     <div className="text-xs text-muted-foreground text-persian">مجموع (دلار)</div>
-                    <div className="text-lg font-bold tabular-nums">{fa(kotajData.totals.usd)}</div>
+                    <div className="text-lg font-bold tabular-nums">{Number(kotajData.totals.usd||0).toLocaleString("fa-IR")}</div>
                   </div>
                   <div className="rounded-md border p-3 bg-muted/30">
                     <div className="text-xs text-muted-foreground text-persian">مجموع (تومان)</div>
@@ -1836,7 +1836,7 @@ const UsersManagementPanel = ({
                           <div>{k.kotaj_date_gregorian || "—"}</div>
                           <div className="text-muted-foreground opacity-70">{k.kotaj_date_jalali || ""}</div>
                         </TableCell>
-                        <TableCell className="tabular-nums">{fa(k.total_value_usd)}</TableCell>
+                        <TableCell className="tabular-nums">{Number(k.total_value_usd||0).toLocaleString("fa-IR")}</TableCell>
                         <TableCell className="tabular-nums text-primary">{fmtToman(k.toman_total)}</TableCell>
                       </TableRow>
                     ))}
@@ -2276,7 +2276,7 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                       <div key={k.id} className="p-2.5 text-persian text-sm">
                         <div className="flex justify-between gap-2 flex-wrap">
                           <span className="font-bold">#{k.kotaj_number}</span>
-                          <span className="tabular-nums font-bold">{fa(k.total_value_usd)} دلار</span>
+                          <span className="tabular-nums font-bold">{Number(k.total_value_usd||0).toLocaleString("fa-IR")} دلار</span>
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {k.user_name} — {k.card_name}{k.entry_title ? ` / ${k.entry_title}` : ""} — {k.kotaj_date_jalali}

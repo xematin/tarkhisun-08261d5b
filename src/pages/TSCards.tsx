@@ -2053,12 +2053,12 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
           <div className="space-y-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
                 { label: "موجودی کل کارت‌ها (دلار)", value: fa(data.totals.card_usd) },
                 { label: "تخصیص یافته (دلار)", value: fa(data.totals.allocated_usd) },
                 { label: "مصرف‌شده با کوتاژ (دلار)", value: fa(data.totals.used_usd) },
                 { label: "مصرف‌شده با کوتاژ (تومان)", value: fa(data.totals.used_irt || 0) },
                 { label: "مانده تخصیصی (دلار)", value: fa(data.totals.remaining_usd) },
+                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
                 { label: "تعداد کوتاژها", value: fa(data.totals.kotaj_count) },
               ].map((s) => (
                 <div key={s.label} className="border rounded-md p-3 bg-muted/30">

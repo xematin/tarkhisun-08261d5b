@@ -1557,6 +1557,27 @@ const UsersManagementPanel = ({
     first_name: "", last_name: "", username: "", password: "",
   });
   const [saving, setSaving] = useState(false);
+  const [payUser, setPayUser] = useState<CardUser | null>(null);
+  const [payData, setPayData] = useState<any>(null);
+  const [payLoading, setPayLoading] = useState(false);
+  const [kotajUser, setKotajUser] = useState<CardUser | null>(null);
+  const [kotajData, setKotajData] = useState<any>(null);
+  const [kotajLoading, setKotajLoading] = useState(false);
+
+  const openPayments = (u: CardUser) => {
+    setPayUser(u); setPayData(null); setPayLoading(true);
+    api<any>(`/api/admin/card-user-payments.php?user_id=${u.id}`)
+      .then(setPayData)
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setPayLoading(false));
+  };
+  const openKotaj = (u: CardUser) => {
+    setKotajUser(u); setKotajData(null); setKotajLoading(true);
+    api<any>(`/api/admin/card-user-kotaj-report.php?user_id=${u.id}`)
+      .then(setKotajData)
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setKotajLoading(false));
+  };
 
   const load = useCallback(() => {
     setLoading(true);

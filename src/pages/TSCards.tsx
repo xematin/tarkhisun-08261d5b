@@ -1939,10 +1939,6 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                 </Table>
               </div>
             </div>
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>

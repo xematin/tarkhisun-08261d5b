@@ -1680,10 +1680,16 @@ const UsersManagementPanel = ({
                     <TableCell className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
                     <TableCell>
                       <div className="flex justify-center gap-1.5 flex-wrap">
-                        <Button variant="outline" size="sm" onClick={() => openEdit(u)}>
+                        <Button variant="outline" size="sm" onClick={() => openPayments(u)} title="گزارش پرداختی‌ها">
+                          <Wallet className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها">
+                          <FileText className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => openEdit(u)} title="ویرایش">
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => remove(u)}>
+                        <Button variant="destructive" size="sm" onClick={() => remove(u)} title="حذف">
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>

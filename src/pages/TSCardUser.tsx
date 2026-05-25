@@ -1065,5 +1065,146 @@ const PaymentDialog = ({
   );
 };
 
+interface Payment {
+  id: number;
+  card_id: number;
+  amount_irt: number;
+  receipt_path?: string | null;
+  note?: string | null;
+  status: string;
+  created_at: string;
+}
+
+const STATUS_LABEL: Record<string, string> = {
+  confirmed: "تایید شده",
+  pending: "در انتظار",
+  rejected: "رد شده",
+};
+const STATUS_CLASS: Record<string, string> = {
+  confirmed: "text-emerald-600",
+  pending: "text-amber-600",
+  rejected: "text-destructive",
+};
+
+const BillingDialog = ({
+  card, onClose, toast,
+}: {
+  card: MyCard | null;
+  onClose: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [items, setItems] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!card) return;
+    setLoading(true);
+    api<{ items: Payment[] }>(`/api/cards/payments-list.php?card_id=${card.id}`)
+      .then(r => setItems(r.items || []))
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [card, toast]);
+
+  if (!card) return null;
+
+  const totalAll = items.reduce((s, p) => s + p.amount_irt, 0);
+  const byStatus = items.reduce<Record<string, number>>((acc, p) => {
+    const k = (p.status || "pending").toLowerCase();
+    acc[k] = (acc[k] || 0) + p.amount_irt;
+    return acc;
+  }, {});
+  const kotajToman = card.kotaj_toman_total ?? 0;
+  const paid = card.payments_toman_total ?? 0;
+  const balance = paid - kotajToman;
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right flex items-center gap-2">
+            <Receipt className="w-5 h-5" /> صورتحساب — {card.name}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-persian">
+            <div className="border rounded-md p-2 bg-muted/30">
+              <div className="text-[11px] text-muted-foreground">هزینه کوتاژها</div>
+              <div className="text-sm font-bold tabular-nums">{fmtToman(kotajToman)}</div>
+            </div>
+            <div className="border rounded-md p-2 bg-emerald-500/10">
+              <div className="text-[11px] text-muted-foreground">مجموع پرداختی</div>
+              <div className="text-sm font-bold tabular-nums text-emerald-700">{fmtToman(paid)}</div>
+            </div>
+            <div className="border rounded-md p-2 bg-amber-500/10">
+              <div className="text-[11px] text-muted-foreground">در انتظار تایید</div>
+              <div className="text-sm font-bold tabular-nums text-amber-700">{fmtToman(byStatus.pending || 0)}</div>
+            </div>
+            <div className={`border rounded-md p-2 ${balance >= 0 ? "bg-sky-500/10" : "bg-destructive/10"}`}>
+              <div className="text-[11px] text-muted-foreground">{balance >= 0 ? "بستانکار" : "بدهکار"}</div>
+              <div className={`text-sm font-bold tabular-nums ${balance >= 0 ? "text-sky-700" : "text-destructive"}`}>
+                {fmtToman(Math.abs(balance))}
+              </div>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+          ) : items.length === 0 ? (
+            <p className="text-center py-8 text-muted-foreground text-persian text-sm">پرداختی ثبت نشده است.</p>
+          ) : (
+            <div className="border rounded-md overflow-hidden">
+              <table className="w-full text-sm text-persian">
+                <thead className="bg-muted/40">
+                  <tr>
+                    <th className="text-right p-2">تاریخ</th>
+                    <th className="text-right p-2">مبلغ</th>
+                    <th className="text-right p-2">وضعیت</th>
+                    <th className="text-right p-2">توضیح</th>
+                    <th className="text-right p-2">فیش</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map(p => {
+                    const st = (p.status || "pending").toLowerCase();
+                    return (
+                      <tr key={p.id} className="border-t">
+                        <td className="p-2 text-xs tabular-nums">{p.created_at?.slice(0, 16).replace("T", " ")}</td>
+                        <td className="p-2 tabular-nums font-bold">{fmtToman(p.amount_irt)}</td>
+                        <td className={`p-2 text-xs font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
+                        <td className="p-2 text-xs text-muted-foreground">{p.note || "—"}</td>
+                        <td className="p-2 text-xs">
+                          {p.receipt_path ? (
+                            <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">مشاهده</a>
+                          ) : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot className="bg-muted/30">
+                  <tr>
+                    <td className="p-2 font-bold">جمع کل</td>
+                    <td className="p-2 font-bold tabular-nums">{fmtToman(totalAll)}</td>
+                    <td colSpan={3}></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => window.print()} className="text-persian">
+            <Printer className="w-4 h-4 ml-1" /> چاپ
+          </Button>
+          <Button onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default TSCardUser;
+
 

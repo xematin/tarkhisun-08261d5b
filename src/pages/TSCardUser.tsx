@@ -414,7 +414,11 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
 
 
 interface ItemDraft { name: string; value_usd: string; unit_price_irt: string; }
-const emptyItem = (): ItemDraft => ({ name: "", value_usd: "", unit_price_irt: "" });
+const emptyItem = (defaultPrice?: number): ItemDraft => ({
+  name: "",
+  value_usd: "",
+  unit_price_irt: defaultPrice && defaultPrice > 0 ? String(defaultPrice) : "",
+});
 
 const KotajDialog = ({
   card, editing, onClose, onSaved, toast,
@@ -427,10 +431,13 @@ const KotajDialog = ({
 }) => {
   const [entryId, setEntryId] = useState<string>("");
   const [num, setNum] = useState("");
-  const [date, setDate] = useState<string>("");
+  // Primary date is gregorian (YYYY-MM-DD); jalali shown faded below
+  const [dateG, setDateG] = useState<string>("");
   const [items, setItems] = useState<ItemDraft[]>([emptyItem()]);
   const [busy, setBusy] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const date = useMemo(() => gToJ(dateG), [dateG]);
 
   useEffect(() => {
     if (card) {
@@ -438,7 +445,8 @@ const KotajDialog = ({
       if (editing) {
         setEntryId(String(editing.entry_id));
         setNum(editing.kotaj_number);
-        setDate(editing.kotaj_date_jalali);
+        const g = editing.kotaj_date_gregorian || jToG(editing.kotaj_date_jalali);
+        setDateG(g);
         setItems(editing.items.length
           ? editing.items.map(it => ({
               name: it.name,
@@ -447,27 +455,40 @@ const KotajDialog = ({
             }))
           : [emptyItem()]);
       } else {
-        setEntryId(usdEntries[0]?.entry_id ? String(usdEntries[0].entry_id) : "");
-        setNum(""); setDate("");
-        setItems([emptyItem()]);
+        const firstEntry = usdEntries[0];
+        setEntryId(firstEntry?.entry_id ? String(firstEntry.entry_id) : "");
+        setNum("");
+        setDateG("");
+        const defPrice = firstEntry?.has_custom_price ? firstEntry.unit_price_irt : 0;
+        setItems([emptyItem(defPrice)]);
       }
     }
   }, [card, editing]);
 
+  const usdEntriesAll = card ? card.entries.filter(e => e.currency === "USD" && e.entry_id !== null) : [];
+  const selected = usdEntriesAll.find(e => String(e.entry_id) === entryId);
+  const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
+
+  // Auto-fill empty price fields with new refPrice when entry changes
+  useEffect(() => {
+    if (!refPrice) return;
+    setItems(prev => prev.map(it => (
+      it.unit_price_irt === "" ? { ...it, unit_price_irt: String(refPrice) } : it
+    )));
+  }, [refPrice]);
+
   if (!card) return null;
-  const usdEntries = card.entries.filter(e => e.currency === "USD" && e.entry_id !== null);
-  const selected = usdEntries.find(e => String(e.entry_id) === entryId);
+  const usdEntries = usdEntriesAll;
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
-  // when editing, that kotaj's own usd should not count against remain
   const editingOwn = editing && selected && editing.entry_id === selected.entry_id ? editing.total_value_usd : 0;
-  const remain = selected ? selected.remaining + editingOwn : 0;
-  const over = selected ? totalUsd - remain > 0.0001 : false;
+  const remainBase = selected ? selected.remaining + editingOwn : 0;
+  const remainLive = remainBase - totalUsd;
+  const over = selected ? remainLive < -0.0001 : false;
   const totalToman = items.reduce((s, it) => {
     const v = parseFloat(normDigits(it.value_usd)) || 0;
     const p = parseFloat(normDigits(it.unit_price_irt)) || 0;
     return s + v * p;
   }, 0);
-  const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
   const customs = lookupCustoms(num);
   const customsCode = customs?.code || "";
   const customsName = customs?.name || "";
@@ -475,14 +496,14 @@ const KotajDialog = ({
   const update = (i: number, patch: Partial<ItemDraft>) => {
     setItems(prev => prev.map((it, idx) => idx === i ? { ...it, ...patch } : it));
   };
-  const add = () => setItems(prev => [...prev, emptyItem()]);
+  const add = () => setItems(prev => [...prev, emptyItem(refPrice)]);
   const remove = (i: number) => setItems(prev => prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev);
 
   const validate = (): boolean => {
     if (!entryId) { toast({ title: "سکشن را انتخاب کنید", variant: "destructive" }); return false; }
     const numClean = normDigits(num).replace(/\D/g, "");
     if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return false; }
-    if (!date) { toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" }); return false; }
+    if (!dateG) { toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" }); return false; }
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return false; }
@@ -504,6 +525,7 @@ const KotajDialog = ({
         entry_id: Number(entryId),
         kotaj_number: numClean,
         kotaj_date_jalali: date,
+        kotaj_date_gregorian: dateG,
         customs_code: customsCode,
         customs_name: customsName,
         items: items.map(it => ({
@@ -567,16 +589,21 @@ const KotajDialog = ({
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-persian">تاریخ کوتاژ (شمسی)</Label>
+              <Label className="text-persian">تاریخ کوتاژ (میلادی)</Label>
               <DatePicker
-                value={date}
-                onChange={(d) => setDate(d ? d.format("YYYY/MM/DD") : "")}
-                calendar={persian}
-                locale={persian_fa}
+                value={dateG}
+                onChange={(d) => setDateG(d ? d.format("YYYY-MM-DD") : "")}
+                calendar={gregorian}
+                locale={gregorian_en}
                 inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                format="YYYY/MM/DD"
-                placeholder="1405/02/31"
+                format="YYYY-MM-DD"
+                placeholder="2026-05-25"
               />
+              {date && (
+                <div className="text-xs text-muted-foreground text-persian tabular-nums opacity-70">
+                  شمسی: {date}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label className="text-persian">گمرک خروجی</Label>
@@ -594,7 +621,7 @@ const KotajDialog = ({
             <div className="flex items-center justify-between">
               <Label className="text-persian">قلم‌های کوتاژ</Label>
               <div className={`text-sm font-bold tabular-nums text-persian ${over ? "text-destructive" : "text-emerald-600"}`}>
-                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remain)}`}
+                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remainLive)}`}
               </div>
             </div>
             {items.map((it, i) => {

@@ -1557,6 +1557,27 @@ const UsersManagementPanel = ({
     first_name: "", last_name: "", username: "", password: "",
   });
   const [saving, setSaving] = useState(false);
+  const [payUser, setPayUser] = useState<CardUser | null>(null);
+  const [payData, setPayData] = useState<any>(null);
+  const [payLoading, setPayLoading] = useState(false);
+  const [kotajUser, setKotajUser] = useState<CardUser | null>(null);
+  const [kotajData, setKotajData] = useState<any>(null);
+  const [kotajLoading, setKotajLoading] = useState(false);
+
+  const openPayments = (u: CardUser) => {
+    setPayUser(u); setPayData(null); setPayLoading(true);
+    api<any>(`/api/admin/card-user-payments.php?user_id=${u.id}`)
+      .then(setPayData)
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setPayLoading(false));
+  };
+  const openKotaj = (u: CardUser) => {
+    setKotajUser(u); setKotajData(null); setKotajLoading(true);
+    api<any>(`/api/admin/card-user-kotaj-report.php?user_id=${u.id}`)
+      .then(setKotajData)
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setKotajLoading(false));
+  };
 
   const load = useCallback(() => {
     setLoading(true);
@@ -1659,10 +1680,16 @@ const UsersManagementPanel = ({
                     <TableCell className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
                     <TableCell>
                       <div className="flex justify-center gap-1.5 flex-wrap">
-                        <Button variant="outline" size="sm" onClick={() => openEdit(u)}>
+                        <Button variant="outline" size="sm" onClick={() => openPayments(u)} title="گزارش پرداختی‌ها">
+                          <Wallet className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها">
+                          <FileText className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => openEdit(u)} title="ویرایش">
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => remove(u)}>
+                        <Button variant="destructive" size="sm" onClick={() => remove(u)} title="حذف">
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -1702,6 +1729,121 @@ const UsersManagementPanel = ({
                 ذخیره
               </Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!payUser} onOpenChange={(o) => !o && setPayUser(null)}>
+          <DialogContent className="panel-fa max-w-4xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-persian">
+                پرداختی‌های {payUser?.first_name} {payUser?.last_name}
+              </DialogTitle>
+            </DialogHeader>
+            {payLoading ? (
+              <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+            ) : payData ? (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">تعداد</div>
+                    <div className="text-lg font-bold tabular-nums">{Number(payData.totals.count||0).toLocaleString("fa-IR")}</div>
+                  </div>
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">جمع کل</div>
+                    <div className="text-lg font-bold tabular-nums text-primary">{fmtToman(payData.totals.amount)}</div>
+                  </div>
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">تأیید شده</div>
+                    <div className="text-lg font-bold tabular-nums text-emerald-600">{fmtToman(payData.totals.confirmed)}</div>
+                  </div>
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">در انتظار</div>
+                    <div className="text-lg font-bold tabular-nums text-amber-600">{fmtToman(payData.totals.pending)}</div>
+                  </div>
+                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-persian">کارت</TableHead>
+                      <TableHead className="text-persian">مبلغ</TableHead>
+                      <TableHead className="text-persian">وضعیت</TableHead>
+                      <TableHead className="text-persian">تاریخ</TableHead>
+                      <TableHead className="text-persian">یادداشت</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {payData.items.length === 0 ? (
+                      <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">پرداختی ثبت نشده است.</TableCell></TableRow>
+                    ) : payData.items.map((p: any) => (
+                      <TableRow key={p.id}>
+                        <TableCell className="text-persian">{p.card_name}</TableCell>
+                        <TableCell className="tabular-nums">{fmtToman(p.amount_irt)}</TableCell>
+                        <TableCell className="text-persian text-xs">{STATUS_FA[p.status] || p.status}</TableCell>
+                        <TableCell className="text-persian text-xs">{toJalali(p.created_at)}</TableCell>
+                        <TableCell className="text-persian text-xs text-muted-foreground">{p.note || "—"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            ) : null}
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!kotajUser} onOpenChange={(o) => !o && setKotajUser(null)}>
+          <DialogContent className="panel-fa max-w-4xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-persian">
+                کوتاژهای {kotajUser?.first_name} {kotajUser?.last_name}
+              </DialogTitle>
+            </DialogHeader>
+            {kotajLoading ? (
+              <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+            ) : kotajData ? (
+              <>
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">تعداد کوتاژ</div>
+                    <div className="text-lg font-bold tabular-nums">{Number(kotajData.totals.count||0).toLocaleString("fa-IR")}</div>
+                  </div>
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">مجموع (دلار)</div>
+                    <div className="text-lg font-bold tabular-nums">{Number(kotajData.totals.usd||0).toLocaleString("fa-IR")}</div>
+                  </div>
+                  <div className="rounded-md border p-3 bg-muted/30">
+                    <div className="text-xs text-muted-foreground text-persian">مجموع (تومان)</div>
+                    <div className="text-lg font-bold tabular-nums text-primary">{fmtToman(kotajData.totals.toman)}</div>
+                  </div>
+                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-persian">شماره کوتاژ</TableHead>
+                      <TableHead className="text-persian">کارت / سکشن</TableHead>
+                      <TableHead className="text-persian">تاریخ</TableHead>
+                      <TableHead className="text-persian">دلار</TableHead>
+                      <TableHead className="text-persian">تومان</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {kotajData.items.length === 0 ? (
+                      <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">کوتاژی ثبت نشده است.</TableCell></TableRow>
+                    ) : kotajData.items.map((k: any) => (
+                      <TableRow key={k.id}>
+                        <TableCell className="text-persian">{k.kotaj_number}</TableCell>
+                        <TableCell className="text-persian text-xs">{k.card_name}{k.entry_title ? ` — ${k.entry_title}` : ""}</TableCell>
+                        <TableCell className="text-persian text-xs">
+                          <div>{k.kotaj_date_gregorian || "—"}</div>
+                          <div className="text-muted-foreground opacity-70">{k.kotaj_date_jalali || ""}</div>
+                        </TableCell>
+                        <TableCell className="tabular-nums">{Number(k.total_value_usd||0).toLocaleString("fa-IR")}</TableCell>
+                        <TableCell className="tabular-nums text-primary">{fmtToman(k.toman_total)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            ) : null}
           </DialogContent>
         </Dialog>
       </CardContent>
@@ -2053,12 +2195,12 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
           <div className="space-y-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
                 { label: "موجودی کل کارت‌ها (دلار)", value: fa(data.totals.card_usd) },
                 { label: "تخصیص یافته (دلار)", value: fa(data.totals.allocated_usd) },
                 { label: "مصرف‌شده با کوتاژ (دلار)", value: fa(data.totals.used_usd) },
                 { label: "مصرف‌شده با کوتاژ (تومان)", value: fa(data.totals.used_irt || 0) },
                 { label: "مانده تخصیصی (دلار)", value: fa(data.totals.remaining_usd) },
+                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
                 { label: "تعداد کوتاژها", value: fa(data.totals.kotaj_count) },
               ].map((s) => (
                 <div key={s.label} className="border rounded-md p-3 bg-muted/30">
@@ -2134,7 +2276,7 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                       <div key={k.id} className="p-2.5 text-persian text-sm">
                         <div className="flex justify-between gap-2 flex-wrap">
                           <span className="font-bold">#{k.kotaj_number}</span>
-                          <span className="tabular-nums font-bold">{fa(k.total_value_usd)} دلار</span>
+                          <span className="tabular-nums font-bold">{Number(k.total_value_usd||0).toLocaleString("fa-IR")} دلار</span>
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {k.user_name} — {k.card_name}{k.entry_title ? ` / ${k.entry_title}` : ""} — {k.kotaj_date_jalali}

@@ -78,6 +78,7 @@ interface Kotaj {
   entry_title: string | null;
   kotaj_number: string;
   kotaj_date_jalali: string;
+  kotaj_date_gregorian?: string | null;
   total_value_usd: number;
   toman_total?: number;
   created_at: string;

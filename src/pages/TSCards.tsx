@@ -405,6 +405,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         </Card>
       </TabsContent>
 
+      <TabsContent value="users" className="mt-0">
+        <UsersManagementPanel toast={toast} />
+      </TabsContent>
+
       <TabsContent value="payments" className="mt-0">
         <AllPaymentsPanel toast={toast} cards={items} />
       </TabsContent>

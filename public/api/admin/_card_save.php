@@ -65,6 +65,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
     $pdo = ts_db();
     $now = date('Y-m-d H:i:s');
 
+    $customMap = [];
     $pdo->beginTransaction();
     try {
         if ($cardId === null) {

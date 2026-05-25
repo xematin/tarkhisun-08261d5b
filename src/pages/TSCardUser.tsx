@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload } from "lucide-react";
+import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload, Receipt, Printer } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,10 +17,29 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import DatePicker from "react-multi-date-picker";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_en from "react-date-object/locales/gregorian_en";
 import { lookupCustoms } from "@/data/customsCodes";
+
+// Convert gregorian "YYYY-MM-DD" → jalali "YYYY/MM/DD"
+const gToJ = (g: string): string => {
+  if (!g) return "";
+  try {
+    const d = new DateObject({ date: g, format: "YYYY-MM-DD", calendar: gregorian, locale: gregorian_en });
+    return d.convert(persian, persian_fa).format("YYYY/MM/DD");
+  } catch { return ""; }
+};
+// Convert jalali "YYYY/MM/DD" → gregorian "YYYY-MM-DD"
+const jToG = (j: string): string => {
+  if (!j) return "";
+  try {
+    const d = new DateObject({ date: j, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa });
+    return d.convert(gregorian, gregorian_en).format("YYYY-MM-DD");
+  } catch { return ""; }
+};
 
 type Currency = "USD" | "EUR" | "IRT";
 const CURRENCY_LABEL: Record<Currency, string> = { USD: "دلار", EUR: "یورو", IRT: "تومان" };
@@ -59,6 +78,7 @@ interface Kotaj {
   entry_title: string | null;
   kotaj_number: string;
   kotaj_date_jalali: string;
+  kotaj_date_gregorian?: string | null;
   total_value_usd: number;
   toman_total?: number;
   created_at: string;
@@ -194,6 +214,7 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
   const [editing, setEditing] = useState<Kotaj | null>(null);
   const [listFor, setListFor] = useState<MyCard | null>(null);
   const [payFor, setPayFor] = useState<MyCard | null>(null);
+  const [billFor, setBillFor] = useState<MyCard | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -343,6 +364,14 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                   <Wallet className="w-4 h-4 ml-1" /> پرداخت
                   {debt > 0 && <span className="mr-2 text-xs opacity-90">({fmtToman(debt)})</span>}
                 </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="w-full text-persian"
+                  onClick={() => setBillFor(c)}
+                >
+                  <Receipt className="w-4 h-4 ml-1" /> صورتحساب
+                </Button>
               </CardContent>
             </Card>
           );
@@ -374,13 +403,22 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
         onSaved={() => { setPayFor(null); void load(); }}
         toast={toast}
       />
+      <BillingDialog
+        card={billFor}
+        onClose={() => setBillFor(null)}
+        toast={toast}
+      />
     </>
   );
 };
 
 
 interface ItemDraft { name: string; value_usd: string; unit_price_irt: string; }
-const emptyItem = (): ItemDraft => ({ name: "", value_usd: "", unit_price_irt: "" });
+const emptyItem = (defaultPrice?: number): ItemDraft => ({
+  name: "",
+  value_usd: "",
+  unit_price_irt: defaultPrice && defaultPrice > 0 ? String(defaultPrice) : "",
+});
 
 const KotajDialog = ({
   card, editing, onClose, onSaved, toast,
@@ -393,10 +431,13 @@ const KotajDialog = ({
 }) => {
   const [entryId, setEntryId] = useState<string>("");
   const [num, setNum] = useState("");
-  const [date, setDate] = useState<string>("");
+  // Primary date is gregorian (YYYY-MM-DD); jalali shown faded below
+  const [dateG, setDateG] = useState<string>("");
   const [items, setItems] = useState<ItemDraft[]>([emptyItem()]);
   const [busy, setBusy] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const date = useMemo(() => gToJ(dateG), [dateG]);
 
   useEffect(() => {
     if (card) {
@@ -404,7 +445,8 @@ const KotajDialog = ({
       if (editing) {
         setEntryId(String(editing.entry_id));
         setNum(editing.kotaj_number);
-        setDate(editing.kotaj_date_jalali);
+        const g = editing.kotaj_date_gregorian || jToG(editing.kotaj_date_jalali);
+        setDateG(g);
         setItems(editing.items.length
           ? editing.items.map(it => ({
               name: it.name,
@@ -413,27 +455,40 @@ const KotajDialog = ({
             }))
           : [emptyItem()]);
       } else {
-        setEntryId(usdEntries[0]?.entry_id ? String(usdEntries[0].entry_id) : "");
-        setNum(""); setDate("");
-        setItems([emptyItem()]);
+        const firstEntry = usdEntries[0];
+        setEntryId(firstEntry?.entry_id ? String(firstEntry.entry_id) : "");
+        setNum("");
+        setDateG("");
+        const defPrice = firstEntry?.has_custom_price ? firstEntry.unit_price_irt : 0;
+        setItems([emptyItem(defPrice)]);
       }
     }
   }, [card, editing]);
 
+  const usdEntriesAll = card ? card.entries.filter(e => e.currency === "USD" && e.entry_id !== null) : [];
+  const selected = usdEntriesAll.find(e => String(e.entry_id) === entryId);
+  const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
+
+  // Auto-fill empty price fields with new refPrice when entry changes
+  useEffect(() => {
+    if (!refPrice) return;
+    setItems(prev => prev.map(it => (
+      it.unit_price_irt === "" ? { ...it, unit_price_irt: String(refPrice) } : it
+    )));
+  }, [refPrice]);
+
   if (!card) return null;
-  const usdEntries = card.entries.filter(e => e.currency === "USD" && e.entry_id !== null);
-  const selected = usdEntries.find(e => String(e.entry_id) === entryId);
+  const usdEntries = usdEntriesAll;
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
-  // when editing, that kotaj's own usd should not count against remain
   const editingOwn = editing && selected && editing.entry_id === selected.entry_id ? editing.total_value_usd : 0;
-  const remain = selected ? selected.remaining + editingOwn : 0;
-  const over = selected ? totalUsd - remain > 0.0001 : false;
+  const remainBase = selected ? selected.remaining + editingOwn : 0;
+  const remainLive = remainBase - totalUsd;
+  const over = selected ? remainLive < -0.0001 : false;
   const totalToman = items.reduce((s, it) => {
     const v = parseFloat(normDigits(it.value_usd)) || 0;
     const p = parseFloat(normDigits(it.unit_price_irt)) || 0;
     return s + v * p;
   }, 0);
-  const refPrice = selected && selected.has_custom_price ? selected.unit_price_irt : 0;
   const customs = lookupCustoms(num);
   const customsCode = customs?.code || "";
   const customsName = customs?.name || "";
@@ -441,14 +496,14 @@ const KotajDialog = ({
   const update = (i: number, patch: Partial<ItemDraft>) => {
     setItems(prev => prev.map((it, idx) => idx === i ? { ...it, ...patch } : it));
   };
-  const add = () => setItems(prev => [...prev, emptyItem()]);
+  const add = () => setItems(prev => [...prev, emptyItem(refPrice)]);
   const remove = (i: number) => setItems(prev => prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev);
 
   const validate = (): boolean => {
     if (!entryId) { toast({ title: "سکشن را انتخاب کنید", variant: "destructive" }); return false; }
     const numClean = normDigits(num).replace(/\D/g, "");
     if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return false; }
-    if (!date) { toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" }); return false; }
+    if (!dateG) { toast({ title: "تاریخ کوتاژ را وارد کنید", variant: "destructive" }); return false; }
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return false; }
@@ -470,6 +525,7 @@ const KotajDialog = ({
         entry_id: Number(entryId),
         kotaj_number: numClean,
         kotaj_date_jalali: date,
+        kotaj_date_gregorian: dateG,
         customs_code: customsCode,
         customs_name: customsName,
         items: items.map(it => ({
@@ -533,16 +589,21 @@ const KotajDialog = ({
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-persian">تاریخ کوتاژ (شمسی)</Label>
+              <Label className="text-persian">تاریخ کوتاژ (میلادی)</Label>
               <DatePicker
-                value={date}
-                onChange={(d) => setDate(d ? d.format("YYYY/MM/DD") : "")}
-                calendar={persian}
-                locale={persian_fa}
+                value={dateG}
+                onChange={(d) => setDateG(d ? d.format("YYYY-MM-DD") : "")}
+                calendar={gregorian}
+                locale={gregorian_en}
                 inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                format="YYYY/MM/DD"
-                placeholder="1405/02/31"
+                format="YYYY-MM-DD"
+                placeholder="2026-05-25"
               />
+              {date && (
+                <div className="text-xs text-muted-foreground text-persian tabular-nums opacity-70">
+                  شمسی: {date}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label className="text-persian">گمرک خروجی</Label>
@@ -560,7 +621,7 @@ const KotajDialog = ({
             <div className="flex items-center justify-between">
               <Label className="text-persian">قلم‌های کوتاژ</Label>
               <div className={`text-sm font-bold tabular-nums text-persian ${over ? "text-destructive" : "text-emerald-600"}`}>
-                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remain)}`}
+                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remainLive)}`}
               </div>
             </div>
             {items.map((it, i) => {
@@ -781,8 +842,13 @@ const KotajListDialog = ({
                     <div className="flex-1 text-persian text-sm space-y-1">
                       <div className="font-bold">کوتاژ #{k.kotaj_number}</div>
                       <div className="text-xs text-muted-foreground">
-                        {k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
+                        {k.kotaj_date_gregorian || k.kotaj_date_jalali} — سکشن: {k.entry_title || "—"}
                       </div>
+                      {k.kotaj_date_gregorian && (
+                        <div className="text-[10px] text-muted-foreground opacity-70 tabular-nums">
+                          شمسی: {k.kotaj_date_jalali}
+                        </div>
+                      )}
                     </div>
                     <div className="text-persian font-bold tabular-nums text-left">
                       <div className="text-primary">{fmtUSD(k.total_value_usd)}</div>
@@ -999,5 +1065,146 @@ const PaymentDialog = ({
   );
 };
 
+interface Payment {
+  id: number;
+  card_id: number;
+  amount_irt: number;
+  receipt_path?: string | null;
+  note?: string | null;
+  status: string;
+  created_at: string;
+}
+
+const STATUS_LABEL: Record<string, string> = {
+  confirmed: "تایید شده",
+  pending: "در انتظار",
+  rejected: "رد شده",
+};
+const STATUS_CLASS: Record<string, string> = {
+  confirmed: "text-emerald-600",
+  pending: "text-amber-600",
+  rejected: "text-destructive",
+};
+
+const BillingDialog = ({
+  card, onClose, toast,
+}: {
+  card: MyCard | null;
+  onClose: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [items, setItems] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!card) return;
+    setLoading(true);
+    api<{ items: Payment[] }>(`/api/cards/payments-list.php?card_id=${card.id}`)
+      .then(r => setItems(r.items || []))
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [card, toast]);
+
+  if (!card) return null;
+
+  const totalAll = items.reduce((s, p) => s + p.amount_irt, 0);
+  const byStatus = items.reduce<Record<string, number>>((acc, p) => {
+    const k = (p.status || "pending").toLowerCase();
+    acc[k] = (acc[k] || 0) + p.amount_irt;
+    return acc;
+  }, {});
+  const kotajToman = card.kotaj_toman_total ?? 0;
+  const paid = card.payments_toman_total ?? 0;
+  const balance = paid - kotajToman;
+
+  return (
+    <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right flex items-center gap-2">
+            <Receipt className="w-5 h-5" /> صورتحساب — {card.name}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-persian">
+            <div className="border rounded-md p-2 bg-muted/30">
+              <div className="text-[11px] text-muted-foreground">هزینه کوتاژها</div>
+              <div className="text-sm font-bold tabular-nums">{fmtToman(kotajToman)}</div>
+            </div>
+            <div className="border rounded-md p-2 bg-emerald-500/10">
+              <div className="text-[11px] text-muted-foreground">مجموع پرداختی</div>
+              <div className="text-sm font-bold tabular-nums text-emerald-700">{fmtToman(paid)}</div>
+            </div>
+            <div className="border rounded-md p-2 bg-amber-500/10">
+              <div className="text-[11px] text-muted-foreground">در انتظار تایید</div>
+              <div className="text-sm font-bold tabular-nums text-amber-700">{fmtToman(byStatus.pending || 0)}</div>
+            </div>
+            <div className={`border rounded-md p-2 ${balance >= 0 ? "bg-sky-500/10" : "bg-destructive/10"}`}>
+              <div className="text-[11px] text-muted-foreground">{balance >= 0 ? "بستانکار" : "بدهکار"}</div>
+              <div className={`text-sm font-bold tabular-nums ${balance >= 0 ? "text-sky-700" : "text-destructive"}`}>
+                {fmtToman(Math.abs(balance))}
+              </div>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+          ) : items.length === 0 ? (
+            <p className="text-center py-8 text-muted-foreground text-persian text-sm">پرداختی ثبت نشده است.</p>
+          ) : (
+            <div className="border rounded-md overflow-hidden">
+              <table className="w-full text-sm text-persian">
+                <thead className="bg-muted/40">
+                  <tr>
+                    <th className="text-right p-2">تاریخ</th>
+                    <th className="text-right p-2">مبلغ</th>
+                    <th className="text-right p-2">وضعیت</th>
+                    <th className="text-right p-2">توضیح</th>
+                    <th className="text-right p-2">فیش</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map(p => {
+                    const st = (p.status || "pending").toLowerCase();
+                    return (
+                      <tr key={p.id} className="border-t">
+                        <td className="p-2 text-xs tabular-nums">{p.created_at?.slice(0, 16).replace("T", " ")}</td>
+                        <td className="p-2 tabular-nums font-bold">{fmtToman(p.amount_irt)}</td>
+                        <td className={`p-2 text-xs font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
+                        <td className="p-2 text-xs text-muted-foreground">{p.note || "—"}</td>
+                        <td className="p-2 text-xs">
+                          {p.receipt_path ? (
+                            <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">مشاهده</a>
+                          ) : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot className="bg-muted/30">
+                  <tr>
+                    <td className="p-2 font-bold">جمع کل</td>
+                    <td className="p-2 font-bold tabular-nums">{fmtToman(totalAll)}</td>
+                    <td colSpan={3}></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => window.print()} className="text-persian">
+            <Printer className="w-4 h-4 ml-1" /> چاپ
+          </Button>
+          <Button onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default TSCardUser;
+
 

@@ -7,7 +7,12 @@ $u = ts_carduser_require();
 $card_id = isset($_GET['card_id']) ? (int)$_GET['card_id'] : 0;
 
 $pdo = ts_db();
-$sql = "SELECT k.*, e.title AS entry_title
+// Detect if gregorian column exists
+$hasG = false;
+try { $pdo->query("SELECT kotaj_date_gregorian FROM ts_kotaj LIMIT 0"); $hasG = true; } catch (Throwable $e) {}
+
+$cols = $hasG ? "k.*, e.title AS entry_title" : "k.*, e.title AS entry_title";
+$sql = "SELECT $cols
         FROM ts_kotaj k
         LEFT JOIN ts_card_entries e ON e.id = k.entry_id
         WHERE k.card_user_id = ?";
@@ -49,6 +54,7 @@ foreach ($rows as $r) {
         'entry_title' => $r['entry_title'],
         'kotaj_number' => $r['kotaj_number'],
         'kotaj_date_jalali' => $r['kotaj_date_jalali'],
+        'kotaj_date_gregorian' => $r['kotaj_date_gregorian'] ?? null,
         'total_value_usd' => (float)$r['total_value_usd'],
         'toman_total' => $tomanTotal,
         'created_at' => $r['created_at'],

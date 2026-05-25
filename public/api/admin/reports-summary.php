@@ -35,12 +35,24 @@ foreach ($pdo->query(
     $used[(int)$r['card_id']] = ['used' => (float)$r['s'], 'count' => (int)$r['n']];
 }
 
+// Per-card toman (sum of items value_usd * unit_price_irt)
+$usedIrt = [];
+foreach ($pdo->query(
+    "SELECT k.card_id, COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS s
+     FROM ts_kotaj k
+     JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
+     GROUP BY k.card_id"
+)->fetchAll() as $r) {
+    $usedIrt[(int)$r['card_id']] = (float)$r['s'];
+}
+
 $cardRows = [];
-$totAlloc=0; $totUsed=0; $totKotaj=0; $totCardUsd=0;
+$totAlloc=0; $totUsed=0; $totUsedIrt=0; $totKotaj=0; $totCardUsd=0;
 foreach ($cards as $c) {
     $id = (int)$c['id'];
     $a = $alloc[$id]['alloc'] ?? 0;
     $u = $used[$id]['used'] ?? 0;
+    $ui = $usedIrt[$id] ?? 0;
     $n = $used[$id]['count'] ?? 0;
     $usersN = $alloc[$id]['users'] ?? 0;
     $cu = (float)$c['card_usd'];
@@ -49,11 +61,12 @@ foreach ($cards as $c) {
         'card_usd' => $cu,
         'allocated_usd' => $a,
         'used_usd' => $u,
+        'used_irt' => $ui,
         'remaining_usd' => max(0, $a - $u),
         'kotaj_count' => $n,
         'user_count' => $usersN,
     ];
-    $totAlloc += $a; $totUsed += $u; $totKotaj += $n; $totCardUsd += $cu;
+    $totAlloc += $a; $totUsed += $u; $totUsedIrt += $ui; $totKotaj += $n; $totCardUsd += $cu;
 }
 
 // Per-user totals (top usage)
@@ -70,8 +83,11 @@ $topUsers = $pdo->query(
 )->fetchAll();
 
 // Recent kotajs
+$hasG = false;
+try { $pdo->query("SELECT kotaj_date_gregorian FROM ts_kotaj LIMIT 0"); $hasG = true; } catch (Throwable $e) {}
+$gSel = $hasG ? "k.kotaj_date_gregorian," : "";
 $recent = $pdo->query(
-    "SELECT k.id, k.kotaj_number, k.kotaj_date_jalali, k.total_value_usd, k.created_at,
+    "SELECT k.id, k.kotaj_number, k.kotaj_date_jalali, $gSel k.total_value_usd, k.created_at,
             c.name AS card_name, u.first_name, u.last_name, e.title AS entry_title
      FROM ts_kotaj k
      JOIN ts_cards c ON c.id=k.card_id
@@ -86,6 +102,7 @@ ts_json(200, [
         'card_usd' => $totCardUsd,
         'allocated_usd' => $totAlloc,
         'used_usd' => $totUsed,
+        'used_irt' => $totUsedIrt,
         'remaining_usd' => max(0, $totAlloc - $totUsed),
         'kotaj_count' => $totKotaj,
     ],
@@ -102,6 +119,7 @@ ts_json(200, [
         'id' => (int)$r['id'],
         'kotaj_number' => $r['kotaj_number'],
         'kotaj_date_jalali' => $r['kotaj_date_jalali'],
+        'kotaj_date_gregorian' => $r['kotaj_date_gregorian'] ?? null,
         'total_value_usd' => (float)$r['total_value_usd'],
         'created_at' => $r['created_at'],
         'card_name' => $r['card_name'],

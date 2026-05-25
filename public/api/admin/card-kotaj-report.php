@@ -8,6 +8,8 @@ $card_id = isset($_GET['card_id']) ? (int)$_GET['card_id'] : 0;
 if ($card_id <= 0) ts_json_error(400, 'card_id نامعتبر');
 
 $pdo = ts_db();
+$hasG = false;
+try { $pdo->query("SELECT kotaj_date_gregorian FROM ts_kotaj LIMIT 0"); $hasG = true; } catch (Throwable $e) {}
 $st = $pdo->prepare(
     "SELECT k.*, e.title AS entry_title, u.first_name, u.last_name, u.username
      FROM ts_kotaj k
@@ -74,6 +76,7 @@ foreach ($rows as $r) {
         'entry_title' => $r['entry_title'],
         'kotaj_number' => $r['kotaj_number'],
         'kotaj_date_jalali' => $r['kotaj_date_jalali'],
+        'kotaj_date_gregorian' => $r['kotaj_date_gregorian'] ?? null,
         'total_value_usd' => (float)$r['total_value_usd'],
         'toman_total' => $kt,
         'created_at' => $r['created_at'],

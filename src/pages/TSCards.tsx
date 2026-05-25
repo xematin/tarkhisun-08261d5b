@@ -217,6 +217,9 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         <TabsTrigger value="cards" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           کارت‌ها
         </TabsTrigger>
+        <TabsTrigger value="users" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+          مدیریت کاربران
+        </TabsTrigger>
         <TabsTrigger value="payments" className="flex-1 h-full rounded-full text-persian text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           پرداخت‌های کاربران
         </TabsTrigger>
@@ -400,6 +403,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             </Dialog>
           </CardContent>
         </Card>
+      </TabsContent>
+
+      <TabsContent value="users" className="mt-0">
+        <UsersManagementPanel toast={toast} />
       </TabsContent>
 
       <TabsContent value="payments" className="mt-0">
@@ -1840,10 +1847,10 @@ const AllPaymentsPanel = ({
 
 
 interface ReportsData {
-  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; remaining_usd: number; kotaj_count: number; };
-  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
+  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; remaining_usd: number; kotaj_count: number; };
+  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
   top_users: { id: number; first_name: string; last_name: string; username: string; used_usd: number; kotaj_count: number; }[];
-  recent: { id: number; kotaj_number: string; kotaj_date_jalali: string; total_value_usd: number; created_at: string; card_name: string; user_name: string; entry_title: string | null; }[];
+  recent: { id: number; kotaj_number: string; kotaj_date_jalali: string; kotaj_date_gregorian?: string | null; total_value_usd: number; created_at: string; card_name: string; user_name: string; entry_title: string | null; }[];
 }
 
 const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
@@ -1885,6 +1892,7 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                 { label: "موجودی کل کارت‌ها (دلار)", value: fa(data.totals.card_usd) },
                 { label: "تخصیص یافته (دلار)", value: fa(data.totals.allocated_usd) },
                 { label: "مصرف‌شده با کوتاژ (دلار)", value: fa(data.totals.used_usd) },
+                { label: "مصرف‌شده با کوتاژ (تومان)", value: fa(data.totals.used_irt || 0) },
                 { label: "مانده تخصیصی (دلار)", value: fa(data.totals.remaining_usd) },
                 { label: "تعداد کوتاژها", value: fa(data.totals.kotaj_count) },
               ].map((s) => (
@@ -1904,7 +1912,8 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                       <TableHead className="text-persian">کارت</TableHead>
                       <TableHead className="text-persian">موجودی</TableHead>
                       <TableHead className="text-persian">تخصیص</TableHead>
-                      <TableHead className="text-persian">مصرف</TableHead>
+                      <TableHead className="text-persian">مصرف (دلار)</TableHead>
+                      <TableHead className="text-persian">مصرف (تومان)</TableHead>
                       <TableHead className="text-persian">مانده</TableHead>
                       <TableHead className="text-persian">کوتاژ</TableHead>
                       <TableHead className="text-persian">کاربران</TableHead>
@@ -1917,14 +1926,19 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                         <TableCell className="tabular-nums">{fa(c.card_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.allocated_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.used_usd)}</TableCell>
+                        <TableCell className="tabular-nums text-primary">{fa(c.used_irt || 0)}</TableCell>
                         <TableCell className="tabular-nums text-emerald-600">{fa(c.remaining_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.kotaj_count)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.user_count)}</TableCell>
                       </TableRow>
                     ))}
                     {data.cards.length === 0 && (
-                      <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
                     )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
                   </TableBody>
                 </Table>
               </div>

@@ -88,9 +88,17 @@ const normDigits = (raw: string) => {
   }).replace(/[^\d.]/g, "");
 };
 
+const API_BASE = (() => {
+  if (typeof window === "undefined") return "";
+  const h = window.location.hostname;
+  if (h === "tarkhisun.com" || h === "www.tarkhisun.com" || h === "localhost" || h === "127.0.0.1") return "";
+  return "https://tarkhisun.com";
+})();
+export const apiUrl = (path: string) => API_BASE + path;
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
-    credentials: "same-origin",
+  const res = await fetch(apiUrl(path), {
+    credentials: API_BASE ? "include" : "same-origin",
     headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
     ...init,
   });

@@ -30,9 +30,17 @@ const fmt = (s: string) => {
   catch { return s; }
 };
 
+const API_BASE = (() => {
+  if (typeof window === "undefined") return "";
+  const h = window.location.hostname;
+  if (h === "tarkhisun.com" || h === "www.tarkhisun.com" || h === "localhost" || h === "127.0.0.1") return "";
+  return "https://tarkhisun.com";
+})();
+const apiUrl = (path: string) => API_BASE + path;
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
-    credentials: "same-origin",
+  const res = await fetch(apiUrl(path), {
+    credentials: API_BASE ? "include" : "same-origin",
     headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
     ...init,
   });
@@ -240,7 +248,7 @@ const LeadsPanel = () => {
             <Button size="sm" variant="outline" onClick={() => load()}>
               <RefreshCw className="w-4 h-4" />
             </Button>
-            <a href="/api/admin/leads-export.php" target="_blank" rel="noreferrer">
+            <a href={apiUrl("/api/admin/leads-export.php")} target="_blank" rel="noreferrer">
               <Button size="sm" variant="outline" className="text-persian">
                 <Download className="w-4 h-4 ml-1" /> CSV
               </Button>

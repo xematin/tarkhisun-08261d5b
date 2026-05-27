@@ -1,56 +1,33 @@
-## تغییرات درخواستی
+# فعال‌سازی پنل روی preview لاوبل (روش سوم)
 
-### ۱) ثبت کوتاژ — تاریخ میلادی + نمایش شمسی
-- در دیالوگ افزودن/ویرایش کوتاژ (`TSCardUser.tsx`) فیلد تاریخ از «شمسی به‌عنوان مقدار اصلی» به «میلادی به‌عنوان مقدار اصلی» تغییر می‌کند:
-  - یک `DatePicker` با تقویم میلادی (gregorian) به‌عنوان فیلد اصلی، مقدار ذخیره‌شده: `YYYY-MM-DD`.
-  - زیر فیلد، معادل شمسی به‌صورت کم‌رنگ نمایش داده شود (محاسبه‌ی خودکار با همان کتابخانه `react-multi-date-picker`).
-- بک‌اند: ستون جدید `kotaj_date_gregorian` به جدول `ts_kotaj` اضافه می‌شود (migration SQL در یک فایل جدید `public/api/migrations/`). فایل‌های `cards/kotaj-create.php`, `cards/kotaj-update.php`, `admin/kotaj-update.php` هم میلادی و هم شمسی را ذخیره کنند (شمسی به‌صورت خودکار از میلادی محاسبه شود اگر کلاینت نفرستد، تا داده‌های قدیمی هم سازگار بمانند).
-- در هر دو پنل (TSCards و TSCardUser) ستون/متن تاریخ، **هر دو تاریخ میلادی و شمسی** را نشان دهد (شمسی کوچک‌تر و کم‌رنگ زیر میلادی).
+هدف: امکان لاگین به `/TSCards`، `/TSCardUser` و `/TSDashboard` از روی `*.lovable.app` در حالی که API همچنان روی `tarkhisun.com/api/*.php` سرو می‌شود.
 
-### ۲) محاسبه‌ی پویای «مانده» در افزودن کوتاژ
-- در `KotajDialog` (`TSCardUser.tsx`) متن «مانده» باید **مانده‌ی زنده = `remain - totalUsd`** را نشان دهد و با تغییر هر قلم، آنی به‌روز شود (در حال حاضر فقط `remain` ثابت نمایش داده می‌شود).
-- رنگ متن قرمز شود اگر منفی شد.
+## تغییرات
 
-### ۳) مقدار پیش‌فرض «قیمت هر دلار»
-- هنگام افزودن قلم جدید (یا باز شدن دیالوگ افزودن کوتاژ)، فیلد `unit_price_irt` به‌صورت پیش‌فرض با **`refPrice`** (قیمت مرجع اختصاصی همان کاربر برای آن سکشن) پر شود؛ کاربر آزاد است تغییر دهد.
-- در حالت ویرایش، همان مقدار ذخیره‌شده نگه داشته می‌شود.
+### ۱) فرانت‌اند — استفاده از API base مطلق در preview
+در سه فایل `src/pages/TSCards.tsx`، `src/pages/TSCardUser.tsx`، `src/pages/TSDashboard.tsx` تابع `api()` و همه‌ی `fetch("/api/...")` ها طوری اصلاح شوند که:
+- اگر `window.location.hostname` برابر `tarkhisun.com` باشد → همان مسیر نسبی `/api/...` (بدون تغییر رفتار production).
+- در غیر این صورت (preview/localhost) → پیشوند `https://tarkhisun.com` اضافه شود و `credentials: "include"` به‌جای `same-origin` ست شود.
 
-### ۴) تب جدید «مدیریت کاربران» در `/TSCards`
-- بین تب‌های «کارت‌ها» و «پرداخت‌های کاربران» تب سوم با عنوان **«مدیریت کاربران»** اضافه شود.
-- محتوای تب: جدول همه‌ی کاربران کارت (از `card-users-list.php` که موجود است) با ستون‌های: نام، نام خانوادگی، نام کاربری، تاریخ ساخت، عملیات.
-- دکمه‌های عملیات در هر ردیف (شبیه بخش کارت‌ها در اسکرین‌شات):
-  - 🗑 **حذف** (با تاییدیه) — از `admin/card-user-delete.php` استفاده می‌کند.
-  - ✏️ **ویرایش** نام/نام‌خانوادگی/نام‌کاربری/رمز (با دیالوگ) — endpoint جدید `admin/card-user-update.php`.
-  - 💰 **گزارش پرداختی** — دیالوگ با لیست تمام پرداختی‌های کاربر (از `admin/payments-list-all.php` فیلتر شده بر اساس `card_user_id`، یا endpoint جدید `admin/card-user-payments.php`).
-  - 📜 **گزارش کوتاژها** — دیالوگ خلاصه‌ای از کوتاژهای کاربر (endpoint جدید `admin/card-user-kotaj-report.php`).
+این منطق در یک هلپر کوچک `apiUrl(path)` متمرکز می‌شود و در هر سه فایل استفاده می‌شود. لینک export در `TSDashboard` (`<a href="/api/admin/leads-export.php">`) هم به‌صورت داینامیک ست شود.
 
-### ۵) دکمه «صورتحساب» در `/TSCardUser`
-- زیر دکمه‌ی «پرداخت» هر کارت، دکمه‌ی جدید **«صورتحساب»** اضافه شود.
-- با کلیک، دیالوگی باز شود که شامل:
-  - جدول تاریخی پرداخت‌های کاربر برای آن کارت (از `cards/payments-list.php?card_id=...` که موجود است) با تاریخ، مبلغ، وضعیت، یادداشت، رسید.
-  - خلاصه‌ی مالی: مجموع پرداخت‌شده، تأیید شده، در انتظار، رد شده.
-  - مجموع مصرف‌شده با کوتاژ (تومان و دلار) برای این کارت.
-  - امکان چاپ/خروجی ساده (دکمه چاپ مرورگر).
+### ۲) بک‌اند — اجازه CORS برای دامنه‌های لاوبل
+در `public/api/db.php` تابع `ts_cors_same_origin()` به این صورت گسترش یابد:
+- علاوه بر same-origin، اگر هاست origin برابر `tarkhisun.com` یا با الگوی `*.lovable.app` مطابقت داشته باشد، آن origin مجاز شمرده شود.
+- هدرهای `Access-Control-Allow-Origin: <origin>`، `Access-Control-Allow-Credentials: true`، `Vary: Origin` ست شوند.
 
-### ۶) ستون «مصرف‌شده با کوتاژ (تومان)» در تب گزارش‌گیری
-- در `ReportsSection` (`TSCards.tsx`) کنار ستون «مصرف‌شده با کوتاژ (دلار)» در کارت‌های آمار بالا و جدول «وضعیت هر کارت»، ستون/کارت جدید **مصرف‌شده با کوتاژ (تومان)** اضافه شود.
-- مقدار تومان از مجموع `value_usd * unit_price_irt` آیتم‌های `ts_kotaj_items` محاسبه می‌شود. فایل `admin/reports-summary.php` بسط داده می‌شود تا `used_irt` per-card و total برگرداند.
+### ۳) بک‌اند — کوکی کراس‌سایت
+در `public/api/db.php` در `ts_admin_set_session`، `ts_admin_clear_session`، `ts_carduser_set_session`، `ts_carduser_clear_session`:
+- `samesite` از `Lax` به `None` تغییر کند.
+- `secure` همیشه `true` ست شود (روی HTTPS هستیم).
 
-### بخش فنی
+این کوکی روی دامنه `tarkhisun.com` ست می‌شود و چون درخواست‌های preview به همان دامنه می‌روند، مرورگر آن را به‌عنوان first-party برای آن دامنه ذخیره می‌کند.
 
-**جداول پایگاه‌داده:**
-- `ALTER TABLE ts_kotaj ADD COLUMN kotaj_date_gregorian DATE NULL` — برای کوتاژ‌های قدیمی فعلاً NULL.
-- بدون تغییر دیگر در جدول‌ها.
+## هشدارها (همان‌طور که گفتیم آزمایشی است)
 
-**فایل‌های جدید (PHP):**
-- `public/api/admin/card-user-update.php`
-- `public/api/admin/card-user-payments.php`
-- `public/api/admin/card-user-kotaj-report.php`
+- **Safari / iOS**: ITP کوکی‌های third-party را در preview بلاک می‌کند؛ احتمال زیاد لاگین آنجا کار نخواهد کرد. Chrome/Firefox باید کار کند.
+- این تغییرات روی production هیچ تاثیر منفی ندارد (همان مسیر نسبی و same-origin استفاده می‌شود).
+- پس از آپلود `db.php` روی هاست، باید کش مرورگر/کوکی قبلی پاک شود.
 
-**فایل‌های ویرایش‌شونده:**
-- PHP: `cards/kotaj-create.php`, `cards/kotaj-update.php`, `cards/kotaj-list.php`, `admin/kotaj-update.php`, `admin/card-kotaj-report.php`, `admin/reports-summary.php`.
-- React: `src/pages/TSCardUser.tsx`, `src/pages/TSCards.tsx`.
-
-**هیچ تغییری در چیدمان RTL و کلاس‌های `panel-fa` انجام نمی‌شود** — همه‌ی دیالوگ‌های جدید از همان الگوی موجود استفاده می‌کنند.
-
-نکته: چون پایگاه‌داده MySQL میزبان روی سرور کارفرماست (Lovable Cloud/Supabase استفاده نشده)، migration به‌صورت یک فایل `.sql` در `public/api/migrations/` ارائه می‌شود تا کارفرما در phpMyAdmin اجرا کند.
+## تست
+بعد از deploy فایل‌های PHP روی هاست `tarkhisun.com`، روی `https://preview--tarkhisun.lovable.app/TSCards` لاگین تست شود.

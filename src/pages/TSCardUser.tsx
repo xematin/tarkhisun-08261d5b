@@ -973,9 +973,9 @@ const PaymentDialog = ({
       fd.append("amount_irt", String(amtNum));
       if (note.trim()) fd.append("note", note.trim());
       fd.append("receipt", file);
-      const res = await fetch("/api/cards/payment-create.php", {
+      const res = await fetch(apiUrl("/api/cards/payment-create.php"), {
         method: "POST",
-        credentials: "same-origin",
+        credentials: API_BASE ? "include" : "same-origin",
         body: fd,
       });
       const data = await res.json().catch(() => ({}));

@@ -248,7 +248,7 @@ const LeadsPanel = () => {
             <Button size="sm" variant="outline" onClick={() => load()}>
               <RefreshCw className="w-4 h-4" />
             </Button>
-            <a href="/api/admin/leads-export.php" target="_blank" rel="noreferrer">
+            <a href={apiUrl("/api/admin/leads-export.php")} target="_blank" rel="noreferrer">
               <Button size="sm" variant="outline" className="text-persian">
                 <Download className="w-4 h-4 ml-1" /> CSV
               </Button>

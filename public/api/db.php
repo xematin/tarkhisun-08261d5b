@@ -75,7 +75,18 @@ function ts_read_json_body(): array {
 function ts_cors_same_origin(): void {
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
     $host   = $_SERVER['HTTP_HOST'] ?? '';
-    if ($origin && $host && parse_url($origin, PHP_URL_HOST) === $host) {
+    $allowed = false;
+    if ($origin && $host) {
+        $oHost = parse_url($origin, PHP_URL_HOST) ?? '';
+        if ($oHost === $host) {
+            $allowed = true;
+        } elseif ($oHost === 'tarkhisun.com' || $oHost === 'www.tarkhisun.com') {
+            $allowed = true;
+        } elseif (preg_match('/\.lovable\.app$/i', $oHost) || preg_match('/\.lovableproject\.com$/i', $oHost)) {
+            $allowed = true;
+        }
+    }
+    if ($allowed) {
         header("Access-Control-Allow-Origin: $origin");
         header('Access-Control-Allow-Credentials: true');
         header('Vary: Origin');

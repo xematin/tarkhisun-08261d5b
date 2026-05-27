@@ -75,18 +75,7 @@ function ts_read_json_body(): array {
 function ts_cors_same_origin(): void {
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
     $host   = $_SERVER['HTTP_HOST'] ?? '';
-    $allowed = false;
-    if ($origin && $host) {
-        $oHost = parse_url($origin, PHP_URL_HOST) ?? '';
-        if ($oHost === $host) {
-            $allowed = true;
-        } elseif ($oHost === 'tarkhisun.com' || $oHost === 'www.tarkhisun.com') {
-            $allowed = true;
-        } elseif (preg_match('/\.lovable\.app$/i', $oHost) || preg_match('/\.lovableproject\.com$/i', $oHost)) {
-            $allowed = true;
-        }
-    }
-    if ($allowed) {
+    if ($origin && $host && parse_url($origin, PHP_URL_HOST) === $host) {
         header("Access-Control-Allow-Origin: $origin");
         header('Access-Control-Allow-Credentials: true');
         header('Vary: Origin');
@@ -109,13 +98,13 @@ function ts_admin_set_session(int $admin_id): string {
     $expires = date('Y-m-d H:i:s', time() + $ttl);
     $stmt = ts_db()->prepare('INSERT INTO ts_admin_sessions (token, admin_id, expires_at) VALUES (?, ?, ?)');
     $stmt->execute([$token, $admin_id, $expires]);
-    $secure = true;
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
     setcookie(ts_admin_session_cookie_name(), $token, [
         'expires'  => time() + $ttl,
         'path'     => '/',
         'secure'   => $secure,
         'httponly' => true,
-        'samesite' => 'None',
+        'samesite' => 'Lax',
     ]);
     return $token;
 }
@@ -129,7 +118,7 @@ function ts_admin_clear_session(): void {
     }
     setcookie($name, '', [
         'expires' => time() - 3600, 'path' => '/',
-        'secure' => true, 'httponly' => true, 'samesite' => 'None',
+        'httponly' => true, 'samesite' => 'Lax',
     ]);
 }
 
@@ -162,13 +151,13 @@ function ts_carduser_set_session(int $user_id): string {
     $expires = date('Y-m-d H:i:s', time() + $ttl);
     $stmt = ts_db()->prepare('INSERT INTO ts_card_user_sessions (token, card_user_id, expires_at) VALUES (?, ?, ?)');
     $stmt->execute([$token, $user_id, $expires]);
-    $secure = true;
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
     setcookie(ts_carduser_cookie_name(), $token, [
         'expires'  => time() + $ttl,
         'path'     => '/',
         'secure'   => $secure,
         'httponly' => true,
-        'samesite' => 'None',
+        'samesite' => 'Lax',
     ]);
     return $token;
 }
@@ -182,7 +171,7 @@ function ts_carduser_clear_session(): void {
     }
     setcookie($name, '', [
         'expires' => time() - 3600, 'path' => '/',
-        'secure' => true, 'httponly' => true, 'samesite' => 'None',
+        'httponly' => true, 'samesite' => 'Lax',
     ]);
 }
 

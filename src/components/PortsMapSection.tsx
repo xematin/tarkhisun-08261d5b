@@ -1,37 +1,54 @@
 import { MapPin } from "lucide-react";
 
-// Iranian ports positioned on a simple world-map SVG (approximate, normalized 0-100)
-const ports = [
-  { name: "بندرعباس شهید رجایی", x: 67, y: 56 },
-  { name: "بندر امام خمینی", x: 64, y: 53 },
-  { name: "بندر چابهار", x: 70, y: 58 },
-  { name: "بندر بوشهر", x: 65, y: 54 },
-  { name: "بندر انزلی", x: 64, y: 47 },
-  { name: "بندر جاسک", x: 69, y: 57 },
+/**
+ * Coordinates are percentages relative to the square map container.
+ * The Iran SVG (public/iran-map.svg) is rendered via CSS mask in a 1:1 box,
+ * so x/y in % map directly onto its bounding box.
+ *
+ * labelSide controls which side the floating label sits on, so labels never
+ * cover the country shape or each other.
+ */
+type Port = {
+  name: string;
+  short: string;
+  x: number;
+  y: number;
+  labelSide: "top" | "bottom" | "left" | "right";
+  delay?: string;
+};
+
+const ports: Port[] = [
+  { name: "بندر انزلی", short: "انزلی", x: 36, y: 18, labelSide: "top", delay: "0s" },
+  { name: "بندر امام خمینی", short: "امام خمینی", x: 23, y: 52, labelSide: "left", delay: "0.4s" },
+  { name: "بندر بوشهر", short: "بوشهر", x: 34, y: 64, labelSide: "left", delay: "0.8s" },
+  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 60, y: 73, labelSide: "top", delay: "1.2s" },
+  { name: "بندر جاسک", short: "جاسک", x: 70, y: 78, labelSide: "bottom", delay: "1.6s" },
+  { name: "بندر چابهار", short: "چابهار", x: 82, y: 78, labelSide: "right", delay: "2s" },
 ];
 
-const destinations = [
-  { x: 50, y: 45 }, // Europe
-  { x: 78, y: 60 }, // India
-  { x: 85, y: 50 }, // China
-  { x: 22, y: 50 }, // Americas
-  { x: 90, y: 75 }, // SE Asia
-];
+const labelPositionClasses: Record<Port["labelSide"], string> = {
+  top: "bottom-full mb-3 left-1/2 -translate-x-1/2",
+  bottom: "top-full mt-3 left-1/2 -translate-x-1/2",
+  left: "right-full mr-3 top-1/2 -translate-y-1/2",
+  right: "left-full ml-3 top-1/2 -translate-y-1/2",
+};
 
 const PortsMapSection = () => {
-  const origin = ports[0];
-
   return (
     <section id="ports" className="relative py-20 ports-map-bg overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.06] pointer-events-none" aria-hidden="true">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle, hsl(0 0% 100%) 1px, transparent 1px)',
-          backgroundSize: '24px 24px'
-        }} />
+      {/* subtle dot grid background */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none" aria-hidden="true">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: "radial-gradient(circle, hsl(0 0% 100%) 1px, transparent 1px)",
+            backgroundSize: "26px 26px",
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-4 relative z-10" dir="rtl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-10 md:mb-14">
           <div className="inline-flex hero-chip mb-4 text-persian">
             <MapPin className="w-4 h-4 text-accent-light" />
             <span>پوشش سراسری</span>
@@ -39,73 +56,57 @@ const PortsMapSection = () => {
           <h2 className="heading-secondary text-white mb-4">
             حضور <strong>ترخیصان</strong> در تمام بنادر اصلی ایران
           </h2>
-          <p className="text-lg text-white/75 max-w-2xl mx-auto text-persian">
+          <p className="text-base md:text-lg text-white/75 max-w-2xl mx-auto text-persian">
             از بندرعباس شهید رجایی تا بندر امام خمینی، چابهار، بوشهر، انزلی و جاسک — هرکجا نیاز به ترخیص دارید، ما کنار شما هستیم.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-5 gap-8 items-center">
-          {/* World map visual */}
-          <div className="lg:col-span-3 relative">
-            <div className="relative aspect-[16/10] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden p-4">
-              <svg viewBox="0 0 100 60" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
-                {/* Simplified world landmasses (stylized blobs) */}
-                <g fill="hsl(0 0% 100% / 0.08)" stroke="hsl(160 84% 55% / 0.25)" strokeWidth="0.15">
-                  {/* Americas */}
-                  <path d="M10,15 Q14,12 18,16 L20,28 Q18,38 22,48 L18,54 Q12,52 10,42 Q8,30 10,15 Z" />
-                  {/* Europe + Africa */}
-                  <path d="M42,12 Q50,10 56,14 L58,22 Q56,30 60,42 L56,52 Q48,54 44,44 Q40,30 42,12 Z" />
-                  {/* Asia + Oceania */}
-                  <path d="M60,12 Q72,10 84,14 Q92,16 94,24 L92,34 Q88,42 80,44 L72,40 Q66,32 64,24 Q62,18 60,12 Z" />
-                  <path d="M82,48 Q88,46 92,50 L90,56 Q86,58 82,54 Z" />
-                </g>
+        <div className="relative mx-auto max-w-4xl">
+          {/* Map container — square aspect so port percentages stay aligned */}
+          <div className="relative w-full aspect-square">
+            {/* Iran shape rendered via CSS mask so we control color via design tokens */}
+            <div className="iran-map-shape" aria-hidden="true" />
+            <div className="iran-map-glow" aria-hidden="true" />
 
-                {/* Dotted destination lines from main port */}
-                {destinations.map((d, i) => (
-                  <line
-                    key={i}
-                    x1={origin.x}
-                    y1={origin.y}
-                    x2={d.x}
-                    y2={d.y}
-                    stroke="hsl(160 84% 55% / 0.6)"
-                    strokeWidth="0.3"
-                    className="dash-path"
-                  />
-                ))}
-
-                {/* Destination dots */}
-                {destinations.map((d, i) => (
-                  <circle key={`d-${i}`} cx={d.x} cy={d.y} r="0.6" fill="hsl(0 0% 100% / 0.5)" />
-                ))}
-              </svg>
-
-              {/* Port dots overlaid (HTML for animation crispness) */}
-              {ports.map((p) => (
-                <div
-                  key={p.name}
-                  className="port-dot"
-                  style={{ left: `${p.x}%`, top: `${p.y * (10/6) + 6}%` }}
-                  title={p.name}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Ports list */}
-          <div className="lg:col-span-2 grid grid-cols-2 gap-3">
+            {/* Port markers */}
             {ports.map((p) => (
               <div
                 key={p.name}
-                className="glass-card !bg-white/10 !border-white/20 !rounded-2xl p-4 flex items-center gap-3 hover:!bg-white/15 transition-all"
+                className="absolute"
+                style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                aria-label={p.name}
               >
-                <div className="w-9 h-9 rounded-xl bg-accent/20 flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-4 h-4 text-accent-light" />
+                <div className="relative">
+                  {/* pulsing dot */}
+                  <span
+                    className="port-dot-v2"
+                    style={{ animationDelay: p.delay }}
+                  />
+                  {/* floating label */}
+                  <div
+                    className={`port-label-v2 ${labelPositionClasses[p.labelSide]}`}
+                  >
+                    <span className="text-persian whitespace-nowrap">{p.name}</span>
+                  </div>
                 </div>
-                <span className="text-white text-sm text-persian leading-tight"><strong>{p.name}</strong></span>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Mobile-friendly list under map */}
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+          {ports.map((p) => (
+            <div
+              key={`list-${p.name}`}
+              className="glass-card !bg-white/8 !border-white/15 !rounded-2xl p-3 flex items-center gap-3"
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-accent-light shadow-[0_0_12px_hsl(var(--accent-light)/0.8)] flex-shrink-0" />
+              <span className="text-white/90 text-sm text-persian leading-tight">
+                <strong>{p.name}</strong>
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

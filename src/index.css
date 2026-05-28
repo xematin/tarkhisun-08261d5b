@@ -710,7 +710,7 @@
   }
   @keyframes port-ping {
     0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(2.2); opacity: 0; }
+    100% { transform: scale(2.6); opacity: 0; }
   }
   .dash-path {
     stroke-dasharray: 4 6;
@@ -718,6 +718,73 @@
   }
   @keyframes dash-flow {
     to { stroke-dashoffset: -200; }
+  }
+
+  /* === Iran map (PortsMapSection v2) === */
+  .iran-map-shape {
+    position: absolute;
+    inset: 0;
+    background-color: hsl(160 84% 55% / 0.18);
+    -webkit-mask: url('/iran-map.svg') center/contain no-repeat;
+    mask: url('/iran-map.svg') center/contain no-repeat;
+  }
+  .iran-map-glow {
+    position: absolute;
+    inset: 0;
+    background-color: hsl(160 84% 50% / 0.5);
+    -webkit-mask: url('/iran-map.svg') center/contain no-repeat;
+    mask: url('/iran-map.svg') center/contain no-repeat;
+    filter: blur(30px);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .port-dot-v2 {
+    position: relative;
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background: hsl(142 76% 55%);
+    box-shadow:
+      0 0 0 3px hsl(142 76% 55% / 0.25),
+      0 0 16px hsl(142 76% 55% / 0.9),
+      0 0 32px hsl(142 76% 50% / 0.6);
+    transform: translate(-50%, -50%);
+  }
+  .port-dot-v2::before,
+  .port-dot-v2::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    border: 2px solid hsl(142 76% 55% / 0.7);
+    animation: port-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+    animation-delay: inherit;
+  }
+  .port-dot-v2::after {
+    animation-delay: 1.2s;
+    opacity: 0.6;
+  }
+  .port-label-v2 {
+    position: absolute;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: hsl(225 89% 10% / 0.85);
+    border: 1px solid hsl(142 76% 55% / 0.55);
+    color: hsl(0 0% 100%);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.4), inset 0 0 0 1px hsl(142 76% 55% / 0.15);
+    pointer-events: none;
+  }
+  @media (max-width: 640px) {
+    .port-label-v2 { font-size: 10px; padding: 4px 8px; border-radius: 8px; }
+    .port-dot-v2 { width: 10px; height: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .port-dot-v2::before, .port-dot-v2::after { animation: none; }
   }
 }
 

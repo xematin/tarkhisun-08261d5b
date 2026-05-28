@@ -98,6 +98,21 @@ if ($rows) {
         $kotajByEntry[$eid] = $t;
     }
 
+    // admin payments to card owner (confirmed)
+    $apByCard = [];
+    try {
+        $apStmt = $pdo->prepare(
+            "SELECT card_id, COALESCE(SUM(amount_irt),0) AS s
+             FROM ts_card_admin_payments
+             WHERE status='confirmed' AND card_id IN ($place)
+             GROUP BY card_id"
+        );
+        $apStmt->execute($ids);
+        foreach ($apStmt->fetchAll() as $ap) {
+            $apByCard[(int)$ap['card_id']] = (float)$ap['s'];
+        }
+    } catch (Throwable $e) { $apByCard = []; }
+
     foreach ($rows as &$r) {
         $cid = (int)$r['id'];
         $r['entries'] = $entriesByCard[$cid] ?? [];

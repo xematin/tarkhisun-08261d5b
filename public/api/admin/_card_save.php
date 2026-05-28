@@ -78,19 +78,26 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
         if ($cardId === null) {
             // create
             $stmt = $pdo->prepare(
-                'INSERT INTO ts_cards (name, balance, currency, created_by, created_at, updated_at)
-                 VALUES (?, ?, ?, ?, ?, ?)'
+                'INSERT INTO ts_cards (name, balance, currency, cost_unit_price_irt, created_by, created_at, updated_at)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)'
             );
-            $stmt->execute([$name, $balanceIrt, 'IRT', $adminId, $now, $now]);
+            $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $adminId, $now, $now]);
             $cardId = (int)$pdo->lastInsertId();
         } else {
             $exists = $pdo->prepare('SELECT id FROM ts_cards WHERE id=?');
             $exists->execute([$cardId]);
             if (!$exists->fetch()) ts_json_error(404, 'کارت یافت نشد');
-            $stmt = $pdo->prepare(
-                'UPDATE ts_cards SET name=?, balance=?, currency=?, updated_at=? WHERE id=?'
-            );
-            $stmt->execute([$name, $balanceIrt, 'IRT', $now, $cardId]);
+            if ($costUnit !== null) {
+                $stmt = $pdo->prepare(
+                    'UPDATE ts_cards SET name=?, balance=?, currency=?, cost_unit_price_irt=?, updated_at=? WHERE id=?'
+                );
+                $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $now, $cardId]);
+            } else {
+                $stmt = $pdo->prepare(
+                    'UPDATE ts_cards SET name=?, balance=?, currency=?, updated_at=? WHERE id=?'
+                );
+                $stmt->execute([$name, $balanceIrt, 'IRT', $now, $cardId]);
+            }
 
             // Snapshot custom_unit_price_irt by (card_user_id, entry_title) so they
             // survive the DELETE+re-INSERT of access rows (entry_id changes after re-create).

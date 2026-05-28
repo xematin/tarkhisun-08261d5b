@@ -52,9 +52,10 @@ const HeroSection = () => {
             </div>
 
             <h1 className="heading-primary text-white mb-6 fade-in-up animate text-persian leading-tight">
-              <strong>ترخیصان</strong>، همراه مطمئن
+              <strong>ترخیصان</strong>، مشاوره امور گمرکی
               <br />
-              ترخیص کالا در
+              و ترخیص کالا در
+
               <br />
               <span key={currentPortIndex} className="text-gradient-accent inline-block animate-fade-in">
                 {ports[currentPortIndex]}

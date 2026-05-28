@@ -6,14 +6,9 @@ ts_admin_require();
 
 $pdo = ts_db();
 
-// detect cost column
-$hasCost = false;
-try { $pdo->query('SELECT cost_unit_price_irt FROM ts_cards LIMIT 0'); $hasCost = true; } catch (Throwable $e) {}
-$costSel = $hasCost ? 'c.cost_unit_price_irt' : 'NULL';
-
 // Per-card summary
 $cards = $pdo->query(
-    "SELECT c.id, c.name, c.balance, $costSel AS cost_unit_price_irt,
+    "SELECT c.id, c.name, c.balance,
             COALESCE(SUM(CASE WHEN e.currency='USD' THEN e.amount ELSE 0 END),0) AS card_usd
      FROM ts_cards c
      LEFT JOIN ts_card_entries e ON e.card_id=c.id
@@ -40,15 +35,22 @@ foreach ($pdo->query(
     $used[(int)$r['card_id']] = ['used' => (float)$r['s'], 'count' => (int)$r['n']];
 }
 
-// Per-card toman (sum of items value_usd * unit_price_irt)
-$usedIrt = [];
+// Per-card revenue (sell to user) and cost (admin purchase) in toman
+//   revenue = Σ ( ki.value_usd × ki.unit_price_irt )                  -- snapshot of sell rate to user
+//   cost    = Σ ( ki.value_usd × e.unit_price_irt )                   -- admin purchase rate from card entry
+$revIrt = []; $costIrt = [];
 foreach ($pdo->query(
-    "SELECT k.card_id, COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS s
+    "SELECT k.card_id,
+            COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0)            AS revenue,
+            COALESCE(SUM(ki.value_usd * COALESCE(e.unit_price_irt,0)),0) AS cost
      FROM ts_kotaj k
      JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
+     LEFT JOIN ts_card_entries e ON e.id = k.entry_id
      GROUP BY k.card_id"
 )->fetchAll() as $r) {
-    $usedIrt[(int)$r['card_id']] = (float)$r['s'];
+    $cid = (int)$r['card_id'];
+    $revIrt[$cid]  = (float)$r['revenue'];
+    $costIrt[$cid] = (float)$r['cost'];
 }
 
 // admin payments per card
@@ -66,29 +68,28 @@ try {
 
 $cardRows = [];
 $totAlloc=0; $totUsed=0; $totUsedIrt=0; $totKotaj=0; $totCardUsd=0;
-$totCost=0; $totProfit=0; $totPaid=0; $totDebt=0;
+$totCost=0; $totRevenue=0; $totProfit=0; $totPaid=0; $totDebt=0;
 foreach ($cards as $c) {
     $id = (int)$c['id'];
     $a = $alloc[$id]['alloc'] ?? 0;
     $u = $used[$id]['used'] ?? 0;
-    $ui = $usedIrt[$id] ?? 0;
+    $rev  = $revIrt[$id]  ?? 0.0;
+    $cost = $costIrt[$id] ?? 0.0;
+    $profit = round($rev - $cost, 2);
     $n = $used[$id]['count'] ?? 0;
     $usersN = $alloc[$id]['users'] ?? 0;
     $cu = (float)$c['card_usd'];
-    $cost_unit = $c['cost_unit_price_irt'] !== null ? (float)$c['cost_unit_price_irt'] : 0.0;
-    $cost_irt  = $cost_unit > 0 ? round($u * $cost_unit, 2) : 0.0;
-    $profit    = round($ui - $cost_irt, 2);
-    $paid      = $adminPaid[$id] ?? 0.0;
-    $balance   = (float)$c['balance'];
-    $debt      = max(0, $balance - $paid);
+    $paid    = $adminPaid[$id] ?? 0.0;
+    $balance = (float)$c['balance'];
+    $debt    = max(0, $balance - $paid);
     $cardRows[] = [
         'id' => $id, 'name' => $c['name'],
         'card_usd' => $cu,
         'allocated_usd' => $a,
         'used_usd' => $u,
-        'used_irt' => $ui,
-        'cost_unit_price_irt' => $cost_unit,
-        'cost_irt' => $cost_irt,
+        'used_irt' => $rev,         // backwards-compat alias for revenue
+        'revenue_irt' => $rev,
+        'cost_irt' => $cost,
         'profit_irt' => $profit,
         'balance_irt' => $balance,
         'admin_paid_irt' => $paid,
@@ -97,8 +98,8 @@ foreach ($cards as $c) {
         'kotaj_count' => $n,
         'user_count' => $usersN,
     ];
-    $totAlloc += $a; $totUsed += $u; $totUsedIrt += $ui; $totKotaj += $n; $totCardUsd += $cu;
-    $totCost += $cost_irt; $totProfit += $profit; $totPaid += $paid; $totDebt += $debt;
+    $totAlloc += $a; $totUsed += $u; $totUsedIrt += $rev; $totKotaj += $n; $totCardUsd += $cu;
+    $totCost += $cost; $totRevenue += $rev; $totProfit += $profit; $totPaid += $paid; $totDebt += $debt;
 }
 
 // Per-user totals (top usage)

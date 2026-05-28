@@ -329,7 +329,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                           ) : "—"}
                         </TableCell>
                         <TableCell className="align-top">
-                          <div className="flex gap-1 flex-wrap justify-end">
+                          <div className="grid grid-cols-3 gap-1 justify-end" style={{maxWidth: 160}}>
                             <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها">
                               <FileText className="w-4 h-4" />
                             </Button>
@@ -347,6 +347,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف">
                               <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="col-span-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600">
+                              <Banknote className="w-4 h-4 ml-1" />
+                              <span className="text-persian text-xs">پرداخت</span>
                             </Button>
                           </div>
                         </TableCell>

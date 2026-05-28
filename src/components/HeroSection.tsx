@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Sparkles, Star, Award, Anchor } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowLeft, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck, Ship } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import hero480Avif from "@/assets/hero-port-480.avif";
 import hero768Avif from "@/assets/hero-port-768.avif";
 import hero1024Avif from "@/assets/hero-port-1024.avif";
@@ -15,6 +15,7 @@ import hero1920Webp from "@/assets/hero-port-1920.webp";
 const HeroSection = () => {
   const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک"];
   const [currentPortIndex, setCurrentPortIndex] = useState(0);
+  const sceneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,13 +35,53 @@ const HeroSection = () => {
     }
   }, []);
 
+  // Subtle 3D parallax on mouse move (desktop only, respects reduced-motion)
+  useEffect(() => {
+    const el = sceneRef.current;
+    if (!el) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    if (reduce || isCoarse) return;
+
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.setProperty('--rx', `${(-y * 6).toFixed(2)}deg`);
+        el.style.setProperty('--ry', `${(x * 8).toFixed(2)}deg`);
+        el.style.setProperty('--px', `${(x * 14).toFixed(2)}px`);
+        el.style.setProperty('--py', `${(y * 10).toFixed(2)}px`);
+      });
+    };
+    const onLeave = () => {
+      el.style.setProperty('--rx', `0deg`);
+      el.style.setProperty('--ry', `0deg`);
+      el.style.setProperty('--px', `0px`);
+      el.style.setProperty('--py', `0px`);
+    };
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <section id="home" className="relative overflow-hidden -mt-[68px] pt-[120px] pb-16 lg:pt-[140px] lg:pb-24">
-      {/* Soft gradient background (replaces full-bleed photo) */}
+      {/* Soft gradient background */}
       <div className="absolute inset-0 z-0 ports-map-bg" aria-hidden="true" />
       {/* Decorative glow */}
       <div className="absolute top-20 -right-20 w-96 h-96 rounded-full bg-accent/20 blur-3xl z-0" aria-hidden="true" />
       <div className="absolute bottom-10 -left-20 w-96 h-96 rounded-full bg-primary-light/30 blur-3xl z-0" aria-hidden="true" />
+      {/* Subtle particles */}
+      <div className="hero-particles" aria-hidden="true">
+        <span /><span /><span /><span /><span /><span />
+      </div>
 
       <div className="container relative z-10 mx-auto px-4" dir="rtl">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
@@ -55,7 +96,6 @@ const HeroSection = () => {
               <strong>ترخیصان</strong>، مشاوره امور گمرکی
               <br />
               و ترخیص کالا در
-
               <br />
               <span key={currentPortIndex} className="text-gradient-accent inline-block animate-fade-in">
                 {ports[currentPortIndex]}
@@ -102,10 +142,11 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Left column - floating image card */}
+          {/* Left column - 3D customs scene */}
           <div className="relative order-1 lg:order-2 fade-in-up animate animation-delay-200">
-            <div className="relative max-w-md mx-auto lg:max-w-none">
-              <div id="hero-react-image" className="hero-image-card aspect-[4/5] lg:aspect-[5/6]" style={{ opacity: 1 }}>
+            <div ref={sceneRef} className="scene-3d mx-auto max-w-md lg:max-w-none">
+              {/* Image card (back layer) */}
+              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5] lg:aspect-[5/6]" style={{ opacity: 1 }}>
                 <picture>
                   <source media="(max-width: 767px)" type="image/avif" srcSet={hero480Avif} />
                   <source media="(max-width: 767px)" type="image/webp" srcSet={hero480Webp} />
@@ -123,11 +164,44 @@ const HeroSection = () => {
                     decoding="async"
                   />
                 </picture>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" aria-hidden="true" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" aria-hidden="true" />
               </div>
 
-              {/* Floating badge - top right (rating) */}
-              <div className="float-badge top-6 right-4 lg:-right-6">
+              {/* Isometric cargo container (front layer) */}
+              <div className="iso-container scene-layer" aria-hidden="true">
+                <div className="iso-face iso-top">
+                  <div className="iso-ridges" />
+                </div>
+                <div className="iso-face iso-front">
+                  <div className="iso-ridges-v" />
+                  <div className="iso-label">
+                    <Ship className="w-3.5 h-3.5" />
+                    <span>TRX • 2026</span>
+                  </div>
+                </div>
+                <div className="iso-face iso-side">
+                  <div className="iso-ridges-v" />
+                </div>
+              </div>
+
+              {/* Customs stamp */}
+              <div className="customs-stamp scene-layer" aria-hidden="true">
+                <ShieldCheck className="w-6 h-6" />
+                <div className="text-[10px] leading-tight text-persian font-bold">تأیید<br/>گمرکی</div>
+              </div>
+
+              {/* Floating document */}
+              <div className="doc-float doc-1 scene-layer" aria-hidden="true">
+                <FileCheck2 className="w-4 h-4 text-accent-dark" />
+                <span className="text-[11px] text-persian">اظهارنامه</span>
+              </div>
+              <div className="doc-float doc-2 scene-layer" aria-hidden="true">
+                <FileCheck2 className="w-4 h-4 text-primary" />
+                <span className="text-[11px] text-persian">بارنامه</span>
+              </div>
+
+              {/* Floating badges (kept) */}
+              <div className="float-badge scene-layer top-4 right-4 lg:-right-6">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-white">
                   <Star className="w-5 h-5 fill-current" />
                 </div>
@@ -137,8 +211,7 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              {/* Floating badge - bottom left (cases) */}
-              <div className="float-badge bottom-6 left-4 lg:-left-6">
+              <div className="float-badge scene-layer bottom-4 left-4 lg:-left-6">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center text-white">
                   <Award className="w-5 h-5" />
                 </div>
@@ -148,8 +221,7 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              {/* Floating mini-badge - middle (port) */}
-              <div className="float-badge top-1/2 -translate-y-1/2 left-2 lg:-left-10 hidden sm:flex">
+              <div className="float-badge scene-layer top-1/2 -translate-y-1/2 left-2 lg:-left-10 hidden sm:flex">
                 <div className="w-9 h-9 rounded-xl bg-accent/15 flex items-center justify-center text-accent-dark">
                   <Anchor className="w-4 h-4" />
                 </div>

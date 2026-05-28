@@ -57,23 +57,20 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
-              <div 
-                key={index} 
-                className="card-service group hover:scale-105"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg transition-all duration-300">
-                  <IconComponent className="w-8 h-8 text-white" />
+              <div key={index} className="service-card-v2 group">
+                <div className="service-icon-v2">
+                  <IconComponent className="w-7 h-7" strokeWidth={1.6} />
                 </div>
-                
-                <h3 className="heading-tertiary mb-4 group-hover:text-accent transition-colors">
+
+                <h3 className="heading-tertiary mb-3 group-hover:text-primary transition-colors">
                   <strong>{service.title}</strong>
                 </h3>
-                
-                <p className="text-muted-foreground mb-6 leading-relaxed text-persian">
+
+                <p className="text-muted-foreground mb-5 leading-relaxed text-persian text-sm">
                   {service.description}
                 </p>
 
@@ -86,9 +83,9 @@ const Services = () => {
                   ))}
                 </ul>
 
-                <div className="mt-6 pt-6 border-t border-border">
-                  <Link 
-                    to={service.link} 
+                <div className="mt-6 pt-5 border-t border-border">
+                  <Link
+                    to={service.link}
                     className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian inline-flex items-center gap-2 hover:gap-3"
                     aria-label={`مطالعه راهنمای ${service.title}`}
                   >
@@ -100,6 +97,7 @@ const Services = () => {
             );
           })}
         </div>
+
 
         {/* CTA Section */}
         <div className="text-center mt-16">

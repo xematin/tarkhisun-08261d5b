@@ -23,7 +23,7 @@ const ports: Port[] = [
   { name: "بندر بوشهر", short: "بوشهر", x: 34, y: 64, labelSide: "left", delay: "0.8s" },
   { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 60, y: 73, labelSide: "top", delay: "1.2s" },
   { name: "بندر جاسک", short: "جاسک", x: 70, y: 78, labelSide: "bottom", delay: "1.6s" },
-  { name: "بندر چابهار", short: "چابهار", x: 82, y: 78, labelSide: "right", delay: "2s" },
+  { name: "بندر چابهار", short: "چابهار", x: 82, y: 78, labelSide: "left", delay: "2s" },
 ];
 
 const labelPositionClasses: Record<Port["labelSide"], string> = {

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck, Ship } from "lucide-react";
+import { ArrowLeft, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import hero480Avif from "@/assets/hero-port-480.avif";
 import hero768Avif from "@/assets/hero-port-768.avif";
@@ -72,9 +72,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="home" className="relative overflow-hidden -mt-[68px] pt-[120px] pb-16 lg:pt-[140px] lg:pb-24">
-      {/* Soft gradient background */}
-      <div className="absolute inset-0 z-0 ports-map-bg" aria-hidden="true" />
+    <section id="home" className="relative overflow-hidden -mt-[68px] pt-[120px] pb-16 lg:pt-[140px] lg:pb-24 ports-map-bg">
       {/* Decorative glow */}
       <div className="absolute top-20 -right-20 w-96 h-96 rounded-full bg-accent/20 blur-3xl z-0" aria-hidden="true" />
       <div className="absolute bottom-10 -left-20 w-96 h-96 rounded-full bg-primary-light/30 blur-3xl z-0" aria-hidden="true" />
@@ -146,7 +144,7 @@ const HeroSection = () => {
           <div className="relative order-1 lg:order-2 fade-in-up animate animation-delay-200">
             <div ref={sceneRef} className="scene-3d mx-auto max-w-md lg:max-w-none">
               {/* Image card (back layer) */}
-              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5] lg:aspect-[5/6]" style={{ opacity: 1 }}>
+              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5]" style={{ opacity: 1 }}>
                 <picture>
                   <source media="(max-width: 767px)" type="image/avif" srcSet={hero480Avif} />
                   <source media="(max-width: 767px)" type="image/webp" srcSet={hero480Webp} />
@@ -157,7 +155,7 @@ const HeroSection = () => {
                   <img
                     src={hero1024Webp}
                     alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران"
-                    className="w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
                     width="1024"
                     height="1280"
                     loading="eager"
@@ -165,23 +163,6 @@ const HeroSection = () => {
                   />
                 </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" aria-hidden="true" />
-              </div>
-
-              {/* Isometric cargo container (front layer) */}
-              <div className="iso-container scene-layer" aria-hidden="true">
-                <div className="iso-face iso-top">
-                  <div className="iso-ridges" />
-                </div>
-                <div className="iso-face iso-front">
-                  <div className="iso-ridges-v" />
-                  <div className="iso-label">
-                    <Ship className="w-3.5 h-3.5" />
-                    <span>TRX • 2026</span>
-                  </div>
-                </div>
-                <div className="iso-face iso-side">
-                  <div className="iso-ridges-v" />
-                </div>
               </div>
 
               {/* Customs stamp */}

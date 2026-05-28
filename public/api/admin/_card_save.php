@@ -43,6 +43,13 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
     $balanceIrt = 0.0;
     foreach ($entries as $e) $balanceIrt += $e['total_irt'];
 
+    // optional admin cost per USD (for profit reports)
+    $costUnit = null;
+    if (array_key_exists('cost_unit_price_irt', $body) && $body['cost_unit_price_irt'] !== '' && $body['cost_unit_price_irt'] !== null) {
+        $costUnit = (float) ts_normalize_digits((string)$body['cost_unit_price_irt']);
+        if ($costUnit < 0) ts_json_error(400, 'قیمت خرید هر دلار معتبر نیست');
+    }
+
     // users: [{entry_index, id, allocated}]
     $rawUsers = isset($body['users']) && is_array($body['users']) ? $body['users'] : [];
     $allocByEntry = array_fill(0, count($entries), 0.0);

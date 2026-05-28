@@ -1,122 +1,38 @@
+# محاسبه سود ادمین — اصلاح منطق
 
-## هدف
+## فهمیدن درست منظور
+- کارت موقع ساخت قیمت خرید هر دلار را همان `entries.unit_price_irt` ذخیره می‌کند (مثلاً 4500).
+- در دیالوگ «قیمت دلار سفارشی کاربران» ادمین برای هر کاربر/قلم قیمت فروش می‌گذارد (مثلاً 5000) که در `ts_card_user_access.custom_unit_price_irt` ذخیره می‌شود و در آیتم‌های کوتاژ هم به‌صورت `ts_kotaj_items.unit_price_irt` snapshot می‌گیرد.
+- پس **هیچ فیلد جدیدی در دیالوگ افزودن/ویرایش کارت لازم نیست**. فیلد `cost_unit_price_irt` اضافی که قبلاً تعریف شد را کنار می‌گذاریم و از همان `entries.unit_price_irt` به‌عنوان «قیمت خرید» استفاده می‌کنیم.
 
-دو قابلیت جدید در `/TSCards`:
-
-1) ادمین بتواند بابت «موجودی کل (تومان)» هر کارت به صاحب کارت پرداخت کند و گزارش سود/بدهی حرفه‌ای بگیرد.
-2) ادمین بتواند کوتاژ‌های کل سیستم را بر اساس عنوان قلم (مثلاً «خیار سبز») جستجو/گزارش‌گیری کند.
-
-دیالوگ‌ها و چیدمان RTL فعلی دست نمی‌خورد. فقط افزودنی هستند.
-
----
-
-## ۱) دکمه «پرداخت» ادمین روی هر کارت (تب کارت‌ها)
-
-در ستون «عملیات» هر ردیف کارت، دکمه‌ها به چیدمان **۲ ردیفی** تبدیل می‌شوند (با `grid grid-cols-3 gap-1` یا flex-wrap). دکمه جدید **پرداخت ادمین** با آیکن `Banknote`/`HandCoins` (سبز) **زیر دکمه حذف** قرار می‌گیرد.
-
-با کلیک، دیالوگ «پرداخت بدهی کارت» باز می‌شود:
-- نمایش: نام کارت، نام صاحب کارت، **مبلغ کل کارت (تومان)**، **مجموع پرداخت‌شده تاکنون**، **مانده‌ی بدهی** (زنده).
-- فرم: مبلغ پرداخت (تومان، ورودی فارسی نرمالایز)، تاریخ (میلادی پیش‌فرض، شمسی کم‌رنگ مثل کوتاژ)، یادداشت، آپلود رسید (اختیاری).
-- دکمه ثبت → فراخوانی endpoint جدید `admin/card-debt-pay.php`.
-
-منطق بدهی:
-- بدهکاری ادمین به کارت = `cards.balance` (همان موجودی کل تومان).
-- مجموع پرداختی‌های ادمین = مجموع `ts_card_admin_payments.amount_irt` (status=confirmed).
-- مانده = بدهی − پرداخت‌شده.
-
----
-
-## ۲) تب جدید «پرداختی‌های کارت» (بین «کارت‌ها» و «مدیریت کاربران»)
-
-ساختار مشابه `AllPaymentsPanel` ولی روی جدول جدید `ts_card_admin_payments`. ستون‌ها:
-- نام کارت، صاحب کارت، مبلغ (تومان)، تاریخ میلادی + شمسی، یادداشت، رسید (لینک بازکردن)، وضعیت (تایید/در انتظار/رد)، عملیات (تایید، رد، حذف، ویرایش مبلغ/یادداشت).
-
-فیلتر/جستجو روی نام کارت، صاحب، بازه تاریخ، وضعیت. صفحه‌بندی ۲۰‌تایی.
-
-Endpoints جدید:
-- `admin/card-admin-payments-list.php` (GET، با فیلترها)
-- `admin/card-admin-payment-update.php` (تغییر وضعیت/یادداشت)
-- `admin/card-admin-payment-delete.php`
-
----
-
-## ۳) گزارش سود حرفه‌ای (در تب گزارش‌گیری موجود)
-
-سود هر کارت = **(مجموع مصرف کاربران به نرخ فروش) − (هزینه‌ی واقعی ادمین برای آن دلار)**.
-
-- «درآمد ادمین از کارت» = `Σ value_usd_i × custom_unit_price_irt_i` (یا `unit_price_irt` سکشن وقتی custom نباشد) از `ts_kotaj_items` → یعنی همان «مصرف‌شده با کوتاژ (تومان)» اضافه‌شده در ستون قبلی.
-- «هزینه‌ی ادمین برای کارت» = `Σ value_usd_i × cards.cost_unit_price_irt` (نرخ خرید واقعی ادمین برای آن کارت).
-- «سود کارت» = درآمد − هزینه.
-
-برای ثبت **نرخ خرید واقعی ادمین**، در دیالوگ «افزودن/ویرایش کارت» فیلد جدید **«قیمت خرید هر دلار (تومان)»** (مثلاً 4500) اضافه می‌شود (پیش‌فرض = میانگین `unit_price_irt` سکشن‌های USD). ذخیره در ستون جدید `ts_cards.cost_unit_price_irt`.
-
-در `reports-summary.php` به هر کارت اضافه می‌شود: `cost_irt`, `revenue_irt` (=used_irt)، `profit_irt`. در `ReportsSection.tsx` جدول و کارت‌های آمار، سه ستون/کارت جدید: **هزینه خرید**، **درآمد فروش**، **سود خالص (تومان)**. همچنین «بدهی پرداخت‌شده/مانده» در کنار آن.
-
----
-
-## ۴) تب جدید «کوتاژ‌ها» (قبل از تب گزارش‌گیری)
-
-جدولی از تمام آیتم‌های `ts_kotaj_items` با جستجوی زنده روی **عنوان قلم** (مثلاً «خیار سبز»). ستون‌ها:
-- عنوان قلم، تعداد/مقدار، ارز، قیمت واحد، مجموع (دلار)، مجموع (تومان)، کارت، کاربر، تاریخ کوتاژ (میلادی+شمسی)، شماره کوتاژ.
-
-نوار بالا:
-- ورودی جستجوی متن (عنوان قلم) با debounce.
-- فیلتر کارت، فیلتر کاربر، بازه‌ی تاریخ (میلادی).
-- خلاصه: تعداد آیتم منطبق، مجموع دلاری، مجموع تومانی.
-
-Endpoint جدید: `admin/kotaj-items-search.php` با پارامترهای `q, card_id, user_id, from, to, page, page_size`. JOIN روی `ts_kotaj_items` + `ts_kotaj` + `ts_cards` + `ts_card_users`.
-
-دکمه «خروجی CSV» اختیاری (همان نتیجه فعلی صفحه).
-
----
-
-## بخش فنی
-
-**Migration جدید** `public/api/migrations/2026_05_28_admin_payments.sql`:
-
-```sql
-ALTER TABLE ts_cards
-  ADD COLUMN cost_unit_price_irt DECIMAL(18,4) NULL AFTER currency;
-
-CREATE TABLE ts_card_admin_payments (
-  id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-  card_id       BIGINT NOT NULL,
-  admin_id      BIGINT NULL,
-  amount_irt    DECIMAL(18,2) NOT NULL,
-  pay_date_gregorian DATE NULL,
-  pay_date_jalali    VARCHAR(20) NULL,
-  receipt_path  VARCHAR(255) NULL,
-  note          TEXT NULL,
-  status        ENUM('pending','confirmed','rejected') NOT NULL DEFAULT 'confirmed',
-  created_at    DATETIME NOT NULL,
-  updated_at    DATETIME NOT NULL,
-  INDEX (card_id), INDEX (status)
-);
+## فرمول سود (per card)
+برای هر آیتم کوتاژِ ثبت‌شده روی کارت:
 ```
+cost_irt    = Σ ( ki.value_usd × entry.unit_price_irt )      // قیمت خرید همان entry که آیتم به آن وصل است
+revenue_irt = Σ ( ki.value_usd × ki.unit_price_irt )         // همان قیمت فروش به کاربر (snapshot)
+profit_irt  = revenue_irt − cost_irt
+```
+به‌این‌ترتیب اگر ادمین کارت را 4500 خریده باشد و به کاربر 5000 فروخته باشد، روی هر دلار مصرف‌شده دقیقاً 500 تومان سود محاسبه می‌شود.
 
-**فایل‌های جدید PHP:**
-- `admin/card-debt-pay.php` (multipart برای رسید)
-- `admin/card-admin-payments-list.php`
-- `admin/card-admin-payment-update.php`
-- `admin/card-admin-payment-delete.php`
-- `admin/kotaj-items-search.php`
+## تغییرات
 
-**ویرایش PHP:**
-- `admin/_card_save.php` → دریافت/ذخیره `cost_unit_price_irt`.
-- `admin/cards-list.php` → برگرداندن `cost_unit_price_irt`, `admin_paid_irt`, `admin_debt_remaining_irt`.
-- `admin/reports-summary.php` → افزودن `cost_irt`, `profit_irt`, `admin_paid_irt` per-card و total.
+### Backend
+- `public/api/admin/reports-summary.php`
+  - حذف وابستگی به `cost_unit_price_irt`.
+  - join با `ts_kotaj_items → ts_kotaj → ts_card_entries` تا برای هر آیتم cost از `entries.unit_price_irt` و revenue از `ki.unit_price_irt` گرفته شود.
+  - خروجی per-card: `cost_irt`, `revenue_irt`, `profit_irt`, `admin_paid_irt`, `admin_debt_remaining_irt` (debt = cost − paid).
+  - جمع کل: همان فیلدها به‌صورت totals.
+- `public/api/admin/_card_save.php` و `cards-list.php`
+  - دست‌نخورده می‌مانند به‌جز اینکه نوشتن/خواندن `cost_unit_price_irt` حذف می‌شود (فیلد بی‌استفاده — در DB می‌ماند ولی استفاده نمی‌شود؛ migration حذف نمی‌کنیم تا داده فعلی خراب نشود).
 
-**ویرایش React (`src/pages/TSCards.tsx`):**
-- چیدمان دکمه‌های هر کارت به ۲ ردیفی + دکمه «پرداخت ادمین».
-- کامپوننت `AdminPayCardDialog`.
-- تب `card-payments` با کامپوننت `CardAdminPaymentsPanel` (الگوی `AllPaymentsPanel`).
-- تب `kotaj-items` با کامپوننت `KotajItemsSearchPanel`.
-- در دیالوگ ساخت/ویرایش کارت، فیلد «قیمت خرید هر دلار».
-- در `ReportsSection`: ستون‌های هزینه، درآمد، سود، بدهی مانده.
+### Frontend — `src/pages/TSCards.tsx`
+- در تب «گزارش‌گیری» (`ReportsSection`) سه ستون جدید کنار ستون‌های فعلی:
+  - «هزینه خرید (تومان)» = `cost_irt`
+  - «درآمد فروش (تومان)» = `revenue_irt`
+  - «سود خالص (تومان)» = `profit_irt` (با رنگ سبز/قرمز بسته به علامت)
+- ردیف totals هم همین سه ستون را جمع می‌زند.
+- بدهی ادمین در ستون «بدهی مانده» = `cost_irt − admin_paid_irt` (یعنی ادمین به اندازه‌ی قیمت خرید کارت به صاحب کارت بدهکار است، نه به اندازه قیمت فروش).
+- هیچ تغییری در دیالوگ افزودن/ویرایش کارت داده نمی‌شود.
 
----
-
-## ترتیب نهایی تب‌ها
-کارت‌ها → پرداختی‌های کارت → مدیریت کاربران → پرداخت‌های کاربران → کوتاژ‌ها → گزارش‌گیری
-
-نکته: migration `.sql` در `public/api/migrations/` تحویل داده می‌شود تا کارفرما در phpMyAdmin اجرا کند.
+## نکته
+- چون cost از خود entries خوانده می‌شود، اگر بعداً ادمین `unit_price_irt` یک entry را ویرایش کند، گزارش سودِ کوتاژهای قدیمی هم با همان قیمت خرید جدید بازمحاسبه می‌شود. اگر می‌خواهید snapshot ثابت بماند (مثل revenue) بگویید تا یک ستون `cost_unit_price_irt` هم در `ts_kotaj_items` اضافه کنم و موقع ثبت کوتاژ snapshot بگیرم.

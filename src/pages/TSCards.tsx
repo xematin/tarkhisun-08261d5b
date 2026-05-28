@@ -2178,8 +2178,8 @@ const AllPaymentsPanel = ({
 
 
 interface ReportsData {
-  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; remaining_usd: number; kotaj_count: number; };
-  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
+  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; revenue_irt?: number; cost_irt?: number; profit_irt?: number; admin_paid_irt?: number; admin_debt_remaining_irt?: number; remaining_usd: number; kotaj_count: number; };
+  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; revenue_irt?: number; cost_irt?: number; profit_irt?: number; admin_paid_irt?: number; admin_debt_remaining_irt?: number; balance_irt?: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
   top_users: { id: number; first_name: string; last_name: string; username: string; used_usd: number; kotaj_count: number; }[];
   recent: { id: number; kotaj_number: string; kotaj_date_jalali: string; kotaj_date_gregorian?: string | null; total_value_usd: number; created_at: string; card_name: string; user_name: string; entry_title: string | null; }[];
 }
@@ -2223,13 +2223,16 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                 { label: "تخصیص یافته (دلار)", value: fa(data.totals.allocated_usd) },
                 { label: "مصرف‌شده با کوتاژ (دلار)", value: fa(data.totals.used_usd) },
                 { label: "مصرف‌شده با کوتاژ (تومان)", value: fa(data.totals.used_irt || 0) },
+                { label: "هزینه خرید کل (تومان)", value: fa(data.totals.cost_irt || 0) },
+                { label: "درآمد فروش کل (تومان)", value: fa(data.totals.revenue_irt || 0) },
+                { label: "سود خالص (تومان)", value: fa(data.totals.profit_irt || 0), highlight: (data.totals.profit_irt || 0) >= 0 ? "text-emerald-600" : "text-destructive" },
                 { label: "مانده تخصیصی (دلار)", value: fa(data.totals.remaining_usd) },
-                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
                 { label: "تعداد کوتاژها", value: fa(data.totals.kotaj_count) },
+                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
               ].map((s) => (
                 <div key={s.label} className="border rounded-md p-3 bg-muted/30">
                   <div className="text-xs text-muted-foreground text-persian">{s.label}</div>
-                  <div className="text-lg font-bold tabular-nums text-persian mt-1">{s.value}</div>
+                  <div className={`text-lg font-bold tabular-nums text-persian mt-1 ${(s as any).highlight || ""}`}>{s.value}</div>
                 </div>
               ))}
             </div>
@@ -2244,27 +2247,34 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                       <TableHead className="text-persian">موجودی</TableHead>
                       <TableHead className="text-persian">تخصیص</TableHead>
                       <TableHead className="text-persian">مصرف (دلار)</TableHead>
-                      <TableHead className="text-persian">مصرف (تومان)</TableHead>
+                      <TableHead className="text-persian">هزینه خرید (تومان)</TableHead>
+                      <TableHead className="text-persian">درآمد فروش (تومان)</TableHead>
+                      <TableHead className="text-persian">سود خالص (تومان)</TableHead>
                       <TableHead className="text-persian">مانده</TableHead>
                       <TableHead className="text-persian">کوتاژ</TableHead>
                       <TableHead className="text-persian">کاربران</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data.cards.map(c => (
+                    {data.cards.map(c => {
+                      const profit = c.profit_irt || 0;
+                      return (
                       <TableRow key={c.id}>
                         <TableCell className="text-persian font-medium">{c.name}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.card_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.allocated_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.used_usd)}</TableCell>
-                        <TableCell className="tabular-nums text-primary">{fa(c.used_irt || 0)}</TableCell>
+                        <TableCell className="tabular-nums text-orange-600">{fa(c.cost_irt || 0)}</TableCell>
+                        <TableCell className="tabular-nums text-primary">{fa(c.revenue_irt ?? c.used_irt ?? 0)}</TableCell>
+                        <TableCell className={`tabular-nums font-bold ${profit >= 0 ? "text-emerald-600" : "text-destructive"}`}>{fa(profit)}</TableCell>
                         <TableCell className="tabular-nums text-emerald-600">{fa(c.remaining_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.kotaj_count)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.user_count)}</TableCell>
                       </TableRow>
-                    ))}
+                      );
+                    })}
                     {data.cards.length === 0 && (
-                      <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={10} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
                     )}
                   </TableBody>
                 </Table>

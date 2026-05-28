@@ -64,6 +64,9 @@ interface CardRow {
   updated_at?: string;
   created_at?: string;
   kotaj_toman_total?: number;
+  cost_unit_price_irt?: number | null;
+  admin_paid_irt?: number;
+  admin_debt_remaining_irt?: number;
 }
 
 const CURRENCY_LABEL: Record<Currency, string> = {

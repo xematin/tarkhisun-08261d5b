@@ -2223,13 +2223,16 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                 { label: "تخصیص یافته (دلار)", value: fa(data.totals.allocated_usd) },
                 { label: "مصرف‌شده با کوتاژ (دلار)", value: fa(data.totals.used_usd) },
                 { label: "مصرف‌شده با کوتاژ (تومان)", value: fa(data.totals.used_irt || 0) },
+                { label: "هزینه خرید کل (تومان)", value: fa(data.totals.cost_irt || 0) },
+                { label: "درآمد فروش کل (تومان)", value: fa(data.totals.revenue_irt || 0) },
+                { label: "سود خالص (تومان)", value: fa(data.totals.profit_irt || 0), highlight: (data.totals.profit_irt || 0) >= 0 ? "text-emerald-600" : "text-destructive" },
                 { label: "مانده تخصیصی (دلار)", value: fa(data.totals.remaining_usd) },
-                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
                 { label: "تعداد کوتاژها", value: fa(data.totals.kotaj_count) },
+                { label: "تعداد کارت‌ها", value: fa(data.totals.cards) },
               ].map((s) => (
                 <div key={s.label} className="border rounded-md p-3 bg-muted/30">
                   <div className="text-xs text-muted-foreground text-persian">{s.label}</div>
-                  <div className="text-lg font-bold tabular-nums text-persian mt-1">{s.value}</div>
+                  <div className={`text-lg font-bold tabular-nums text-persian mt-1 ${(s as any).highlight || ""}`}>{s.value}</div>
                 </div>
               ))}
             </div>

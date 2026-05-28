@@ -6,13 +6,18 @@ ts_admin_require();
 
 $pdo = ts_db();
 
+// detect cost column
+$hasCost = false;
+try { $pdo->query('SELECT cost_unit_price_irt FROM ts_cards LIMIT 0'); $hasCost = true; } catch (Throwable $e) {}
+$costSel = $hasCost ? 'c.cost_unit_price_irt' : 'NULL';
+
 // Per-card summary
 $cards = $pdo->query(
-    "SELECT c.id, c.name,
+    "SELECT c.id, c.name, c.balance, $costSel AS cost_unit_price_irt,
             COALESCE(SUM(CASE WHEN e.currency='USD' THEN e.amount ELSE 0 END),0) AS card_usd
      FROM ts_cards c
      LEFT JOIN ts_card_entries e ON e.card_id=c.id
-     GROUP BY c.id, c.name
+     GROUP BY c.id, c.name, c.balance
      ORDER BY c.id DESC"
 )->fetchAll();
 

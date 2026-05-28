@@ -2247,27 +2247,34 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
                       <TableHead className="text-persian">موجودی</TableHead>
                       <TableHead className="text-persian">تخصیص</TableHead>
                       <TableHead className="text-persian">مصرف (دلار)</TableHead>
-                      <TableHead className="text-persian">مصرف (تومان)</TableHead>
+                      <TableHead className="text-persian">هزینه خرید (تومان)</TableHead>
+                      <TableHead className="text-persian">درآمد فروش (تومان)</TableHead>
+                      <TableHead className="text-persian">سود خالص (تومان)</TableHead>
                       <TableHead className="text-persian">مانده</TableHead>
                       <TableHead className="text-persian">کوتاژ</TableHead>
                       <TableHead className="text-persian">کاربران</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data.cards.map(c => (
+                    {data.cards.map(c => {
+                      const profit = c.profit_irt || 0;
+                      return (
                       <TableRow key={c.id}>
                         <TableCell className="text-persian font-medium">{c.name}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.card_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.allocated_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.used_usd)}</TableCell>
-                        <TableCell className="tabular-nums text-primary">{fa(c.used_irt || 0)}</TableCell>
+                        <TableCell className="tabular-nums text-orange-600">{fa(c.cost_irt || 0)}</TableCell>
+                        <TableCell className="tabular-nums text-primary">{fa(c.revenue_irt ?? c.used_irt ?? 0)}</TableCell>
+                        <TableCell className={`tabular-nums font-bold ${profit >= 0 ? "text-emerald-600" : "text-destructive"}`}>{fa(profit)}</TableCell>
                         <TableCell className="tabular-nums text-emerald-600">{fa(c.remaining_usd)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.kotaj_count)}</TableCell>
                         <TableCell className="tabular-nums">{fa(c.user_count)}</TableCell>
                       </TableRow>
-                    ))}
+                      );
+                    })}
                     {data.cards.length === 0 && (
-                      <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={10} className="text-center text-muted-foreground text-persian py-4">کارتی وجود ندارد.</TableCell></TableRow>
                     )}
                   </TableBody>
                 </Table>

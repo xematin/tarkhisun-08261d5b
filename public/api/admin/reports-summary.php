@@ -136,6 +136,7 @@ ts_json(200, [
         'allocated_usd' => $totAlloc,
         'used_usd' => $totUsed,
         'used_irt' => $totUsedIrt,
+        'revenue_irt' => $totRevenue,
         'cost_irt' => $totCost,
         'profit_irt' => $totProfit,
         'admin_paid_irt' => $totPaid,

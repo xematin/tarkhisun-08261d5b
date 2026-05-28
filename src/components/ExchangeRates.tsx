@@ -148,23 +148,21 @@ const ExchangeRates = () => {
             const trend = rate.sell > rate.buy ? 'up' : 'down';
             
             return (
-              <div key={rate.currency} className="exchange-card">
+              <div key={rate.currency} className="exchange-card-v2">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                      <IconComponent className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-gradient-to-br from-accent/15 to-primary/10 rounded-full flex items-center justify-center">
+                      <IconComponent className="w-6 h-6 text-accent-dark" strokeWidth={1.8} />
                     </div>
                     <div>
                       <h3 className="text-primary text-persian"><strong>{rate.name}</strong></h3>
                       <span className="text-sm text-muted-foreground">{rate.currency}</span>
                     </div>
                   </div>
-                  
-                  {trend === 'up' ? (
-                    <TrendingUp className="w-5 h-5 text-accent" />
-                  ) : (
-                    <TrendingDown className="w-5 h-5 text-destructive" />
-                  )}
+
+                  <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs ${trend === 'up' ? 'bg-accent/10 text-accent-dark' : 'bg-destructive/10 text-destructive'}`}>
+                    {trend === 'up' ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -172,7 +170,7 @@ const ExchangeRates = () => {
                     <span className="text-sm text-muted-foreground text-persian">خرید</span>
                     <span className="text-accent-text"><strong>{formatPrice(rate.buy)}</strong> ریال</span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground text-persian">فروش</span>
                     <span className="text-primary"><strong>{formatPrice(rate.sell)}</strong> ریال</span>
@@ -186,6 +184,7 @@ const ExchangeRates = () => {
                 </div>
               </div>
             );
+
           })}
         </div>
 

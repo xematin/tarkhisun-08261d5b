@@ -72,9 +72,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="home" className="relative overflow-hidden -mt-[68px] pt-[120px] pb-16 lg:pt-[140px] lg:pb-24">
-      {/* Soft gradient background */}
-      <div className="absolute inset-0 z-0 ports-map-bg" aria-hidden="true" />
+    <section id="home" className="relative overflow-hidden -mt-[68px] pt-[120px] pb-16 lg:pt-[140px] lg:pb-24 ports-map-bg">
       {/* Decorative glow */}
       <div className="absolute top-20 -right-20 w-96 h-96 rounded-full bg-accent/20 blur-3xl z-0" aria-hidden="true" />
       <div className="absolute bottom-10 -left-20 w-96 h-96 rounded-full bg-primary-light/30 blur-3xl z-0" aria-hidden="true" />

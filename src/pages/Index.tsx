@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import WhyUs from "@/components/WhyUs";
 import AIAssistant from "@/components/AIAssistant";
 import RelatedArticles from "@/components/RelatedArticles";
+import PortsMapSection from "@/components/PortsMapSection";
 import FloatingCallButton from "@/components/FloatingCallButton";
 
 // Lazy load below-the-fold components with prefetch for optimal performance

@@ -115,6 +115,8 @@ if ($rows) {
 
     foreach ($rows as &$r) {
         $cid = (int)$r['id'];
+        $r['cost_unit_price_irt'] = isset($r['cost_unit_price_irt']) && $r['cost_unit_price_irt'] !== null
+            ? (float)$r['cost_unit_price_irt'] : null;
         $r['entries'] = $entriesByCard[$cid] ?? [];
         foreach ($r['entries'] as &$ent) {
             $ent['kotaj_toman_total'] = $kotajByEntry[(int)$ent['id']] ?? 0.0;
@@ -126,6 +128,9 @@ if ($rows) {
         foreach ($r['users'] as $u) $r['allocated_total'] += $u['allocated'];
         $r['remaining'] = max(0, (float)$r['balance'] - (float)$r['allocated_total']);
         $r['kotaj_toman_total'] = $kotajByCard[$cid] ?? 0.0;
+        $paid = $apByCard[$cid] ?? 0.0;
+        $r['admin_paid_irt'] = $paid;
+        $r['admin_debt_remaining_irt'] = max(0, (float)$r['balance'] - $paid);
     }
 }
 

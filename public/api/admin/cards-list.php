@@ -5,8 +5,14 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
+
+// detect cost_unit_price_irt column
+$hasCost = false;
+try { $pdo->query('SELECT cost_unit_price_irt FROM ts_cards LIMIT 0'); $hasCost = true; } catch (Throwable $e) {}
+$costSel = $hasCost ? 'c.cost_unit_price_irt,' : 'NULL AS cost_unit_price_irt,';
+
 $rows = $pdo->query(
-    "SELECT c.id, c.name, c.balance, c.currency, c.created_at, c.updated_at
+    "SELECT c.id, c.name, c.balance, c.currency, $costSel c.created_at, c.updated_at
      FROM ts_cards c
      ORDER BY c.id DESC"
 )->fetchAll();

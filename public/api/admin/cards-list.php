@@ -5,8 +5,14 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
+
+// detect cost_unit_price_irt column
+$hasCost = false;
+try { $pdo->query('SELECT cost_unit_price_irt FROM ts_cards LIMIT 0'); $hasCost = true; } catch (Throwable $e) {}
+$costSel = $hasCost ? 'c.cost_unit_price_irt,' : 'NULL AS cost_unit_price_irt,';
+
 $rows = $pdo->query(
-    "SELECT c.id, c.name, c.balance, c.currency, c.created_at, c.updated_at
+    "SELECT c.id, c.name, c.balance, c.currency, $costSel c.created_at, c.updated_at
      FROM ts_cards c
      ORDER BY c.id DESC"
 )->fetchAll();
@@ -92,8 +98,25 @@ if ($rows) {
         $kotajByEntry[$eid] = $t;
     }
 
+    // admin payments to card owner (confirmed)
+    $apByCard = [];
+    try {
+        $apStmt = $pdo->prepare(
+            "SELECT card_id, COALESCE(SUM(amount_irt),0) AS s
+             FROM ts_card_admin_payments
+             WHERE status='confirmed' AND card_id IN ($place)
+             GROUP BY card_id"
+        );
+        $apStmt->execute($ids);
+        foreach ($apStmt->fetchAll() as $ap) {
+            $apByCard[(int)$ap['card_id']] = (float)$ap['s'];
+        }
+    } catch (Throwable $e) { $apByCard = []; }
+
     foreach ($rows as &$r) {
         $cid = (int)$r['id'];
+        $r['cost_unit_price_irt'] = isset($r['cost_unit_price_irt']) && $r['cost_unit_price_irt'] !== null
+            ? (float)$r['cost_unit_price_irt'] : null;
         $r['entries'] = $entriesByCard[$cid] ?? [];
         foreach ($r['entries'] as &$ent) {
             $ent['kotaj_toman_total'] = $kotajByEntry[(int)$ent['id']] ?? 0.0;
@@ -105,6 +128,9 @@ if ($rows) {
         foreach ($r['users'] as $u) $r['allocated_total'] += $u['allocated'];
         $r['remaining'] = max(0, (float)$r['balance'] - (float)$r['allocated_total']);
         $r['kotaj_toman_total'] = $kotajByCard[$cid] ?? 0.0;
+        $paid = $apByCard[$cid] ?? 0.0;
+        $r['admin_paid_irt'] = $paid;
+        $r['admin_debt_remaining_irt'] = max(0, (float)$r['balance'] - $paid);
     }
 }
 

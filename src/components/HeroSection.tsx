@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck, Ship } from "lucide-react";
+import { ArrowLeft, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import hero480Avif from "@/assets/hero-port-480.avif";
 import hero768Avif from "@/assets/hero-port-768.avif";

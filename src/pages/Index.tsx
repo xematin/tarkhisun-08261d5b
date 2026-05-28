@@ -270,6 +270,7 @@ const Index = () => {
             <FAQ />
           </Suspense>
           <RelatedArticles currentPostId={1} limit={3} />
+          <PortsMapSection />
           <Suspense fallback={<LoadingFallback />}>
             <Contact />
           </Suspense>

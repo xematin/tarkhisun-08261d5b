@@ -2318,4 +2318,378 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
   );
 };
 
+// ============ Admin Pay Card Debt Dialog ============
+const AdminPayCardDialog = ({
+  card, onClose, onSaved, toast,
+}: {
+  card: CardRow | null;
+  onClose: () => void;
+  onSaved: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+}) => {
+  const [amount, setAmount] = useState("");
+  const [note, setNote] = useState("");
+  const [dateG, setDateG] = useState<string>(() => new Date().toISOString().slice(0, 10));
+  const [file, setFile] = useState<File | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (card) { setAmount(""); setNote(""); setDateG(new Date().toISOString().slice(0, 10)); setFile(null); }
+  }, [card]);
+
+  const bal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
+  const paid = card?.admin_paid_irt || 0;
+  const remain = Math.max(0, bal - paid);
+  const amt = parseFloat(amount) || 0;
+  const afterRemain = remain - amt;
+
+  const jalali = (() => {
+    if (!dateG) return "";
+    const d = new Date(dateG);
+    if (isNaN(d.getTime())) return "";
+    try {
+      return new Intl.DateTimeFormat("fa-IR-u-ca-persian-nu-latn", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+      }).format(d).replace(/-/g, "/");
+    } catch { return ""; }
+  })();
+
+  const submit = async () => {
+    if (!card) return;
+    if (amt <= 0) return toast({ title: "مبلغ پرداخت را وارد کنید", variant: "destructive" });
+    setBusy(true);
+    try {
+      const fd = new FormData();
+      fd.append("card_id", String(card.id));
+      fd.append("amount_irt", String(amt));
+      fd.append("note", note);
+      fd.append("pay_date_gregorian", dateG);
+      if (jalali) fd.append("pay_date_jalali", jalali);
+      if (file) fd.append("receipt", file);
+      const res = await fetch("/api/admin/card-debt-pay.php", { method: "POST", credentials: "same-origin", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as any).error || `HTTP ${res.status}`);
+      toast({ title: "پرداخت ثبت شد" });
+      onSaved();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!card} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md panel-fa">
+        <DialogHeader>
+          <DialogTitle className="text-persian">پرداخت بدهی کارت — {card?.name}</DialogTitle>
+        </DialogHeader>
+        {card && (
+          <div className="space-y-3 text-persian">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="rounded border p-2 bg-muted/30">
+                <div className="text-xs text-muted-foreground">بدهی کل</div>
+                <div className="font-bold tabular-nums text-sm">{fmtToman(bal)}</div>
+              </div>
+              <div className="rounded border p-2 bg-muted/30">
+                <div className="text-xs text-muted-foreground">پرداخت‌شده</div>
+                <div className="font-bold tabular-nums text-sm text-emerald-600">{fmtToman(paid)}</div>
+              </div>
+              <div className="rounded border p-2 bg-muted/30">
+                <div className="text-xs text-muted-foreground">مانده</div>
+                <div className={`font-bold tabular-nums text-sm ${afterRemain < 0 ? "text-destructive" : "text-primary"}`}>{fmtToman(Math.max(0, afterRemain))}</div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label className="text-persian text-xs">مبلغ پرداخت (تومان)</Label>
+              <Input value={amount} onChange={(e) => setAmount(normDigits(e.target.value))} inputMode="decimal" dir="ltr" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
+              <Input type="date" value={dateG} onChange={(e) => setDateG(e.target.value)} dir="ltr" />
+              {jalali && <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">{jalali}</div>}
+            </div>
+            <div className="space-y-1">
+              <Label className="text-persian text-xs">یادداشت</Label>
+              <Input value={note} onChange={(e) => setNote(e.target.value)} className="text-persian" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-persian text-xs">رسید (اختیاری)</Label>
+              <Input type="file" accept="image/*,application/pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+            </div>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="text-persian">انصراف</Button>
+          <Button onClick={submit} disabled={busy} className="text-persian bg-emerald-600 hover:bg-emerald-700">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : "ثبت پرداخت"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// ============ Card Admin Payments Panel ============
+interface AdminCardPayment {
+  id: number; card_id: number; card_name: string;
+  amount_irt: number; pay_date_gregorian: string | null; pay_date_jalali: string | null;
+  receipt_path: string | null; note: string | null; status: string; created_at: string;
+}
+const CardAdminPaymentsPanel = ({
+  toast, cards, onChanged,
+}: {
+  toast: ReturnType<typeof useToast>["toast"];
+  cards: CardRow[];
+  onChanged: () => void;
+}) => {
+  const [items, setItems] = useState<AdminCardPayment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [cardFilter, setCardFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    api<{ items: AdminCardPayment[]; totals: { count: number; amount: number; confirmed: number } }>("/api/admin/card-admin-payments-list.php")
+      .then(r => setItems(r.items || []))
+      .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
+      .finally(() => setLoading(false));
+  }, [toast]);
+  useEffect(() => { load(); }, [load]);
+
+  const filtered = items.filter(p => {
+    if (cardFilter !== "all" && String(p.card_id) !== cardFilter) return false;
+    if (statusFilter !== "all" && p.status !== statusFilter) return false;
+    return true;
+  });
+  const totalSum = filtered.reduce((s, p) => s + p.amount_irt, 0);
+  const confirmedSum = filtered.filter(p => p.status === "confirmed").reduce((s, p) => s + p.amount_irt, 0);
+
+  const changeStatus = async (id: number, status: string) => {
+    try {
+      await api("/api/admin/card-admin-payment-update.php", { method: "POST", body: JSON.stringify({ id, status }) });
+      toast({ title: "وضعیت تغییر کرد" });
+      load(); onChanged();
+    } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
+  };
+  const remove = async (id: number) => {
+    if (!confirm("حذف این پرداخت؟")) return;
+    try {
+      await api("/api/admin/card-admin-payment-delete.php", { method: "POST", body: JSON.stringify({ id }) });
+      toast({ title: "حذف شد" });
+      load(); onChanged();
+    } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
+  };
+
+  const isImage = (p?: string | null) => !!p && /\.(jpe?g|png|webp|gif)$/i.test(p);
+  const statusBadge = (s: string) => {
+    if (s === "confirmed") return <Badge className="bg-emerald-600 text-persian">تأیید</Badge>;
+    if (s === "pending") return <Badge variant="secondary" className="text-persian">در انتظار</Badge>;
+    return <Badge variant="destructive" className="text-persian">رد شده</Badge>;
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <CardTitle className="text-persian flex items-center gap-2">
+            <Banknote className="w-5 h-5" /> پرداختی‌های کارت <Badge variant="secondary">{items.length}</Badge>
+          </CardTitle>
+          <Button size="sm" variant="outline" onClick={load}><RefreshCw className="w-4 h-4" /></Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded border p-3 bg-muted/30"><div className="text-xs text-muted-foreground text-persian">تعداد</div><div className="text-lg font-bold tabular-nums">{filtered.length.toLocaleString("fa-IR")}</div></div>
+          <div className="rounded border p-3 bg-muted/30"><div className="text-xs text-muted-foreground text-persian">جمع</div><div className="text-lg font-bold tabular-nums text-primary">{fmtToman(totalSum)}</div></div>
+          <div className="rounded border p-3 bg-muted/30"><div className="text-xs text-muted-foreground text-persian">جمع تأییدشده</div><div className="text-lg font-bold tabular-nums text-emerald-600">{fmtToman(confirmedSum)}</div></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <Select value={cardFilter} onValueChange={setCardFilter}>
+            <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-persian">همه کارت‌ها</SelectItem>
+              {cards.map(c => <SelectItem key={c.id} value={String(c.id)} className="text-persian">{c.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-persian">همه وضعیت‌ها</SelectItem>
+              <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
+              <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
+              <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {loading ? (
+          <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : filtered.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">پرداختی ثبت نشده.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-persian">کارت</TableHead>
+                  <TableHead className="text-persian">مبلغ (تومان)</TableHead>
+                  <TableHead className="text-persian">تاریخ</TableHead>
+                  <TableHead className="text-persian">وضعیت</TableHead>
+                  <TableHead className="text-persian">فیش</TableHead>
+                  <TableHead className="text-persian">یادداشت</TableHead>
+                  <TableHead className="text-persian">عملیات</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map(p => (
+                  <TableRow key={p.id}>
+                    <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
+                    <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
+                    <TableCell className="text-persian text-xs">
+                      <div className="tabular-nums">{p.pay_date_gregorian || toJalali(p.created_at)}</div>
+                      {p.pay_date_jalali && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_jalali}</div>}
+                    </TableCell>
+                    <TableCell>{statusBadge(p.status)}</TableCell>
+                    <TableCell>
+                      {p.receipt_path ? (
+                        isImage(p.receipt_path) ? (
+                          <button onClick={() => setPreview(p.receipt_path)}><img src={p.receipt_path!} alt="فیش" className="w-12 h-12 object-cover rounded border" /></button>
+                        ) : (
+                          <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary text-persian text-sm underline">مشاهده</a>
+                        )
+                      ) : <span className="text-muted-foreground text-xs">—</span>}
+                    </TableCell>
+                    <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>{p.note || "—"}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600">✓</Button>}
+                        {p.status !== "rejected" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "rejected")} title="رد" className="text-destructive">✗</Button>}
+                        <Button size="sm" variant="ghost" onClick={() => remove(p.id)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+        <Dialog open={!!preview} onOpenChange={(v) => !v && setPreview(null)}>
+          <DialogContent className="max-w-2xl panel-fa">
+            <DialogHeader><DialogTitle className="text-persian">رسید</DialogTitle></DialogHeader>
+            {preview && <img src={preview} alt="رسید" className="w-full h-auto rounded" />}
+          </DialogContent>
+        </Dialog>
+      </CardContent>
+    </Card>
+  );
+};
+
+// ============ Kotaj Items Search Panel ============
+interface KotajItemRow {
+  id: number; name: string; value_usd: number; unit_price_irt: number; toman: number;
+  kotaj_number: string; kotaj_date_jalali: string | null; kotaj_date_gregorian: string | null;
+  card_name: string; user_name: string; username: string; entry_title: string | null;
+}
+const KotajItemsSearchPanel = ({
+  toast, cards,
+}: {
+  toast: ReturnType<typeof useToast>["toast"];
+  cards: CardRow[];
+}) => {
+  const [q, setQ] = useState("");
+  const [cardFilter, setCardFilter] = useState("");
+  const [items, setItems] = useState<KotajItemRow[]>([]);
+  const [totals, setTotals] = useState<{ count: number; usd: number; toman: number }>({ count: 0, usd: 0, toman: 0 });
+  const [loading, setLoading] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (q.trim()) params.set("q", q.trim());
+      if (cardFilter) params.set("card_id", cardFilter);
+      params.set("page_size", "200");
+      const r = await api<{ items: KotajItemRow[]; totals: { count: number; usd: number; toman: number } }>(
+        `/api/admin/kotaj-items-search.php?${params.toString()}`
+      );
+      setItems(r.items || []);
+      setTotals(r.totals || { count: 0, usd: 0, toman: 0 });
+    } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
+    finally { setLoading(false); }
+  }, [q, cardFilter, toast]);
+
+  useEffect(() => { const t = setTimeout(() => void load(), 300); return () => clearTimeout(t); }, [load]);
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <CardTitle className="text-persian flex items-center gap-2">
+            <Package className="w-5 h-5" /> جستجوی کوتاژها بر اساس قلم
+          </CardTitle>
+          <Button size="sm" variant="outline" onClick={load}><RefreshCw className="w-4 h-4" /></Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded border p-3 bg-muted/30"><div className="text-xs text-muted-foreground text-persian">تعداد آیتم</div><div className="text-lg font-bold tabular-nums">{Number(totals.count).toLocaleString("fa-IR")}</div></div>
+          <div className="rounded border p-3 bg-muted/30"><div className="text-xs text-muted-foreground text-persian">مجموع (دلار)</div><div className="text-lg font-bold tabular-nums">{Number(totals.usd).toLocaleString("fa-IR")}</div></div>
+          <div className="rounded border p-3 bg-muted/30"><div className="text-xs text-muted-foreground text-persian">مجموع (تومان)</div><div className="text-lg font-bold tabular-nums text-primary">{fmtToman(totals.toman)}</div></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div className="relative">
+            <Search className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="نام قلم (مثلاً خیار سبز)" className="text-persian pr-8" />
+          </div>
+          <Select value={cardFilter || "all"} onValueChange={(v) => setCardFilter(v === "all" ? "" : v)}>
+            <SelectTrigger className="text-persian"><SelectValue placeholder="همه کارت‌ها" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-persian">همه کارت‌ها</SelectItem>
+              {cards.map(c => <SelectItem key={c.id} value={String(c.id)} className="text-persian">{c.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        {loading ? (
+          <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : items.length === 0 ? (
+          <p className="py-8 text-center text-muted-foreground text-persian text-sm">قلمی یافت نشد.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-persian">قلم</TableHead>
+                  <TableHead className="text-persian">دلار</TableHead>
+                  <TableHead className="text-persian">قیمت هر دلار</TableHead>
+                  <TableHead className="text-persian">جمع (تومان)</TableHead>
+                  <TableHead className="text-persian">کارت / سکشن</TableHead>
+                  <TableHead className="text-persian">کاربر</TableHead>
+                  <TableHead className="text-persian">کوتاژ</TableHead>
+                  <TableHead className="text-persian">تاریخ</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.map(r => (
+                  <TableRow key={r.id}>
+                    <TableCell className="text-persian font-medium">{r.name}</TableCell>
+                    <TableCell className="tabular-nums">{r.value_usd.toLocaleString("fa-IR")}</TableCell>
+                    <TableCell className="tabular-nums text-xs">{r.unit_price_irt.toLocaleString("fa-IR")}</TableCell>
+                    <TableCell className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
+                    <TableCell className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
+                    <TableCell className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
+                    <TableCell className="text-persian text-xs">#{r.kotaj_number}</TableCell>
+                    <TableCell className="text-persian text-xs">
+                      <div className="tabular-nums">{r.kotaj_date_gregorian || "—"}</div>
+                      <div className="text-muted-foreground opacity-70 tabular-nums">{r.kotaj_date_jalali || ""}</div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 export default TSCards;

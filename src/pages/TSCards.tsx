@@ -415,8 +415,14 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                 )}
               </DialogContent>
             </Dialog>
+
+            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); }} toast={toast} />
           </CardContent>
         </Card>
+      </TabsContent>
+
+      <TabsContent value="card-payments" className="mt-0">
+        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => void load()} />
       </TabsContent>
 
       <TabsContent value="users" className="mt-0">
@@ -425,6 +431,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
 
       <TabsContent value="payments" className="mt-0">
         <AllPaymentsPanel toast={toast} cards={items} />
+      </TabsContent>
+
+      <TabsContent value="kotaj-items" className="mt-0">
+        <KotajItemsSearchPanel toast={toast} cards={items} />
       </TabsContent>
 
       <TabsContent value="reports" className="mt-0">

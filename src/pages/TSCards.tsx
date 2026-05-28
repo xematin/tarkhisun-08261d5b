@@ -2178,8 +2178,8 @@ const AllPaymentsPanel = ({
 
 
 interface ReportsData {
-  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; remaining_usd: number; kotaj_count: number; };
-  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
+  totals: { cards: number; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; revenue_irt?: number; cost_irt?: number; profit_irt?: number; admin_paid_irt?: number; admin_debt_remaining_irt?: number; remaining_usd: number; kotaj_count: number; };
+  cards: { id: number; name: string; card_usd: number; allocated_usd: number; used_usd: number; used_irt?: number; revenue_irt?: number; cost_irt?: number; profit_irt?: number; admin_paid_irt?: number; admin_debt_remaining_irt?: number; balance_irt?: number; remaining_usd: number; kotaj_count: number; user_count: number; }[];
   top_users: { id: number; first_name: string; last_name: string; username: string; used_usd: number; kotaj_count: number; }[];
   recent: { id: number; kotaj_number: string; kotaj_date_jalali: string; kotaj_date_gregorian?: string | null; total_value_usd: number; created_at: string; card_name: string; user_name: string; entry_title: string | null; }[];
 }

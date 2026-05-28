@@ -78,7 +78,7 @@ const HeroSection = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="rounded-full bg-white/10 border-white/40 text-white hover:bg-white hover:text-primary backdrop-blur-md text-persian"
+                className="rounded-full bg-white/10 border-white/40 text-white hover:bg-white hover:text-primary backdrop-blur-md"
                 onClick={() => document.getElementById('ai-assistant')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 ترخیصان‌یار - مشاور هوش‌مصنوعی

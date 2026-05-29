@@ -155,7 +155,7 @@ const HeroSection = () => {
                   <img
                     src={hero1024Webp}
                     alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
+                    className="absolute inset-0 w-full h-full object-contain object-center bg-primary"
                     width="1024"
                     height="1280"
                     loading="eager"

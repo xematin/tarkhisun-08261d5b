@@ -808,7 +808,8 @@
     will-change: transform;
   }
   .scene-img {
-    transform: rotateX(calc(var(--rx) * 1.6)) rotateY(calc(var(--ry) * 1.8)) translate3d(calc(var(--px) * 0.4), calc(var(--py) * 0.4), 0);
+    transform: rotateX(calc(var(--rx) * 1.2)) rotateY(calc(var(--ry) * 1.4));
+    transform-origin: center center;
   }
 
   .hero-particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }

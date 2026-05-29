@@ -85,6 +85,7 @@ const PortsMapSection = () => {
                   {/* floating label */}
                   <div
                     className={`port-label-v2 ${labelPositionClasses[p.labelSide]}`}
+                    style={p.labelOffsetX ? { transform: `translateX(${p.labelOffsetX})` } : undefined}
                   >
                     <span className="text-persian whitespace-nowrap">{p.name}</span>
                   </div>

@@ -17,13 +17,13 @@ type Port = {
   delay?: string;
 };
 
-const ports: Port[] = [
+const ports: (Port & { labelOffsetX?: string })[] = [
   { name: "بندر انزلی", short: "انزلی", x: 36, y: 18, labelSide: "top", delay: "0s" },
   { name: "بندر امام خمینی", short: "امام خمینی", x: 23, y: 52, labelSide: "left", delay: "0.4s" },
   { name: "بندر بوشهر", short: "بوشهر", x: 34, y: 64, labelSide: "left", delay: "0.8s" },
   { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 60, y: 73, labelSide: "top", delay: "1.2s" },
   { name: "بندر جاسک", short: "جاسک", x: 70, y: 78, labelSide: "bottom", delay: "1.6s" },
-  { name: "بندر چابهار", short: "چابهار", x: 82, y: 78, labelSide: "left", delay: "2s" },
+  { name: "بندر چابهار", short: "چابهار", x: 82, y: 78, labelSide: "right", delay: "2s", labelOffsetX: "-110%" },
 ];
 
 const labelPositionClasses: Record<Port["labelSide"], string> = {

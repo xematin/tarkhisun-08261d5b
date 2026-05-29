@@ -621,6 +621,7 @@
   /* ===== Homepage Redesign Utilities ===== */
   .hero-image-card {
     @apply relative overflow-hidden rounded-[2rem] border border-white/30;
+    scrollbar-gutter: auto;
     box-shadow:
       0 30px 80px -20px hsl(var(--primary) / 0.5),
       0 10px 30px -10px hsl(var(--accent) / 0.35),

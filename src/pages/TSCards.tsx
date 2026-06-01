@@ -2195,6 +2195,7 @@ const AllPaymentsPanel = ({
                   <TableHead className="text-persian">وضعیت</TableHead>
                   <TableHead className="text-persian">فیش</TableHead>
                   <TableHead className="text-persian">توضیح</TableHead>
+                  <TableHead className="text-persian text-center">عملیات</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2225,6 +2226,16 @@ const AllPaymentsPanel = ({
                     </TableCell>
                     <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>
                       {p.note || "—"}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1 justify-center">
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش">
+                          <Pencil className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف">
+                          <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,0 +1,444 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
+import {
+  ArrowDownToLine, ArrowUpFromLine, Vault, Coins, TrendingUp,
+  RefreshCw, Download, Loader2, BarChart3,
+} from "lucide-react";
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from "recharts";
+import type { useToast } from "@/hooks/use-toast";
+
+interface CardCash {
+  id: number;
+  name: string;
+  cash_in: number;
+  cash_out: number;
+  from_treasury_out: number;
+  profit: number;
+}
+
+interface TreasurySummary {
+  balance: number;
+  total_in: number;
+  total_out: number;
+  total_profit: number;
+  tx_count: number;
+  cards: CardCash[];
+  trend: { date: string; in: number; out: number; balance: number }[];
+}
+
+interface LedgerItem {
+  id: number;
+  direction: "in" | "out";
+  amount_irt: number;
+  card_id: number | null;
+  card_name: string | null;
+  source_type: string;
+  source_id: number | null;
+  admin_username: string | null;
+  note: string | null;
+  occurred_at: string;
+}
+
+const fmt = (n: number) => `${(isFinite(n) ? n : 0).toLocaleString("fa-IR")} تومان`;
+
+async function api<T>(path: string): Promise<T> {
+  const res = await fetch(path, { credentials: "same-origin" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+  return data as T;
+}
+
+const SOURCE_LABEL: Record<string, string> = {
+  user_payment: "پرداخت کاربر",
+  admin_payment: "پرداخت به کارت",
+  manual_adjust: "تعدیل دستی",
+};
+
+/** Animated treasury vault graphic */
+const VaultGraphic = ({ balance }: { balance: number }) => {
+  const positive = balance > 0;
+  return (
+    <div className="relative w-full max-w-md mx-auto select-none">
+      <div
+        className="relative rounded-3xl p-8 overflow-hidden border-2 shadow-2xl"
+        style={{
+          background:
+            "linear-gradient(135deg, hsl(var(--primary) / 0.95) 0%, hsl(var(--primary) / 0.7) 50%, hsl(var(--accent) / 0.9) 100%)",
+          borderColor: "hsl(var(--accent) / 0.5)",
+          boxShadow:
+            "0 20px 60px -10px hsl(var(--primary) / 0.5), inset 0 2px 0 hsl(var(--accent) / 0.4)",
+        }}
+      >
+        {/* Decorative shine */}
+        <div
+          className="absolute -top-16 -right-16 w-48 h-48 rounded-full opacity-30 blur-2xl"
+          style={{ background: "hsl(var(--accent))" }}
+        />
+        <div
+          className="absolute -bottom-20 -left-20 w-56 h-56 rounded-full opacity-20 blur-2xl"
+          style={{ background: "hsl(var(--accent-light, var(--accent)))" }}
+        />
+
+        <div className="relative flex flex-col items-center gap-4 text-center">
+          {/* Vault icon with rotating dial */}
+          <div className="relative">
+            <div
+              className="w-28 h-28 rounded-full flex items-center justify-center border-4"
+              style={{
+                background:
+                  "radial-gradient(circle at 30% 30%, hsl(var(--accent)) 0%, hsl(var(--primary)) 80%)",
+                borderColor: "hsl(var(--accent) / 0.7)",
+                boxShadow:
+                  "inset 0 4px 12px rgba(0,0,0,0.3), 0 4px 20px hsl(var(--accent) / 0.4)",
+              }}
+            >
+              <Vault className="w-14 h-14 text-primary-foreground drop-shadow-lg" strokeWidth={1.5} />
+            </div>
+            {/* Glowing coins around */}
+            <div
+              className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center animate-pulse"
+              style={{
+                background: "hsl(var(--accent))",
+                boxShadow: "0 0 12px hsl(var(--accent) / 0.8)",
+              }}
+            >
+              <Coins className="w-4 h-4 text-primary-foreground" />
+            </div>
+          </div>
+
+          <div className="text-persian text-xs font-medium uppercase tracking-wider text-primary-foreground/80">
+            موجودی صندوق ترخیصان
+          </div>
+          <div
+            className="text-3xl md:text-4xl font-extrabold tabular-nums tracking-tight drop-shadow-lg"
+            style={{ color: positive ? "hsl(var(--accent))" : "hsl(0 80% 75%)" }}
+          >
+            {balance.toLocaleString("fa-IR")}
+          </div>
+          <div className="text-persian text-sm text-primary-foreground/90 -mt-2">تومان</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface Props {
+  toast: ReturnType<typeof useToast>["toast"];
+  refreshKey?: number;
+}
+
+const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
+  const [sum, setSum] = useState<TreasurySummary | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [ledger, setLedger] = useState<LedgerItem[]>([]);
+  const [ledgerLoading, setLedgerLoading] = useState(false);
+  const [fCard, setFCard] = useState<string>("all");
+  const [fDir, setFDir] = useState<"all" | "in" | "out">("all");
+  const [fFrom, setFFrom] = useState("");
+  const [fTo, setFTo] = useState("");
+
+  const loadSummary = useCallback(async () => {
+    setLoading(true);
+    try {
+      const s = await api<TreasurySummary>("/api/admin/treasury-summary.php");
+      setSum(s);
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setLoading(false); }
+  }, [toast]);
+
+  const loadLedger = useCallback(async () => {
+    setLedgerLoading(true);
+    try {
+      const qs = new URLSearchParams();
+      if (fCard !== "all") qs.set("card_id", fCard);
+      if (fDir !== "all") qs.set("direction", fDir);
+      if (fFrom) qs.set("from", fFrom);
+      if (fTo) qs.set("to", fTo);
+      qs.set("limit", "200");
+      const r = await api<{ items: LedgerItem[] }>(`/api/admin/treasury-ledger.php?${qs.toString()}`);
+      setLedger(r.items || []);
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setLedgerLoading(false); }
+  }, [fCard, fDir, fFrom, fTo, toast]);
+
+  useEffect(() => { void loadSummary(); }, [loadSummary, refreshKey]);
+  useEffect(() => { void loadLedger(); }, [loadLedger, refreshKey]);
+
+  const sortedCards = useMemo(() => {
+    if (!sum) return [];
+    return [...sum.cards].sort((a, b) => b.profit - a.profit);
+  }, [sum]);
+
+  const downloadCsv = () => {
+    const qs = new URLSearchParams();
+    if (fCard !== "all") qs.set("card_id", fCard);
+    if (fDir !== "all") qs.set("direction", fDir);
+    if (fFrom) qs.set("from", fFrom);
+    if (fTo) qs.set("to", fTo);
+    qs.set("csv", "1");
+    window.open(`/api/admin/treasury-ledger.php?${qs.toString()}`, "_blank");
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* KPI strip + Vault */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <CardTitle className="text-persian flex items-center gap-2">
+              <Vault className="w-5 h-5" /> بانک ترخیصان
+              <span className="text-xs font-normal text-muted-foreground">(حسابداری نقدی)</span>
+            </CardTitle>
+            <Button size="sm" variant="outline" onClick={() => void loadSummary()} disabled={loading}>
+              <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {!sum ? (
+            <div className="py-10 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+          ) : (
+            <div className="grid lg:grid-cols-2 gap-6 items-center">
+              <VaultGraphic balance={sum.balance} />
+              <div className="grid grid-cols-2 gap-3">
+                <KpiCard
+                  icon={<ArrowDownToLine className="w-4 h-4" />}
+                  label="کل ورودی"
+                  value={fmt(sum.total_in)}
+                  tone="success"
+                />
+                <KpiCard
+                  icon={<ArrowUpFromLine className="w-4 h-4" />}
+                  label="کل خروجی"
+                  value={fmt(sum.total_out)}
+                  tone="danger"
+                />
+                <KpiCard
+                  icon={<TrendingUp className="w-4 h-4" />}
+                  label="سود نقدی کل"
+                  value={fmt(sum.total_profit)}
+                  tone={sum.total_profit >= 0 ? "success" : "danger"}
+                />
+                <KpiCard
+                  icon={<BarChart3 className="w-4 h-4" />}
+                  label="تعداد تراکنش"
+                  value={`${sum.tx_count.toLocaleString("fa-IR")} مورد`}
+                  tone="neutral"
+                />
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Trend chart */}
+      {sum && sum.trend.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-persian text-base">روند موجودی صندوق (۳۰ روز اخیر)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="w-full h-56" dir="ltr">
+              <ResponsiveContainer>
+                <LineChart data={sum.trend} margin={{ top: 8, right: 16, left: 0, bottom: 4 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => Intl.NumberFormat("en").format(Number(v))} />
+                  <Tooltip
+                    formatter={(v: number) => fmt(Number(v))}
+                    contentStyle={{ direction: "rtl", fontFamily: "inherit" }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="balance"
+                    stroke="hsl(var(--primary))"
+                    strokeWidth={2.5}
+                    dot={{ r: 3 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Per-card profit */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-persian text-base">سود نقدی هر کارت</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-persian">کارت</TableHead>
+                <TableHead className="text-persian text-center">دریافتی نقدی</TableHead>
+                <TableHead className="text-persian text-center">پرداختی نقدی</TableHead>
+                <TableHead className="text-persian text-center">سود/زیان</TableHead>
+                <TableHead className="text-persian text-center">سهم</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sortedCards.length === 0 ? (
+                <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">داده‌ای نیست.</TableCell></TableRow>
+              ) : sortedCards.map((c) => {
+                const totalAbs = sum?.total_profit && sum.total_profit > 0 ? sum.total_profit : 1;
+                const pct = Math.max(0, Math.min(100, (c.profit / totalAbs) * 100));
+                return (
+                  <TableRow key={c.id}>
+                    <TableCell className="text-persian font-medium">{c.name}</TableCell>
+                    <TableCell className="text-center tabular-nums text-emerald-600">{fmt(c.cash_in)}</TableCell>
+                    <TableCell className="text-center tabular-nums text-rose-600">{fmt(c.cash_out)}</TableCell>
+                    <TableCell className={`text-center tabular-nums font-bold ${c.profit >= 0 ? "text-emerald-600" : "text-destructive"}`}>
+                      {fmt(c.profit)}
+                    </TableCell>
+                    <TableCell className="text-center min-w-[120px]">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all"
+                            style={{
+                              width: `${pct}%`,
+                              background: c.profit >= 0 ? "hsl(var(--primary))" : "hsl(var(--destructive))",
+                            }}
+                          />
+                        </div>
+                        <span className="text-xs tabular-nums opacity-70 w-10">{pct.toFixed(0)}٪</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Ledger */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <CardTitle className="text-persian text-base">دفتر کل صندوق</CardTitle>
+            <Button size="sm" variant="outline" onClick={downloadCsv}>
+              <Download className="w-4 h-4 ml-1" /> CSV
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div>
+              <Label className="text-persian text-xs">کارت</Label>
+              <Select value={fCard} onValueChange={setFCard}>
+                <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all" className="text-persian">همه</SelectItem>
+                  {(sum?.cards || []).map((c) => (
+                    <SelectItem key={c.id} value={String(c.id)} className="text-persian">{c.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-persian text-xs">جهت</Label>
+              <Select value={fDir} onValueChange={(v) => setFDir(v as "all" | "in" | "out")}>
+                <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all" className="text-persian">همه</SelectItem>
+                  <SelectItem value="in" className="text-persian">ورود</SelectItem>
+                  <SelectItem value="out" className="text-persian">خروج</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-persian text-xs">از تاریخ</Label>
+              <Input type="date" value={fFrom} onChange={(e) => setFFrom(e.target.value)} dir="ltr" />
+            </div>
+            <div>
+              <Label className="text-persian text-xs">تا تاریخ</Label>
+              <Input type="date" value={fTo} onChange={(e) => setFTo(e.target.value)} dir="ltr" />
+            </div>
+          </div>
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-persian">تاریخ</TableHead>
+                <TableHead className="text-persian">جهت</TableHead>
+                <TableHead className="text-persian text-center">مبلغ</TableHead>
+                <TableHead className="text-persian">کارت</TableHead>
+                <TableHead className="text-persian">منبع</TableHead>
+                <TableHead className="text-persian">یادداشت</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {ledgerLoading ? (
+                <TableRow><TableCell colSpan={6} className="text-center py-6"><Loader2 className="w-4 h-4 animate-spin inline" /></TableCell></TableRow>
+              ) : ledger.length === 0 ? (
+                <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground text-persian py-6">تراکنشی نیست.</TableCell></TableRow>
+              ) : ledger.map((l) => (
+                <TableRow key={l.id}>
+                  <TableCell className="text-xs tabular-nums opacity-80">{l.occurred_at}</TableCell>
+                  <TableCell>
+                    {l.direction === "in" ? (
+                      <Badge className="bg-emerald-600/15 text-emerald-700 hover:bg-emerald-600/20 border-emerald-600/30">
+                        <ArrowDownToLine className="w-3 h-3 ml-1" /> ورود
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-rose-600/15 text-rose-700 hover:bg-rose-600/20 border-rose-600/30">
+                        <ArrowUpFromLine className="w-3 h-3 ml-1" /> خروج
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className={`text-center tabular-nums font-bold ${l.direction === "in" ? "text-emerald-600" : "text-rose-600"}`}>
+                    {l.direction === "in" ? "+" : "−"} {fmt(l.amount_irt)}
+                  </TableCell>
+                  <TableCell className="text-persian text-sm">{l.card_name || "—"}</TableCell>
+                  <TableCell className="text-persian text-xs">{SOURCE_LABEL[l.source_type] || l.source_type}</TableCell>
+                  <TableCell className="text-persian text-xs opacity-80">{l.note || "—"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const KpiCard = ({
+  icon, label, value, tone,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  tone: "success" | "danger" | "neutral";
+}) => {
+  const toneClass =
+    tone === "success" ? "text-emerald-600 border-emerald-600/30 bg-emerald-600/5" :
+    tone === "danger"  ? "text-rose-600 border-rose-600/30 bg-rose-600/5" :
+    "text-primary border-primary/30 bg-primary/5";
+  return (
+    <div className={`rounded-xl border p-3 ${toneClass}`}>
+      <div className="flex items-center gap-1.5 text-xs text-persian opacity-80">
+        {icon} {label}
+      </div>
+      <div className="mt-1 text-base font-bold tabular-nums">{value}</div>
+    </div>
+  );
+};
+
+export default TreasuryPanel;

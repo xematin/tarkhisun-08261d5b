@@ -9,9 +9,10 @@ $id = (int)($body['id'] ?? 0);
 if ($id <= 0) ts_json_error(400, 'شناسه نامعتبر');
 
 $pdo = ts_db();
-$row = $pdo->prepare('SELECT id FROM ts_card_admin_payments WHERE id=?');
+$row = $pdo->prepare('SELECT * FROM ts_card_admin_payments WHERE id=?');
 $row->execute([$id]);
-if (!$row->fetch()) ts_json_error(404, 'یافت نشد');
+$cur = $row->fetch();
+if (!$cur) ts_json_error(404, 'یافت نشد');
 
 $sets = []; $params = [];
 if (isset($body['status']) && in_array($body['status'], ['confirmed','pending','rejected'], true)) {
@@ -34,10 +35,29 @@ if (array_key_exists('pay_date_jalali', $body)) {
     $j = trim((string)$body['pay_date_jalali']);
     $sets[] = 'pay_date_jalali=?'; $params[] = $j !== '' ? $j : null;
 }
+if (array_key_exists('from_treasury', $body)) {
+    $ft = (int)$body['from_treasury'] === 1 ? 1 : 0;
+    $sets[] = 'from_treasury=?'; $params[] = $ft;
+}
 if (!$sets) ts_json_error(400, 'تغییری ارسال نشده');
 
 $sets[] = 'updated_at=?'; $params[] = date('Y-m-d H:i:s');
 $params[] = $id;
 
 $pdo->prepare('UPDATE ts_card_admin_payments SET ' . implode(',', $sets) . ' WHERE id=?')->execute($params);
-ts_json(200, ['ok' => true]);
+
+// Re-sync treasury ledger for this admin payment
+$row->execute([$id]);
+$new = $row->fetch();
+ts_treasury_remove_source('admin_payment', $id);
+if ($new && $new['status'] === 'confirmed' && (int)$new['from_treasury'] === 1) {
+    // Check balance only when increasing exposure (otherwise allow correction)
+    $occ = $new['pay_date_gregorian'] ? ($new['pay_date_gregorian'] . ' ' . date('H:i:s')) : ($new['updated_at'] ?? date('Y-m-d H:i:s'));
+    ts_treasury_log(
+        'out', (float)$new['amount_irt'], (int)$new['card_id'], 'admin_payment', $id,
+        'پرداخت به کارت (ویرایش‌شده)' . ($new['note'] ? ' — ' . $new['note'] : ''),
+        $occ
+    );
+}
+
+ts_json(200, ['ok' => true, 'treasury_balance' => ts_treasury_balance()]);

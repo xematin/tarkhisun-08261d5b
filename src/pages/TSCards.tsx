@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault } from "lucide-react";
+import TreasuryPanel from "@/components/admin/TreasuryPanel";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 
 import { Button } from "@/components/ui/button";
@@ -233,10 +234,14 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         <TabsTrigger value="kotaj-items" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           کوتاژ‌ها
         </TabsTrigger>
+        <TabsTrigger value="treasury" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+          <Vault className="w-3.5 h-3.5 ml-1 inline" /> بانک ترخیصان
+        </TabsTrigger>
         <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           گزارش‌گیری
         </TabsTrigger>
       </TabsList>
+
 
       <TabsContent value="cards" className="mt-0">
         <Card>
@@ -437,12 +442,17 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         <KotajItemsSearchPanel toast={toast} cards={items} />
       </TabsContent>
 
+      <TabsContent value="treasury" className="mt-0">
+        <TreasuryPanel toast={toast} />
+      </TabsContent>
+
       <TabsContent value="reports" className="mt-0">
         <ReportsSection toast={toast} />
       </TabsContent>
     </Tabs>
   );
 };
+
 
 interface DialogProps {
   open: boolean;
@@ -2342,10 +2352,19 @@ const AdminPayCardDialog = ({
   const [dateG, setDateG] = useState<string>(() => new Date().toISOString().slice(0, 10));
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
+  const [fromTreasury, setFromTreasury] = useState<boolean>(true);
+  const [treasuryBal, setTreasuryBal] = useState<number | null>(null);
 
   useEffect(() => {
-    if (card) { setAmount(""); setNote(""); setDateG(new Date().toISOString().slice(0, 10)); setFile(null); }
+    if (card) {
+      setAmount(""); setNote(""); setDateG(new Date().toISOString().slice(0, 10));
+      setFile(null); setFromTreasury(true);
+      fetch("/api/admin/treasury-summary.php", { credentials: "same-origin" })
+        .then((r) => r.json()).then((d) => setTreasuryBal(typeof d?.balance === "number" ? d.balance : 0))
+        .catch(() => setTreasuryBal(null));
+    }
   }, [card]);
+
 
   const bal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
   const paid = card?.admin_paid_irt || 0;
@@ -2367,6 +2386,9 @@ const AdminPayCardDialog = ({
   const submit = async () => {
     if (!card) return;
     if (amt <= 0) return toast({ title: "مبلغ پرداخت را وارد کنید", variant: "destructive" });
+    if (fromTreasury && treasuryBal !== null && amt > treasuryBal) {
+      return toast({ title: "موجودی صندوق کافی نیست", description: fmtToman(treasuryBal), variant: "destructive" });
+    }
     setBusy(true);
     try {
       const fd = new FormData();
@@ -2376,6 +2398,8 @@ const AdminPayCardDialog = ({
       fd.append("pay_date_gregorian", dateG);
       if (jalali) fd.append("pay_date_jalali", jalali);
       if (file) fd.append("receipt", file);
+      fd.append("from_treasury", fromTreasury ? "1" : "0");
+
       const res = await fetch("/api/admin/card-debt-pay.php", { method: "POST", credentials: "same-origin", body: fd });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error((data as any).error || `HTTP ${res.status}`);
@@ -2409,9 +2433,52 @@ const AdminPayCardDialog = ({
               </div>
             </div>
             <div className="space-y-1">
+              <Label className="text-persian text-xs">منبع پرداخت</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFromTreasury(true)}
+                  className={`rounded-lg border p-2 text-right transition-all ${
+                    fromTreasury
+                      ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                      : "border-border bg-background hover:bg-muted/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                    <Vault className="w-4 h-4" /> از صندوق ترخیصان
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-1 tabular-nums">
+                    موجودی: {treasuryBal === null ? "…" : fmtToman(treasuryBal)}
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFromTreasury(false)}
+                  className={`rounded-lg border p-2 text-right transition-all ${
+                    !fromTreasury
+                      ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                      : "border-border bg-background hover:bg-muted/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                    <Banknote className="w-4 h-4" /> پرداخت بیرونی
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-1">
+                    بدون اثر روی صندوق
+                  </div>
+                </button>
+              </div>
+              {fromTreasury && treasuryBal !== null && amt > treasuryBal && (
+                <div className="text-[11px] text-destructive text-persian mt-1">
+                  مبلغ از موجودی صندوق بیشتر است.
+                </div>
+              )}
+            </div>
+            <div className="space-y-1">
               <Label className="text-persian text-xs">مبلغ پرداخت (تومان)</Label>
               <Input value={amount} onChange={(e) => setAmount(normDigits(e.target.value))} inputMode="decimal" dir="ltr" />
             </div>
+
             <div className="space-y-1">
               <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
               <Input type="date" value={dateG} onChange={(e) => setDateG(e.target.value)} dir="ltr" />

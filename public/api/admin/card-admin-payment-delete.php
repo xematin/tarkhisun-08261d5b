@@ -9,5 +9,7 @@ $id = (int)($body['id'] ?? 0);
 if ($id <= 0) ts_json_error(400, 'شناسه نامعتبر');
 
 $pdo = ts_db();
+// remove any treasury ledger row tied to this admin payment first
+ts_treasury_remove_source('admin_payment', $id);
 $pdo->prepare('DELETE FROM ts_card_admin_payments WHERE id=?')->execute([$id]);
 ts_json(200, ['ok' => true]);

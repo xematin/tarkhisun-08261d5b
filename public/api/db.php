@@ -233,3 +233,54 @@ function ts_card_alloc_log(
     }
 }
 
+// ============ Treasury (بانک ترخیصان) ============
+function ts_treasury_balance(): float {
+    try {
+        $row = ts_db()->query(
+            "SELECT
+                COALESCE(SUM(CASE WHEN direction='in'  THEN amount_irt ELSE 0 END),0) -
+                COALESCE(SUM(CASE WHEN direction='out' THEN amount_irt ELSE 0 END),0) AS bal
+             FROM ts_treasury_ledger"
+        )->fetch();
+        return (float)($row['bal'] ?? 0);
+    } catch (Throwable $e) { return 0.0; }
+}
+
+function ts_treasury_log(
+    string $direction,           // 'in' | 'out'
+    float $amount_irt,
+    ?int $card_id,
+    string $source_type,         // 'user_payment' | 'admin_payment' | 'manual_adjust'
+    ?int $source_id,
+    ?string $note = null,
+    ?string $occurred_at = null
+): ?int {
+    if (!in_array($direction, ['in','out'], true)) return null;
+    if ($amount_irt <= 0) return null;
+    try {
+        $admin = ts_admin_current();
+        $occ = $occurred_at ?: date('Y-m-d H:i:s');
+        $now = date('Y-m-d H:i:s');
+        $stmt = ts_db()->prepare(
+            'INSERT INTO ts_treasury_ledger
+             (direction, amount_irt, card_id, source_type, source_id, admin_id, note, occurred_at, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $direction, $amount_irt, $card_id, $source_type, $source_id,
+            $admin['id'] ?? null, $note, $occ, $now,
+        ]);
+        return (int)ts_db()->lastInsertId();
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+
+function ts_treasury_remove_source(string $source_type, int $source_id): void {
+    try {
+        ts_db()->prepare('DELETE FROM ts_treasury_ledger WHERE source_type=? AND source_id=?')
+            ->execute([$source_type, $source_id]);
+    } catch (Throwable $e) {}
+}
+
+

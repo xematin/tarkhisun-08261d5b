@@ -1899,10 +1899,11 @@ const UsersManagementPanel = ({
 };
 
 const AllPaymentsPanel = ({
-  toast, cards,
+  toast, cards, onChanged,
 }: {
   toast: ReturnType<typeof useToast>["toast"];
   cards: CardRow[];
+  onChanged?: () => void;
 }) => {
   const [items, setItems] = useState<AdminPayment[]>([]);
   const [loading, setLoading] = useState(true);

@@ -186,23 +186,14 @@
   }
 
   .btn-ai {
-    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden;
+    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300 relative;
     box-shadow: 0 0 30px hsl(var(--accent) / 0.3);
-    isolation: isolate;
   }
 
   .btn-ai:hover {
-    box-shadow: 0 20px 40px hsl(var(--primary) / 0.25);
+    background-color: hsl(var(--accent-light));
     color: hsl(var(--accent-foreground));
-  }
-
-  .btn-ai::before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-accent-light to-accent opacity-0 transition-opacity duration-300;
-    z-index: -1;
-  }
-  .btn-ai:hover::before {
-    opacity: 1;
+    box-shadow: 0 20px 40px hsl(var(--primary) / 0.25);
   }
 
   /* Card Styles */

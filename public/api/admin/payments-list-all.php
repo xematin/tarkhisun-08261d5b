@@ -28,6 +28,7 @@ foreach ($rows as &$r) {
     $r['card_id'] = (int)$r['card_id'];
     $r['card_user_id'] = (int)$r['card_user_id'];
     $r['amount_irt'] = (float)$r['amount_irt'];
+    $r['to_treasury'] = isset($r['to_treasury']) ? (int)$r['to_treasury'] : 1;
     $total += $r['amount_irt'];
 }
 unset($r);

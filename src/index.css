@@ -168,9 +168,11 @@
     right: 0;
   }
   
-  html[dir="rtl"] * {
-    scrollbar-gutter: stable;
-  }
+  /* scrollbar-gutter intentionally NOT applied to all elements:
+     in RTL it reserves space on the left side of every container,
+     visibly shifting content to the right on mobile. Only the body
+     needs it (see below) to keep the page scrollbar position stable. */
+
   
   /* Ensure body scrollbar is on the right */
   body {

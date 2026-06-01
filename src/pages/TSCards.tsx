@@ -2487,7 +2487,18 @@ const AdminPayCardDialog = ({
             </div>
             <div className="space-y-1">
               <Label className="text-persian text-xs">مبلغ پرداخت (تومان)</Label>
-              <Input value={amount} onChange={(e) => setAmount(normDigits(e.target.value))} inputMode="decimal" dir="ltr" />
+              <Input
+                value={formatThousands(amount)}
+                onChange={(e) => setAmount(unformatThousands(e.target.value))}
+                inputMode="decimal"
+                dir="ltr"
+                placeholder="0"
+              />
+              {amt > 0 && (
+                <div className="text-[11px] text-muted-foreground tabular-nums">
+                  {amt.toLocaleString("fa-IR")} تومان
+                </div>
+              )}
             </div>
 
             <div className="space-y-1">

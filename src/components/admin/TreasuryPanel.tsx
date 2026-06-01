@@ -53,6 +53,18 @@ interface LedgerItem {
 
 const fmt = (n: number) => `${(isFinite(n) ? n : 0).toLocaleString("fa-IR")} تومان`;
 
+const toJalaliDateTime = (iso: string): string => {
+  if (!iso) return "";
+  const d = new Date(iso.replace(" ", "T"));
+  if (isNaN(d.getTime())) return "";
+  try {
+    return new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit",
+    }).format(d);
+  } catch { return ""; }
+};
+
 async function api<T>(path: string): Promise<T> {
   const res = await fetch(path, { credentials: "same-origin" });
   const data = await res.json().catch(() => ({}));

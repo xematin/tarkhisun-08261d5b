@@ -423,7 +423,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               </DialogContent>
             </Dialog>
 
-            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); }} toast={toast} />
+            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); }} toast={toast} />
           </CardContent>
         </Card>
       </TabsContent>

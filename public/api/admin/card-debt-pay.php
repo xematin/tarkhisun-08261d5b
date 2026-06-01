@@ -12,6 +12,7 @@ $payG      = trim((string)($_POST['pay_date_gregorian'] ?? ''));
 $payJ      = trim((string)($_POST['pay_date_jalali'] ?? ''));
 $status    = in_array(($_POST['status'] ?? 'confirmed'), ['confirmed','pending','rejected'], true)
                 ? $_POST['status'] : 'confirmed';
+$fromTreasury = (int)($_POST['from_treasury'] ?? 0) === 1 ? 1 : 0;
 
 if ($card_id <= 0) ts_json_error(400, 'کارت معتبر نیست');
 if ($amount <= 0) ts_json_error(400, 'مبلغ پرداخت معتبر نیست');

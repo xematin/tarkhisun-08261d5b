@@ -479,7 +479,10 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
                 <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground text-persian py-6">تراکنشی نیست.</TableCell></TableRow>
               ) : ledger.map((l) => (
                 <TableRow key={l.id}>
-                  <TableCell className="text-xs tabular-nums opacity-80">{l.occurred_at}</TableCell>
+                  <TableCell className="text-xs tabular-nums opacity-80">
+                    <div>{l.occurred_at}</div>
+                    <div className="text-[10px] text-muted-foreground opacity-80">{toJalaliDateTime(l.occurred_at)}</div>
+                  </TableCell>
                   <TableCell>
                     {l.direction === "in" ? (
                       <Badge className="bg-emerald-600/15 text-emerald-700 hover:bg-emerald-600/20 border-emerald-600/30">

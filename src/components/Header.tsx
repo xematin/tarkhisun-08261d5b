@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
@@ -15,11 +15,41 @@ const navItems = [
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
+  const [currentHash, setCurrentHash] = useState<string>(typeof window !== "undefined" ? window.location.hash : "");
+
+  useEffect(() => {
+    setCurrentHash(hash);
+  }, [hash]);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const sectionIds = ["services", "ai-assistant", "contact"];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setCurrentHash(`#${visible.target.id}`);
+        else if (window.scrollY < 200) setCurrentHash("");
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [pathname]);
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    if (href.startsWith("/#")) return false;
+    if (href.startsWith("/#")) {
+      const targetHash = href.slice(1);
+      return pathname === "/" && currentHash === targetHash;
+    }
+    if (href === "/") return pathname === "/" && !currentHash;
     return pathname === href || pathname.startsWith(href + "/");
   };
 

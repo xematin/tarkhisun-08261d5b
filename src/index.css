@@ -800,6 +800,8 @@
   @media (max-width: 640px) {
     .port-label-v2 { font-size: 10px; padding: 4px 8px; border-radius: 8px; }
     .port-dot-v2 { width: 10px; height: 10px; }
+    /* Push Chabahar label further right on mobile to avoid Jask overlap */
+    .chabahar-label { transform: translateX(-30%) !important; }
   }
   @media (prefers-reduced-motion: reduce) {
     .port-dot-v2::before, .port-dot-v2::after { animation: none; }

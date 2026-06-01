@@ -9,7 +9,7 @@ $rows = [];
 try {
     $st = $pdo->query(
         "SELECT p.id, p.card_id, p.card_user_id, p.amount_irt, p.receipt_path,
-                p.note, p.status, p.created_at,
+                p.note, p.status, p.to_treasury, p.created_at,
                 c.name AS card_name,
                 u.first_name, u.last_name, u.username
          FROM ts_card_payments p
@@ -28,6 +28,7 @@ foreach ($rows as &$r) {
     $r['card_id'] = (int)$r['card_id'];
     $r['card_user_id'] = (int)$r['card_user_id'];
     $r['amount_irt'] = (float)$r['amount_irt'];
+    $r['to_treasury'] = isset($r['to_treasury']) ? (int)$r['to_treasury'] : 1;
     $total += $r['amount_irt'];
 }
 unset($r);

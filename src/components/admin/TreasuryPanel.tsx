@@ -53,6 +53,18 @@ interface LedgerItem {
 
 const fmt = (n: number) => `${(isFinite(n) ? n : 0).toLocaleString("fa-IR")} تومان`;
 
+const toJalaliDateTime = (iso: string): string => {
+  if (!iso) return "";
+  const d = new Date(iso.replace(" ", "T"));
+  if (isNaN(d.getTime())) return "";
+  try {
+    return new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit",
+    }).format(d);
+  } catch { return ""; }
+};
+
 async function api<T>(path: string): Promise<T> {
   const res = await fetch(path, { credentials: "same-origin" });
   const data = await res.json().catch(() => ({}));
@@ -192,6 +204,77 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
     qs.set("csv", "1");
     window.open(`/api/admin/treasury-ledger.php?${qs.toString()}`, "_blank");
   };
+
+  const downloadPdf = async () => {
+    if (!sum || ledger.length === 0) return;
+    const { default: html2canvas } = await import("html2canvas");
+    const { default: jsPDF } = await import("jspdf");
+    const container = document.createElement("div");
+    container.style.cssText = `position:fixed;top:-10000px;left:-10000px;width:1100px;padding:24px;background:#fff;color:#0f172a;font-family:"Vazirmatn","Tahoma",sans-serif;direction:rtl;text-align:right`;
+    const today = toJalaliDateTime(new Date().toISOString());
+    container.innerHTML = `
+      <h2 style="font-size:22px;font-weight:800;margin:0 0 6px">دفتر کل صندوق ترخیصان</h2>
+      <div style="font-size:12px;color:#64748b;margin-bottom:10px">تاریخ خروجی: ${today}</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;font-size:12px">
+        <div style="flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:8px"><div style="color:#64748b">موجودی فعلی</div><div style="font-weight:800;font-size:16px">${fmt(sum.balance)}</div></div>
+        <div style="flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:8px"><div style="color:#64748b">کل ورودی</div><div style="font-weight:800;font-size:16px;color:#059669">${fmt(sum.total_in)}</div></div>
+        <div style="flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:8px"><div style="color:#64748b">کل خروجی</div><div style="font-weight:800;font-size:16px;color:#e11d48">${fmt(sum.total_out)}</div></div>
+        <div style="flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:8px"><div style="color:#64748b">تعداد تراکنش</div><div style="font-weight:800;font-size:16px">${sum.tx_count.toLocaleString("fa-IR")}</div></div>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr style="background:#0f172a;color:#fff">
+          <th style="padding:6px;border:1px solid #0f172a">#</th>
+          <th style="padding:6px;border:1px solid #0f172a">تاریخ</th>
+          <th style="padding:6px;border:1px solid #0f172a">جهت</th>
+          <th style="padding:6px;border:1px solid #0f172a">مبلغ (تومان)</th>
+          <th style="padding:6px;border:1px solid #0f172a">کارت</th>
+          <th style="padding:6px;border:1px solid #0f172a">منبع</th>
+          <th style="padding:6px;border:1px solid #0f172a">یادداشت</th>
+        </tr></thead>
+        <tbody>${ledger.map((l, i) => `
+          <tr>
+            <td style="padding:5px;border:1px solid #cbd5e1">${(i + 1).toLocaleString("fa-IR")}</td>
+            <td style="padding:5px;border:1px solid #cbd5e1">
+              <div>${l.occurred_at}</div>
+              <div style="color:#64748b;font-size:10px">${toJalaliDateTime(l.occurred_at)}</div>
+            </td>
+            <td style="padding:5px;border:1px solid #cbd5e1;color:${l.direction === "in" ? "#059669" : "#e11d48"};font-weight:700">${l.direction === "in" ? "ورود" : "خروج"}</td>
+            <td style="padding:5px;border:1px solid #cbd5e1;font-weight:700">${(l.direction === "in" ? "+" : "−") + " " + fmt(l.amount_irt)}</td>
+            <td style="padding:5px;border:1px solid #cbd5e1">${l.card_name || "—"}</td>
+            <td style="padding:5px;border:1px solid #cbd5e1">${SOURCE_LABEL[l.source_type] || l.source_type}</td>
+            <td style="padding:5px;border:1px solid #cbd5e1">${(l.note || "—").replace(/</g, "&lt;")}</td>
+          </tr>`).join("")}</tbody>
+      </table>`;
+    document.body.appendChild(container);
+    try {
+      const canvas = await html2canvas(container, { scale: 2, backgroundColor: "#fff" });
+      const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "landscape" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 8;
+      const imgW = pageW - margin * 2;
+      const pageImgH = pageH - margin * 2;
+      const ratio = canvas.width / imgW;
+      const pageCanvasH = pageImgH * ratio;
+      let y = 0;
+      while (y < canvas.height) {
+        const slice = document.createElement("canvas");
+        slice.width = canvas.width;
+        slice.height = Math.min(pageCanvasH, canvas.height - y);
+        const ctx = slice.getContext("2d")!;
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, slice.width, slice.height);
+        ctx.drawImage(canvas, 0, y, slice.width, slice.height, 0, 0, slice.width, slice.height);
+        const sliceH = (slice.height * imgW) / slice.width;
+        if (y > 0) pdf.addPage();
+        pdf.addImage(slice.toDataURL("image/jpeg", 0.92), "JPEG", margin, margin, imgW, sliceH);
+        y += pageCanvasH;
+      }
+      pdf.save(`treasury-ledger-${new Date().toISOString().slice(0, 10)}.pdf`);
+    } finally {
+      document.body.removeChild(container);
+    }
+  };
+
 
   return (
     <div className="space-y-6">
@@ -333,9 +416,14 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
         <CardHeader>
           <div className="flex items-center justify-between flex-wrap gap-3">
             <CardTitle className="text-persian text-base">دفتر کل صندوق</CardTitle>
-            <Button size="sm" variant="outline" onClick={downloadCsv}>
-              <Download className="w-4 h-4 ml-1" /> CSV
-            </Button>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" onClick={downloadCsv}>
+                <Download className="w-4 h-4 ml-1" /> CSV
+              </Button>
+              <Button size="sm" variant="outline" onClick={downloadPdf} disabled={ledger.length === 0}>
+                <Download className="w-4 h-4 ml-1" /> PDF
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -391,7 +479,10 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
                 <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground text-persian py-6">تراکنشی نیست.</TableCell></TableRow>
               ) : ledger.map((l) => (
                 <TableRow key={l.id}>
-                  <TableCell className="text-xs tabular-nums opacity-80">{l.occurred_at}</TableCell>
+                  <TableCell className="text-xs tabular-nums opacity-80">
+                    <div>{l.occurred_at}</div>
+                    <div className="text-[10px] text-muted-foreground opacity-80">{toJalaliDateTime(l.occurred_at)}</div>
+                  </TableCell>
                   <TableCell>
                     {l.direction === "in" ? (
                       <Badge className="bg-emerald-600/15 text-emerald-700 hover:bg-emerald-600/20 border-emerald-600/30">

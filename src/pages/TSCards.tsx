@@ -192,6 +192,8 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [reportFor, setReportFor] = useState<CardRow | null>(null);
   const [kotajCostFor, setKotajCostFor] = useState<CardRow | null>(null);
   const [payDebtFor, setPayDebtFor] = useState<CardRow | null>(null);
+  const [treasuryKey, setTreasuryKey] = useState(0);
+  const bumpTreasury = useCallback(() => setTreasuryKey((k) => k + 1), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -421,13 +423,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               </DialogContent>
             </Dialog>
 
-            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); }} toast={toast} />
+            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); }} toast={toast} />
           </CardContent>
         </Card>
       </TabsContent>
 
       <TabsContent value="card-payments" className="mt-0">
-        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => void load()} />
+        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
       </TabsContent>
 
       <TabsContent value="users" className="mt-0">
@@ -435,7 +437,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
       </TabsContent>
 
       <TabsContent value="payments" className="mt-0">
-        <AllPaymentsPanel toast={toast} cards={items} />
+        <AllPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
       </TabsContent>
 
       <TabsContent value="kotaj-items" className="mt-0">
@@ -443,7 +445,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
       </TabsContent>
 
       <TabsContent value="treasury" className="mt-0">
-        <TreasuryPanel toast={toast} />
+        <TreasuryPanel toast={toast} refreshKey={treasuryKey} />
       </TabsContent>
 
       <TabsContent value="reports" className="mt-0">
@@ -1549,11 +1551,22 @@ interface AdminPayment {
   receipt_path: string | null;
   note: string | null;
   status: string;
+  to_treasury?: number;
   created_at: string;
   first_name: string;
   last_name: string;
   username: string;
 }
+
+// Format an already-normalized digit string with thousand separators (Latin commas, LTR-safe).
+const formatThousands = (raw: string): string => {
+  if (!raw) return "";
+  const cleaned = normDigits(raw);
+  const [intP, decP] = cleaned.split(".");
+  const withSep = intP.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return decP !== undefined ? `${withSep}.${decP}` : withSep;
+};
+const unformatThousands = (raw: string): string => normDigits(raw);
 
 const toJalali = (iso: string): string => {
   if (!iso) return "—";
@@ -1886,10 +1899,11 @@ const UsersManagementPanel = ({
 };
 
 const AllPaymentsPanel = ({
-  toast, cards,
+  toast, cards, onChanged,
 }: {
   toast: ReturnType<typeof useToast>["toast"];
   cards: CardRow[];
+  onChanged?: () => void;
 }) => {
   const [items, setItems] = useState<AdminPayment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1899,6 +1913,62 @@ const AllPaymentsPanel = ({
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
+  const [editRow, setEditRow] = useState<AdminPayment | null>(null);
+  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; to_treasury: boolean }>({
+    amount: "", note: "", status: "confirmed", to_treasury: true,
+  });
+  const [editSaving, setEditSaving] = useState(false);
+  const [confirmDel, setConfirmDel] = useState<AdminPayment | null>(null);
+
+  const openEdit = (p: AdminPayment) => {
+    setEditRow(p);
+    setEditForm({
+      amount: String(p.amount_irt || ""),
+      note: p.note || "",
+      status: p.status || "confirmed",
+      to_treasury: (p.to_treasury ?? 1) === 1,
+    });
+  };
+  const saveEdit = async () => {
+    if (!editRow) return;
+    const amt = parseFloat(unformatThousands(editForm.amount));
+    if (!amt || amt <= 0) {
+      toast({ title: "مبلغ نامعتبر", variant: "destructive" });
+      return;
+    }
+    setEditSaving(true);
+    try {
+      await api("/api/admin/card-user-payment-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: editRow.id,
+          amount_irt: amt,
+          note: editForm.note,
+          status: editForm.status,
+          to_treasury: editForm.to_treasury ? 1 : 0,
+        }),
+      });
+      toast({ title: "ذخیره شد" });
+      setEditRow(null);
+      load(); onChanged?.();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setEditSaving(false); }
+  };
+  const doDelete = async () => {
+    if (!confirmDel) return;
+    try {
+      await api("/api/admin/card-user-payment-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: confirmDel.id }),
+      });
+      toast({ title: "حذف شد" });
+      setConfirmDel(null);
+      load(); onChanged?.();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
 
   const load = useCallback(() => {
     setLoading(true);
@@ -2128,6 +2198,7 @@ const AllPaymentsPanel = ({
                   <TableHead className="text-persian">وضعیت</TableHead>
                   <TableHead className="text-persian">فیش</TableHead>
                   <TableHead className="text-persian">توضیح</TableHead>
+                  <TableHead className="text-persian text-center">عملیات</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -2159,12 +2230,88 @@ const AllPaymentsPanel = ({
                     <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>
                       {p.note || "—"}
                     </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1 justify-center">
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش">
+                          <Pencil className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف">
+                          <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                        </Button>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
         )}
+
+        <Dialog open={!!editRow} onOpenChange={(o) => !o && setEditRow(null)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">ویرایش پرداخت کاربر</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div className="rounded border p-2 bg-muted/30 text-persian text-xs">
+                {editRow?.card_name} — {editRow?.first_name} {editRow?.last_name}
+              </div>
+              <div>
+                <Label className="text-persian text-xs">مبلغ (تومان)</Label>
+                <Input
+                  value={formatThousands(editForm.amount)}
+                  onChange={(e) => setEditForm(f => ({ ...f, amount: unformatThousands(e.target.value) }))}
+                  inputMode="decimal" dir="ltr"
+                />
+              </div>
+              <div>
+                <Label className="text-persian text-xs">وضعیت</Label>
+                <Select value={editForm.status} onValueChange={(v) => setEditForm(f => ({ ...f, status: v }))}>
+                  <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
+                    <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
+                    <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-persian text-xs">یادداشت</Label>
+                <Input value={editForm.note} onChange={(e) => setEditForm(f => ({ ...f, note: e.target.value }))} className="text-persian" />
+              </div>
+              <label className="flex items-center gap-2 text-persian text-sm cursor-pointer">
+                <Checkbox checked={editForm.to_treasury} onCheckedChange={(v) => setEditForm(f => ({ ...f, to_treasury: !!v }))} />
+                واریز به صندوق ترخیصان (در صورت تأیید)
+              </label>
+              <p className="text-[11px] text-muted-foreground text-persian">
+                با ذخیره، ردیف صندوق متناسب با تغییرات همگام می‌شود.
+              </p>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditRow(null)} className="text-persian">انصراف</Button>
+              <Button onClick={saveEdit} disabled={editSaving} className="text-persian">
+                {editSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!confirmDel} onOpenChange={(o) => !o && setConfirmDel(null)}>
+          <DialogContent className="panel-fa max-w-sm">
+            <DialogHeader><DialogTitle className="text-persian">حذف پرداخت</DialogTitle></DialogHeader>
+            <div className="text-persian text-sm">
+              این پرداخت حذف شود؟ تأثیر آن از صندوق ترخیصان نیز برداشته می‌شود.
+              {confirmDel && (
+                <div className="mt-2 rounded border p-2 bg-muted/30 text-xs">
+                  {confirmDel.card_name} — {confirmDel.first_name} {confirmDel.last_name} — <span className="tabular-nums">{fmtToman(confirmDel.amount_irt)}</span>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setConfirmDel(null)} className="text-persian">انصراف</Button>
+              <Button variant="destructive" onClick={doDelete} className="text-persian">حذف</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
 
         <Dialog open={!!preview} onOpenChange={(v) => { if (!v) setPreview(null); }}>
           <DialogContent className="max-w-2xl panel-fa">
@@ -2476,7 +2623,18 @@ const AdminPayCardDialog = ({
             </div>
             <div className="space-y-1">
               <Label className="text-persian text-xs">مبلغ پرداخت (تومان)</Label>
-              <Input value={amount} onChange={(e) => setAmount(normDigits(e.target.value))} inputMode="decimal" dir="ltr" />
+              <Input
+                value={formatThousands(amount)}
+                onChange={(e) => setAmount(unformatThousands(e.target.value))}
+                inputMode="decimal"
+                dir="ltr"
+                placeholder="0"
+              />
+              {amt > 0 && (
+                <div className="text-[11px] text-muted-foreground tabular-nums">
+                  {amt.toLocaleString("fa-IR")} تومان
+                </div>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -2509,7 +2667,7 @@ const AdminPayCardDialog = ({
 interface AdminCardPayment {
   id: number; card_id: number; card_name: string;
   amount_irt: number; pay_date_gregorian: string | null; pay_date_jalali: string | null;
-  receipt_path: string | null; note: string | null; status: string; created_at: string;
+  receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string;
 }
 const CardAdminPaymentsPanel = ({
   toast, cards, onChanged,
@@ -2523,6 +2681,47 @@ const CardAdminPaymentsPanel = ({
   const [cardFilter, setCardFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [preview, setPreview] = useState<string | null>(null);
+  const [editRow, setEditRow] = useState<AdminCardPayment | null>(null);
+  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; from_treasury: boolean; pay_date_gregorian: string }>({
+    amount: "", note: "", status: "confirmed", from_treasury: true, pay_date_gregorian: "",
+  });
+  const [editSaving, setEditSaving] = useState(false);
+  const [confirmDel, setConfirmDel] = useState<AdminCardPayment | null>(null);
+
+  const openEdit = (p: AdminCardPayment) => {
+    setEditRow(p);
+    setEditForm({
+      amount: String(p.amount_irt || ""),
+      note: p.note || "",
+      status: p.status || "confirmed",
+      from_treasury: (p.from_treasury ?? 0) === 1,
+      pay_date_gregorian: p.pay_date_gregorian || "",
+    });
+  };
+  const saveEdit = async () => {
+    if (!editRow) return;
+    const amt = parseFloat(unformatThousands(editForm.amount));
+    if (!amt || amt <= 0) { toast({ title: "مبلغ نامعتبر", variant: "destructive" }); return; }
+    setEditSaving(true);
+    try {
+      await api("/api/admin/card-admin-payment-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: editRow.id,
+          amount_irt: amt,
+          note: editForm.note,
+          status: editForm.status,
+          from_treasury: editForm.from_treasury ? 1 : 0,
+          pay_date_gregorian: editForm.pay_date_gregorian,
+        }),
+      });
+      toast({ title: "ذخیره شد" });
+      setEditRow(null);
+      load(); onChanged();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setEditSaving(false); }
+  };
 
   const load = useCallback(() => {
     setLoading(true);
@@ -2548,11 +2747,12 @@ const CardAdminPaymentsPanel = ({
       load(); onChanged();
     } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
   };
-  const remove = async (id: number) => {
-    if (!confirm("حذف این پرداخت؟")) return;
+  const doDelete = async () => {
+    if (!confirmDel) return;
     try {
-      await api("/api/admin/card-admin-payment-delete.php", { method: "POST", body: JSON.stringify({ id }) });
+      await api("/api/admin/card-admin-payment-delete.php", { method: "POST", body: JSON.stringify({ id: confirmDel.id }) });
       toast({ title: "حذف شد" });
+      setConfirmDel(null);
       load(); onChanged();
     } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
   };
@@ -2640,7 +2840,8 @@ const CardAdminPaymentsPanel = ({
                       <div className="flex gap-1">
                         {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600">✓</Button>}
                         {p.status !== "rejected" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "rejected")} title="رد" className="text-destructive">✗</Button>}
-                        <Button size="sm" variant="ghost" onClick={() => remove(p.id)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش"><Pencil className="w-4 h-4" /></Button>
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -2649,6 +2850,70 @@ const CardAdminPaymentsPanel = ({
             </Table>
           </div>
         )}
+        <Dialog open={!!editRow} onOpenChange={(o) => !o && setEditRow(null)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">ویرایش پرداخت کارت</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div className="rounded border p-2 bg-muted/30 text-persian text-xs">{editRow?.card_name}</div>
+              <div>
+                <Label className="text-persian text-xs">مبلغ (تومان)</Label>
+                <Input
+                  value={formatThousands(editForm.amount)}
+                  onChange={(e) => setEditForm(f => ({ ...f, amount: unformatThousands(e.target.value) }))}
+                  inputMode="decimal" dir="ltr"
+                />
+              </div>
+              <div>
+                <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
+                <Input type="date" value={editForm.pay_date_gregorian} onChange={(e) => setEditForm(f => ({ ...f, pay_date_gregorian: e.target.value }))} dir="ltr" />
+              </div>
+              <div>
+                <Label className="text-persian text-xs">وضعیت</Label>
+                <Select value={editForm.status} onValueChange={(v) => setEditForm(f => ({ ...f, status: v }))}>
+                  <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
+                    <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
+                    <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-persian text-xs">یادداشت</Label>
+                <Input value={editForm.note} onChange={(e) => setEditForm(f => ({ ...f, note: e.target.value }))} className="text-persian" />
+              </div>
+              <label className="flex items-center gap-2 text-persian text-sm cursor-pointer">
+                <Checkbox checked={editForm.from_treasury} onCheckedChange={(v) => setEditForm(f => ({ ...f, from_treasury: !!v }))} />
+                از صندوق ترخیصان برداشت شود
+              </label>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditRow(null)} className="text-persian">انصراف</Button>
+              <Button onClick={saveEdit} disabled={editSaving} className="text-persian">
+                {editSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!confirmDel} onOpenChange={(o) => !o && setConfirmDel(null)}>
+          <DialogContent className="panel-fa max-w-sm">
+            <DialogHeader><DialogTitle className="text-persian">حذف پرداخت کارت</DialogTitle></DialogHeader>
+            <div className="text-persian text-sm">
+              این پرداخت حذف شود؟ اگر از صندوق ترخیصان بوده، تأثیر آن نیز برگشت می‌خورد.
+              {confirmDel && (
+                <div className="mt-2 rounded border p-2 bg-muted/30 text-xs">
+                  {confirmDel.card_name} — <span className="tabular-nums">{fmtToman(confirmDel.amount_irt)}</span>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setConfirmDel(null)} className="text-persian">انصراف</Button>
+              <Button variant="destructive" onClick={doDelete} className="text-persian">حذف</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Dialog open={!!preview} onOpenChange={(v) => !v && setPreview(null)}>
           <DialogContent className="max-w-2xl panel-fa">
             <DialogHeader><DialogTitle className="text-persian">رسید</DialogTitle></DialogHeader>

@@ -1950,7 +1950,7 @@ const AllPaymentsPanel = ({
       });
       toast({ title: "ذخیره شد" });
       setEditRow(null);
-      load();
+      load(); onChanged?.();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     } finally { setEditSaving(false); }
@@ -1964,7 +1964,7 @@ const AllPaymentsPanel = ({
       });
       toast({ title: "حذف شد" });
       setConfirmDel(null);
-      load();
+      load(); onChanged?.();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     }

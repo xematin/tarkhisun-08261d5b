@@ -18,12 +18,12 @@ type Port = {
 };
 
 const ports: (Port & { labelOffsetX?: string })[] = [
-  { name: "بندر انزلی", short: "انزلی", x: 36, y: 18, labelSide: "top", delay: "0s" },
-  { name: "بندر امام خمینی", short: "امام خمینی", x: 23, y: 52, labelSide: "left", delay: "0.4s" },
-  { name: "بندر بوشهر", short: "بوشهر", x: 34, y: 64, labelSide: "left", delay: "0.8s" },
-  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 60, y: 73, labelSide: "top", delay: "1.2s" },
-  { name: "بندر جاسک", short: "جاسک", x: 70, y: 78, labelSide: "bottom", delay: "1.6s" },
-  { name: "بندر چابهار", short: "چابهار", x: 82, y: 78, labelSide: "right", delay: "2s", labelOffsetX: "-110%" },
+  { name: "بندر انزلی", short: "انزلی", x: 31.5, y: 25, labelSide: "top", delay: "0s" },
+  { name: "بندر امام خمینی", short: "امام خمینی", x: 25.5, y: 50, labelSide: "left", delay: "0.4s" },
+  { name: "بندر بوشهر", short: "بوشهر", x: 30, y: 68, labelSide: "left", delay: "0.8s" },
+  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 57, y: 75, labelSide: "top", delay: "1.2s" },
+  { name: "بندر جاسک", short: "جاسک", x: 66, y: 80, labelSide: "bottom", delay: "1.6s" },
+  { name: "بندر چابهار", short: "چابهار", x: 77.5, y: 78, labelSide: "right", delay: "2s", labelOffsetX: "-110%" },
 ];
 
 const labelPositionClasses: Record<Port["labelSide"], string> = {
@@ -100,10 +100,10 @@ const PortsMapSection = () => {
           {ports.map((p) => (
             <div
               key={`list-${p.name}`}
-              className="glass-card !bg-white/8 !border-white/15 !rounded-2xl p-3 flex items-center gap-3"
+              className="!bg-white/95 !border-white/40 border rounded-2xl p-3 flex items-center gap-3 shadow-sm"
             >
               <span className="w-2.5 h-2.5 rounded-full bg-accent-light shadow-[0_0_12px_hsl(var(--accent-light)/0.8)] flex-shrink-0" />
-              <span className="text-white/90 text-sm text-persian leading-tight">
+              <span className="text-slate-900 text-sm text-persian leading-tight">
                 <strong>{p.name}</strong>
               </span>
             </div>

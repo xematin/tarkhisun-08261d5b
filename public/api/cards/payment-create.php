@@ -55,9 +55,18 @@ if (!empty($_FILES['receipt']) && is_array($_FILES['receipt']) && (int)$_FILES['
 
 $now = date('Y-m-d H:i:s');
 $ins = $pdo->prepare(
-    "INSERT INTO ts_card_payments (card_id, card_user_id, amount_irt, receipt_path, note, status, created_at)
-     VALUES (?, ?, ?, ?, ?, 'confirmed', ?)"
+    "INSERT INTO ts_card_payments (card_id, card_user_id, amount_irt, receipt_path, note, status, to_treasury, created_at)
+     VALUES (?, ?, ?, ?, ?, 'confirmed', 1, ?)"
 );
 $ins->execute([$card_id, (int)$u['id'], $amount, $receiptPath, $note !== '' ? $note : null, $now]);
+$paymentId = (int)$pdo->lastInsertId();
 
-ts_json(200, ['ok' => true, 'id' => (int)$pdo->lastInsertId(), 'receipt_path' => $receiptPath]);
+// Treasury: deposit (cash IN)
+ts_treasury_log(
+    'in', $amount, $card_id, 'user_payment', $paymentId,
+    'پرداخت کاربر #' . (int)$u['id'] . ($note !== '' ? ' — ' . $note : ''),
+    $now
+);
+
+ts_json(200, ['ok' => true, 'id' => $paymentId, 'receipt_path' => $receiptPath]);
+

@@ -1549,11 +1549,22 @@ interface AdminPayment {
   receipt_path: string | null;
   note: string | null;
   status: string;
+  to_treasury?: number;
   created_at: string;
   first_name: string;
   last_name: string;
   username: string;
 }
+
+// Format an already-normalized digit string with thousand separators (Latin commas, LTR-safe).
+const formatThousands = (raw: string): string => {
+  if (!raw) return "";
+  const cleaned = normDigits(raw);
+  const [intP, decP] = cleaned.split(".");
+  const withSep = intP.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return decP !== undefined ? `${withSep}.${decP}` : withSep;
+};
+const unformatThousands = (raw: string): string => normDigits(raw);
 
 const toJalali = (iso: string): string => {
   if (!iso) return "—";

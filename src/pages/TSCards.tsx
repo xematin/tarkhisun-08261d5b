@@ -1910,6 +1910,62 @@ const AllPaymentsPanel = ({
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
+  const [editRow, setEditRow] = useState<AdminPayment | null>(null);
+  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; to_treasury: boolean }>({
+    amount: "", note: "", status: "confirmed", to_treasury: true,
+  });
+  const [editSaving, setEditSaving] = useState(false);
+  const [confirmDel, setConfirmDel] = useState<AdminPayment | null>(null);
+
+  const openEdit = (p: AdminPayment) => {
+    setEditRow(p);
+    setEditForm({
+      amount: String(p.amount_irt || ""),
+      note: p.note || "",
+      status: p.status || "confirmed",
+      to_treasury: (p.to_treasury ?? 1) === 1,
+    });
+  };
+  const saveEdit = async () => {
+    if (!editRow) return;
+    const amt = parseFloat(unformatThousands(editForm.amount));
+    if (!amt || amt <= 0) {
+      toast({ title: "مبلغ نامعتبر", variant: "destructive" });
+      return;
+    }
+    setEditSaving(true);
+    try {
+      await api("/api/admin/card-user-payment-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: editRow.id,
+          amount_irt: amt,
+          note: editForm.note,
+          status: editForm.status,
+          to_treasury: editForm.to_treasury ? 1 : 0,
+        }),
+      });
+      toast({ title: "ذخیره شد" });
+      setEditRow(null);
+      load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setEditSaving(false); }
+  };
+  const doDelete = async () => {
+    if (!confirmDel) return;
+    try {
+      await api("/api/admin/card-user-payment-delete.php", {
+        method: "POST",
+        body: JSON.stringify({ id: confirmDel.id }),
+      });
+      toast({ title: "حذف شد" });
+      setConfirmDel(null);
+      load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
 
   const load = useCallback(() => {
     setLoading(true);

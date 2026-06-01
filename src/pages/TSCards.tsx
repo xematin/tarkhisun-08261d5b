@@ -442,12 +442,17 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         <KotajItemsSearchPanel toast={toast} cards={items} />
       </TabsContent>
 
+      <TabsContent value="treasury" className="mt-0">
+        <TreasuryPanel toast={toast} />
+      </TabsContent>
+
       <TabsContent value="reports" className="mt-0">
         <ReportsSection toast={toast} />
       </TabsContent>
     </Tabs>
   );
 };
+
 
 interface DialogProps {
   open: boolean;

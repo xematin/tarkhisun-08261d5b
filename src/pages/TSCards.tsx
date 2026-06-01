@@ -445,7 +445,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
       </TabsContent>
 
       <TabsContent value="treasury" className="mt-0">
-        <TreasuryPanel toast={toast} />
+        <TreasuryPanel toast={toast} refreshKey={treasuryKey} />
       </TabsContent>
 
       <TabsContent value="reports" className="mt-0">

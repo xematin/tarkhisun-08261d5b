@@ -2433,9 +2433,52 @@ const AdminPayCardDialog = ({
               </div>
             </div>
             <div className="space-y-1">
+              <Label className="text-persian text-xs">منبع پرداخت</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFromTreasury(true)}
+                  className={`rounded-lg border p-2 text-right transition-all ${
+                    fromTreasury
+                      ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                      : "border-border bg-background hover:bg-muted/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                    <Vault className="w-4 h-4" /> از صندوق ترخیصان
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-1 tabular-nums">
+                    موجودی: {treasuryBal === null ? "…" : fmtToman(treasuryBal)}
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFromTreasury(false)}
+                  className={`rounded-lg border p-2 text-right transition-all ${
+                    !fromTreasury
+                      ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                      : "border-border bg-background hover:bg-muted/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                    <Banknote className="w-4 h-4" /> پرداخت بیرونی
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-1">
+                    بدون اثر روی صندوق
+                  </div>
+                </button>
+              </div>
+              {fromTreasury && treasuryBal !== null && amt > treasuryBal && (
+                <div className="text-[11px] text-destructive text-persian mt-1">
+                  مبلغ از موجودی صندوق بیشتر است.
+                </div>
+              )}
+            </div>
+            <div className="space-y-1">
               <Label className="text-persian text-xs">مبلغ پرداخت (تومان)</Label>
               <Input value={amount} onChange={(e) => setAmount(normDigits(e.target.value))} inputMode="decimal" dir="ltr" />
             </div>
+
             <div className="space-y-1">
               <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
               <Input type="date" value={dateG} onChange={(e) => setDateG(e.target.value)} dir="ltr" />

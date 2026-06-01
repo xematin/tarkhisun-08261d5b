@@ -234,10 +234,14 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
         <TabsTrigger value="kotaj-items" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           کوتاژ‌ها
         </TabsTrigger>
+        <TabsTrigger value="treasury" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+          <Vault className="w-3.5 h-3.5 ml-1 inline" /> بانک ترخیصان
+        </TabsTrigger>
         <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
           گزارش‌گیری
         </TabsTrigger>
       </TabsList>
+
 
       <TabsContent value="cards" className="mt-0">
         <Card>

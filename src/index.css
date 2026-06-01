@@ -197,6 +197,11 @@
   .btn-ai::before {
     content: '';
     @apply absolute inset-0 bg-gradient-to-r from-accent-light to-accent opacity-0 hover:opacity-100 transition-opacity duration-300;
+    z-index: 0;
+  }
+  .btn-ai > * {
+    position: relative;
+    z-index: 1;
   }
 
   /* Card Styles */

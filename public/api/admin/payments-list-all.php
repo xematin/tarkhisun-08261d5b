@@ -9,7 +9,7 @@ $rows = [];
 try {
     $st = $pdo->query(
         "SELECT p.id, p.card_id, p.card_user_id, p.amount_irt, p.receipt_path,
-                p.note, p.status, p.created_at,
+                p.note, p.status, p.to_treasury, p.created_at,
                 c.name AS card_name,
                 u.first_name, u.last_name, u.username
          FROM ts_card_payments p

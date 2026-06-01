@@ -2386,6 +2386,9 @@ const AdminPayCardDialog = ({
   const submit = async () => {
     if (!card) return;
     if (amt <= 0) return toast({ title: "مبلغ پرداخت را وارد کنید", variant: "destructive" });
+    if (fromTreasury && treasuryBal !== null && amt > treasuryBal) {
+      return toast({ title: "موجودی صندوق کافی نیست", description: fmtToman(treasuryBal), variant: "destructive" });
+    }
     setBusy(true);
     try {
       const fd = new FormData();
@@ -2395,6 +2398,8 @@ const AdminPayCardDialog = ({
       fd.append("pay_date_gregorian", dateG);
       if (jalali) fd.append("pay_date_jalali", jalali);
       if (file) fd.append("receipt", file);
+      fd.append("from_treasury", fromTreasury ? "1" : "0");
+
       const res = await fetch("/api/admin/card-debt-pay.php", { method: "POST", credentials: "same-origin", body: fd });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error((data as any).error || `HTTP ${res.status}`);

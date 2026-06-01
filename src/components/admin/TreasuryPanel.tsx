@@ -416,9 +416,14 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
         <CardHeader>
           <div className="flex items-center justify-between flex-wrap gap-3">
             <CardTitle className="text-persian text-base">دفتر کل صندوق</CardTitle>
-            <Button size="sm" variant="outline" onClick={downloadCsv}>
-              <Download className="w-4 h-4 ml-1" /> CSV
-            </Button>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" onClick={downloadCsv}>
+                <Download className="w-4 h-4 ml-1" /> CSV
+              </Button>
+              <Button size="sm" variant="outline" onClick={downloadPdf} disabled={ledger.length === 0}>
+                <Download className="w-4 h-4 ml-1" /> PDF
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">

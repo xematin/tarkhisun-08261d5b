@@ -2847,6 +2847,70 @@ const CardAdminPaymentsPanel = ({
             </Table>
           </div>
         )}
+        <Dialog open={!!editRow} onOpenChange={(o) => !o && setEditRow(null)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">ویرایش پرداخت کارت</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div className="rounded border p-2 bg-muted/30 text-persian text-xs">{editRow?.card_name}</div>
+              <div>
+                <Label className="text-persian text-xs">مبلغ (تومان)</Label>
+                <Input
+                  value={formatThousands(editForm.amount)}
+                  onChange={(e) => setEditForm(f => ({ ...f, amount: unformatThousands(e.target.value) }))}
+                  inputMode="decimal" dir="ltr"
+                />
+              </div>
+              <div>
+                <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
+                <Input type="date" value={editForm.pay_date_gregorian} onChange={(e) => setEditForm(f => ({ ...f, pay_date_gregorian: e.target.value }))} dir="ltr" />
+              </div>
+              <div>
+                <Label className="text-persian text-xs">وضعیت</Label>
+                <Select value={editForm.status} onValueChange={(v) => setEditForm(f => ({ ...f, status: v }))}>
+                  <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
+                    <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
+                    <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-persian text-xs">یادداشت</Label>
+                <Input value={editForm.note} onChange={(e) => setEditForm(f => ({ ...f, note: e.target.value }))} className="text-persian" />
+              </div>
+              <label className="flex items-center gap-2 text-persian text-sm cursor-pointer">
+                <Checkbox checked={editForm.from_treasury} onCheckedChange={(v) => setEditForm(f => ({ ...f, from_treasury: !!v }))} />
+                از صندوق ترخیصان برداشت شود
+              </label>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditRow(null)} className="text-persian">انصراف</Button>
+              <Button onClick={saveEdit} disabled={editSaving} className="text-persian">
+                {editSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!confirmDel} onOpenChange={(o) => !o && setConfirmDel(null)}>
+          <DialogContent className="panel-fa max-w-sm">
+            <DialogHeader><DialogTitle className="text-persian">حذف پرداخت کارت</DialogTitle></DialogHeader>
+            <div className="text-persian text-sm">
+              این پرداخت حذف شود؟ اگر از صندوق ترخیصان بوده، تأثیر آن نیز برگشت می‌خورد.
+              {confirmDel && (
+                <div className="mt-2 rounded border p-2 bg-muted/30 text-xs">
+                  {confirmDel.card_name} — <span className="tabular-nums">{fmtToman(confirmDel.amount_irt)}</span>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setConfirmDel(null)} className="text-persian">انصراف</Button>
+              <Button variant="destructive" onClick={doDelete} className="text-persian">حذف</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Dialog open={!!preview} onOpenChange={(v) => !v && setPreview(null)}>
           <DialogContent className="max-w-2xl panel-fa">
             <DialogHeader><DialogTitle className="text-persian">رسید</DialogTitle></DialogHeader>

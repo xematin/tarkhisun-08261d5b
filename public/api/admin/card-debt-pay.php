@@ -52,9 +52,18 @@ if (!empty($_FILES['receipt']) && is_array($_FILES['receipt']) && (int)$_FILES['
 
 $now = date('Y-m-d H:i:s');
 $ins = $pdo->prepare(
+// If paying from treasury, ensure sufficient balance
+if ($fromTreasury && $status === 'confirmed') {
+    $bal = ts_treasury_balance();
+    if ($amount > $bal + 0.0001) {
+        ts_json_error(400, 'موجودی صندوق ترخیصان کافی نیست (موجودی فعلی: ' . number_format($bal, 0) . ' تومان)');
+    }
+}
+
+$ins = $pdo->prepare(
     "INSERT INTO ts_card_admin_payments
-     (card_id, admin_id, amount_irt, pay_date_gregorian, pay_date_jalali, receipt_path, note, status, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+     (card_id, admin_id, amount_irt, pay_date_gregorian, pay_date_jalali, receipt_path, note, status, from_treasury, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 );
 $ins->execute([
     $card_id,
@@ -65,12 +74,30 @@ $ins->execute([
     $receiptPath,
     $note !== '' ? $note : null,
     $status,
+    $fromTreasury,
     $now, $now,
 ]);
+$paymentId = (int)$pdo->lastInsertId();
 
 ts_card_alloc_log(
     $card_id, null, 'card_balance', null, $amount, 'IRT', null,
     'پرداخت ادمین به کارت «' . $card['name'] . '» — ' . number_format($amount, 0) . ' تومان'
+    . ($fromTreasury ? ' (از صندوق ترخیصان)' : '')
 );
 
-ts_json(200, ['ok' => true, 'id' => (int)$pdo->lastInsertId(), 'receipt_path' => $receiptPath]);
+// Treasury: withdraw (cash OUT) when paid from treasury and confirmed
+if ($fromTreasury && $status === 'confirmed') {
+    ts_treasury_log(
+        'out', $amount, $card_id, 'admin_payment', $paymentId,
+        'پرداخت به کارت «' . $card['name'] . '»' . ($note !== '' ? ' — ' . $note : ''),
+        $payG !== '' ? ($payG . ' ' . date('H:i:s')) : $now
+    );
+}
+
+ts_json(200, [
+    'ok' => true,
+    'id' => $paymentId,
+    'receipt_path' => $receiptPath,
+    'treasury_balance' => ts_treasury_balance(),
+]);
+

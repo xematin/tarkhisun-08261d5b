@@ -2352,10 +2352,19 @@ const AdminPayCardDialog = ({
   const [dateG, setDateG] = useState<string>(() => new Date().toISOString().slice(0, 10));
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
+  const [fromTreasury, setFromTreasury] = useState<boolean>(true);
+  const [treasuryBal, setTreasuryBal] = useState<number | null>(null);
 
   useEffect(() => {
-    if (card) { setAmount(""); setNote(""); setDateG(new Date().toISOString().slice(0, 10)); setFile(null); }
+    if (card) {
+      setAmount(""); setNote(""); setDateG(new Date().toISOString().slice(0, 10));
+      setFile(null); setFromTreasury(true);
+      fetch("/api/admin/treasury-summary.php", { credentials: "same-origin" })
+        .then((r) => r.json()).then((d) => setTreasuryBal(typeof d?.balance === "number" ? d.balance : 0))
+        .catch(() => setTreasuryBal(null));
+    }
   }, [card]);
+
 
   const bal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
   const paid = card?.admin_paid_irt || 0;

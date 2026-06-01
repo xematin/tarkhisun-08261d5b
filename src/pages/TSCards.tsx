@@ -2664,7 +2664,7 @@ const AdminPayCardDialog = ({
 interface AdminCardPayment {
   id: number; card_id: number; card_name: string;
   amount_irt: number; pay_date_gregorian: string | null; pay_date_jalali: string | null;
-  receipt_path: string | null; note: string | null; status: string; created_at: string;
+  receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string;
 }
 const CardAdminPaymentsPanel = ({
   toast, cards, onChanged,
@@ -2678,6 +2678,47 @@ const CardAdminPaymentsPanel = ({
   const [cardFilter, setCardFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [preview, setPreview] = useState<string | null>(null);
+  const [editRow, setEditRow] = useState<AdminCardPayment | null>(null);
+  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; from_treasury: boolean; pay_date_gregorian: string }>({
+    amount: "", note: "", status: "confirmed", from_treasury: true, pay_date_gregorian: "",
+  });
+  const [editSaving, setEditSaving] = useState(false);
+  const [confirmDel, setConfirmDel] = useState<AdminCardPayment | null>(null);
+
+  const openEdit = (p: AdminCardPayment) => {
+    setEditRow(p);
+    setEditForm({
+      amount: String(p.amount_irt || ""),
+      note: p.note || "",
+      status: p.status || "confirmed",
+      from_treasury: (p.from_treasury ?? 0) === 1,
+      pay_date_gregorian: p.pay_date_gregorian || "",
+    });
+  };
+  const saveEdit = async () => {
+    if (!editRow) return;
+    const amt = parseFloat(unformatThousands(editForm.amount));
+    if (!amt || amt <= 0) { toast({ title: "مبلغ نامعتبر", variant: "destructive" }); return; }
+    setEditSaving(true);
+    try {
+      await api("/api/admin/card-admin-payment-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: editRow.id,
+          amount_irt: amt,
+          note: editForm.note,
+          status: editForm.status,
+          from_treasury: editForm.from_treasury ? 1 : 0,
+          pay_date_gregorian: editForm.pay_date_gregorian,
+        }),
+      });
+      toast({ title: "ذخیره شد" });
+      setEditRow(null);
+      load(); onChanged();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setEditSaving(false); }
+  };
 
   const load = useCallback(() => {
     setLoading(true);
@@ -2703,11 +2744,12 @@ const CardAdminPaymentsPanel = ({
       load(); onChanged();
     } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
   };
-  const remove = async (id: number) => {
-    if (!confirm("حذف این پرداخت؟")) return;
+  const doDelete = async () => {
+    if (!confirmDel) return;
     try {
-      await api("/api/admin/card-admin-payment-delete.php", { method: "POST", body: JSON.stringify({ id }) });
+      await api("/api/admin/card-admin-payment-delete.php", { method: "POST", body: JSON.stringify({ id: confirmDel.id }) });
       toast({ title: "حذف شد" });
+      setConfirmDel(null);
       load(); onChanged();
     } catch (e) { toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }); }
   };

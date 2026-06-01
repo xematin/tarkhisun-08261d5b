@@ -2244,6 +2244,72 @@ const AllPaymentsPanel = ({
           </div>
         )}
 
+        <Dialog open={!!editRow} onOpenChange={(o) => !o && setEditRow(null)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">ویرایش پرداخت کاربر</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div className="rounded border p-2 bg-muted/30 text-persian text-xs">
+                {editRow?.card_name} — {editRow?.first_name} {editRow?.last_name}
+              </div>
+              <div>
+                <Label className="text-persian text-xs">مبلغ (تومان)</Label>
+                <Input
+                  value={formatThousands(editForm.amount)}
+                  onChange={(e) => setEditForm(f => ({ ...f, amount: unformatThousands(e.target.value) }))}
+                  inputMode="decimal" dir="ltr"
+                />
+              </div>
+              <div>
+                <Label className="text-persian text-xs">وضعیت</Label>
+                <Select value={editForm.status} onValueChange={(v) => setEditForm(f => ({ ...f, status: v }))}>
+                  <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
+                    <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
+                    <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-persian text-xs">یادداشت</Label>
+                <Input value={editForm.note} onChange={(e) => setEditForm(f => ({ ...f, note: e.target.value }))} className="text-persian" />
+              </div>
+              <label className="flex items-center gap-2 text-persian text-sm cursor-pointer">
+                <Checkbox checked={editForm.to_treasury} onCheckedChange={(v) => setEditForm(f => ({ ...f, to_treasury: !!v }))} />
+                واریز به صندوق ترخیصان (در صورت تأیید)
+              </label>
+              <p className="text-[11px] text-muted-foreground text-persian">
+                با ذخیره، ردیف صندوق متناسب با تغییرات همگام می‌شود.
+              </p>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditRow(null)} className="text-persian">انصراف</Button>
+              <Button onClick={saveEdit} disabled={editSaving} className="text-persian">
+                {editSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!confirmDel} onOpenChange={(o) => !o && setConfirmDel(null)}>
+          <DialogContent className="panel-fa max-w-sm">
+            <DialogHeader><DialogTitle className="text-persian">حذف پرداخت</DialogTitle></DialogHeader>
+            <div className="text-persian text-sm">
+              این پرداخت حذف شود؟ تأثیر آن از صندوق ترخیصان نیز برداشته می‌شود.
+              {confirmDel && (
+                <div className="mt-2 rounded border p-2 bg-muted/30 text-xs">
+                  {confirmDel.card_name} — {confirmDel.first_name} {confirmDel.last_name} — <span className="tabular-nums">{fmtToman(confirmDel.amount_irt)}</span>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setConfirmDel(null)} className="text-persian">انصراف</Button>
+              <Button variant="destructive" onClick={doDelete} className="text-persian">حذف</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+
         <Dialog open={!!preview} onOpenChange={(v) => { if (!v) setPreview(null); }}>
           <DialogContent className="max-w-2xl panel-fa">
             <DialogHeader>

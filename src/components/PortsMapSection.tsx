@@ -100,10 +100,10 @@ const PortsMapSection = () => {
           {ports.map((p) => (
             <div
               key={`list-${p.name}`}
-              className="glass-card !bg-white/8 !border-white/15 !rounded-2xl p-3 flex items-center gap-3"
+              className="!bg-white/95 !border-white/40 border rounded-2xl p-3 flex items-center gap-3 shadow-sm"
             >
               <span className="w-2.5 h-2.5 rounded-full bg-accent-light shadow-[0_0_12px_hsl(var(--accent-light)/0.8)] flex-shrink-0" />
-              <span className="text-white/90 text-sm text-persian leading-tight">
+              <span className="text-slate-900 text-sm text-persian leading-tight">
                 <strong>{p.name}</strong>
               </span>
             </div>

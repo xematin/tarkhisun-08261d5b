@@ -429,7 +429,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
       </TabsContent>
 
       <TabsContent value="card-payments" className="mt-0">
-        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => void load()} />
+        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
       </TabsContent>
 
       <TabsContent value="users" className="mt-0">

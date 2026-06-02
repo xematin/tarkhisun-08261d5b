@@ -34,11 +34,21 @@ try {
 }
 
 $total = 0.0; $confirmed = 0.0;
+$treasuryPaymentIds = [];
+try {
+    $ids = array_column($rows, 'id');
+    if ($ids) {
+        $place = implode(',', array_fill(0, count($ids), '?'));
+        $lg = $pdo->prepare("SELECT DISTINCT source_id FROM ts_treasury_ledger WHERE source_type='admin_payment' AND source_id IN ($place)");
+        $lg->execute($ids);
+        foreach ($lg->fetchAll() as $lr) $treasuryPaymentIds[(int)$lr['source_id']] = true;
+    }
+} catch (Throwable $e) {}
 foreach ($rows as &$r) {
     $r['id'] = (int)$r['id'];
     $r['card_id'] = (int)$r['card_id'];
     $r['amount_irt'] = (float)$r['amount_irt'];
-    $r['from_treasury'] = isset($r['from_treasury']) ? (int)$r['from_treasury'] : 0;
+    $r['from_treasury'] = (isset($treasuryPaymentIds[$r['id']]) || (int)($r['from_treasury'] ?? 0) === 1) ? 1 : 0;
     if (empty($r['pay_date_jalali']) && !empty($r['created_at'])) $r['pay_date_jalali'] = null;
     if (empty($r['pay_date_gregorian']) && !empty($r['created_at'])) $r['pay_date_gregorian'] = substr((string)$r['created_at'], 0, 10);
     $total += $r['amount_irt'];

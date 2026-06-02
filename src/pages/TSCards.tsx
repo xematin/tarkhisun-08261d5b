@@ -1695,20 +1695,21 @@ const UsersManagementPanel = ({
           <CardTitle className="text-persian flex items-center gap-2">
             مدیریت کاربران <Badge variant="secondary">{items.length}</Badge>
           </CardTitle>
-          <div className="flex items-center gap-2">
-            <div className="relative">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="relative flex-1 sm:flex-none">
               <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 value={q}
                 onChange={e => setQ(e.target.value)}
                 placeholder="جستجو..."
-                className="w-56 pr-8 text-persian"
+                className="w-full sm:w-56 pr-8 text-persian"
               />
             </div>
             <Button variant="outline" size="sm" onClick={load} disabled={loading}>
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             </Button>
           </div>
+
         </div>
       </CardHeader>
       <CardContent>

@@ -19,6 +19,7 @@ $cur = $row->fetch();
 if (!$cur) ts_json_error(404, 'یافت نشد');
 
 $curFromTreasury = (int)($cur['from_treasury'] ?? 0) === 1;
+$hasFromTreasuryColumn = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
 if (!$curFromTreasury) {
     try {
         $chk = $pdo->prepare("SELECT 1 FROM ts_treasury_ledger WHERE source_type='admin_payment' AND source_id=? LIMIT 1");
@@ -53,7 +54,7 @@ if (array_key_exists('from_treasury', $body)) {
     if (($ft === 1) !== $curFromTreasury) {
         ts_json_error(400, 'منبع پرداخت بعد از ثبت قابل تغییر نیست');
     }
-    $sets[] = 'from_treasury=?'; $params[] = $ft;
+    if ($hasFromTreasuryColumn) { $sets[] = 'from_treasury=?'; $params[] = $ft; }
 }
 if (!$sets) ts_json_error(400, 'تغییری ارسال نشده');
 
@@ -78,7 +79,7 @@ $pdo->prepare('UPDATE ts_card_admin_payments SET ' . implode(',', $sets) . ' WHE
 $row->execute([$id]);
 $new = $row->fetch();
 ts_treasury_remove_source('admin_payment', $id);
-if ($new && $new['status'] === 'confirmed' && (int)$new['from_treasury'] === 1) {
+if ($new && $new['status'] === 'confirmed' && $targetFromTreasury) {
     $occ = $new['pay_date_gregorian'] ? ($new['pay_date_gregorian'] . ' ' . date('H:i:s')) : ($new['updated_at'] ?? $new['created_at'] ?? date('Y-m-d H:i:s'));
     ts_treasury_log(
         'out', (float)$new['amount_irt'], (int)$new['card_id'], 'admin_payment', $id,

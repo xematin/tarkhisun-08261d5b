@@ -2950,7 +2950,46 @@ const CardAdminPaymentsPanel = ({
             <DialogHeader><DialogTitle className="text-persian">ویرایش پرداخت کارت</DialogTitle></DialogHeader>
             <div className="space-y-3">
               <div className="rounded border p-2 bg-muted/30 text-persian text-xs">{editRow?.card_name}</div>
-              <div>
+
+              <div className="space-y-1">
+                <Label className="text-persian text-xs">منبع پرداخت</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditForm(f => ({ ...f, from_treasury: true }))}
+                    className={`rounded-lg border p-2 text-right transition-all ${
+                      editForm.from_treasury
+                        ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                        : "border-border bg-background hover:bg-muted/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                      <Vault className="w-4 h-4" /> از صندوق ترخیصان
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-1 tabular-nums">
+                      موجودی: {editTreasuryBal === null ? "…" : fmtToman(editTreasuryBal)}
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditForm(f => ({ ...f, from_treasury: false }))}
+                    className={`rounded-lg border p-2 text-right transition-all ${
+                      !editForm.from_treasury
+                        ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                        : "border-border bg-background hover:bg-muted/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                      <Banknote className="w-4 h-4" /> پرداخت بیرونی
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-1">
+                      بدون اثر روی صندوق
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-1">
                 <Label className="text-persian text-xs">مبلغ (تومان)</Label>
                 <Input
                   value={formatThousands(editForm.amount)}
@@ -2958,29 +2997,41 @@ const CardAdminPaymentsPanel = ({
                   inputMode="decimal" dir="ltr"
                 />
               </div>
-              <div>
-                <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
-                <Input type="date" value={editForm.pay_date_gregorian} onChange={(e) => setEditForm(f => ({ ...f, pay_date_gregorian: e.target.value }))} dir="ltr" />
+
+              <div className="space-y-1">
+                <Label className="text-persian text-xs">تاریخ پرداخت (شمسی)</Label>
+                <DatePicker
+                  value={editForm.dateJ ? new DateObject({ date: editForm.dateJ, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa }) : null}
+                  onChange={(d: DateObject | null) => setEditForm(f => ({ ...f, dateJ: d ? d.format("YYYY/MM/DD") : "" }))}
+                  calendar={persian}
+                  locale={persian_fa}
+                  calendarPosition="bottom-right"
+                  format="YYYY/MM/DD"
+                  inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  placeholder="1404/03/12"
+                  containerClassName="w-full"
+                />
+                {editDateG && (
+                  <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">میلادی: {editDateG}</div>
+                )}
               </div>
-              <div>
+
+              <div className="space-y-1">
                 <Label className="text-persian text-xs">وضعیت</Label>
                 <Select value={editForm.status} onValueChange={(v) => setEditForm(f => ({ ...f, status: v }))}>
                   <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="panel-fa">
                     <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
                     <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
                     <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+
+              <div className="space-y-1">
                 <Label className="text-persian text-xs">یادداشت</Label>
                 <Input value={editForm.note} onChange={(e) => setEditForm(f => ({ ...f, note: e.target.value }))} className="text-persian" />
               </div>
-              <label className="flex items-center gap-2 text-persian text-sm cursor-pointer">
-                <Checkbox checked={editForm.from_treasury} onCheckedChange={(v) => setEditForm(f => ({ ...f, from_treasury: !!v }))} />
-                از صندوق ترخیصان برداشت شود
-              </label>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditRow(null)} className="text-persian">انصراف</Button>

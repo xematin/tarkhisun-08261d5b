@@ -2750,21 +2750,47 @@ const CardAdminPaymentsPanel = ({
   const [statusFilter, setStatusFilter] = useState("all");
   const [preview, setPreview] = useState<string | null>(null);
   const [editRow, setEditRow] = useState<AdminCardPayment | null>(null);
-  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; from_treasury: boolean; pay_date_gregorian: string }>({
-    amount: "", note: "", status: "confirmed", from_treasury: true, pay_date_gregorian: "",
+  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; from_treasury: boolean; dateJ: string }>({
+    amount: "", note: "", status: "confirmed", from_treasury: true, dateJ: "",
   });
   const [editSaving, setEditSaving] = useState(false);
+  const [editTreasuryBal, setEditTreasuryBal] = useState<number | null>(null);
   const [confirmDel, setConfirmDel] = useState<AdminCardPayment | null>(null);
+
+  // Gregorian from edit dialog's Jalali
+  const editDateG = (() => {
+    const j = editForm.dateJ || "";
+    const norm = j.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+                  .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+    const m = norm.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (!m) return "";
+    const jy = +m[1], jm = +m[2], jd = +m[3];
+    try {
+      const o = new DateObject({ date: `${jy}/${jm}/${jd}`, format: "YYYY/M/D", calendar: persian }).convert(gregorian);
+      return `${o.year}-${String(o.month.number).padStart(2, "0")}-${String(o.day).padStart(2, "0")}`;
+    } catch { return ""; }
+  })();
 
   const openEdit = (p: AdminCardPayment) => {
     setEditRow(p);
+    // Convert pay_date_gregorian to Jalali for the picker
+    let dj = p.pay_date_jalali || "";
+    if (!dj && p.pay_date_gregorian) {
+      try {
+        const o = new DateObject({ date: p.pay_date_gregorian, format: "YYYY-MM-DD", calendar: gregorian }).convert(persian);
+        dj = o.format("YYYY/MM/DD");
+      } catch { /* ignore */ }
+    }
     setEditForm({
       amount: String(p.amount_irt || ""),
       note: p.note || "",
       status: p.status || "confirmed",
       from_treasury: (p.from_treasury ?? 0) === 1,
-      pay_date_gregorian: p.pay_date_gregorian || "",
+      dateJ: dj,
     });
+    fetch("/api/admin/treasury-summary.php", { credentials: "same-origin" })
+      .then((r) => r.json()).then((d) => setEditTreasuryBal(typeof d?.balance === "number" ? d.balance : 0))
+      .catch(() => setEditTreasuryBal(null));
   };
   const saveEdit = async () => {
     if (!editRow) return;
@@ -2780,7 +2806,8 @@ const CardAdminPaymentsPanel = ({
           note: editForm.note,
           status: editForm.status,
           from_treasury: editForm.from_treasury ? 1 : 0,
-          pay_date_gregorian: editForm.pay_date_gregorian,
+          pay_date_gregorian: editDateG,
+          pay_date_jalali: editForm.dateJ,
         }),
       });
       toast({ title: "ذخیره شد" });

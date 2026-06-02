@@ -6,6 +6,7 @@ ts_admin_require();
 
 $pdo = ts_db();
 ts_ensure_treasury_schema($pdo);
+ts_treasury_backfill($pdo);
 if (!ts_table_exists($pdo, 'ts_treasury_ledger')) {
     if ((int)($_GET['csv'] ?? 0) === 1) {
         header('Content-Type: text/csv; charset=utf-8');

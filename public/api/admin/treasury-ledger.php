@@ -5,6 +5,19 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
+ts_ensure_treasury_schema($pdo);
+if (!ts_table_exists($pdo, 'ts_treasury_ledger')) {
+    if ((int)($_GET['csv'] ?? 0) === 1) {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="treasury-ledger.csv"');
+        echo "\xEF\xBB\xBF";
+        $out = fopen('php://output', 'w');
+        fputcsv($out, ['#','جهت','مبلغ (تومان)','کارت','منبع','کاربر','یادداشت','تاریخ']);
+        fclose($out);
+        exit;
+    }
+    ts_json(200, ['items' => [], 'total' => 0, 'balance' => 0]);
+}
 
 $cardId    = isset($_GET['card_id']) ? (int)$_GET['card_id'] : 0;
 $direction = isset($_GET['direction']) && in_array($_GET['direction'], ['in','out'], true) ? $_GET['direction'] : '';

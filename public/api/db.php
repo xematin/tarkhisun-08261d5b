@@ -51,6 +51,32 @@ function ts_normalize_digits(string $s): string {
     return str_replace($ar, $en, str_replace($fa, $en, $s));
 }
 
+function ts_gregorian_to_jalali(string $date): ?string {
+    $parts = explode('-', substr($date, 0, 10));
+    if (count($parts) !== 3) return null;
+    [$gy, $gm, $gd] = array_map('intval', $parts);
+    if ($gy <= 0 || $gm <= 0 || $gd <= 0) return null;
+    $g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+    $gy2 = ($gm > 2) ? ($gy + 1) : $gy;
+    $days = 355666 + (365 * $gy) + intdiv($gy2 + 3, 4) - intdiv($gy2 + 99, 100) + intdiv($gy2 + 399, 400) + $gd + $g_d_m[$gm - 1];
+    $jy = -1595 + (33 * intdiv($days, 12053));
+    $days %= 12053;
+    $jy += 4 * intdiv($days, 1461);
+    $days %= 1461;
+    if ($days > 365) {
+        $jy += intdiv($days - 1, 365);
+        $days = ($days - 1) % 365;
+    }
+    if ($days < 186) {
+        $jm = 1 + intdiv($days, 31);
+        $jd = 1 + ($days % 31);
+    } else {
+        $jm = 7 + intdiv($days - 186, 30);
+        $jd = 1 + (($days - 186) % 30);
+    }
+    return sprintf('%04d/%02d/%02d', $jy, $jm, $jd);
+}
+
 function ts_valid_phone(string $phone): bool {
     return (bool) preg_match('/^09\d{9}$/', $phone);
 }
@@ -77,6 +103,16 @@ function ts_column_exists(PDO $pdo, string $table, string $column): bool {
         $stmt = $pdo->prepare("SHOW COLUMNS FROM `$table` LIKE ?");
         $stmt->execute([$column]);
         return (bool)$stmt->fetch();
+    } catch (Throwable $e) {
+        return false;
+    }
+}
+
+function ts_table_exists(PDO $pdo, string $table): bool {
+    try {
+        $stmt = $pdo->prepare('SHOW TABLES LIKE ?');
+        $stmt->execute([$table]);
+        return (bool)$stmt->fetchColumn();
     } catch (Throwable $e) {
         return false;
     }
@@ -293,7 +329,7 @@ function ts_treasury_remove_source(string $source_type, int $source_id): void {
     } catch (Throwable $e) {}
 }
 
-function ts_ensure_card_admin_payments_schema(PDO $pdo): void {
+function ts_ensure_card_admin_payments_schema(PDO $pdo): bool {
     try {
         $pdo->exec("CREATE TABLE IF NOT EXISTS ts_card_admin_payments (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -331,8 +367,33 @@ function ts_ensure_card_admin_payments_schema(PDO $pdo): void {
         try { $pdo->exec('ALTER TABLE ts_card_admin_payments ADD INDEX idx_card (card_id)'); } catch (Throwable $e) {}
         try { $pdo->exec('ALTER TABLE ts_card_admin_payments ADD INDEX idx_status (status)'); } catch (Throwable $e) {}
         $pdo->exec('UPDATE ts_card_admin_payments SET created_at = COALESCE(created_at, NOW()), updated_at = COALESCE(updated_at, created_at, NOW()) WHERE created_at IS NULL OR updated_at IS NULL');
+        return true;
     } catch (Throwable $e) {
-        ts_json_error(500, 'خطا در آماده‌سازی جدول پرداختی‌های کارت', $e->getMessage());
+        return false;
+    }
+}
+
+function ts_ensure_treasury_schema(PDO $pdo): bool {
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS ts_treasury_ledger (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            direction ENUM('in','out') NOT NULL,
+            amount_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+            card_id INT NULL,
+            source_type ENUM('user_payment','admin_payment','manual_adjust') NOT NULL,
+            source_id BIGINT NULL,
+            admin_id INT NULL,
+            note VARCHAR(500) NULL,
+            occurred_at DATETIME NOT NULL,
+            created_at DATETIME NOT NULL,
+            INDEX idx_card (card_id),
+            INDEX idx_dir (direction),
+            INDEX idx_src (source_type, source_id),
+            INDEX idx_occurred (occurred_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        return true;
+    } catch (Throwable $e) {
+        return false;
     }
 }
 

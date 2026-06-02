@@ -6,6 +6,9 @@ ts_admin_require();
 
 $pdo = ts_db();
 ts_ensure_card_admin_payments_schema($pdo);
+if (!ts_table_exists($pdo, 'ts_card_admin_payments')) {
+    ts_json(200, ['items' => [], 'totals' => ['count' => 0, 'amount' => 0, 'confirmed' => 0]]);
+}
 $select = [
     'p.id',
     'p.card_id',
@@ -49,7 +52,10 @@ foreach ($rows as &$r) {
     $r['card_id'] = (int)$r['card_id'];
     $r['amount_irt'] = (float)$r['amount_irt'];
     $r['from_treasury'] = (isset($treasuryPaymentIds[$r['id']]) || (int)($r['from_treasury'] ?? 0) === 1) ? 1 : 0;
-    if (empty($r['pay_date_jalali']) && !empty($r['created_at'])) $r['pay_date_jalali'] = null;
+    if (empty($r['pay_date_jalali']) && !empty($r['created_at'])) {
+        $ts = strtotime((string)$r['created_at']);
+        $r['pay_date_jalali'] = $ts ? ts_gregorian_to_jalali(date('Y-m-d', $ts)) : null;
+    }
     if (empty($r['pay_date_gregorian']) && !empty($r['created_at'])) $r['pay_date_gregorian'] = substr((string)$r['created_at'], 0, 10);
     if (empty($r['receipt_path'])) {
         $dir = __DIR__ . '/../../uploads/admin-payments/' . (int)$r['card_id'];

@@ -1,64 +1,48 @@
-# تغییرات مورد نظر
+## Goal
+Reposition the 12 port markers on `PortsMapSection.tsx` so each one sits exactly on its real geographic location on the Iran SVG shape, matching the reference image you sent.
 
-## ۱) ویرایش و حذف پرداخت‌های کاربران (تب «پرداخت‌های کاربران»)
+## Approach
 
-### بک‌اند (PHP) — جدید
-- `public/api/admin/card-user-payment-update.php`
-  - ورودی: `id`, `amount_irt?`, `note?`, `status?`, `to_treasury?`
-  - پس از به‌روزرسانی: همگام‌سازی دفتر صندوق با `ts_treasury_remove_source('user_payment', id)` و در صورت `status=confirmed && to_treasury=1` ثبت مجدد `ts_treasury_log('in', ...)`.
-- `public/api/admin/card-user-payment-delete.php`
-  - حذف ردیف از `ts_card_payments` + `ts_treasury_remove_source('user_payment', id)`.
+1. **Determine the SVG's geographic bounding box.** The `public/iran-map.svg` is a traced silhouette rendered as a CSS mask in a square container. I'll inspect the SVG path to find its real bounding box (minX/maxX/minY/maxY in SVG units), then map that box to Iran's real geographic extent:
+   - Longitude: ~44.0°E (west, Khorramshahr area) → ~63.3°E (east, near Chabahar/Sistan border)
+   - Latitude: ~25.07°N (south, Chabahar coast) → ~39.78°N (north, Astara/Armenia border)
 
-### فرانت‌اند (TSCards.tsx — تب پرداخت‌های کاربران)
-- افزودن دو دکمه آیکونی (Pencil / Trash2) برای هر ردیف.
-- دیالوگ ویرایش: مبلغ (با جداکننده هزارگان فارسی)، یادداشت، وضعیت (تأیید/در انتظار/رد)، کلید «واریز به صندوق».
-- دیالوگ تأیید حذف.
-- پس از موفقیت → refresh لیست + refresh `TreasuryPanel` (با افزایش `refreshKey`).
+2. **Convert each port's real lat/lng (from your reference image) into x%/y%** on the square container using a linear projection:
+   - `x% = (lng - minLng) / (maxLng - minLng) * 100`
+   - `y% = (maxLat - lat) / (maxLat - minLat) * 100`
 
-## ۲) ویرایش و حذف در تب «پرداخت‌های کارت» (پرداختی‌های ادمین)
-- اندپوینت‌های `card-admin-payment-update.php` و `card-admin-payment-delete.php` از قبل وجود دارند و خزانه را sync می‌کنند.
-- در UI تب «پرداخت‌های کارت» دکمه‌های ویرایش/حذف اضافه می‌شوند با همان دیالوگ‌ها (مبلغ، تاریخ، یادداشت، وضعیت، کلید «از صندوق ترخیصان»).
-- پس از موفقیت → refresh + بروزرسانی موجودی صندوق.
+   Source coordinates (from your image):
+   ```
+   آستارا        37.4300 N, 48.8711 E
+   انزلی          37.4697 N, 49.4584 E
+   سرخس         36.5403 N, 61.1570 E
+   باشماق/باجماق 37.1197 N, 57.3086 E (note: image label may be off — باشماق is Kurdistan ~35.66 N, 46.06 E; I'll use the real باشماق coordinates, not the image's mistaken value)
+   ماهیرود        36.3111 N, 61.7908 E (image value is off — real ماهیرود is ~32.66 N, 60.05 E; I'll use real)
+   خرمشهر        30.4275 N, 48.1753 E
+   امام خمینی    30.3631 N, 49.5931 E
+   بوشهر          28.9647 N, 50.8371 E
+   شهید رجایی   27.1463 N, 56.2625 E
+   سیریک          25.4589 N, 57.4647 E (real ~26.51 N, 57.04 E — will use real)
+   جاسک           25.6425 N, 57.7628 E (real ~25.65 N, 57.77 E — matches)
+   چابهار          25.2910 N, 60.6218 E
+   ```
+   I'll use the **real-world coordinates** from authoritative sources rather than the slightly-off values in the image, so markers sit precisely on the correct points of the Iran shape.
 
-## ۳) جداکننده هزارگان در دیالوگ «پرداخت بدهی کارت»
+3. **Update labelSide for each port** so labels don't overlap or cover the country shape (top/bottom/left/right based on each port's position).
 
-- ساخت هلپر `formatThousands(value)` و `parseThousands(value)` در همان فایل (یا `src/lib/utils.ts`).
-- فیلد مبلغ تومان: `type="text" inputMode="numeric"`؛ هنگام `onChange` ارقام فارسی به انگلیسی نرمال، غیر رقم حذف، با `Intl.NumberFormat('fa-IR')` فرمت و نمایش داده شود. هنگام ارسال، عدد خام به سرور ارسال گردد.
-- همین رفتار در دیالوگ‌های جدید «ویرایش پرداخت کاربر/ادمین» نیز اعمال می‌شود.
+4. **Verify with screenshots.** After the change, I'll:
+   - Take a desktop screenshot of the `#ports` section
+   - Crop/zoom into the map area
+   - Visually confirm each dot sits on the correct part of the Iran outline (north dots on north coast, west dots on Iraq border, south dots on Persian Gulf/Oman Sea coast, east dots on the Afghan/Pakistan border)
+   - If any marker is off by more than ~1-2%, adjust and re-screenshot until correct
 
-## ۴) خروجی PDF دفتر کل صندوق
+## Files to change
+- `src/components/PortsMapSection.tsx` — update `ports` array with recomputed `x`, `y`, and `labelSide`
 
-- نصب نشده، اما `jspdf` و `jspdf-autotable` در پروژه موجود است (در صورت نبود، فراخوانی dynamic import).
-- در `TreasuryPanel.tsx` کنار دکمه CSV یک دکمه «PDF» اضافه می‌شود.
-- تولید سمت کلاینت: تیتر «دفتر کل صندوق ترخیصان»، تاریخ تولید، خلاصه (موجودی، کل ورودی، کل خروجی)، سپس جدول با ستون‌های: ردیف، تاریخ (میلادی + شمسی)، جهت، مبلغ، کارت، منبع، یادداشت.
-- جهت RTL با فونت Vazirmatn (که در پروژه لود می‌شود) — در صورت نبود فونت در jsPDF از تبدیل به تصویر `html2canvas` روی یک کانتینر مخفی استفاده می‌شود (fallback مطمئن برای فارسی).
-- نام فایل: `treasury-ledger-YYYY-MM-DD.pdf`.
+## Out of scope
+- No changes to the rotating ports list in `HeroSection.tsx`
+- No changes to the SVG asset itself
+- No changes to label styling / dot styling
 
-## ۵) نمایش تاریخ شمسی زیر تاریخ میلادی در جدول دفتر کل
-
-- در `TreasuryPanel.tsx` ستون تاریخ به دو خط تبدیل می‌شود:
-  - خط بالا: `occurred_at` (میلادی، tabular-nums).
-  - خط پایین: تاریخ شمسی کوچک و کم‌رنگ (`text-[11px] text-muted-foreground`) با `new Intl.DateTimeFormat('fa-IR-u-ca-persian', { dateStyle:'short', timeStyle:'short' })`.
-
-# جزئیات فنی
-
-- همه اندپوینت‌های جدید `ts_admin_require()` + `ts_treasury_remove_source()` را قبل از تغییر/درج مجدد در دفتر صندوق فراخوانی می‌کنند تا داده تکراری ایجاد نشود.
-- بازگشت همه اندپوینت‌های جدید شامل `treasury_balance` برای refresh آنی UI.
-- هلپر فرمت/پارس عدد در `src/lib/utils.ts`:
-  - `parseFaNumber(s)`: نرمال‌سازی ارقام فارسی/عربی → انگلیسی، حذف کاما/فاصله/`٬`.
-  - `formatFaThousands(s)`: گرفتن رشته خام و خروجی با جداکننده فارسی.
-- `TreasuryPanel` پراپ `refreshKey` دارد؛ کافی است بعد از موفقیت اکشن‌ها در `TSCards.tsx` مقدار state افزایش داده شود.
-
-# فایل‌های تحت تأثیر
-
-- جدید: `public/api/admin/card-user-payment-update.php`, `public/api/admin/card-user-payment-delete.php`
-- ویرایش: `src/pages/TSCards.tsx` (دو تب + دیالوگ بدهی + refreshKey)
-- ویرایش: `src/components/admin/TreasuryPanel.tsx` (تاریخ شمسی + دکمه PDF)
-- (در صورت لزوم) ویرایش: `src/lib/utils.ts` افزودن هلپرهای عدد فارسی
-- بدون تغییر در دیتابیس و migration
-
-# نکات
-
-- جداکننده هزارگان فقط نمایشی است؛ مقدار ارسالی به سرور همچنان رقم خام انگلیسی است.
-- خروجی PDF برای متن فارسی از مسیر html2canvas (تضمینی) استفاده می‌کند تا مشکل گلیف فونت در jsPDF رخ ندهد.
-- ویرایش پرداخت کاربر اگر مبلغ تغییر کند، ردیف قبلی دفتر حذف و ردیف جدید با مبلغ تازه ثبت می‌شود؛ بنابراین موجودی صندوق همیشه دقیق می‌ماند.
+## Note on the reference image
+The image you uploaded has some coordinate values that don't match the real-world location of the named port (e.g. باشماق label shows 37.11 N / 57.30 E which is in Khorasan, not Kurdistan; ماهیرود shows 36.31 N which is too far north). I'll prioritize **placing each named port at its true geographic location on the Iran shape**, since that's what looks correct visually. Let me know if you'd rather I use the exact numeric values from the image even where they don't match the real port location.

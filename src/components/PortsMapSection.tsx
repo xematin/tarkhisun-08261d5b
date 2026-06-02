@@ -228,7 +228,18 @@ const PortsMapSection = () => {
           <div className="max-w-4xl mx-auto mb-4 p-3 rounded-2xl bg-amber-500/20 border border-amber-400/50 text-white text-persian text-sm flex flex-wrap items-center gap-3">
             <span className="font-bold">🛠 حالت ویرایش فعال:</span>
             <span>مارکر را با موس بکش. برای تغییر سمت لیبل، روی مارکر کلیک کن.</span>
-            <div className="flex gap-2 mr-auto">
+            <div className="flex flex-wrap gap-2 mr-auto items-center">
+              {saveMsg && (
+                <span className="text-xs px-2 py-1 rounded bg-black/30">{saveMsg}</span>
+              )}
+              <button
+                type="button"
+                onClick={saveToHost}
+                disabled={saving}
+                className="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-600 disabled:opacity-60 text-white text-xs font-bold"
+              >
+                {saving ? "در حال ذخیره..." : "ثبت روی هاست"}
+              </button>
               <button
                 type="button"
                 onClick={copyJson}

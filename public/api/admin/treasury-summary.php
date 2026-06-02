@@ -7,6 +7,8 @@ ts_admin_require();
 $pdo = ts_db();
 ts_ensure_card_admin_payments_schema($pdo);
 ts_ensure_treasury_schema($pdo);
+// Self-heal: if ledger is missing rows for existing confirmed payments, backfill them.
+ts_treasury_backfill($pdo);
 
 $hasLedger = ts_table_exists($pdo, 'ts_treasury_ledger');
 $hasAdminPayments = ts_table_exists($pdo, 'ts_card_admin_payments');

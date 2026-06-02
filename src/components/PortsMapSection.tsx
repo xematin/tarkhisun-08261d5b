@@ -56,6 +56,27 @@ const PortsMapSection = () => {
   const [ports, setPorts] = useState<Port[]>(defaultPorts);
   const [dragging, setDragging] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
+
+  // Load published coordinates from host for ALL users (cache-busted)
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/ports-coords.json?t=${Date.now()}`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        const arr = Array.isArray(data) ? data : data.ports;
+        if (Array.isArray(arr) && arr.length > 0) {
+          setPorts(arr as Port[]);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const [copied, setCopied] = useState(false);
 
   // Load saved overrides from localStorage when in edit mode
   useEffect(() => {

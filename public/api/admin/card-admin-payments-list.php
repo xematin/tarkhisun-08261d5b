@@ -5,6 +5,7 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
+ts_ensure_card_admin_payments_schema($pdo);
 $select = [
     'p.id',
     'p.card_id',
@@ -38,6 +39,8 @@ foreach ($rows as &$r) {
     $r['card_id'] = (int)$r['card_id'];
     $r['amount_irt'] = (float)$r['amount_irt'];
     $r['from_treasury'] = isset($r['from_treasury']) ? (int)$r['from_treasury'] : 0;
+    if (empty($r['pay_date_jalali']) && !empty($r['created_at'])) $r['pay_date_jalali'] = null;
+    if (empty($r['pay_date_gregorian']) && !empty($r['created_at'])) $r['pay_date_gregorian'] = substr((string)$r['created_at'], 0, 10);
     $total += $r['amount_irt'];
     if (($r['status'] ?? '') === 'confirmed') $confirmed += $r['amount_irt'];
 }

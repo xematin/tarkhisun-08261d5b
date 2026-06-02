@@ -5,11 +5,15 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
+$hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
+$hasUpdatedAt = ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at');
+$fromTreasurySelect = $hasFromTreasury ? 'p.from_treasury' : '0 AS from_treasury';
+$updatedAtSelect = $hasUpdatedAt ? 'p.updated_at' : 'p.created_at AS updated_at';
 $rows = [];
 try {
     $st = $pdo->query(
         "SELECT p.id, p.card_id, p.amount_irt, p.pay_date_gregorian, p.pay_date_jalali,
-                p.receipt_path, p.note, p.status, p.from_treasury, p.created_at, p.updated_at,
+                p.receipt_path, p.note, p.status, $fromTreasurySelect, p.created_at, $updatedAtSelect,
                 c.name AS card_name
          FROM ts_card_admin_payments p
          JOIN ts_cards c ON c.id = p.card_id

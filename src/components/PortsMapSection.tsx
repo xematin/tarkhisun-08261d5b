@@ -22,18 +22,18 @@ type Port = {
 // Coordinates derived from real lat/lng of each port projected onto the
 // Iran SVG bounding box (lng 44.0–63.33°E → x 0–99.83%, lat 25.06–39.78°N → y 6.54–93.50%).
 const defaultPorts: Port[] = [
-  { name: "بندر آستارا", short: "آستارا", x: 25.2, y: 14.5, labelSide: "top", delay: "0s" },
-  { name: "بندر انزلی", short: "انزلی", x: 28.2, y: 20.2, labelSide: "top", delay: "0.2s" },
-  { name: "بندر باشماق", short: "باشماق", x: 10.7, y: 30.9, labelSide: "left", delay: "0.4s" },
-  { name: "بندر سرخس", short: "سرخس", x: 88.6, y: 25.7, labelSide: "top", delay: "0.6s" },
-  { name: "بندر ماهیرود", short: "ماهیرود", x: 81, y: 49, labelSide: "right", delay: "0.8s" },
-  { name: "بندر خرمشهر", short: "خرمشهر", x: 21.6, y: 61.8, labelSide: "left", delay: "1s" },
-  { name: "بندر امام خمینی", short: "امام خمینی", x: 26.2, y: 61.8, labelSide: "top", delay: "1.2s" },
-  { name: "بندر بوشهر", short: "بوشهر", x: 35, y: 69, labelSide: "left", delay: "1.4s" },
-  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 63.3, y: 81.2, labelSide: "top", delay: "1.6s" },
-  { name: "بندر سیریک", short: "سیریک", x: 67.3, y: 84.9, labelSide: "bottom", delay: "1.8s" },
-  { name: "بندر جاسک", short: "جاسک", x: 71.1, y: 90.0, labelSide: "bottom", delay: "2s" },
-  { name: "بندر چابهار", short: "چابهار", x: 85.8, y: 92.1, labelSide: "right", delay: "2.2s", labelOffsetX: "-110%" },
+  { name: "بندر آستارا", short: "آستارا", x: 1.73, y: 10.14, labelSide: "bottom", delay: "0s" },
+  { name: "بندر انزلی", short: "انزلی", x: 33.31, y: 26.32, labelSide: "left", delay: "0.2s" },
+  { name: "بندر باشماق", short: "باشماق", x: 74.72, y: 21.63, labelSide: "top", delay: "0.4s" },
+  { name: "بندر سرخس", short: "سرخس", x: 82.76, y: 24.54, labelSide: "right", delay: "0.6s" },
+  { name: "بندر ماهیرود", short: "ماهیرود", x: 81.98, y: 42.84, labelSide: "bottom", delay: "0.8s" },
+  { name: "بندر خرمشهر", short: "خرمشهر", x: 16.13, y: 59.58, labelSide: "left", delay: "1s" },
+  { name: "بندر امام خمینی", short: "امام خمینی", x: 27.18, y: 65.38, labelSide: "top", delay: "1.2s" },
+  { name: "بندر بوشهر", short: "بوشهر", x: 34.21, y: 76.99, labelSide: "top", delay: "1.4s" },
+  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 66.46, y: 84.47, labelSide: "top", delay: "1.6s" },
+  { name: "بندر سیریک", short: "سیریک", x: 75.84, y: 90.94, labelSide: "top", delay: "1.8s" },
+  { name: "بندر جاسک", short: "جاسک", x: 80.97, y: 92.28, labelSide: "bottom", delay: "2s" },
+  { name: "بندر چابهار", short: "چابهار", x: 91.8, y: 91.17, labelSide: "right", delay: "2.2s", labelOffsetX: "-110%" },
 ];
 
 const labelPositionClasses: Record<Port["labelSide"], string> = {

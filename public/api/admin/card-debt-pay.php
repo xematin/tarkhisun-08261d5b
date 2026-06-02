@@ -51,7 +51,7 @@ if (!empty($_FILES['receipt']) && is_array($_FILES['receipt']) && (int)$_FILES['
 }
 
 $now = date('Y-m-d H:i:s');
-$ins = $pdo->prepare(
+
 // If paying from treasury, ensure sufficient balance
 if ($fromTreasury && $status === 'confirmed') {
     $bal = ts_treasury_balance();

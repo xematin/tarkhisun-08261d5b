@@ -18,12 +18,18 @@ type Port = {
 };
 
 const ports: (Port & { labelOffsetX?: string })[] = [
-  { name: "بندر انزلی", short: "انزلی", x: 31.5, y: 25, labelSide: "top", delay: "0s" },
-  { name: "بندر امام خمینی", short: "امام خمینی", x: 25.5, y: 50, labelSide: "left", delay: "0.4s" },
-  { name: "بندر بوشهر", short: "بوشهر", x: 30, y: 68, labelSide: "left", delay: "0.8s" },
-  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 57, y: 75, labelSide: "top", delay: "1.2s" },
-  { name: "بندر جاسک", short: "جاسک", x: 66, y: 80, labelSide: "bottom", delay: "1.6s" },
-  { name: "بندر چابهار", short: "چابهار", x: 77.5, y: 78, labelSide: "right", delay: "2s", labelOffsetX: "-110%" },
+  { name: "بندر آستارا", short: "آستارا", x: 29, y: 16, labelSide: "top", delay: "0s" },
+  { name: "بندر انزلی", short: "انزلی", x: 31.5, y: 25, labelSide: "top", delay: "0.2s" },
+  { name: "بندر سرخس", short: "سرخس", x: 75, y: 28, labelSide: "top", delay: "0.4s" },
+  { name: "بندر باشماق", short: "باشماق", x: 16, y: 44, labelSide: "left", delay: "0.6s" },
+  { name: "بندر امام خمینی", short: "امام خمینی", x: 25.5, y: 50, labelSide: "left", delay: "0.8s" },
+  { name: "بندر خرمشهر", short: "خرمشهر", x: 24, y: 56, labelSide: "left", delay: "1s" },
+  { name: "بندر بوشهر", short: "بوشهر", x: 30, y: 68, labelSide: "left", delay: "1.2s" },
+  { name: "بندرعباس شهید رجایی", short: "شهید رجایی", x: 57, y: 75, labelSide: "top", delay: "1.4s" },
+  { name: "بندر سیریک", short: "سیریک", x: 64, y: 77, labelSide: "top", delay: "1.6s" },
+  { name: "بندر جاسک", short: "جاسک", x: 66, y: 80, labelSide: "bottom", delay: "1.8s" },
+  { name: "بندر ماهیرود", short: "ماهیرود", x: 78, y: 50, labelSide: "right", delay: "2s" },
+  { name: "بندر چابهار", short: "چابهار", x: 77.5, y: 78, labelSide: "right", delay: "2.2s", labelOffsetX: "-110%" },
 ];
 
 const labelPositionClasses: Record<Port["labelSide"], string> = {

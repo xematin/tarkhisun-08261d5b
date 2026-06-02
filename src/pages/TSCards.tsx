@@ -198,6 +198,8 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [payDebtFor, setPayDebtFor] = useState<CardRow | null>(null);
   const [treasuryKey, setTreasuryKey] = useState(0);
   const bumpTreasury = useCallback(() => setTreasuryKey((k) => k + 1), []);
+  const [adminPaymentsKey, setAdminPaymentsKey] = useState(0);
+  const bumpAdminPayments = useCallback(() => setAdminPaymentsKey((k) => k + 1), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -430,13 +432,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               </DialogContent>
             </Dialog>
 
-            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); }} toast={toast} />
+            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); bumpAdminPayments(); }} toast={toast} />
           </CardContent>
         </Card>
       </TabsContent>
 
       <TabsContent value="card-payments" className="mt-0">
-        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
+        <CardAdminPaymentsPanel toast={toast} cards={items} refreshKey={adminPaymentsKey} onChanged={() => { void load(); bumpTreasury(); }} />
       </TabsContent>
 
       <TabsContent value="users" className="mt-0">
@@ -2736,13 +2738,14 @@ const AdminPayCardDialog = ({
 interface AdminCardPayment {
   id: number; card_id: number; card_name: string;
   amount_irt: number; pay_date_gregorian: string | null; pay_date_jalali: string | null;
-  receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string;
+  receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string | null; updated_at?: string | null;
 }
 const CardAdminPaymentsPanel = ({
-  toast, cards, onChanged,
+  toast, cards, refreshKey = 0, onChanged,
 }: {
   toast: ReturnType<typeof useToast>["toast"];
   cards: CardRow[];
+  refreshKey?: number;
   onChanged: () => void;
 }) => {
   const [items, setItems] = useState<AdminCardPayment[]>([]);
@@ -2826,7 +2829,7 @@ const CardAdminPaymentsPanel = ({
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [toast]);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, [load, refreshKey]);
 
   const filtered = items.filter(p => {
     if (cardFilter !== "all" && String(p.card_id) !== cardFilter) return false;
@@ -2918,8 +2921,8 @@ const CardAdminPaymentsPanel = ({
                     <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
                     <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
                     <TableCell className="text-persian text-xs">
-                      <div className="tabular-nums">{p.pay_date_gregorian || toJalali(p.created_at)}</div>
-                      {p.pay_date_jalali && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_jalali}</div>}
+                      <div className="tabular-nums font-medium">{p.pay_date_jalali || toJalali(p.created_at || p.updated_at || "")}</div>
+                      {p.pay_date_gregorian && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_gregorian}</div>}
                     </TableCell>
                     <TableCell>{statusBadge(p.status)}</TableCell>
                     <TableCell>
@@ -2956,12 +2959,15 @@ const CardAdminPaymentsPanel = ({
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setEditForm(f => ({ ...f, from_treasury: true }))}
+                    disabled={(editRow?.from_treasury ?? 0) !== 1}
+                    onClick={() => {
+                      if ((editRow?.from_treasury ?? 0) === 1) setEditForm(f => ({ ...f, from_treasury: true }));
+                    }}
                     className={`rounded-lg border p-2 text-right transition-all ${
                       editForm.from_treasury
                         ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
                         : "border-border bg-background hover:bg-muted/40"
-                    }`}
+                    } ${(editRow?.from_treasury ?? 0) !== 1 ? "opacity-45 cursor-not-allowed" : ""}`}
                   >
                     <div className="flex items-center gap-2 text-persian text-sm font-medium">
                       <Vault className="w-4 h-4" /> از صندوق ترخیصان
@@ -2972,12 +2978,15 @@ const CardAdminPaymentsPanel = ({
                   </button>
                   <button
                     type="button"
-                    onClick={() => setEditForm(f => ({ ...f, from_treasury: false }))}
+                    disabled={(editRow?.from_treasury ?? 0) === 1}
+                    onClick={() => {
+                      if ((editRow?.from_treasury ?? 0) !== 1) setEditForm(f => ({ ...f, from_treasury: false }));
+                    }}
                     className={`rounded-lg border p-2 text-right transition-all ${
                       !editForm.from_treasury
                         ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
                         : "border-border bg-background hover:bg-muted/40"
-                    }`}
+                    } ${(editRow?.from_treasury ?? 0) === 1 ? "opacity-45 cursor-not-allowed" : ""}`}
                   >
                     <div className="flex items-center gap-2 text-persian text-sm font-medium">
                       <Banknote className="w-4 h-4" /> پرداخت بیرونی

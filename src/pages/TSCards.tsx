@@ -2741,10 +2741,11 @@ interface AdminCardPayment {
   receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string | null; updated_at?: string | null;
 }
 const CardAdminPaymentsPanel = ({
-  toast, cards, onChanged,
+  toast, cards, refreshKey = 0, onChanged,
 }: {
   toast: ReturnType<typeof useToast>["toast"];
   cards: CardRow[];
+  refreshKey?: number;
   onChanged: () => void;
 }) => {
   const [items, setItems] = useState<AdminCardPayment[]>([]);
@@ -2828,7 +2829,7 @@ const CardAdminPaymentsPanel = ({
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [toast]);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, [load, refreshKey]);
 
   const filtered = items.filter(p => {
     if (cardFilter !== "all" && String(p.card_id) !== cardFilter) return false;

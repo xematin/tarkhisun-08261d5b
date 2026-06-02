@@ -1676,10 +1676,14 @@ const UsersManagementPanel = ({
     }
   };
 
-  const qN = normDigits(q).trim().toLowerCase();
+  const qN = q
+    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .trim().toLowerCase();
   const filtered = items.filter(u =>
-    !qN || `${u.first_name} ${u.last_name} @${u.username}`.toLowerCase().includes(qN)
+    !qN || `${u.first_name} ${u.last_name} ${u.username} @${u.username}`.toLowerCase().includes(qN)
   );
+
 
   return (
     <Card>

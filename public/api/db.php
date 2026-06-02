@@ -82,6 +82,16 @@ function ts_column_exists(PDO $pdo, string $table, string $column): bool {
     }
 }
 
+function ts_table_exists(PDO $pdo, string $table): bool {
+    try {
+        $stmt = $pdo->prepare('SHOW TABLES LIKE ?');
+        $stmt->execute([$table]);
+        return (bool)$stmt->fetchColumn();
+    } catch (Throwable $e) {
+        return false;
+    }
+}
+
 function ts_cors_same_origin(): void {
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
     $host   = $_SERVER['HTTP_HOST'] ?? '';
@@ -293,7 +303,7 @@ function ts_treasury_remove_source(string $source_type, int $source_id): void {
     } catch (Throwable $e) {}
 }
 
-function ts_ensure_card_admin_payments_schema(PDO $pdo): void {
+function ts_ensure_card_admin_payments_schema(PDO $pdo): bool {
     try {
         $pdo->exec("CREATE TABLE IF NOT EXISTS ts_card_admin_payments (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -331,8 +341,33 @@ function ts_ensure_card_admin_payments_schema(PDO $pdo): void {
         try { $pdo->exec('ALTER TABLE ts_card_admin_payments ADD INDEX idx_card (card_id)'); } catch (Throwable $e) {}
         try { $pdo->exec('ALTER TABLE ts_card_admin_payments ADD INDEX idx_status (status)'); } catch (Throwable $e) {}
         $pdo->exec('UPDATE ts_card_admin_payments SET created_at = COALESCE(created_at, NOW()), updated_at = COALESCE(updated_at, created_at, NOW()) WHERE created_at IS NULL OR updated_at IS NULL');
+        return true;
     } catch (Throwable $e) {
-        ts_json_error(500, 'خطا در آماده‌سازی جدول پرداختی‌های کارت', $e->getMessage());
+        return false;
+    }
+}
+
+function ts_ensure_treasury_schema(PDO $pdo): bool {
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS ts_treasury_ledger (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            direction ENUM('in','out') NOT NULL,
+            amount_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+            card_id INT NULL,
+            source_type ENUM('user_payment','admin_payment','manual_adjust') NOT NULL,
+            source_id BIGINT NULL,
+            admin_id INT NULL,
+            note VARCHAR(500) NULL,
+            occurred_at DATETIME NOT NULL,
+            created_at DATETIME NOT NULL,
+            INDEX idx_card (card_id),
+            INDEX idx_dir (direction),
+            INDEX idx_src (source_type, source_id),
+            INDEX idx_occurred (occurred_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        return true;
+    } catch (Throwable $e) {
+        return false;
     }
 }
 

@@ -198,6 +198,8 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [payDebtFor, setPayDebtFor] = useState<CardRow | null>(null);
   const [treasuryKey, setTreasuryKey] = useState(0);
   const bumpTreasury = useCallback(() => setTreasuryKey((k) => k + 1), []);
+  const [adminPaymentsKey, setAdminPaymentsKey] = useState(0);
+  const bumpAdminPayments = useCallback(() => setAdminPaymentsKey((k) => k + 1), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -430,13 +432,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
               </DialogContent>
             </Dialog>
 
-            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); }} toast={toast} />
+            <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); bumpAdminPayments(); }} toast={toast} />
           </CardContent>
         </Card>
       </TabsContent>
 
       <TabsContent value="card-payments" className="mt-0">
-        <CardAdminPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
+        <CardAdminPaymentsPanel toast={toast} cards={items} refreshKey={adminPaymentsKey} onChanged={() => { void load(); bumpTreasury(); }} />
       </TabsContent>
 
       <TabsContent value="users" className="mt-0">

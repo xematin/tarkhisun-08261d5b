@@ -2907,7 +2907,6 @@ const CardAdminPaymentsPanel = ({
                     <TableCell>
                       <div className="flex gap-1">
                         {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600">✓</Button>}
-                        {p.status !== "rejected" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "rejected")} title="رد" className="text-destructive">✗</Button>}
                         <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش"><Pencil className="w-4 h-4" /></Button>
                         <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
                       </div>

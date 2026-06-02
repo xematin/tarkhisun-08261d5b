@@ -2494,9 +2494,46 @@ const AdminPayCardDialog = ({
   onSaved: () => void;
   toast: ReturnType<typeof useToast>["toast"];
 }) => {
+  const todayJ = () => {
+    try {
+      return new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+      }).format(new Date()).replace(/-/g, "/");
+    } catch { return ""; }
+  };
+
+  // Jalali → Gregorian conversion
+  const jalaliToGregorian = (jy: number, jm: number, jd: number): [number, number, number] => {
+    let gy = jy <= 979 ? 621 : 1600;
+    jy -= jy <= 979 ? 0 : 979;
+    let days = (365 * jy) + Math.floor(jy / 33) * 8 + Math.floor(((jy % 33) + 3) / 4)
+      + 78 + jd + (jm < 7 ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+    gy += 400 * Math.floor(days / 146097);
+    days %= 146097;
+    if (days > 36524) {
+      gy += 100 * Math.floor(--days / 36524);
+      days %= 36524;
+      if (days >= 365) days++;
+    }
+    gy += 4 * Math.floor(days / 1461);
+    days %= 1461;
+    if (days > 365) {
+      gy += Math.floor((days - 1) / 365);
+      days = (days - 1) % 365;
+    }
+    let gd = days + 1;
+    const sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let gm = 0;
+    for (gm = 1; gm <= 12; gm++) {
+      if (gd <= sal_a[gm]) break;
+      gd -= sal_a[gm];
+    }
+    return [gy, gm, gd];
+  };
+
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
-  const [dateG, setDateG] = useState<string>(() => new Date().toISOString().slice(0, 10));
+  const [dateJ, setDateJ] = useState<string>(() => todayJ());
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [fromTreasury, setFromTreasury] = useState<boolean>(true);
@@ -2504,7 +2541,7 @@ const AdminPayCardDialog = ({
 
   useEffect(() => {
     if (card) {
-      setAmount(""); setNote(""); setDateG(new Date().toISOString().slice(0, 10));
+      setAmount(""); setNote(""); setDateJ(todayJ());
       setFile(null); setFromTreasury(true);
       fetch("/api/admin/treasury-summary.php", { credentials: "same-origin" })
         .then((r) => r.json()).then((d) => setTreasuryBal(typeof d?.balance === "number" ? d.balance : 0))
@@ -2519,16 +2556,22 @@ const AdminPayCardDialog = ({
   const amt = parseFloat(amount) || 0;
   const afterRemain = remain - amt;
 
-  const jalali = (() => {
-    if (!dateG) return "";
-    const d = new Date(dateG);
-    if (isNaN(d.getTime())) return "";
+  // Parse Jalali input → derive Gregorian
+  const dateG = (() => {
+    const norm = (dateJ || "").replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+                              .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+    const m = norm.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (!m) return "";
+    const jy = +m[1], jm = +m[2], jd = +m[3];
+    if (jm < 1 || jm > 12 || jd < 1 || jd > 31) return "";
     try {
-      return new Intl.DateTimeFormat("fa-IR-u-ca-persian-nu-latn", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-      }).format(d).replace(/-/g, "/");
+      const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+      return `${gy}-${String(gm).padStart(2, "0")}-${String(gd).padStart(2, "0")}`;
     } catch { return ""; }
   })();
+
+  const jalali = dateJ;
+
 
   const submit = async () => {
     if (!card) return;

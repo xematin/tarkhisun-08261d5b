@@ -21,6 +21,9 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 
 type Currency = "USD" | "EUR" | "IRT";
 
@@ -2682,19 +2685,24 @@ const AdminPayCardDialog = ({
 
             <div className="space-y-1">
               <Label className="text-persian text-xs">تاریخ پرداخت (شمسی)</Label>
-              <Input
-                value={dateJ}
-                onChange={(e) => setDateJ(e.target.value)}
+              <DatePicker
+                value={dateJ ? new DateObject({ date: dateJ, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa }) : null}
+                onChange={(d: DateObject | null) => setDateJ(d ? d.format("YYYY/MM/DD") : "")}
+                calendar={persian}
+                locale={persian_fa}
+                calendarPosition="bottom-right"
+                format="YYYY/MM/DD"
+                inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 placeholder="1404/03/12"
-                dir="ltr"
-                inputMode="numeric"
+                containerClassName="w-full"
               />
               {dateG ? (
                 <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">میلادی: {dateG}</div>
               ) : (
-                <div className="text-[11px] text-destructive">فرمت تاریخ شمسی نامعتبر است (مثال: 1404/03/12)</div>
+                <div className="text-[11px] text-destructive">تاریخ را انتخاب کنید</div>
               )}
             </div>
+
 
             <div className="space-y-1">
               <Label className="text-persian text-xs">یادداشت</Label>

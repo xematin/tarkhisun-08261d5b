@@ -150,18 +150,20 @@ try {
 } catch (Throwable $e) {}
 
 ts_json(200, [
-    'items' => array_map(fn($r) => [
-        'id' => (int)$r['source_id'],
-        'direction' => $r['direction'],
-        'amount_irt' => (float)$r['amount_irt'],
-        'card_id' => $r['card_id'] !== null ? (int)$r['card_id'] : null,
-        'card_name' => $r['card_name'],
-        'source_type' => $r['source_type'],
-        'source_id' => $r['source_id'] !== null ? (int)$r['source_id'] : null,
-        'admin_username' => $r['admin_username'],
-        'note' => $r['note'],
-        'occurred_at' => $r['occurred_at'],
-    ], $pageRows),
+    'items' => array_map(function($r) {
+        return [
+            'id' => (int)$r['source_id'],
+            'direction' => $r['direction'],
+            'amount_irt' => (float)$r['amount_irt'],
+            'card_id' => $r['card_id'] !== null ? (int)$r['card_id'] : null,
+            'card_name' => $r['card_name'],
+            'source_type' => $r['source_type'],
+            'source_id' => $r['source_id'] !== null ? (int)$r['source_id'] : null,
+            'admin_username' => $r['admin_username'],
+            'note' => $r['note'],
+            'occurred_at' => $r['occurred_at'],
+        ];
+    }, $pageRows),
     'total' => $total,
     'balance' => round($balIn - $balOut, 2),
 ]);

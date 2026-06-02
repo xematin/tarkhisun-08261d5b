@@ -5,6 +5,7 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
+ts_ensure_card_admin_payments_schema($pdo);
 
 // Totals
 $tot = $pdo->query(

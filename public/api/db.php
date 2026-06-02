@@ -397,4 +397,54 @@ function ts_ensure_treasury_schema(PDO $pdo): bool {
     }
 }
 
+/**
+ * Idempotent backfill of ts_treasury_ledger from real confirmed payments.
+ * Returns number of rows newly inserted.
+ */
+function ts_treasury_backfill(PDO $pdo): int {
+    if (!ts_table_exists($pdo, 'ts_treasury_ledger')) return 0;
+    $inserted = 0;
+    try {
+        if (ts_table_exists($pdo, 'ts_card_payments')) {
+            $hasToTreasury = ts_column_exists($pdo, 'ts_card_payments', 'to_treasury');
+            $toCond = $hasToTreasury ? "AND COALESCE(p.to_treasury,1)=1" : "";
+            $inserted += (int)$pdo->exec(
+                "INSERT INTO ts_treasury_ledger
+                   (direction, amount_irt, card_id, source_type, source_id, note, occurred_at, created_at)
+                 SELECT 'in', p.amount_irt, p.card_id, 'user_payment', p.id,
+                        CONCAT('Backfill — پرداخت کاربر #', p.card_user_id),
+                        p.created_at, NOW()
+                 FROM ts_card_payments p
+                 WHERE p.status='confirmed' $toCond
+                   AND NOT EXISTS (
+                     SELECT 1 FROM ts_treasury_ledger l
+                     WHERE l.source_type='user_payment' AND l.source_id=p.id
+                   )"
+            );
+        }
+        if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
+            $hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
+            $fromCond = $hasFromTreasury ? "AND ap.from_treasury=1" : "";
+            $occCol = ts_column_exists($pdo, 'ts_card_admin_payments', 'pay_date_gregorian')
+                      ? "COALESCE(ap.pay_date_gregorian, ap.created_at)"
+                      : "ap.created_at";
+            $adminCol = ts_column_exists($pdo, 'ts_card_admin_payments', 'admin_id') ? "ap.admin_id" : "NULL";
+            $inserted += (int)$pdo->exec(
+                "INSERT INTO ts_treasury_ledger
+                   (direction, amount_irt, card_id, source_type, source_id, admin_id, note, occurred_at, created_at)
+                 SELECT 'out', ap.amount_irt, ap.card_id, 'admin_payment', ap.id, $adminCol,
+                        'Backfill — پرداخت بدهی کارت',
+                        $occCol, NOW()
+                 FROM ts_card_admin_payments ap
+                 WHERE ap.status='confirmed' $fromCond
+                   AND NOT EXISTS (
+                     SELECT 1 FROM ts_treasury_ledger l
+                     WHERE l.source_type='admin_payment' AND l.source_id=ap.id
+                   )"
+            );
+        }
+    } catch (Throwable $e) { /* silent */ }
+    return $inserted;
+}
+
 

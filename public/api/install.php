@@ -264,6 +264,8 @@ try {
     else echo "WARN: could not auto-ensure ts_card_admin_payments schema; run migrations manually\n";
     if (ts_ensure_treasury_schema($pdo)) echo "OK: ensured ts_treasury_ledger schema\n";
     else echo "WARN: could not auto-ensure ts_treasury_ledger schema; run treasury migration manually\n";
+    $bf = ts_treasury_backfill($pdo);
+    echo "OK: treasury backfill — inserted $bf row(s)\n";
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";
 }

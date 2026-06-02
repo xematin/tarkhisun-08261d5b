@@ -19,13 +19,17 @@ if ($amount <= 0) ts_json_error(400, 'مبلغ پرداخت معتبر نیست'
 
 $pdo = ts_db();
 ts_ensure_card_admin_payments_schema($pdo);
+$needsInstallMsg = 'جدول پرداختی‌های کارت روی هاست کامل نیست؛ فایل /api/install.php یا migration پرداختی‌های کارت را یک‌بار اجرا کنید';
+if (!ts_table_exists($pdo, 'ts_card_admin_payments')) {
+    ts_json_error(500, $needsInstallMsg);
+}
 $requiredColumns = ['pay_date_gregorian', 'pay_date_jalali', 'receipt_path', 'note', 'status', 'created_at'];
 $missingColumns = [];
 foreach ($requiredColumns as $col) {
     if (!ts_column_exists($pdo, 'ts_card_admin_payments', $col)) $missingColumns[] = $col;
 }
 if ($missingColumns) {
-    ts_json_error(500, 'ساختار جدول پرداختی‌های کارت ناقص است', 'Missing columns: ' . implode(', ', $missingColumns));
+    ts_json_error(500, $needsInstallMsg, 'Missing columns: ' . implode(', ', $missingColumns));
 }
 
 $hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');

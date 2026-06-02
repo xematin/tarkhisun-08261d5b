@@ -2736,7 +2736,7 @@ const AdminPayCardDialog = ({
 interface AdminCardPayment {
   id: number; card_id: number; card_name: string;
   amount_irt: number; pay_date_gregorian: string | null; pay_date_jalali: string | null;
-  receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string;
+  receipt_path: string | null; note: string | null; status: string; from_treasury?: number; created_at: string | null; updated_at?: string | null;
 }
 const CardAdminPaymentsPanel = ({
   toast, cards, onChanged,
@@ -2918,8 +2918,8 @@ const CardAdminPaymentsPanel = ({
                     <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
                     <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
                     <TableCell className="text-persian text-xs">
-                      <div className="tabular-nums">{p.pay_date_gregorian || toJalali(p.created_at)}</div>
-                      {p.pay_date_jalali && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_jalali}</div>}
+                      <div className="tabular-nums font-medium">{p.pay_date_jalali || toJalali(p.created_at || p.updated_at || "")}</div>
+                      {p.pay_date_gregorian && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_gregorian}</div>}
                     </TableCell>
                     <TableCell>{statusBadge(p.status)}</TableCell>
                     <TableCell>

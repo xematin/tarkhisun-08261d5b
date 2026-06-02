@@ -297,6 +297,30 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
 
   return (
     <div className="space-y-6">
+      {errors.length > 0 && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-persian text-sm text-destructive">
+          <div className="font-bold mb-1">خطای خواندن بانک ترخیصان</div>
+          <ul className="space-y-1 list-disc list-inside" dir="ltr">
+            {errors.map((err) => <li key={err} className="text-left tabular-nums break-words">{err}</li>)}
+          </ul>
+        </div>
+      )}
+
+      {sum?.debug && (
+        <div className="rounded-lg border border-border bg-muted/30 p-3 text-persian text-xs text-muted-foreground">
+          <div className="font-bold text-foreground mb-1">گزارش منبع داده صندوق</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 tabular-nums">
+            <span>پرداخت کاربران: {String(sum.debug.user_payments_count ?? 0)}</span>
+            <span>جمع ورودی: {fmt(Number(sum.debug.user_payments_sum ?? 0))}</span>
+            <span>پرداخت از صندوق: {String(sum.debug.admin_payments_count ?? 0)}</span>
+            <span>جمع خروجی: {fmt(Number(sum.debug.admin_payments_sum ?? 0))}</span>
+          </div>
+          {Array.isArray(sum.debug.notes) && sum.debug.notes.length > 0 && (
+            <div className="mt-2 text-destructive break-words" dir="ltr">{sum.debug.notes.join(" | ")}</div>
+          )}
+        </div>
+      )}
+
       {/* KPI strip + Vault */}
       <Card>
         <CardHeader>

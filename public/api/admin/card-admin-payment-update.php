@@ -15,6 +15,15 @@ $row->execute([$id]);
 $cur = $row->fetch();
 if (!$cur) ts_json_error(404, 'یافت نشد');
 
+$curFromTreasury = (int)($cur['from_treasury'] ?? 0) === 1;
+if (!$curFromTreasury) {
+    try {
+        $chk = $pdo->prepare("SELECT 1 FROM ts_treasury_ledger WHERE source_type='admin_payment' AND source_id=? LIMIT 1");
+        $chk->execute([$id]);
+        $curFromTreasury = (bool)$chk->fetchColumn();
+    } catch (Throwable $e) {}
+}
+
 $sets = []; $params = [];
 if (isset($body['status']) && in_array($body['status'], ['confirmed','pending','rejected'], true)) {
     $sets[] = 'status=?'; $params[] = $body['status'];
@@ -38,7 +47,7 @@ if (array_key_exists('pay_date_jalali', $body)) {
 }
 if (array_key_exists('from_treasury', $body)) {
     $ft = (int)$body['from_treasury'] === 1 ? 1 : 0;
-    if ($ft !== (int)($cur['from_treasury'] ?? 0)) {
+    if (($ft === 1) !== $curFromTreasury) {
         ts_json_error(400, 'منبع پرداخت بعد از ثبت قابل تغییر نیست');
     }
     $sets[] = 'from_treasury=?'; $params[] = $ft;
@@ -47,7 +56,7 @@ if (!$sets) ts_json_error(400, 'تغییری ارسال نشده');
 
 $targetStatus = isset($body['status']) && in_array($body['status'], ['confirmed','pending','rejected'], true) ? $body['status'] : ($cur['status'] ?? 'confirmed');
 $targetAmount = array_key_exists('amount_irt', $body) ? (float) ts_normalize_digits((string)$body['amount_irt']) : (float)$cur['amount_irt'];
-$targetFromTreasury = (int)($cur['from_treasury'] ?? 0) === 1;
+$targetFromTreasury = $curFromTreasury;
 if ($targetStatus === 'confirmed' && $targetFromTreasury) {
     $available = ts_treasury_balance();
     if (($cur['status'] ?? '') === 'confirmed') $available += (float)$cur['amount_irt'];

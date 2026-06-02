@@ -2681,10 +2681,21 @@ const AdminPayCardDialog = ({
             </div>
 
             <div className="space-y-1">
-              <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
-              <Input type="date" value={dateG} onChange={(e) => setDateG(e.target.value)} dir="ltr" />
-              {jalali && <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">{jalali}</div>}
+              <Label className="text-persian text-xs">تاریخ پرداخت (شمسی)</Label>
+              <Input
+                value={dateJ}
+                onChange={(e) => setDateJ(e.target.value)}
+                placeholder="1404/03/12"
+                dir="ltr"
+                inputMode="numeric"
+              />
+              {dateG ? (
+                <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">میلادی: {dateG}</div>
+              ) : (
+                <div className="text-[11px] text-destructive">فرمت تاریخ شمسی نامعتبر است (مثال: 1404/03/12)</div>
+              )}
             </div>
+
             <div className="space-y-1">
               <Label className="text-persian text-xs">یادداشت</Label>
               <Input value={note} onChange={(e) => setNote(e.target.value)} className="text-persian" />

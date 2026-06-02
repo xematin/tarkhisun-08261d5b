@@ -2507,9 +2507,7 @@ const AdminPayCardDialog = ({
 }) => {
   const todayJ = () => {
     try {
-      return new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-      }).format(new Date()).replace(/-/g, "/");
+      return new DateObject({ calendar: persian }).format("YYYY/MM/DD");
     } catch { return ""; }
   };
 

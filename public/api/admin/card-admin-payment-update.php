@@ -20,7 +20,7 @@ if (!$cur) ts_json_error(404, 'یافت نشد');
 
 $curFromTreasury = (int)($cur['from_treasury'] ?? 0) === 1;
 $hasFromTreasuryColumn = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
-if (!$curFromTreasury) {
+if (!$curFromTreasury && ts_table_exists($pdo, 'ts_treasury_ledger')) {
     try {
         $chk = $pdo->prepare("SELECT 1 FROM ts_treasury_ledger WHERE source_type='admin_payment' AND source_id=? LIMIT 1");
         $chk->execute([$id]);

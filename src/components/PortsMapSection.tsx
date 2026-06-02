@@ -169,6 +169,34 @@ const PortsMapSection = () => {
     }
   };
 
+  const saveToHost = async () => {
+    setSaving(true);
+    setSaveMsg(null);
+    try {
+      const res = await fetch("/api/admin/ports-coords-save.php", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ports }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setSaveMsg(
+          res.status === 401
+            ? "ابتدا در /tscards وارد شوید"
+            : `خطا: ${data.error || res.status}`
+        );
+      } else {
+        setSaveMsg("ذخیره شد روی هاست ✓");
+      }
+    } catch (e: any) {
+      setSaveMsg("خطای شبکه");
+    } finally {
+      setSaving(false);
+      setTimeout(() => setSaveMsg(null), 4000);
+    }
+  };
+
   return (
     <section id="ports" className="relative py-20 ports-map-bg overflow-hidden">
       {/* subtle dot grid background */}

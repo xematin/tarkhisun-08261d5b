@@ -285,10 +285,24 @@ function ts_treasury_balance(): float {
         $row = ts_db()->query(
             "SELECT
                 COALESCE(SUM(CASE WHEN direction='in'  THEN amount_irt ELSE 0 END),0) -
-                COALESCE(SUM(CASE WHEN direction='out' THEN amount_irt ELSE 0 END),0) AS bal
+                COALESCE(SUM(CASE WHEN direction='out' THEN amount_irt ELSE 0 END),0) AS bal,
+                COUNT(*) AS n
              FROM ts_treasury_ledger"
         )->fetch();
-        return (float)($row['bal'] ?? 0);
+        if ((int)($row['n'] ?? 0) > 0) return (float)($row['bal'] ?? 0);
+        $pdo = ts_db();
+        $in = 0.0; $out = 0.0;
+        if (ts_table_exists($pdo, 'ts_card_payments')) {
+            $toCond = ts_column_exists($pdo, 'ts_card_payments', 'to_treasury') ? 'AND COALESCE(to_treasury,1)=1' : '';
+            $r = $pdo->query("SELECT COALESCE(SUM(amount_irt),0) AS s FROM ts_card_payments WHERE status='confirmed' $toCond")->fetch();
+            $in = (float)($r['s'] ?? 0);
+        }
+        if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
+            $fromCond = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury') ? 'AND COALESCE(from_treasury,0)=1' : '';
+            $r = $pdo->query("SELECT COALESCE(SUM(amount_irt),0) AS s FROM ts_card_admin_payments WHERE status='confirmed' $fromCond")->fetch();
+            $out = (float)($r['s'] ?? 0);
+        }
+        return $in - $out;
     } catch (Throwable $e) { return 0.0; }
 }
 
@@ -304,6 +318,7 @@ function ts_treasury_log(
     if (!in_array($direction, ['in','out'], true)) return null;
     if ($amount_irt <= 0) return null;
     try {
+        ts_ensure_treasury_schema(ts_db());
         $admin = ts_admin_current();
         $occ = $occurred_at ?: date('Y-m-d H:i:s');
         $now = date('Y-m-d H:i:s');
@@ -402,20 +417,41 @@ function ts_ensure_treasury_schema(PDO $pdo): bool {
  * Returns number of rows newly inserted.
  */
 function ts_treasury_backfill(PDO $pdo): int {
+    if (!ts_table_exists($pdo, 'ts_treasury_ledger')) {
+        ts_ensure_treasury_schema($pdo);
+    }
     if (!ts_table_exists($pdo, 'ts_treasury_ledger')) return 0;
     $inserted = 0;
     try {
         if (ts_table_exists($pdo, 'ts_card_payments')) {
             $hasToTreasury = ts_column_exists($pdo, 'ts_card_payments', 'to_treasury');
             $toCond = $hasToTreasury ? "AND COALESCE(p.to_treasury,1)=1" : "";
+            $deleteCond = $hasToTreasury ? "OR COALESCE(p.to_treasury,1)<>1" : "";
+            $pdo->exec(
+                "DELETE l FROM ts_treasury_ledger l
+                 JOIN ts_card_payments p ON p.id=l.source_id
+                 WHERE l.source_type='user_payment'
+                   AND (p.status<>'confirmed' $deleteCond)"
+            );
+            $pdo->exec(
+                "UPDATE ts_treasury_ledger l
+                 JOIN ts_card_payments p ON p.id=l.source_id
+                 SET l.direction='in',
+                     l.amount_irt=COALESCE(p.amount_irt,0),
+                     l.card_id=p.card_id,
+                     l.occurred_at=COALESCE(NULLIF(p.created_at,'0000-00-00 00:00:00'), l.occurred_at, NOW())
+                 WHERE l.source_type='user_payment'
+                   AND p.status='confirmed' $toCond"
+            );
             $inserted += (int)$pdo->exec(
                 "INSERT INTO ts_treasury_ledger
                    (direction, amount_irt, card_id, source_type, source_id, note, occurred_at, created_at)
-                 SELECT 'in', p.amount_irt, p.card_id, 'user_payment', p.id,
+                 SELECT 'in', COALESCE(p.amount_irt,0), p.card_id, 'user_payment', p.id,
                         CONCAT('Backfill — پرداخت کاربر #', p.card_user_id),
-                        p.created_at, NOW()
+                         COALESCE(NULLIF(p.created_at,'0000-00-00 00:00:00'), NOW()), NOW()
                  FROM ts_card_payments p
                  WHERE p.status='confirmed' $toCond
+                   AND COALESCE(p.amount_irt,0)>0
                    AND NOT EXISTS (
                      SELECT 1 FROM ts_treasury_ledger l
                      WHERE l.source_type='user_payment' AND l.source_id=p.id
@@ -424,19 +460,38 @@ function ts_treasury_backfill(PDO $pdo): int {
         }
         if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
             $hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
-            $fromCond = $hasFromTreasury ? "AND ap.from_treasury=1" : "";
+            $fromCond = $hasFromTreasury ? "AND COALESCE(ap.from_treasury,0)=1" : "";
+            $deleteCond = $hasFromTreasury ? "OR COALESCE(ap.from_treasury,0)<>1" : "";
             $occCol = ts_column_exists($pdo, 'ts_card_admin_payments', 'pay_date_gregorian')
-                      ? "COALESCE(ap.pay_date_gregorian, ap.created_at)"
-                      : "ap.created_at";
+                      ? "COALESCE(NULLIF(CONCAT(ap.pay_date_gregorian,' 00:00:00'),'0000-00-00 00:00:00'), NULLIF(ap.created_at,'0000-00-00 00:00:00'), NOW())"
+                      : "COALESCE(NULLIF(ap.created_at,'0000-00-00 00:00:00'), NOW())";
             $adminCol = ts_column_exists($pdo, 'ts_card_admin_payments', 'admin_id') ? "ap.admin_id" : "NULL";
+            $pdo->exec(
+                "DELETE l FROM ts_treasury_ledger l
+                 JOIN ts_card_admin_payments ap ON ap.id=l.source_id
+                 WHERE l.source_type='admin_payment'
+                   AND (ap.status<>'confirmed' $deleteCond)"
+            );
+            $pdo->exec(
+                "UPDATE ts_treasury_ledger l
+                 JOIN ts_card_admin_payments ap ON ap.id=l.source_id
+                 SET l.direction='out',
+                     l.amount_irt=COALESCE(ap.amount_irt,0),
+                     l.card_id=ap.card_id,
+                     l.admin_id=$adminCol,
+                     l.occurred_at=$occCol
+                 WHERE l.source_type='admin_payment'
+                   AND ap.status='confirmed' $fromCond"
+            );
             $inserted += (int)$pdo->exec(
                 "INSERT INTO ts_treasury_ledger
                    (direction, amount_irt, card_id, source_type, source_id, admin_id, note, occurred_at, created_at)
-                 SELECT 'out', ap.amount_irt, ap.card_id, 'admin_payment', ap.id, $adminCol,
+                 SELECT 'out', COALESCE(ap.amount_irt,0), ap.card_id, 'admin_payment', ap.id, $adminCol,
                         'Backfill — پرداخت بدهی کارت',
                         $occCol, NOW()
                  FROM ts_card_admin_payments ap
                  WHERE ap.status='confirmed' $fromCond
+                   AND COALESCE(ap.amount_irt,0)>0
                    AND NOT EXISTS (
                      SELECT 1 FROM ts_treasury_ledger l
                      WHERE l.source_type='admin_payment' AND l.source_id=ap.id

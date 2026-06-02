@@ -54,6 +54,46 @@ $cnt = $pdo->prepare("SELECT COUNT(*) AS n FROM ts_treasury_ledger l $whereSql")
 $cnt->execute($params);
 $total = (int)($cnt->fetch()['n'] ?? 0);
 
+// Fallback: if the ledger is empty on an older host, build the visible ledger
+// from confirmed source payments so the panel does not show a blank دفتر کل.
+if ($total === 0 && !$where) {
+    $fallbackRows = [];
+    try {
+        if (ts_table_exists($pdo, 'ts_card_payments')) {
+            $toCond = ts_column_exists($pdo, 'ts_card_payments', 'to_treasury') ? 'AND COALESCE(p.to_treasury,1)=1' : '';
+            $st = $pdo->query(
+                "SELECT p.id, 'in' AS direction, p.amount_irt, p.card_id, c.name AS card_name,
+                        'user_payment' AS source_type, p.id AS source_id, NULL AS admin_id,
+                        NULL AS admin_username, CONCAT('پرداخت کاربر #', p.card_user_id) AS note,
+                        COALESCE(NULLIF(p.created_at,'0000-00-00 00:00:00'), NOW()) AS occurred_at,
+                        p.created_at
+                 FROM ts_card_payments p
+                 LEFT JOIN ts_cards c ON c.id=p.card_id
+                 WHERE p.status='confirmed' $toCond"
+            );
+            $fallbackRows = array_merge($fallbackRows, $st->fetchAll());
+        }
+        if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
+            $fromCond = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury') ? 'AND COALESCE(ap.from_treasury,0)=1' : '';
+            $st = $pdo->query(
+                "SELECT ap.id, 'out' AS direction, ap.amount_irt, ap.card_id, c.name AS card_name,
+                        'admin_payment' AS source_type, ap.id AS source_id, ap.admin_id,
+                        a.username AS admin_username, COALESCE(ap.note, 'پرداخت بدهی کارت') AS note,
+                        COALESCE(NULLIF(CONCAT(ap.pay_date_gregorian,' 00:00:00'),'0000-00-00 00:00:00'), NULLIF(ap.created_at,'0000-00-00 00:00:00'), NOW()) AS occurred_at,
+                        ap.created_at
+                 FROM ts_card_admin_payments ap
+                 LEFT JOIN ts_cards c ON c.id=ap.card_id
+                 LEFT JOIN ts_admins a ON a.id=ap.admin_id
+                 WHERE ap.status='confirmed' $fromCond"
+            );
+            $fallbackRows = array_merge($fallbackRows, $st->fetchAll());
+        }
+    } catch (Throwable $e) {}
+    usort($fallbackRows, fn($a, $b) => strcmp((string)$b['occurred_at'], (string)$a['occurred_at']));
+    $rows = array_slice($fallbackRows, $offset, $limit);
+    $total = count($fallbackRows);
+}
+
 if ($csv) {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="treasury-ledger.csv"');

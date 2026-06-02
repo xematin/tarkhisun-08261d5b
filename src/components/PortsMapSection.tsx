@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * Coordinates are percentages relative to the square map container.
@@ -15,11 +16,12 @@ type Port = {
   y: number;
   labelSide: "top" | "bottom" | "left" | "right";
   delay?: string;
+  labelOffsetX?: string;
 };
 
 // Coordinates derived from real lat/lng of each port projected onto the
 // Iran SVG bounding box (lng 44.0–63.33°E → x 0–99.83%, lat 25.06–39.78°N → y 6.54–93.50%).
-const ports: (Port & { labelOffsetX?: string })[] = [
+const defaultPorts: Port[] = [
   { name: "بندر آستارا", short: "آستارا", x: 25.2, y: 14.5, labelSide: "top", delay: "0s" },
   { name: "بندر انزلی", short: "انزلی", x: 28.2, y: 20.2, labelSide: "top", delay: "0.2s" },
   { name: "بندر باشماق", short: "باشماق", x: 10.7, y: 30.9, labelSide: "left", delay: "0.4s" },
@@ -41,7 +43,112 @@ const labelPositionClasses: Record<Port["labelSide"], string> = {
   right: "left-full ml-3 top-1/2 -translate-y-1/2",
 };
 
+const STORAGE_KEY = "ts-ports-coords-v1";
+
 const PortsMapSection = () => {
+  // Edit mode is opt-in via ?edit-ports=1 (admin-only convention).
+  const editMode = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).get("edit-ports") === "1";
+  }, []);
+
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [ports, setPorts] = useState<Port[]>(defaultPorts);
+  const [dragging, setDragging] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Load saved overrides from localStorage when in edit mode
+  useEffect(() => {
+    if (!editMode) return;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw) as Port[];
+        if (Array.isArray(saved) && saved.length === defaultPorts.length) {
+          setPorts(saved);
+        }
+      }
+    } catch {}
+  }, [editMode]);
+
+  // Persist changes
+  useEffect(() => {
+    if (!editMode) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(ports));
+    } catch {}
+  }, [ports, editMode]);
+
+  // Pointer-based drag
+  useEffect(() => {
+    if (!editMode || !dragging) return;
+    const map = mapRef.current;
+    if (!map) return;
+
+    const move = (e: PointerEvent) => {
+      const rect = map.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setPorts((prev) =>
+        prev.map((p) =>
+          p.name === dragging
+            ? { ...p, x: Math.max(0, Math.min(100, +x.toFixed(2))), y: Math.max(0, Math.min(100, +y.toFixed(2))) }
+            : p
+        )
+      );
+    };
+    const up = () => setDragging(null);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [editMode, dragging]);
+
+  const cycleLabelSide = (name: string) => {
+    const order: Port["labelSide"][] = ["top", "right", "bottom", "left"];
+    setPorts((prev) =>
+      prev.map((p) =>
+        p.name === name
+          ? { ...p, labelSide: order[(order.indexOf(p.labelSide) + 1) % order.length] }
+          : p
+      )
+    );
+  };
+
+  const copyJson = async () => {
+    const json = JSON.stringify(
+      ports.map((p) => ({
+        name: p.name,
+        short: p.short,
+        x: p.x,
+        y: p.y,
+        labelSide: p.labelSide,
+        delay: p.delay,
+        ...(p.labelOffsetX ? { labelOffsetX: p.labelOffsetX } : {}),
+      })),
+      null,
+      2
+    );
+    try {
+      await navigator.clipboard.writeText(json);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt("کپی JSON:", json);
+    }
+  };
+
+  const reset = () => {
+    if (confirm("بازگشت به مختصات پیش‌فرض؟")) {
+      localStorage.removeItem(STORAGE_KEY);
+      setPorts(defaultPorts);
+    }
+  };
+
   return (
     <section id="ports" className="relative py-20 ports-map-bg overflow-hidden">
       {/* subtle dot grid background */}
@@ -69,9 +176,32 @@ const PortsMapSection = () => {
           </p>
         </div>
 
+        {editMode && (
+          <div className="max-w-4xl mx-auto mb-4 p-3 rounded-2xl bg-amber-500/20 border border-amber-400/50 text-white text-persian text-sm flex flex-wrap items-center gap-3">
+            <span className="font-bold">🛠 حالت ویرایش فعال:</span>
+            <span>مارکر را با موس بکش. برای تغییر سمت لیبل، روی مارکر کلیک کن.</span>
+            <div className="flex gap-2 mr-auto">
+              <button
+                type="button"
+                onClick={copyJson}
+                className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold"
+              >
+                {copied ? "کپی شد ✓" : "کپی JSON"}
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className="px-3 py-1.5 rounded-lg bg-red-500/80 hover:bg-red-600 text-white text-xs font-bold"
+              >
+                ریست
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="relative mx-auto max-w-4xl">
           {/* Map container — square aspect so port percentages stay aligned */}
-          <div className="relative w-full aspect-square">
+          <div ref={mapRef} className="relative w-full aspect-square select-none">
             {/* Iran shape rendered via CSS mask so we control color via design tokens */}
             <div className="iran-map-shape" aria-hidden="true" />
             <div className="iran-map-glow" aria-hidden="true" />
@@ -87,15 +217,34 @@ const PortsMapSection = () => {
                 <div className="relative">
                   {/* pulsing dot */}
                   <span
-                    className="port-dot-v2"
+                    className={`port-dot-v2 ${editMode ? "cursor-move ring-2 ring-amber-300" : ""}`}
                     style={{ animationDelay: p.delay }}
+                    onPointerDown={(e) => {
+                      if (!editMode) return;
+                      e.preventDefault();
+                      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+                      setDragging(p.name);
+                    }}
+                    onClick={(e) => {
+                      if (!editMode) return;
+                      e.stopPropagation();
+                      // single click without drag → cycle label side
+                      if (!dragging) cycleLabelSide(p.name);
+                    }}
                   />
                   {/* floating label */}
                   <div
-                    className={`port-label-v2 ${labelPositionClasses[p.labelSide]} ${p.short === 'چابهار' ? 'chabahar-label' : ''}`}
-                    style={p.labelOffsetX ? { transform: `translateX(${p.labelOffsetX})` } : undefined}
+                    className={`port-label-v2 ${labelPositionClasses[p.labelSide]} ${p.short === 'چابهار' && !editMode ? 'chabahar-label' : ''}`}
+                    style={p.labelOffsetX && !editMode ? { transform: `translateX(${p.labelOffsetX})` } : undefined}
                   >
-                    <span className="text-persian whitespace-nowrap">{p.name}</span>
+                    <span className="text-persian whitespace-nowrap">
+                      {p.name}
+                      {editMode && (
+                        <span className="opacity-70 text-[10px] mr-1">
+                          ({p.x.toFixed(1)},{p.y.toFixed(1)})
+                        </span>
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>

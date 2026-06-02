@@ -248,9 +248,13 @@ try {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN custom_unit_price_irt DECIMAL(18,2) NULL");
         echo "OK: added ts_card_user_access.custom_unit_price_irt\n";
     }
-    if (!ts_column_exists($pdo, 'ts_cards', 'cost_unit_price_irt')) {
-        $pdo->exec("ALTER TABLE ts_cards ADD COLUMN cost_unit_price_irt DECIMAL(18,4) NULL AFTER currency");
-        echo "OK: added ts_cards.cost_unit_price_irt\n";
+    $hasCost = false;
+    try { $pdo->query('SELECT cost_unit_price_irt FROM ts_cards LIMIT 0'); $hasCost = true; } catch (Throwable $e) {}
+    if (!$hasCost) {
+        try {
+            $pdo->exec("ALTER TABLE ts_cards ADD COLUMN cost_unit_price_irt DECIMAL(18,4) NULL AFTER currency");
+            echo "OK: added ts_cards.cost_unit_price_irt\n";
+        } catch (Throwable $e) { echo "WARN: " . $e->getMessage() . "\n"; }
     }
     if (!ts_column_exists($pdo, 'ts_card_payments', 'to_treasury')) {
         $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN to_treasury TINYINT(1) NOT NULL DEFAULT 1 AFTER status");

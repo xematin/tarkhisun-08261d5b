@@ -223,29 +223,32 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
 
   return (
     <Tabs dir="rtl" defaultValue="cards" className="space-y-6">
-      <TabsList className="panel-3d-tabs h-14 w-full justify-between rounded-full bg-secondary p-1.5 border border-border shadow-[inset_0_2px_6px_hsl(var(--primary)/0.12),0_2px_4px_hsl(var(--primary)/0.06)] gap-1 flex-wrap">
-        <TabsTrigger value="cards" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          کارت‌ها
-        </TabsTrigger>
-        <TabsTrigger value="card-payments" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          پرداختی‌های کارت
-        </TabsTrigger>
-        <TabsTrigger value="users" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          مدیریت کاربران
-        </TabsTrigger>
-        <TabsTrigger value="payments" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          پرداخت‌های کاربران
-        </TabsTrigger>
-        <TabsTrigger value="kotaj-items" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          کوتاژ‌ها
-        </TabsTrigger>
-        <TabsTrigger value="treasury" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          <Vault className="w-3.5 h-3.5 ml-1 inline" /> بانک ترخیصان
-        </TabsTrigger>
-        <TabsTrigger value="reports" className="flex-1 h-full rounded-full text-persian text-xs md:text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-          گزارش‌گیری
-        </TabsTrigger>
-      </TabsList>
+      <div className="-mx-2 px-2 overflow-x-auto md:overflow-visible">
+        <TabsList className="panel-3d-tabs h-12 md:h-14 w-max md:w-full justify-between rounded-full bg-secondary p-1.5 border border-border shadow-[inset_0_2px_6px_hsl(var(--primary)/0.12),0_2px_4px_hsl(var(--primary)/0.06)] gap-1 flex-nowrap md:flex-wrap">
+          <TabsTrigger value="cards" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            کارت‌ها
+          </TabsTrigger>
+          <TabsTrigger value="card-payments" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            پرداختی‌های کارت
+          </TabsTrigger>
+          <TabsTrigger value="users" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            مدیریت کاربران
+          </TabsTrigger>
+          <TabsTrigger value="payments" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            پرداخت‌های کاربران
+          </TabsTrigger>
+          <TabsTrigger value="kotaj-items" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            کوتاژ‌ها
+          </TabsTrigger>
+          <TabsTrigger value="treasury" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            <Vault className="w-3.5 h-3.5 ml-1 inline" /> بانک ترخیصان
+          </TabsTrigger>
+          <TabsTrigger value="reports" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            گزارش‌گیری
+          </TabsTrigger>
+        </TabsList>
+      </div>
+
 
 
       <TabsContent value="cards" className="mt-0">

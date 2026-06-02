@@ -162,6 +162,40 @@ $sql = [
         FOREIGN KEY (card_id) REFERENCES ts_cards(id) ON DELETE CASCADE,
         FOREIGN KEY (card_user_id) REFERENCES ts_card_users(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_card_admin_payments (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        card_id INT NOT NULL,
+        admin_id INT NULL,
+        amount_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+        pay_date_gregorian DATE NULL,
+        pay_date_jalali VARCHAR(20) NULL,
+        receipt_path VARCHAR(255) NULL,
+        note VARCHAR(500) NULL,
+        status ENUM('pending','confirmed','rejected') NOT NULL DEFAULT 'confirmed',
+        from_treasury TINYINT(1) NOT NULL DEFAULT 0,
+        created_at DATETIME NULL,
+        updated_at DATETIME NULL,
+        INDEX idx_card (card_id),
+        INDEX idx_status (status)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+    "CREATE TABLE IF NOT EXISTS ts_treasury_ledger (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        direction ENUM('in','out') NOT NULL,
+        amount_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+        card_id INT NULL,
+        source_type ENUM('user_payment','admin_payment','manual_adjust') NOT NULL,
+        source_id BIGINT NULL,
+        admin_id INT NULL,
+        note VARCHAR(500) NULL,
+        occurred_at DATETIME NOT NULL,
+        created_at DATETIME NOT NULL,
+        INDEX idx_card (card_id),
+        INDEX idx_dir (direction),
+        INDEX idx_src (source_type, source_id),
+        INDEX idx_occurred (occurred_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
 
 
@@ -214,6 +248,18 @@ try {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN custom_unit_price_irt DECIMAL(18,2) NULL");
         echo "OK: added ts_card_user_access.custom_unit_price_irt\n";
     }
+    if (!ts_column_exists($pdo, 'ts_cards', 'cost_unit_price_irt')) {
+        $pdo->exec("ALTER TABLE ts_cards ADD COLUMN cost_unit_price_irt DECIMAL(18,4) NULL AFTER currency");
+        echo "OK: added ts_cards.cost_unit_price_irt\n";
+    }
+    if (!ts_column_exists($pdo, 'ts_card_payments', 'to_treasury')) {
+        $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN to_treasury TINYINT(1) NOT NULL DEFAULT 1 AFTER status");
+        echo "OK: added ts_card_payments.to_treasury\n";
+    }
+    if (ts_ensure_card_admin_payments_schema($pdo)) echo "OK: ensured ts_card_admin_payments schema\n";
+    else echo "WARN: could not auto-ensure ts_card_admin_payments schema; run migrations manually\n";
+    if (ts_ensure_treasury_schema($pdo)) echo "OK: ensured ts_treasury_ledger schema\n";
+    else echo "WARN: could not auto-ensure ts_treasury_ledger schema; run treasury migration manually\n";
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";
 }

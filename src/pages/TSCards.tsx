@@ -2956,12 +2956,15 @@ const CardAdminPaymentsPanel = ({
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setEditForm(f => ({ ...f, from_treasury: true }))}
+                    disabled={(editRow?.from_treasury ?? 0) !== 1}
+                    onClick={() => {
+                      if ((editRow?.from_treasury ?? 0) === 1) setEditForm(f => ({ ...f, from_treasury: true }));
+                    }}
                     className={`rounded-lg border p-2 text-right transition-all ${
                       editForm.from_treasury
                         ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
                         : "border-border bg-background hover:bg-muted/40"
-                    }`}
+                    } ${(editRow?.from_treasury ?? 0) !== 1 ? "opacity-45 cursor-not-allowed" : ""}`}
                   >
                     <div className="flex items-center gap-2 text-persian text-sm font-medium">
                       <Vault className="w-4 h-4" /> از صندوق ترخیصان
@@ -2972,12 +2975,15 @@ const CardAdminPaymentsPanel = ({
                   </button>
                   <button
                     type="button"
-                    onClick={() => setEditForm(f => ({ ...f, from_treasury: false }))}
+                    disabled={(editRow?.from_treasury ?? 0) === 1}
+                    onClick={() => {
+                      if ((editRow?.from_treasury ?? 0) !== 1) setEditForm(f => ({ ...f, from_treasury: false }));
+                    }}
                     className={`rounded-lg border p-2 text-right transition-all ${
                       !editForm.from_treasury
                         ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
                         : "border-border bg-background hover:bg-muted/40"
-                    }`}
+                    } ${(editRow?.from_treasury ?? 0) === 1 ? "opacity-45 cursor-not-allowed" : ""}`}
                   >
                     <div className="flex items-center gap-2 text-persian text-sm font-medium">
                       <Banknote className="w-4 h-4" /> پرداخت بیرونی

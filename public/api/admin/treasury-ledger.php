@@ -17,6 +17,14 @@ $to        = trim((string)($_GET['to'] ?? ''));
 $limit     = max(1, min(500, (int)($_GET['limit'] ?? 100)));
 $offset    = max(0, (int)($_GET['offset'] ?? 0));
 $csv       = (int)($_GET['csv'] ?? 0) === 1;
+$debug = [
+    'source' => 'source_tables',
+    'user_payments_count' => 0,
+    'admin_payments_count' => 0,
+    'manual_adjust_count' => 0,
+    'ledger_count' => 0,
+    'notes' => [],
+];
 
 /**
  * Always build the displayable ledger from real confirmed payments so the panel
@@ -39,7 +47,9 @@ try {
              LEFT JOIN ts_cards c ON c.id = p.card_id
              WHERE p.status='confirmed' AND COALESCE(p.amount_irt,0) > 0 $toCond"
         );
-        foreach ($st->fetchAll() as $r) { $rows[] = $r; }
+        foreach ($st->fetchAll() as $r) { $rows[] = $r; $debug['user_payments_count']++; }
+    } else {
+        $debug['notes'][] = 'missing table: ts_card_payments';
     }
     if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
         $hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
@@ -66,10 +76,10 @@ try {
              $adminJoin
              WHERE ap.status='confirmed' AND COALESCE(ap.amount_irt,0) > 0 $fromCond"
         );
-        foreach ($st->fetchAll() as $r) { $rows[] = $r; }
+        foreach ($st->fetchAll() as $r) { $rows[] = $r; $debug['admin_payments_count']++; }
     }
 } catch (Throwable $e) {
-    ts_json(500, ['error' => 'treasury-ledger: ' . $e->getMessage()]);
+    ts_json(500, ['error' => 'treasury-ledger: ' . $e->getMessage(), 'debug' => $debug]);
 }
 
 // Manual adjustments still come from the ledger only (no source table).
@@ -85,9 +95,11 @@ try {
              LEFT JOIN ts_admins a ON a.id = l.admin_id
              WHERE l.source_type='manual_adjust'"
         );
-        foreach ($st->fetchAll() as $r) { $rows[] = $r; }
+        foreach ($st->fetchAll() as $r) { $rows[] = $r; $debug['manual_adjust_count']++; }
+        $r = $pdo->query("SELECT COUNT(*) AS n FROM ts_treasury_ledger")->fetch() ?: [];
+        $debug['ledger_count'] = (int)($r['n'] ?? 0);
     }
-} catch (Throwable $e) {}
+} catch (Throwable $e) { $debug['notes'][] = 'manual_adjust: ' . $e->getMessage(); }
 
 // Apply filters in PHP (small dataset, robust across schema variants)
 $rows = array_values(array_filter($rows, function ($r) use ($cardId, $direction, $from, $to) {
@@ -166,4 +178,5 @@ ts_json(200, [
     }, $pageRows),
     'total' => $total,
     'balance' => round($balIn - $balOut, 2),
+    'debug' => $debug,
 ]);

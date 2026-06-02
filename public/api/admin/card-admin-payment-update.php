@@ -9,6 +9,7 @@ $id = (int)($body['id'] ?? 0);
 if ($id <= 0) ts_json_error(400, 'شناسه نامعتبر');
 
 $pdo = ts_db();
+ts_ensure_card_admin_payments_schema($pdo);
 $row = $pdo->prepare('SELECT * FROM ts_card_admin_payments WHERE id=?');
 $row->execute([$id]);
 $cur = $row->fetch();

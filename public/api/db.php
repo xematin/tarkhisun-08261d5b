@@ -285,10 +285,24 @@ function ts_treasury_balance(): float {
         $row = ts_db()->query(
             "SELECT
                 COALESCE(SUM(CASE WHEN direction='in'  THEN amount_irt ELSE 0 END),0) -
-                COALESCE(SUM(CASE WHEN direction='out' THEN amount_irt ELSE 0 END),0) AS bal
+                COALESCE(SUM(CASE WHEN direction='out' THEN amount_irt ELSE 0 END),0) AS bal,
+                COUNT(*) AS n
              FROM ts_treasury_ledger"
         )->fetch();
-        return (float)($row['bal'] ?? 0);
+        if ((int)($row['n'] ?? 0) > 0) return (float)($row['bal'] ?? 0);
+        $pdo = ts_db();
+        $in = 0.0; $out = 0.0;
+        if (ts_table_exists($pdo, 'ts_card_payments')) {
+            $toCond = ts_column_exists($pdo, 'ts_card_payments', 'to_treasury') ? 'AND COALESCE(to_treasury,1)=1' : '';
+            $r = $pdo->query("SELECT COALESCE(SUM(amount_irt),0) AS s FROM ts_card_payments WHERE status='confirmed' $toCond")->fetch();
+            $in = (float)($r['s'] ?? 0);
+        }
+        if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
+            $fromCond = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury') ? 'AND COALESCE(from_treasury,0)=1' : '';
+            $r = $pdo->query("SELECT COALESCE(SUM(amount_irt),0) AS s FROM ts_card_admin_payments WHERE status='confirmed' $fromCond")->fetch();
+            $out = (float)($r['s'] ?? 0);
+        }
+        return $in - $out;
     } catch (Throwable $e) { return 0.0; }
 }
 
@@ -304,6 +318,7 @@ function ts_treasury_log(
     if (!in_array($direction, ['in','out'], true)) return null;
     if ($amount_irt <= 0) return null;
     try {
+        ts_ensure_treasury_schema(ts_db());
         $admin = ts_admin_current();
         $occ = $occurred_at ?: date('Y-m-d H:i:s');
         $now = date('Y-m-d H:i:s');

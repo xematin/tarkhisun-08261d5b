@@ -13,7 +13,7 @@ import hero1440Webp from "@/assets/hero-port-1440.webp";
 import hero1920Webp from "@/assets/hero-port-1920.webp";
 
 const HeroSection = () => {
-  const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک"];
+  const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک", "بندر سیریک", "بندر خرمشهر", "بندر آستارا", "بندر باشماق", "بندر سرخس", "بندر ماهیرود"];
   const [currentPortIndex, setCurrentPortIndex] = useState(0);
   const sceneRef = useRef<HTMLDivElement>(null);
 

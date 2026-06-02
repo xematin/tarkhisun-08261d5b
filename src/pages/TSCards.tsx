@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
+import gregorian from "react-date-object/calendars/gregorian";
 import persian_fa from "react-date-object/locales/persian_fa";
 
 type Currency = "USD" | "EUR" | "IRT";
@@ -2507,9 +2508,7 @@ const AdminPayCardDialog = ({
 }) => {
   const todayJ = () => {
     try {
-      return new Intl.DateTimeFormat("en-US-u-ca-persian-nu-latn", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-      }).format(new Date()).replace(/-/g, "/");
+      return new DateObject({ calendar: persian }).format("YYYY/MM/DD");
     } catch { return ""; }
   };
 
@@ -2752,21 +2751,47 @@ const CardAdminPaymentsPanel = ({
   const [statusFilter, setStatusFilter] = useState("all");
   const [preview, setPreview] = useState<string | null>(null);
   const [editRow, setEditRow] = useState<AdminCardPayment | null>(null);
-  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; from_treasury: boolean; pay_date_gregorian: string }>({
-    amount: "", note: "", status: "confirmed", from_treasury: true, pay_date_gregorian: "",
+  const [editForm, setEditForm] = useState<{ amount: string; note: string; status: string; from_treasury: boolean; dateJ: string }>({
+    amount: "", note: "", status: "confirmed", from_treasury: true, dateJ: "",
   });
   const [editSaving, setEditSaving] = useState(false);
+  const [editTreasuryBal, setEditTreasuryBal] = useState<number | null>(null);
   const [confirmDel, setConfirmDel] = useState<AdminCardPayment | null>(null);
+
+  // Gregorian from edit dialog's Jalali
+  const editDateG = (() => {
+    const j = editForm.dateJ || "";
+    const norm = j.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+                  .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+    const m = norm.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (!m) return "";
+    const jy = +m[1], jm = +m[2], jd = +m[3];
+    try {
+      const o = new DateObject({ date: `${jy}/${jm}/${jd}`, format: "YYYY/M/D", calendar: persian }).convert(gregorian);
+      return `${o.year}-${String(o.month.number).padStart(2, "0")}-${String(o.day).padStart(2, "0")}`;
+    } catch { return ""; }
+  })();
 
   const openEdit = (p: AdminCardPayment) => {
     setEditRow(p);
+    // Convert pay_date_gregorian to Jalali for the picker
+    let dj = p.pay_date_jalali || "";
+    if (!dj && p.pay_date_gregorian) {
+      try {
+        const o = new DateObject({ date: p.pay_date_gregorian, format: "YYYY-MM-DD", calendar: gregorian }).convert(persian);
+        dj = o.format("YYYY/MM/DD");
+      } catch { /* ignore */ }
+    }
     setEditForm({
       amount: String(p.amount_irt || ""),
       note: p.note || "",
       status: p.status || "confirmed",
       from_treasury: (p.from_treasury ?? 0) === 1,
-      pay_date_gregorian: p.pay_date_gregorian || "",
+      dateJ: dj,
     });
+    fetch("/api/admin/treasury-summary.php", { credentials: "same-origin" })
+      .then((r) => r.json()).then((d) => setEditTreasuryBal(typeof d?.balance === "number" ? d.balance : 0))
+      .catch(() => setEditTreasuryBal(null));
   };
   const saveEdit = async () => {
     if (!editRow) return;
@@ -2782,7 +2807,8 @@ const CardAdminPaymentsPanel = ({
           note: editForm.note,
           status: editForm.status,
           from_treasury: editForm.from_treasury ? 1 : 0,
-          pay_date_gregorian: editForm.pay_date_gregorian,
+          pay_date_gregorian: editDateG,
+          pay_date_jalali: editForm.dateJ,
         }),
       });
       toast({ title: "ذخیره شد" });
@@ -2909,7 +2935,6 @@ const CardAdminPaymentsPanel = ({
                     <TableCell>
                       <div className="flex gap-1">
                         {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600">✓</Button>}
-                        {p.status !== "rejected" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "rejected")} title="رد" className="text-destructive">✗</Button>}
                         <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش"><Pencil className="w-4 h-4" /></Button>
                         <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
                       </div>
@@ -2925,7 +2950,46 @@ const CardAdminPaymentsPanel = ({
             <DialogHeader><DialogTitle className="text-persian">ویرایش پرداخت کارت</DialogTitle></DialogHeader>
             <div className="space-y-3">
               <div className="rounded border p-2 bg-muted/30 text-persian text-xs">{editRow?.card_name}</div>
-              <div>
+
+              <div className="space-y-1">
+                <Label className="text-persian text-xs">منبع پرداخت</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditForm(f => ({ ...f, from_treasury: true }))}
+                    className={`rounded-lg border p-2 text-right transition-all ${
+                      editForm.from_treasury
+                        ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                        : "border-border bg-background hover:bg-muted/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                      <Vault className="w-4 h-4" /> از صندوق ترخیصان
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-1 tabular-nums">
+                      موجودی: {editTreasuryBal === null ? "…" : fmtToman(editTreasuryBal)}
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditForm(f => ({ ...f, from_treasury: false }))}
+                    className={`rounded-lg border p-2 text-right transition-all ${
+                      !editForm.from_treasury
+                        ? "border-primary bg-primary/10 shadow-[0_2px_8px_hsl(var(--primary)/0.2)]"
+                        : "border-border bg-background hover:bg-muted/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 text-persian text-sm font-medium">
+                      <Banknote className="w-4 h-4" /> پرداخت بیرونی
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-1">
+                      بدون اثر روی صندوق
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-1">
                 <Label className="text-persian text-xs">مبلغ (تومان)</Label>
                 <Input
                   value={formatThousands(editForm.amount)}
@@ -2933,29 +2997,41 @@ const CardAdminPaymentsPanel = ({
                   inputMode="decimal" dir="ltr"
                 />
               </div>
-              <div>
-                <Label className="text-persian text-xs">تاریخ پرداخت (میلادی)</Label>
-                <Input type="date" value={editForm.pay_date_gregorian} onChange={(e) => setEditForm(f => ({ ...f, pay_date_gregorian: e.target.value }))} dir="ltr" />
+
+              <div className="space-y-1">
+                <Label className="text-persian text-xs">تاریخ پرداخت (شمسی)</Label>
+                <DatePicker
+                  value={editForm.dateJ ? new DateObject({ date: editForm.dateJ, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa }) : null}
+                  onChange={(d: DateObject | null) => setEditForm(f => ({ ...f, dateJ: d ? d.format("YYYY/MM/DD") : "" }))}
+                  calendar={persian}
+                  locale={persian_fa}
+                  calendarPosition="bottom-right"
+                  format="YYYY/MM/DD"
+                  inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  placeholder="1404/03/12"
+                  containerClassName="w-full"
+                />
+                {editDateG && (
+                  <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">میلادی: {editDateG}</div>
+                )}
               </div>
-              <div>
+
+              <div className="space-y-1">
                 <Label className="text-persian text-xs">وضعیت</Label>
                 <Select value={editForm.status} onValueChange={(v) => setEditForm(f => ({ ...f, status: v }))}>
                   <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="panel-fa">
                     <SelectItem value="confirmed" className="text-persian">تأیید شده</SelectItem>
                     <SelectItem value="pending" className="text-persian">در انتظار</SelectItem>
                     <SelectItem value="rejected" className="text-persian">رد شده</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+
+              <div className="space-y-1">
                 <Label className="text-persian text-xs">یادداشت</Label>
                 <Input value={editForm.note} onChange={(e) => setEditForm(f => ({ ...f, note: e.target.value }))} className="text-persian" />
               </div>
-              <label className="flex items-center gap-2 text-persian text-sm cursor-pointer">
-                <Checkbox checked={editForm.from_treasury} onCheckedChange={(v) => setEditForm(f => ({ ...f, from_treasury: !!v }))} />
-                از صندوق ترخیصان برداشت شود
-              </label>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditRow(null)} className="text-persian">انصراف</Button>

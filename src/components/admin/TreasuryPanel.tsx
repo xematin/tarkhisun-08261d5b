@@ -15,7 +15,8 @@ import {
   RefreshCw, Download, Loader2, BarChart3,
 } from "lucide-react";
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+  ComposedChart, Bar, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  CartesianGrid, Legend, PieChart, Pie, Cell,
 } from "recharts";
 import type { useToast } from "@/hooks/use-toast";
 
@@ -330,33 +331,96 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
 
       {/* Trend chart */}
       {sum && sum.trend.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-persian text-base">روند موجودی صندوق (۳۰ روز اخیر)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="w-full h-56" dir="ltr">
-              <ResponsiveContainer>
-                <LineChart data={sum.trend} margin={{ top: 8, right: 16, left: 0, bottom: 4 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => Intl.NumberFormat("en").format(Number(v))} />
-                  <Tooltip
-                    formatter={(v: number) => fmt(Number(v))}
-                    contentStyle={{ direction: "rtl", fontFamily: "inherit" }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="balance"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={2.5}
-                    dot={{ r: 3 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="grid lg:grid-cols-3 gap-4">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-persian text-base">روند موجودی صندوق (۳۰ روز اخیر)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-72" dir="ltr">
+                <ResponsiveContainer>
+                  <ComposedChart data={sum.trend} margin={{ top: 10, right: 16, left: 0, bottom: 4 }}>
+                    <defs>
+                      <linearGradient id="balGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="hsl(45 95% 55%)" stopOpacity={0.55} />
+                        <stop offset="100%" stopColor="hsl(45 95% 55%)" stopOpacity={0.05} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                    <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(d: string) => d.slice(5)} />
+                    <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => Intl.NumberFormat("en", { notation: "compact" }).format(Number(v))} />
+                    <Tooltip
+                      formatter={(v: number, name: string) => {
+                        const label = name === "in" ? "ورود" : name === "out" ? "خروج" : "موجودی";
+                        return [fmt(Number(v)), label];
+                      }}
+                      labelFormatter={(d) => `تاریخ: ${d}`}
+                      contentStyle={{ direction: "rtl", fontFamily: "inherit", borderRadius: 8, border: "1px solid hsl(var(--border))" }}
+                    />
+                    <Legend
+                      verticalAlign="top" height={28}
+                      formatter={(v) => v === "in" ? "ورود" : v === "out" ? "خروج" : "موجودی"}
+                      wrapperStyle={{ direction: "rtl", fontFamily: "inherit", fontSize: 12 }}
+                    />
+                    <Bar dataKey="in" fill="hsl(142 71% 45%)" radius={[4, 4, 0, 0]} barSize={10} />
+                    <Bar dataKey="out" fill="hsl(0 72% 55%)" radius={[4, 4, 0, 0]} barSize={10} />
+                    <Area type="monotone" dataKey="balance" stroke="hsl(45 95% 50%)" strokeWidth={2.5} fill="url(#balGrad)" dot={false} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-persian text-base">توزیع نقدینگی</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-72" dir="ltr">
+                {(() => {
+                  const data = [
+                    { key: "in", name: "کل ورودی", value: Math.max(0, sum.total_in), color: "hsl(142 71% 45%)" },
+                    { key: "out", name: "کل خروجی", value: Math.max(0, sum.total_out), color: "hsl(0 72% 55%)" },
+                    ...(sum.total_profit > 0
+                      ? [{ key: "profit", name: "سود نقدی", value: sum.total_profit, color: "hsl(45 95% 50%)" }]
+                      : []),
+                  ].filter(d => d.value > 0);
+                  if (data.length === 0) {
+                    return <div className="h-full flex items-center justify-center text-muted-foreground text-persian text-sm">داده‌ای برای نمایش نیست.</div>;
+                  }
+                  return (
+                    <ResponsiveContainer>
+                      <PieChart>
+                        <Pie
+                          data={data}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%" cy="50%"
+                          innerRadius={55} outerRadius={95}
+                          paddingAngle={3}
+                          stroke="hsl(var(--background))"
+                          strokeWidth={2}
+                          label={({ percent }) => `${(percent * 100).toFixed(0)}٪`}
+                          labelLine={false}
+                        >
+                          {data.map((d) => <Cell key={d.key} fill={d.color} />)}
+                        </Pie>
+                        <Tooltip
+                          formatter={(v: number) => fmt(Number(v))}
+                          contentStyle={{ direction: "rtl", fontFamily: "inherit", borderRadius: 8, border: "1px solid hsl(var(--border))" }}
+                        />
+                        <Legend
+                          verticalAlign="bottom" height={32}
+                          wrapperStyle={{ direction: "rtl", fontFamily: "inherit", fontSize: 12 }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Per-card profit */}

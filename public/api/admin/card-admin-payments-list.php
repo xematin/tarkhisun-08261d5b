@@ -5,10 +5,6 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
-ts_ensure_card_admin_payments_schema($pdo);
-if (!ts_table_exists($pdo, 'ts_card_admin_payments')) {
-    ts_json(200, ['items' => [], 'totals' => ['count' => 0, 'amount' => 0, 'confirmed' => 0]]);
-}
 $select = [
     'p.id',
     'p.card_id',
@@ -37,34 +33,11 @@ try {
 }
 
 $total = 0.0; $confirmed = 0.0;
-$treasuryPaymentIds = [];
-try {
-    $ids = array_column($rows, 'id');
-    if ($ids) {
-        $place = implode(',', array_fill(0, count($ids), '?'));
-        $lg = $pdo->prepare("SELECT DISTINCT source_id FROM ts_treasury_ledger WHERE source_type='admin_payment' AND source_id IN ($place)");
-        $lg->execute($ids);
-        foreach ($lg->fetchAll() as $lr) $treasuryPaymentIds[(int)$lr['source_id']] = true;
-    }
-} catch (Throwable $e) {}
 foreach ($rows as &$r) {
     $r['id'] = (int)$r['id'];
     $r['card_id'] = (int)$r['card_id'];
     $r['amount_irt'] = (float)$r['amount_irt'];
-    $r['from_treasury'] = (isset($treasuryPaymentIds[$r['id']]) || (int)($r['from_treasury'] ?? 0) === 1) ? 1 : 0;
-    if (empty($r['pay_date_jalali']) && !empty($r['created_at'])) {
-        $ts = strtotime((string)$r['created_at']);
-        $r['pay_date_jalali'] = $ts ? ts_gregorian_to_jalali(date('Y-m-d', $ts)) : null;
-    }
-    if (empty($r['pay_date_gregorian']) && !empty($r['created_at'])) $r['pay_date_gregorian'] = substr((string)$r['created_at'], 0, 10);
-    if (empty($r['receipt_path'])) {
-        $dir = __DIR__ . '/../../uploads/admin-payments/' . (int)$r['card_id'];
-        $files = is_dir($dir) ? glob($dir . '/*.{jpg,jpeg,png,webp,pdf}', GLOB_BRACE) : [];
-        if ($files) {
-            usort($files, fn($a, $b) => filemtime($b) <=> filemtime($a));
-            $r['receipt_path'] = '/uploads/admin-payments/' . (int)$r['card_id'] . '/' . basename($files[0]);
-        }
-    }
+    $r['from_treasury'] = isset($r['from_treasury']) ? (int)$r['from_treasury'] : 0;
     $total += $r['amount_irt'];
     if (($r['status'] ?? '') === 'confirmed') $confirmed += $r['amount_irt'];
 }

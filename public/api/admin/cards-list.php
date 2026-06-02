@@ -5,7 +5,6 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
-ts_ensure_card_admin_payments_schema($pdo);
 
 // detect cost_unit_price_irt column
 $hasCost = false;

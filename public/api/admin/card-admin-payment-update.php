@@ -9,24 +9,10 @@ $id = (int)($body['id'] ?? 0);
 if ($id <= 0) ts_json_error(400, 'شناسه نامعتبر');
 
 $pdo = ts_db();
-ts_ensure_card_admin_payments_schema($pdo);
-if (!ts_table_exists($pdo, 'ts_card_admin_payments')) {
-    ts_json_error(500, 'جدول پرداختی‌های کارت روی هاست نصب نشده است؛ فایل install.php یا migration پرداختی‌ها را یک‌بار اجرا کنید');
-}
 $row = $pdo->prepare('SELECT * FROM ts_card_admin_payments WHERE id=?');
 $row->execute([$id]);
 $cur = $row->fetch();
 if (!$cur) ts_json_error(404, 'یافت نشد');
-
-$curFromTreasury = (int)($cur['from_treasury'] ?? 0) === 1;
-$hasFromTreasuryColumn = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
-if (!$curFromTreasury && ts_table_exists($pdo, 'ts_treasury_ledger')) {
-    try {
-        $chk = $pdo->prepare("SELECT 1 FROM ts_treasury_ledger WHERE source_type='admin_payment' AND source_id=? LIMIT 1");
-        $chk->execute([$id]);
-        $curFromTreasury = (bool)$chk->fetchColumn();
-    } catch (Throwable $e) {}
-}
 
 $sets = []; $params = [];
 if (isset($body['status']) && in_array($body['status'], ['confirmed','pending','rejected'], true)) {
@@ -51,26 +37,11 @@ if (array_key_exists('pay_date_jalali', $body)) {
 }
 if (array_key_exists('from_treasury', $body)) {
     $ft = (int)$body['from_treasury'] === 1 ? 1 : 0;
-    if (($ft === 1) !== $curFromTreasury) {
-        ts_json_error(400, 'منبع پرداخت بعد از ثبت قابل تغییر نیست');
-    }
-    if ($hasFromTreasuryColumn) { $sets[] = 'from_treasury=?'; $params[] = $ft; }
+    $sets[] = 'from_treasury=?'; $params[] = $ft;
 }
 if (!$sets) ts_json_error(400, 'تغییری ارسال نشده');
 
-$targetStatus = isset($body['status']) && in_array($body['status'], ['confirmed','pending','rejected'], true) ? $body['status'] : ($cur['status'] ?? 'confirmed');
-$targetAmount = array_key_exists('amount_irt', $body) ? (float) ts_normalize_digits((string)$body['amount_irt']) : (float)$cur['amount_irt'];
-$targetFromTreasury = $curFromTreasury;
-if ($targetStatus === 'confirmed' && $targetFromTreasury) {
-    $available = ts_treasury_balance();
-    if (($cur['status'] ?? '') === 'confirmed') $available += (float)$cur['amount_irt'];
-    if ($targetAmount > $available + 0.0001) {
-        ts_json_error(400, 'موجودی صندوق ترخیصان کافی نیست (موجودی فعلی: ' . number_format($available, 0) . ' تومان)');
-    }
-}
-
-$hasUpdatedAt = ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at');
-if ($hasUpdatedAt) { $sets[] = 'updated_at=?'; $params[] = date('Y-m-d H:i:s'); }
+$sets[] = 'updated_at=?'; $params[] = date('Y-m-d H:i:s');
 $params[] = $id;
 
 $pdo->prepare('UPDATE ts_card_admin_payments SET ' . implode(',', $sets) . ' WHERE id=?')->execute($params);
@@ -79,8 +50,9 @@ $pdo->prepare('UPDATE ts_card_admin_payments SET ' . implode(',', $sets) . ' WHE
 $row->execute([$id]);
 $new = $row->fetch();
 ts_treasury_remove_source('admin_payment', $id);
-if ($new && $new['status'] === 'confirmed' && $targetFromTreasury) {
-    $occ = $new['pay_date_gregorian'] ? ($new['pay_date_gregorian'] . ' ' . date('H:i:s')) : ($new['updated_at'] ?? $new['created_at'] ?? date('Y-m-d H:i:s'));
+if ($new && $new['status'] === 'confirmed' && (int)$new['from_treasury'] === 1) {
+    // Check balance only when increasing exposure (otherwise allow correction)
+    $occ = $new['pay_date_gregorian'] ? ($new['pay_date_gregorian'] . ' ' . date('H:i:s')) : ($new['updated_at'] ?? date('Y-m-d H:i:s'));
     ts_treasury_log(
         'out', (float)$new['amount_irt'], (int)$new['card_id'], 'admin_payment', $id,
         'پرداخت به کارت (ویرایش‌شده)' . ($new['note'] ? ' — ' . $new['note'] : ''),

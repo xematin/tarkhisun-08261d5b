@@ -5,7 +5,6 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
-ts_ensure_card_admin_payments_schema($pdo);
 
 // Per-card summary
 $cards = $pdo->query(
@@ -57,15 +56,13 @@ foreach ($pdo->query(
 // admin payments per card
 $adminPaid = [];
 try {
-    if (ts_table_exists($pdo, 'ts_card_admin_payments')) {
-        foreach ($pdo->query(
-            "SELECT card_id, COALESCE(SUM(amount_irt),0) AS s
-             FROM ts_card_admin_payments
-             WHERE status='confirmed'
-             GROUP BY card_id"
-        )->fetchAll() as $r) {
-            $adminPaid[(int)$r['card_id']] = (float)$r['s'];
-        }
+    foreach ($pdo->query(
+        "SELECT card_id, COALESCE(SUM(amount_irt),0) AS s
+         FROM ts_card_admin_payments
+         WHERE status='confirmed'
+         GROUP BY card_id"
+    )->fetchAll() as $r) {
+        $adminPaid[(int)$r['card_id']] = (float)$r['s'];
     }
 } catch (Throwable $e) { $adminPaid = []; }
 

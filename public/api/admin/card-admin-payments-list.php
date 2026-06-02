@@ -5,23 +5,31 @@ ts_cors_same_origin();
 ts_admin_require();
 
 $pdo = ts_db();
-$hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
-$hasUpdatedAt = ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at');
-$fromTreasurySelect = $hasFromTreasury ? 'p.from_treasury' : '0 AS from_treasury';
-$updatedAtSelect = $hasUpdatedAt ? 'p.updated_at' : 'p.created_at AS updated_at';
+$select = [
+    'p.id',
+    'p.card_id',
+    'p.amount_irt',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'pay_date_gregorian') ? 'p.pay_date_gregorian' : 'NULL AS pay_date_gregorian',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'pay_date_jalali') ? 'p.pay_date_jalali' : 'NULL AS pay_date_jalali',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'receipt_path') ? 'p.receipt_path' : 'NULL AS receipt_path',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'note') ? 'p.note' : 'NULL AS note',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'status') ? 'p.status' : "'confirmed' AS status",
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury') ? 'p.from_treasury' : '0 AS from_treasury',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'created_at') ? 'p.created_at' : 'NULL AS created_at',
+    ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at') ? 'p.updated_at' : 'NULL AS updated_at',
+    "COALESCE(c.name, CONCAT('کارت #', p.card_id)) AS card_name",
+];
 $rows = [];
 try {
     $st = $pdo->query(
-        "SELECT p.id, p.card_id, p.amount_irt, p.pay_date_gregorian, p.pay_date_jalali,
-                p.receipt_path, p.note, p.status, $fromTreasurySelect, p.created_at, $updatedAtSelect,
-                c.name AS card_name
+        "SELECT " . implode(', ', $select) . "
          FROM ts_card_admin_payments p
-         JOIN ts_cards c ON c.id = p.card_id
+         LEFT JOIN ts_cards c ON c.id = p.card_id
          ORDER BY p.id DESC"
     );
     $rows = $st->fetchAll();
 } catch (Throwable $e) {
-    ts_json(200, ['items' => [], 'totals' => ['count' => 0, 'amount' => 0, 'confirmed' => 0]]);
+    ts_json_error(500, 'خطا در خواندن پرداختی‌های کارت', $e->getMessage());
 }
 
 $total = 0.0; $confirmed = 0.0;

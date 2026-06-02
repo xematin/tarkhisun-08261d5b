@@ -18,6 +18,15 @@ if ($card_id <= 0) ts_json_error(400, 'کارت معتبر نیست');
 if ($amount <= 0) ts_json_error(400, 'مبلغ پرداخت معتبر نیست');
 
 $pdo = ts_db();
+$requiredColumns = ['pay_date_gregorian', 'pay_date_jalali', 'receipt_path', 'note', 'status', 'created_at'];
+$missingColumns = [];
+foreach ($requiredColumns as $col) {
+    if (!ts_column_exists($pdo, 'ts_card_admin_payments', $col)) $missingColumns[] = $col;
+}
+if ($missingColumns) {
+    ts_json_error(500, 'ساختار جدول پرداختی‌های کارت ناقص است', 'Missing columns: ' . implode(', ', $missingColumns));
+}
+
 $hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
 $hasUpdatedAt = ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at');
 $exists = $pdo->prepare('SELECT id, name FROM ts_cards WHERE id=?');
@@ -82,6 +91,27 @@ $ins = $pdo->prepare('INSERT INTO ts_card_admin_payments (' . implode(', ', $col
 $ins->execute($values);
 $paymentId = (int)$pdo->lastInsertId();
 
+// Defensive sync for hosts with older/partially-migrated tables: make sure the visible fields are written.
+$syncSets = [
+    'pay_date_gregorian=?', 'pay_date_jalali=?', 'receipt_path=?', 'note=?', 'status=?', 'created_at=?'
+];
+$syncParams = [
+    $payG !== '' ? $payG : null,
+    $payJ !== '' ? $payJ : null,
+    $receiptPath,
+    $note !== '' ? $note : null,
+    $status,
+    $now,
+];
+if ($hasFromTreasury) { $syncSets[] = 'from_treasury=?'; $syncParams[] = $fromTreasury; }
+if ($hasUpdatedAt) { $syncSets[] = 'updated_at=?'; $syncParams[] = $now; }
+$syncParams[] = $paymentId;
+$pdo->prepare('UPDATE ts_card_admin_payments SET ' . implode(', ', $syncSets) . ' WHERE id=?')->execute($syncParams);
+
+$savedStmt = $pdo->prepare('SELECT pay_date_gregorian, pay_date_jalali, receipt_path, note, status, created_at' . ($hasUpdatedAt ? ', updated_at' : '') . ($hasFromTreasury ? ', from_treasury' : '') . ' FROM ts_card_admin_payments WHERE id=?');
+$savedStmt->execute([$paymentId]);
+$saved = $savedStmt->fetch() ?: [];
+
 ts_card_alloc_log(
     $card_id, null, 'card_balance', null, $amount, 'IRT', null,
     'پرداخت ادمین به کارت «' . $card['name'] . '» — ' . number_format($amount, 0) . ' تومان'
@@ -100,7 +130,14 @@ if ($fromTreasury && $status === 'confirmed') {
 ts_json(200, [
     'ok' => true,
     'id' => $paymentId,
-    'receipt_path' => $receiptPath,
+    'receipt_path' => $saved['receipt_path'] ?? $receiptPath,
+    'pay_date_gregorian' => $saved['pay_date_gregorian'] ?? ($payG !== '' ? $payG : null),
+    'pay_date_jalali' => $saved['pay_date_jalali'] ?? ($payJ !== '' ? $payJ : null),
+    'note' => $saved['note'] ?? ($note !== '' ? $note : null),
+    'status' => $saved['status'] ?? $status,
+    'from_treasury' => isset($saved['from_treasury']) ? (int)$saved['from_treasury'] : $fromTreasury,
+    'created_at' => $saved['created_at'] ?? $now,
+    'updated_at' => $saved['updated_at'] ?? ($hasUpdatedAt ? $now : null),
     'treasury_balance' => ts_treasury_balance(),
 ]);
 

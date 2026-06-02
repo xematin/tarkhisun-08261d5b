@@ -18,6 +18,7 @@ if ($card_id <= 0) ts_json_error(400, 'کارت معتبر نیست');
 if ($amount <= 0) ts_json_error(400, 'مبلغ پرداخت معتبر نیست');
 
 $pdo = ts_db();
+ts_ensure_card_admin_payments_schema($pdo);
 $requiredColumns = ['pay_date_gregorian', 'pay_date_jalali', 'receipt_path', 'note', 'status', 'created_at'];
 $missingColumns = [];
 foreach ($requiredColumns as $col) {

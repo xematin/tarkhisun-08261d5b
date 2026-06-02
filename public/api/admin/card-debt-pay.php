@@ -18,6 +18,8 @@ if ($card_id <= 0) ts_json_error(400, 'کارت معتبر نیست');
 if ($amount <= 0) ts_json_error(400, 'مبلغ پرداخت معتبر نیست');
 
 $pdo = ts_db();
+$hasFromTreasury = ts_column_exists($pdo, 'ts_card_admin_payments', 'from_treasury');
+$hasUpdatedAt = ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at');
 $exists = $pdo->prepare('SELECT id, name FROM ts_cards WHERE id=?');
 $exists->execute([$card_id]);
 $card = $exists->fetch();
@@ -60,12 +62,8 @@ if ($fromTreasury && $status === 'confirmed') {
     }
 }
 
-$ins = $pdo->prepare(
-    "INSERT INTO ts_card_admin_payments
-     (card_id, admin_id, amount_irt, pay_date_gregorian, pay_date_jalali, receipt_path, note, status, from_treasury, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-);
-$ins->execute([
+$columns = ['card_id', 'admin_id', 'amount_irt', 'pay_date_gregorian', 'pay_date_jalali', 'receipt_path', 'note', 'status'];
+$values = [
     $card_id,
     (int)($admin['id'] ?? 0) ?: null,
     $amount,
@@ -74,9 +72,14 @@ $ins->execute([
     $receiptPath,
     $note !== '' ? $note : null,
     $status,
-    $fromTreasury,
-    $now, $now,
-]);
+];
+if ($hasFromTreasury) { $columns[] = 'from_treasury'; $values[] = $fromTreasury; }
+$columns[] = 'created_at'; $values[] = $now;
+if ($hasUpdatedAt) { $columns[] = 'updated_at'; $values[] = $now; }
+
+$placeholders = implode(', ', array_fill(0, count($columns), '?'));
+$ins = $pdo->prepare('INSERT INTO ts_card_admin_payments (' . implode(', ', $columns) . ') VALUES (' . $placeholders . ')');
+$ins->execute($values);
 $paymentId = (int)$pdo->lastInsertId();
 
 ts_card_alloc_log(

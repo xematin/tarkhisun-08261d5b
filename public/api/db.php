@@ -293,4 +293,47 @@ function ts_treasury_remove_source(string $source_type, int $source_id): void {
     } catch (Throwable $e) {}
 }
 
+function ts_ensure_card_admin_payments_schema(PDO $pdo): void {
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS ts_card_admin_payments (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            card_id INT NOT NULL,
+            admin_id INT NULL,
+            amount_irt DECIMAL(18,2) NOT NULL DEFAULT 0,
+            pay_date_gregorian DATE NULL,
+            pay_date_jalali VARCHAR(20) NULL,
+            receipt_path VARCHAR(255) NULL,
+            note VARCHAR(500) NULL,
+            status ENUM('pending','confirmed','rejected') NOT NULL DEFAULT 'confirmed',
+            from_treasury TINYINT(1) NOT NULL DEFAULT 0,
+            created_at DATETIME NULL,
+            updated_at DATETIME NULL,
+            INDEX idx_card (card_id),
+            INDEX idx_status (status)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $defs = [
+            'admin_id' => 'ADD COLUMN admin_id INT NULL',
+            'pay_date_gregorian' => 'ADD COLUMN pay_date_gregorian DATE NULL',
+            'pay_date_jalali' => 'ADD COLUMN pay_date_jalali VARCHAR(20) NULL',
+            'receipt_path' => 'ADD COLUMN receipt_path VARCHAR(255) NULL',
+            'note' => 'ADD COLUMN note VARCHAR(500) NULL',
+            'status' => "ADD COLUMN status ENUM('pending','confirmed','rejected') NOT NULL DEFAULT 'confirmed'",
+            'from_treasury' => 'ADD COLUMN from_treasury TINYINT(1) NOT NULL DEFAULT 0',
+            'created_at' => 'ADD COLUMN created_at DATETIME NULL',
+            'updated_at' => 'ADD COLUMN updated_at DATETIME NULL',
+        ];
+        foreach ($defs as $col => $ddl) {
+            if (!ts_column_exists($pdo, 'ts_card_admin_payments', $col)) {
+                $pdo->exec("ALTER TABLE ts_card_admin_payments $ddl");
+            }
+        }
+        try { $pdo->exec('ALTER TABLE ts_card_admin_payments ADD INDEX idx_card (card_id)'); } catch (Throwable $e) {}
+        try { $pdo->exec('ALTER TABLE ts_card_admin_payments ADD INDEX idx_status (status)'); } catch (Throwable $e) {}
+        $pdo->exec('UPDATE ts_card_admin_payments SET created_at = COALESCE(created_at, NOW()), updated_at = COALESCE(updated_at, created_at, NOW()) WHERE created_at IS NULL OR updated_at IS NULL');
+    } catch (Throwable $e) {
+        ts_json_error(500, 'خطا در آماده‌سازی جدول پرداختی‌های کارت', $e->getMessage());
+    }
+}
+
 

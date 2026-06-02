@@ -51,6 +51,32 @@ function ts_normalize_digits(string $s): string {
     return str_replace($ar, $en, str_replace($fa, $en, $s));
 }
 
+function ts_gregorian_to_jalali(string $date): ?string {
+    $parts = explode('-', substr($date, 0, 10));
+    if (count($parts) !== 3) return null;
+    [$gy, $gm, $gd] = array_map('intval', $parts);
+    if ($gy <= 0 || $gm <= 0 || $gd <= 0) return null;
+    $g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+    $gy2 = ($gm > 2) ? ($gy + 1) : $gy;
+    $days = 355666 + (365 * $gy) + intdiv($gy2 + 3, 4) - intdiv($gy2 + 99, 100) + intdiv($gy2 + 399, 400) + $gd + $g_d_m[$gm - 1];
+    $jy = -1595 + (33 * intdiv($days, 12053));
+    $days %= 12053;
+    $jy += 4 * intdiv($days, 1461);
+    $days %= 1461;
+    if ($days > 365) {
+        $jy += intdiv($days - 1, 365);
+        $days = ($days - 1) % 365;
+    }
+    if ($days < 186) {
+        $jm = 1 + intdiv($days, 31);
+        $jd = 1 + ($days % 31);
+    } else {
+        $jm = 7 + intdiv($days - 186, 30);
+        $jd = 1 + (($days - 186) % 30);
+    }
+    return sprintf('%04d/%02d/%02d', $jy, $jm, $jd);
+}
+
 function ts_valid_phone(string $phone): bool {
     return (bool) preg_match('/^09\d{9}$/', $phone);
 }

@@ -76,7 +76,6 @@ const PortsMapSection = () => {
       cancelled = true;
     };
   }, []);
-  const [copied, setCopied] = useState(false);
 
   // Load saved overrides from localStorage when in edit mode
   useEffect(() => {

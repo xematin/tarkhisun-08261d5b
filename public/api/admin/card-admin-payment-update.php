@@ -10,6 +10,9 @@ if ($id <= 0) ts_json_error(400, 'شناسه نامعتبر');
 
 $pdo = ts_db();
 ts_ensure_card_admin_payments_schema($pdo);
+if (!ts_table_exists($pdo, 'ts_card_admin_payments')) {
+    ts_json_error(500, 'جدول پرداختی‌های کارت روی هاست نصب نشده است؛ فایل install.php یا migration پرداختی‌ها را یک‌بار اجرا کنید');
+}
 $row = $pdo->prepare('SELECT * FROM ts_card_admin_payments WHERE id=?');
 $row->execute([$id]);
 $cur = $row->fetch();

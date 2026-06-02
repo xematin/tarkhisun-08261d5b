@@ -15,7 +15,8 @@ import {
   RefreshCw, Download, Loader2, BarChart3,
 } from "lucide-react";
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+  ComposedChart, Bar, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  CartesianGrid, Legend, PieChart, Pie, Cell,
 } from "recharts";
 import type { useToast } from "@/hooks/use-toast";
 

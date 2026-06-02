@@ -44,6 +44,17 @@ if (array_key_exists('from_treasury', $body)) {
 }
 if (!$sets) ts_json_error(400, 'تغییری ارسال نشده');
 
+$targetStatus = isset($body['status']) && in_array($body['status'], ['confirmed','pending','rejected'], true) ? $body['status'] : ($cur['status'] ?? 'confirmed');
+$targetAmount = array_key_exists('amount_irt', $body) ? (float) ts_normalize_digits((string)$body['amount_irt']) : (float)$cur['amount_irt'];
+$targetFromTreasury = (int)($cur['from_treasury'] ?? 0) === 1;
+if ($targetStatus === 'confirmed' && $targetFromTreasury) {
+    $available = ts_treasury_balance();
+    if (($cur['status'] ?? '') === 'confirmed') $available += (float)$cur['amount_irt'];
+    if ($targetAmount > $available + 0.0001) {
+        ts_json_error(400, 'موجودی صندوق ترخیصان کافی نیست (موجودی فعلی: ' . number_format($available, 0) . ' تومان)');
+    }
+}
+
 $hasUpdatedAt = ts_column_exists($pdo, 'ts_card_admin_payments', 'updated_at');
 if ($hasUpdatedAt) { $sets[] = 'updated_at=?'; $params[] = date('Y-m-d H:i:s'); }
 $params[] = $id;
@@ -55,10 +66,6 @@ $row->execute([$id]);
 $new = $row->fetch();
 ts_treasury_remove_source('admin_payment', $id);
 if ($new && $new['status'] === 'confirmed' && (int)$new['from_treasury'] === 1) {
-    $balanceAfterRemovingOld = ts_treasury_balance();
-    if ((float)$new['amount_irt'] > $balanceAfterRemovingOld + 0.0001) {
-        ts_json_error(400, 'موجودی صندوق ترخیصان کافی نیست (موجودی فعلی: ' . number_format($balanceAfterRemovingOld, 0) . ' تومان)');
-    }
     $occ = $new['pay_date_gregorian'] ? ($new['pay_date_gregorian'] . ' ' . date('H:i:s')) : ($new['updated_at'] ?? $new['created_at'] ?? date('Y-m-d H:i:s'));
     ts_treasury_log(
         'out', (float)$new['amount_irt'], (int)$new['card_id'], 'admin_payment', $id,

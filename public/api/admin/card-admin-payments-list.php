@@ -51,6 +51,14 @@ foreach ($rows as &$r) {
     $r['from_treasury'] = (isset($treasuryPaymentIds[$r['id']]) || (int)($r['from_treasury'] ?? 0) === 1) ? 1 : 0;
     if (empty($r['pay_date_jalali']) && !empty($r['created_at'])) $r['pay_date_jalali'] = null;
     if (empty($r['pay_date_gregorian']) && !empty($r['created_at'])) $r['pay_date_gregorian'] = substr((string)$r['created_at'], 0, 10);
+    if (empty($r['receipt_path'])) {
+        $dir = __DIR__ . '/../../uploads/admin-payments/' . (int)$r['card_id'];
+        $files = is_dir($dir) ? glob($dir . '/*.{jpg,jpeg,png,webp,pdf}', GLOB_BRACE) : [];
+        if ($files) {
+            usort($files, fn($a, $b) => filemtime($b) <=> filemtime($a));
+            $r['receipt_path'] = '/uploads/admin-payments/' . (int)$r['card_id'] . '/' . basename($files[0]);
+        }
+    }
     $total += $r['amount_irt'];
     if (($r['status'] ?? '') === 'confirmed') $confirmed += $r['amount_irt'];
 }

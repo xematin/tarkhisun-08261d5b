@@ -37,6 +37,7 @@ interface TreasurySummary {
   tx_count: number;
   cards: CardCash[];
   trend: { date: string; in: number; out: number; balance: number }[];
+  debug?: Record<string, unknown>;
 }
 
 interface LedgerItem {
@@ -50,6 +51,11 @@ interface LedgerItem {
   admin_username: string | null;
   note: string | null;
   occurred_at: string;
+}
+
+interface LedgerResponse {
+  items: LedgerItem[];
+  debug?: Record<string, unknown>;
 }
 
 const fmt = (n: number) => `${(isFinite(n) ? n : 0).toLocaleString("fa-IR")} تومان`;
@@ -69,7 +75,7 @@ const toJalaliDateTime = (iso: string): string => {
 async function api<T>(path: string): Promise<T> {
   const res = await fetch(path, { credentials: "same-origin" });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+  if (!res.ok) throw new Error((data as { error?: string; detail?: string }).error || (data as { detail?: string }).detail || `HTTP ${res.status}`);
   return data as T;
 }
 
@@ -161,16 +167,26 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
   const [fDir, setFDir] = useState<"all" | "in" | "out">("all");
   const [fFrom, setFFrom] = useState("");
   const [fTo, setFTo] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const pushPanelError = useCallback((source: string, message: string) => {
+    setErrors((prev) => [`${source}: ${message}`, ...prev.filter((x) => !x.startsWith(`${source}:`))].slice(0, 4));
+  }, []);
+  const clearPanelError = useCallback((source: string) => {
+    setErrors((prev) => prev.filter((x) => !x.startsWith(`${source}:`)));
+  }, []);
 
   const loadSummary = useCallback(async () => {
     setLoading(true);
     try {
       const s = await api<TreasurySummary>("/api/admin/treasury-summary.php");
       setSum(s);
+      clearPanelError("treasury-summary");
     } catch (e) {
+      pushPanelError("treasury-summary", (e as Error).message);
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     } finally { setLoading(false); }
-  }, [toast]);
+  }, [clearPanelError, pushPanelError, toast]);
 
   const loadLedger = useCallback(async () => {
     setLedgerLoading(true);
@@ -181,12 +197,14 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
       if (fFrom) qs.set("from", fFrom);
       if (fTo) qs.set("to", fTo);
       qs.set("limit", "200");
-      const r = await api<{ items: LedgerItem[] }>(`/api/admin/treasury-ledger.php?${qs.toString()}`);
+      const r = await api<LedgerResponse>(`/api/admin/treasury-ledger.php?${qs.toString()}`);
       setLedger(r.items || []);
+      clearPanelError("treasury-ledger");
     } catch (e) {
+      pushPanelError("treasury-ledger", (e as Error).message);
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     } finally { setLedgerLoading(false); }
-  }, [fCard, fDir, fFrom, fTo, toast]);
+  }, [clearPanelError, fCard, fDir, fFrom, fTo, pushPanelError, toast]);
 
   useEffect(() => { void loadSummary(); }, [loadSummary, refreshKey]);
   useEffect(() => { void loadLedger(); }, [loadLedger, refreshKey]);
@@ -279,6 +297,30 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
 
   return (
     <div className="space-y-6">
+      {errors.length > 0 && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-persian text-sm text-destructive">
+          <div className="font-bold mb-1">خطای خواندن بانک ترخیصان</div>
+          <ul className="space-y-1 list-disc list-inside" dir="ltr">
+            {errors.map((err) => <li key={err} className="text-left tabular-nums break-words">{err}</li>)}
+          </ul>
+        </div>
+      )}
+
+      {sum?.debug && (
+        <div className="rounded-lg border border-border bg-muted/30 p-3 text-persian text-xs text-muted-foreground">
+          <div className="font-bold text-foreground mb-1">گزارش منبع داده صندوق</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 tabular-nums">
+            <span>پرداخت کاربران: {String(sum.debug.user_payments_count ?? 0)}</span>
+            <span>جمع ورودی: {fmt(Number(sum.debug.user_payments_sum ?? 0))}</span>
+            <span>پرداخت از صندوق: {String(sum.debug.admin_payments_count ?? 0)}</span>
+            <span>جمع خروجی: {fmt(Number(sum.debug.admin_payments_sum ?? 0))}</span>
+          </div>
+          {Array.isArray(sum.debug.notes) && sum.debug.notes.length > 0 && (
+            <div className="mt-2 text-destructive break-words" dir="ltr">{sum.debug.notes.join(" | ")}</div>
+          )}
+        </div>
+      )}
+
       {/* KPI strip + Vault */}
       <Card>
         <CardHeader>

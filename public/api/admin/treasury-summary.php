@@ -26,6 +26,25 @@ if ($hasLedger) {
     )->fetch() ?: $tot;
 }
 
+// Fallback for older hosts where the ledger table exists but is still empty/broken:
+// show real cash totals from source payment tables instead of blank treasury numbers.
+if ((int)($tot['tx_count'] ?? 0) === 0) {
+    try {
+        if (ts_table_exists($pdo, 'ts_card_payments')) {
+            $toCond = ts_column_exists($pdo, 'ts_card_payments', 'to_treasury') ? 'AND COALESCE(to_treasury,1)=1' : '';
+            $r = $pdo->query("SELECT COALESCE(SUM(amount_irt),0) AS s, COUNT(*) AS n FROM ts_card_payments WHERE status='confirmed' $toCond")->fetch() ?: [];
+            $tot['total_in'] = (float)($r['s'] ?? 0);
+            $tot['tx_count'] = (int)($tot['tx_count'] ?? 0) + (int)($r['n'] ?? 0);
+        }
+        if ($hasAdminPayments) {
+            $fromCond = $hasFromTreasury ? 'AND COALESCE(from_treasury,0)=1' : '';
+            $r = $pdo->query("SELECT COALESCE(SUM(amount_irt),0) AS s, COUNT(*) AS n FROM ts_card_admin_payments WHERE status='confirmed' $fromCond")->fetch() ?: [];
+            $tot['total_out'] = (float)($r['s'] ?? 0);
+            $tot['tx_count'] = (int)($tot['tx_count'] ?? 0) + (int)($r['n'] ?? 0);
+        }
+    } catch (Throwable $e) {}
+}
+
 $totalIn  = (float)($tot['total_in']  ?? 0);
 $totalOut = (float)($tot['total_out'] ?? 0);
 $balance  = $totalIn - $totalOut;

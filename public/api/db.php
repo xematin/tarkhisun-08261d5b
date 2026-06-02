@@ -100,9 +100,12 @@ function ts_read_json_body(): array {
 
 function ts_column_exists(PDO $pdo, string $table, string $column): bool {
     try {
-        $stmt = $pdo->prepare("SHOW COLUMNS FROM `$table` LIKE ?");
-        $stmt->execute([$column]);
-        return (bool)$stmt->fetch();
+        $stmt = $pdo->prepare(
+            "SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?"
+        );
+        $stmt->execute([$table, $column]);
+        return (bool)$stmt->fetchColumn();
     } catch (Throwable $e) {
         return false;
     }

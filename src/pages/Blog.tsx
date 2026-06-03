@@ -244,7 +244,20 @@ const Blog = () => {
 
               <div className="grid lg:grid-cols-2 gap-8">
                 {currentPosts.map((post) => (
-                  <Card key={post.id} className="card-service group cursor-pointer">
+                  <Card key={post.id} className="card-service group cursor-pointer overflow-hidden">
+                    <div className="w-full aspect-[16/9] bg-muted overflow-hidden">
+                      {post.image ? (
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-secondary to-muted" />
+                      )}
+                    </div>
                     <CardHeader>
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1 rounded-full text-persian">

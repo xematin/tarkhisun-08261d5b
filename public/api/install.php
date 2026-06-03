@@ -206,12 +206,18 @@ foreach ($sql as $q) {
 
 // ===== migrations for existing installs =====
 try {
-    $col = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'allocated'")->fetch();
+    $col = $pdo->query(
+        "SELECT COUNT(*) FROM information_schema.columns
+         WHERE table_schema = DATABASE() AND table_name = 'ts_card_user_access' AND column_name = 'allocated'"
+    )->fetchColumn();
     if (!$col) {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN allocated DECIMAL(18,2) NOT NULL DEFAULT 0");
         echo "OK: added ts_card_user_access.allocated\n";
     }
-    $col2 = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'entry_id'")->fetch();
+    $col2 = $pdo->query(
+        "SELECT COUNT(*) FROM information_schema.columns
+         WHERE table_schema = DATABASE() AND table_name = 'ts_card_user_access' AND column_name = 'entry_id'"
+    )->fetchColumn();
     if (!$col2) {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN entry_id INT NULL AFTER card_id");
         $pdo->exec("ALTER TABLE ts_card_user_access ADD INDEX idx_entry (entry_id)");
@@ -243,7 +249,10 @@ try {
         }
     }
     // custom unit price per (card_user, entry)
-    $col3 = $pdo->query("SHOW COLUMNS FROM ts_card_user_access LIKE 'custom_unit_price_irt'")->fetch();
+    $col3 = $pdo->query(
+        "SELECT COUNT(*) FROM information_schema.columns
+         WHERE table_schema = DATABASE() AND table_name = 'ts_card_user_access' AND column_name = 'custom_unit_price_irt'"
+    )->fetchColumn();
     if (!$col3) {
         $pdo->exec("ALTER TABLE ts_card_user_access ADD COLUMN custom_unit_price_irt DECIMAL(18,2) NULL");
         echo "OK: added ts_card_user_access.custom_unit_price_irt\n";

@@ -166,7 +166,7 @@ const Blog = () => {
         {/* Blog Posts */}
         <section className="py-20">
           <div className="container mx-auto px-4" dir="rtl">
-            <div className="max-w-6xl mx-auto">
+              <div className="max-w-5xl mx-auto">
               <div className="mb-12">
                 <h2 className="heading-secondary mb-4 text-persian">آخرین مقالات</h2>
                 <p className="text-lg text-muted-foreground text-persian">

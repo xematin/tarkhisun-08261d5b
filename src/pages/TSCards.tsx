@@ -1467,7 +1467,7 @@ const AdminKotajEditDialog = ({
         body: JSON.stringify({
           id: kotaj.id,
           kotaj_number: numClean,
-          kotaj_date_jalali: normDigits(date),
+          kotaj_date_jalali: normDateDigits(date),
           items: items.map(it => ({
             name: it.name.trim(),
             value_usd: parseFloat(normDigits(it.value_usd)) || 0,

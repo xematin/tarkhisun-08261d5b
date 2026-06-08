@@ -95,6 +95,14 @@ const normDigits = (raw: string) => {
     const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
   }).replace(/[^\d.]/g, "");
 };
+// تبدیل ارقام فارسی/عربی به انگلیسی بدون حذف جداکننده‌ها (برای فیلدهای تاریخ)
+const normDateDigits = (raw: string) => {
+  const fa = "۰۱۲۳۴۵۶۷۸۹"; const ar = "٠١٢٣٤٥٦٧٨٩";
+  return raw.replace(/[۰-۹٠-٩]/g, (d) => {
+    const i = fa.indexOf(d); if (i >= 0) return String(i);
+    const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
+  });
+};
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
@@ -1445,7 +1453,7 @@ const AdminKotajEditDialog = ({
   const save = async () => {
     const numClean = normDigits(num).replace(/\D/g, "");
     if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return; }
-    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(normDigits(date))) { toast({ title: "تاریخ کوتاژ معتبر نیست (1405/01/01)", variant: "destructive" }); return; }
+    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(normDateDigits(date))) { toast({ title: "تاریخ کوتاژ معتبر نیست (1405/01/01)", variant: "destructive" }); return; }
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return; }
@@ -1459,7 +1467,7 @@ const AdminKotajEditDialog = ({
         body: JSON.stringify({
           id: kotaj.id,
           kotaj_number: numClean,
-          kotaj_date_jalali: normDigits(date),
+          kotaj_date_jalali: normDateDigits(date),
           items: items.map(it => ({
             name: it.name.trim(),
             value_usd: parseFloat(normDigits(it.value_usd)) || 0,
@@ -1488,7 +1496,7 @@ const AdminKotajEditDialog = ({
             </div>
             <div className="space-y-2">
               <Label className="text-persian">تاریخ کوتاژ (شمسی)</Label>
-              <Input value={date} onChange={(e) => setDate(normDigits(e.target.value))} dir="ltr" placeholder="1405/02/31" />
+              <Input value={date} onChange={(e) => setDate(normDateDigits(e.target.value))} dir="ltr" placeholder="1405/02/31" />
             </div>
           </div>
 

@@ -275,6 +275,38 @@ try {
     else echo "WARN: could not auto-ensure ts_treasury_ledger schema; run treasury migration manually\n";
     $bf = ts_treasury_backfill($pdo);
     echo "OK: treasury backfill — inserted $bf row(s)\n";
+
+    // ===== One-time data repair: orphan kotaj entry_ids =====
+    // ریشه‌ی باگ: نسخه‌ی قدیمی _card_save.php هنگام ویرایش کارت تمام
+    // ts_card_entries را DELETE+INSERT می‌کرد و entry_id عوض می‌شد، ولی
+    // ts_kotaj.entry_id ها به‌روزرسانی نمی‌شدند.
+    try {
+        $orphan = (int)$pdo->query(
+            "SELECT COUNT(*) FROM ts_kotaj k
+             LEFT JOIN ts_card_entries e ON e.id = k.entry_id
+             WHERE e.id IS NULL"
+        )->fetchColumn();
+        if ($orphan > 0) {
+            // برای هر کارت، اگر فقط یک سکشن فعال داشته باشد، کوتاژهای یتیم
+            // همان کارت را به آن سکشن وصل کن. اگر چند سکشن داشت، به
+            // سکشنی با کمترین sort_order/id متصل کن.
+            $fix = $pdo->prepare(
+                "UPDATE ts_kotaj k
+                 JOIN (
+                    SELECT card_id, MIN(id) AS new_eid
+                    FROM ts_card_entries
+                    GROUP BY card_id
+                 ) m ON m.card_id = k.card_id
+                 LEFT JOIN ts_card_entries e_old ON e_old.id = k.entry_id
+                 SET k.entry_id = m.new_eid
+                 WHERE e_old.id IS NULL"
+            );
+            $fix->execute();
+            echo "OK: repaired $orphan orphan kotaj entry_id(s)\n";
+        }
+    } catch (Throwable $e) {
+        echo "WARN: orphan kotaj repair failed: " . $e->getMessage() . "\n";
+    }
 } catch (Throwable $e) {
     echo "WARN: " . $e->getMessage() . "\n";
 }

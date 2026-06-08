@@ -24,7 +24,18 @@ $st = $pdo->prepare("SELECT k.id, k.entry_id, k.card_id, a.allocated
                      WHERE k.id=? AND k.card_user_id=? LIMIT 1");
 $st->execute([$id, (int)$u['id']]);
 $row = $st->fetch();
-if (!$row) ts_json_error(404, 'کوتاژ یافت نشد');
+if (!$row) {
+    // Diagnose: kotaj may exist but be linked to an orphaned entry (entry recreated by admin)
+    $diag = $pdo->prepare("SELECT k.id, k.entry_id, k.card_id,
+                                  (SELECT COUNT(*) FROM ts_card_entries e WHERE e.id=k.entry_id) AS entry_alive
+                           FROM ts_kotaj k WHERE k.id=? AND k.card_user_id=? LIMIT 1");
+    $diag->execute([$id, (int)$u['id']]);
+    $d = $diag->fetch();
+    if ($d && (int)$d['entry_alive'] === 0) {
+        ts_json_error(409, 'این کوتاژ به سکشن حذف‌شده‌ای متصل است (entry_id=' . (int)$d['entry_id'] . '). لطفاً به مدیر اطلاع دهید تا داده ترمیم شود.');
+    }
+    ts_json_error(404, 'کوتاژ یافت نشد یا به سکشن فعلی شما متصل نیست');
+}
 
 $entry_id = (int)$row['entry_id'];
 $alloc    = (float)$row['allocated'];

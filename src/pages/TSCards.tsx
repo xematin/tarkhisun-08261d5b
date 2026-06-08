@@ -1453,7 +1453,7 @@ const AdminKotajEditDialog = ({
   const save = async () => {
     const numClean = normDigits(num).replace(/\D/g, "");
     if (!numClean) { toast({ title: "شماره کوتاژ معتبر نیست", variant: "destructive" }); return; }
-    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(normDigits(date))) { toast({ title: "تاریخ کوتاژ معتبر نیست (1405/01/01)", variant: "destructive" }); return; }
+    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(normDateDigits(date))) { toast({ title: "تاریخ کوتاژ معتبر نیست (1405/01/01)", variant: "destructive" }); return; }
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       if (!it.name.trim()) { toast({ title: `نام کالای قلم ${i + 1}`, variant: "destructive" }); return; }

@@ -93,6 +93,14 @@ const normDigits = (raw: string) => {
   return raw.replace(/[۰-۹٠-٩]/g, (d) => {
     const i = fa.indexOf(d); if (i >= 0) return String(i);
     const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
+  }).replace(/[^\d.]/g, "");
+};
+// تبدیل ارقام فارسی/عربی به انگلیسی بدون حذف جداکننده‌ها (برای فیلدهای تاریخ)
+const normDateDigits = (raw: string) => {
+  const fa = "۰۱۲۳۴۵۶۷۸۹"; const ar = "٠١٢٣٤٥٦٧٨٩";
+  return raw.replace(/[۰-۹٠-٩]/g, (d) => {
+    const i = fa.indexOf(d); if (i >= 0) return String(i);
+    const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
   });
 };
 

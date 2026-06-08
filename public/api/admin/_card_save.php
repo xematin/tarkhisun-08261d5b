@@ -83,6 +83,17 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
             );
             $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $adminId, $now, $now]);
             $cardId = (int)$pdo->lastInsertId();
+
+            // create-path: simple inserts for entries
+            $entryIds = [];
+            $insE = $pdo->prepare(
+                'INSERT INTO ts_card_entries (card_id, title, amount, currency, unit_price_irt, total_irt, sort_order)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)'
+            );
+            foreach ($entries as $i => $e) {
+                $insE->execute([$cardId, $e['title'], $e['amount'], $e['currency'], $e['unit_price_irt'], $e['total_irt'], $e['sort_order']]);
+                $entryIds[$i] = (int)$pdo->lastInsertId();
+            }
         } else {
             $exists = $pdo->prepare('SELECT id FROM ts_cards WHERE id=?');
             $exists->execute([$cardId]);
@@ -99,8 +110,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
                 $stmt->execute([$name, $balanceIrt, 'IRT', $now, $cardId]);
             }
 
-            // Snapshot custom_unit_price_irt by (card_user_id, entry_title) so they
-            // survive the DELETE+re-INSERT of access rows (entry_id changes after re-create).
+            // Snapshot custom_unit_price_irt by (card_user_id, entry_title)
             $customMap = [];
             $snap = $pdo->prepare(
                 "SELECT a.card_user_id, e.title AS entry_title, a.custom_unit_price_irt
@@ -113,18 +123,59 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
                 $customMap[(int)$s['card_user_id'] . '|' . $s['entry_title']] = (float)$s['custom_unit_price_irt'];
             }
 
-            $pdo->prepare('DELETE FROM ts_card_user_access WHERE card_id=?')->execute([$cardId]);
-            $pdo->prepare('DELETE FROM ts_card_entries WHERE card_id=?')->execute([$cardId]);
-        }
+            // Load existing entries for stable-id matching by title
+            $exE = $pdo->prepare("SELECT id, title FROM ts_card_entries WHERE card_id=?");
+            $exE->execute([$cardId]);
+            $existingByTitle = [];
+            foreach ($exE->fetchAll() as $er) {
+                $existingByTitle[(string)$er['title']] = (int)$er['id'];
+            }
 
-        $entryIds = [];
-        $insE = $pdo->prepare(
-            'INSERT INTO ts_card_entries (card_id, title, amount, currency, unit_price_irt, total_irt, sort_order)
-             VALUES (?, ?, ?, ?, ?, ?, ?)'
-        );
-        foreach ($entries as $i => $e) {
-            $insE->execute([$cardId, $e['title'], $e['amount'], $e['currency'], $e['unit_price_irt'], $e['total_irt'], $e['sort_order']]);
-            $entryIds[$i] = (int)$pdo->lastInsertId();
+            $entryIds = [];
+            $usedExistingIds = [];
+            $insE = $pdo->prepare(
+                'INSERT INTO ts_card_entries (card_id, title, amount, currency, unit_price_irt, total_irt, sort_order)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)'
+            );
+            $updE = $pdo->prepare(
+                'UPDATE ts_card_entries SET amount=?, currency=?, unit_price_irt=?, total_irt=?, sort_order=? WHERE id=?'
+            );
+            foreach ($entries as $i => $e) {
+                $title = (string)$e['title'];
+                if (isset($existingByTitle[$title])) {
+                    $eid = $existingByTitle[$title];
+                    $updE->execute([$e['amount'], $e['currency'], $e['unit_price_irt'], $e['total_irt'], $e['sort_order'], $eid]);
+                    $entryIds[$i] = $eid;
+                    $usedExistingIds[$eid] = true;
+                } else {
+                    $insE->execute([$cardId, $e['title'], $e['amount'], $e['currency'], $e['unit_price_irt'], $e['total_irt'], $e['sort_order']]);
+                    $entryIds[$i] = (int)$pdo->lastInsertId();
+                }
+            }
+
+            // Entries to remove: those not used. Block removal if they have kotajs.
+            $toRemove = [];
+            foreach ($existingByTitle as $title => $eid) {
+                if (!isset($usedExistingIds[$eid])) $toRemove[$eid] = $title;
+            }
+            if ($toRemove) {
+                $rids = array_keys($toRemove);
+                $place = implode(',', array_fill(0, count($rids), '?'));
+                $chk = $pdo->prepare("SELECT entry_id, COUNT(*) c FROM ts_kotaj WHERE entry_id IN ($place) GROUP BY entry_id");
+                $chk->execute($rids);
+                $blocked = [];
+                foreach ($chk->fetchAll() as $br) {
+                    if ((int)$br['c'] > 0) $blocked[] = $toRemove[(int)$br['entry_id']];
+                }
+                if ($blocked) {
+                    ts_json_error(409, 'سکشن‌های «' . implode('، ', $blocked) . '» دارای کوتاژ ثبت‌شده‌اند و قابل حذف یا تغییر نام نیستند. ابتدا کوتاژهای مرتبط را حذف کنید.');
+                }
+                $pdo->prepare("DELETE FROM ts_card_user_access WHERE entry_id IN ($place)")->execute($rids);
+                $pdo->prepare("DELETE FROM ts_card_entries WHERE id IN ($place)")->execute($rids);
+            }
+
+            // Rebuild access for this card based on incoming user rows
+            $pdo->prepare('DELETE FROM ts_card_user_access WHERE card_id=?')->execute([$cardId]);
         }
 
         if ($userRows) {
@@ -137,7 +188,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
             }
         }
 
-        // Re-apply preserved custom prices using the new entry_ids (matched by entry title).
+        // Re-apply preserved custom prices using current entry ids (matched by title).
         if (!empty($customMap)) {
             $upd = $pdo->prepare(
                 "UPDATE ts_card_user_access a

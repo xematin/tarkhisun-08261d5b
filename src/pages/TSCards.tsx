@@ -1496,7 +1496,7 @@ const AdminKotajEditDialog = ({
             </div>
             <div className="space-y-2">
               <Label className="text-persian">تاریخ کوتاژ (شمسی)</Label>
-              <Input value={date} onChange={(e) => setDate(normDigits(e.target.value))} dir="ltr" placeholder="1405/02/31" />
+              <Input value={date} onChange={(e) => setDate(normDateDigits(e.target.value))} dir="ltr" placeholder="1405/02/31" />
             </div>
           </div>
 

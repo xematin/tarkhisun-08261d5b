@@ -93,7 +93,7 @@ const normDigits = (raw: string) => {
   return raw.replace(/[۰-۹٠-٩]/g, (d) => {
     const i = fa.indexOf(d); if (i >= 0) return String(i);
     const j = ar.indexOf(d); return j >= 0 ? String(j) : d;
-  }).replace(/[^\d.]/g, "");
+  });
 };
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {

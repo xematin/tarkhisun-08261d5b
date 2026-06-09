@@ -501,6 +501,88 @@ const BusinessCardGuide = () => {
                 </div>
               </section>
 
+              {/* Disadvantages Section */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">معایب اخذ کارت بازرگانی</h2>
+                <p className="text-body mb-4 text-persian">
+                  در کنار مزایا، دارندگان کارت بازرگانی مشمول تعهداتی نیز هستند که آگاهی از آن‌ها پیش از اقدام ضروری است:
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+                    <span>الزام به ثبت‌نام در سامانه‌های مالیاتی و پرداخت <strong>مالیات بر ارزش افزوده</strong> و مالیات بر واردات کالا.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+                    <span>اخذ کارت برای کسانی که فقط چند بار محدود قصد واردات یا صادرات دارند مقرون‌به‌صرفه نیست.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+                    <span><strong>اجاره یا فروش کارت بازرگانی</strong> تبعات حقوقی، مالی و کیفری بسیار سنگینی برای دارنده اصلی به همراه دارد و اکیداً توصیه نمی‌شود.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+                    <span>مسئولیت کلیه عملکرد مالی و گمرکی ثبت‌شده با کارت، بر عهده دارنده آن است.</span>
+                  </li>
+                </ul>
+              </section>
+
+              {/* Exempt People Section */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">افراد معاف از اخذ کارت بازرگانی</h2>
+                <p className="text-body mb-4 text-persian">
+                  قانون‌گذار برخی از اشخاص را به‌دلیل ماهیت شغلی یا محل جغرافیایی فعالیت، از ارائه کارت بازرگانی معاف کرده است:
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-persian">
+                    <CheckCircle2 className="w-5 h-5 text-accent mt-1 flex-shrink-0" />
+                    <span><strong>پیله‌وران</strong> ساکن در نوار مرزی کشور</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <CheckCircle2 className="w-5 h-5 text-accent mt-1 flex-shrink-0" />
+                    <span><strong>ملوانان ایرانی</strong> شاغل در شناورهای واقع در مرزها و سواحل ایران (در حدی که گمرک کالا را برای فروش تشخیص ندهد)</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <CheckCircle2 className="w-5 h-5 text-accent mt-1 flex-shrink-0" />
+                    <span><strong>کارگران ایرانی</strong> شاغل در خارج از کشور، دارای کارنامه شغلی از وزارت کار</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <CheckCircle2 className="w-5 h-5 text-accent mt-1 flex-shrink-0" />
+                    <span><strong>شرکت‌های تعاونی مرزنشینان</strong> برای واردات کالاهای مورد نیاز اعضا</span>
+                  </li>
+                </ul>
+              </section>
+
+              {/* Deprived People Section */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">محرومین از کارت بازرگانی</h2>
+                <p className="text-body mb-4 text-persian">
+                  گروه‌هایی از اشخاص بر اساس قانون از دریافت کارت بازرگانی محروم هستند؛ شامل:
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                    <span>افرادی که به موجب قانون از تمام یا بخشی از <strong>حقوق اجتماعی</strong> محروم شده‌اند.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                    <span>افرادی که هنوز <strong>ارز حاصل از صادرات</strong> خود را به سیستم بانکی بازنگردانده‌اند.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                    <span>افرادی که <strong>فساد اخلاقی</strong> آن‌ها محرز و قطعی شده باشد.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                    <span>افراد <strong>ورشکسته به تقصیر و تقلب</strong> که حکم آن‌ها قطعی شده باشد.</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-persian">
+                    <AlertCircle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                    <span>ورشکستگانی که هنوز <strong>امور تسویه</strong> آن‌ها انجام نشده است.</span>
+                  </li>
+                </ul>
+              </section>
+
               {/* Important Notes */}
               <section className="mb-12">
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 border-r-4 border-yellow-500 rounded-lg p-6">

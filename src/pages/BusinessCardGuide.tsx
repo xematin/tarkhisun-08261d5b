@@ -192,6 +192,34 @@ const BusinessCardGuide = () => {
                     </CardContent>
                   </Card>
                 </div>
+
+                <h3 className="heading-tertiary mb-4 mt-8 text-persian">تقسیم‌بندی بر اساس نوع درخواست</h3>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h4 className="text-persian mb-2"><strong>کارت بازرگانی تولیدی</strong></h4>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        مخصوص واحدهای تولیدی دارای پروانه بهره‌برداری برای واردات مواد اولیه و ماشین‌آلات و صادرات محصولات تولیدی.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h4 className="text-persian mb-2"><strong>کارت بازرگانی خدماتی</strong></h4>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        برای شرکت‌ها و افرادی که در حوزه ارائه خدمات بین‌المللی فعالیت می‌کنند.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h4 className="text-persian mb-2"><strong>کارت بازرگانی موردی</strong></h4>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        برای انجام یک‌بار واردات یا صادرات محدود به یک محموله خاص و در زمان مشخص صادر می‌شود.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
               </section>
 
               {/* Image 2 */}
